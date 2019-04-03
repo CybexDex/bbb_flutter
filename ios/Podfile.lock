@@ -1,0 +1,22 @@
+PODS:
+  - cybex_flutter_plugin (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - cybex_flutter_plugin (from `.symlinks/plugins/cybex_flutter_plugin/ios`)
+  - Flutter (from `.symlinks/flutter/ios`)
+
+EXTERNAL SOURCES:
+  cybex_flutter_plugin:
+    :path: ".symlinks/plugins/cybex_flutter_plugin/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+
+SPEC CHECKSUMS:
+  cybex_flutter_plugin: 64ab57bd15ef63ae4d250caa7c40c0e66a0552f1
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+
+PODFILE CHECKSUM: b02606947baaf3e07fcd71cb6f0c6149fcdf6bf2
+
+COCOAPODS: 1.7.0.beta.3
