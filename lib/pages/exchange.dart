@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/colors/palette.dart';
+import 'package:bbb_flutter/components/style_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 
@@ -17,46 +18,24 @@ class _ExchangeState extends State<ExchangePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Container(
-            height: 130,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("res/assets/images/mask.png"),
-                  fit: BoxFit.fill,
-                )
-            )
-          ),
+          WidgetFactory.pageTopContainer(),
           AppBar(
             leading: Image.asset("res/assets/icons/icPersonWhite.png"),
             centerTitle: true,
             title: Text(
               ".BXBT",
-              style: const TextStyle(
-                  color: Palette.buttonPrimaryColor,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 18.0
-              )
+              style: StyleFactory.title
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
           SafeArea(
               child: Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
+                  margin: WidgetFactory.pageMargin,
                   child: Column(
                     children: <Widget>[
                       Container(
-                        decoration: BoxDecoration(
-                            color: Palette.pagePrimaryColor,
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            boxShadow: [BoxShadow(
-                                color: Color.fromRGBO(102, 102, 102, 0.1),
-                                offset: Offset(0, 4),
-                                spreadRadius: 2,
-                                blurRadius: 8
-                            )]
-                        ),
+                        decoration: DecorationFactory.cornerShadowDecoration,
                         height: 270,
                         margin: EdgeInsets.only(top: 48),
                       ),
@@ -66,37 +45,21 @@ class _ExchangeState extends State<ExchangePage> {
                           children: <Widget>[
                             Expanded(
                               flex: 1,
-                              child: RaisedButton(
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4)),
-                                onPressed: (){},
-                                color: Palette.redOrange,
-                                textColor: Colors.white,
-                                child: Padding(padding: EdgeInsets.only(top: 14, bottom: 14),
-                                    child: Text(S.of(context).buy_up_price("0.21863"), style: Theme.of(context).textTheme.button)
-                                ),
-                              ),
+                              child: WidgetFactory.button(data: S.of(context).buy_up_price("0.21863"), color:Palette.redOrange, onPressed: (){})
                             ),
                             Container(
                               width: 20,
                             ),
                             Expanded(
                               flex: 1,
-                              child: RaisedButton(
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4)),
-                                onPressed: (){},
-                                color: Palette.shamrockGreen,
-                                textColor: Colors.white,
-                                child: Padding(padding: EdgeInsets.only(top: 14, bottom: 14),
-                                    child: Text(S.of(context).buy_up_price("0.21863"), style: Theme.of(context).textTheme.button)
-                                ),
-                              ),
+                              child: WidgetFactory.button(data: S.of(context).buy_up_price("0.21863"), color:Palette.shamrockGreen, onPressed: (){})
                             ),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.only(bottom: 20, top: 20),
+                          margin: WidgetFactory.pageMargin,
                           child: Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -104,13 +67,7 @@ class _ExchangeState extends State<ExchangePage> {
                                 Image.asset("res/assets/images/icEmpty.png"),
                                 Padding(
                                   padding: EdgeInsets.only(top: 8),
-                                  child: Text("暂无持仓",
-                                      style: const TextStyle(
-                                          color:  const Color(0xffcccccc),
-                                          fontWeight: FontWeight.w400,
-                                          fontStyle:  FontStyle.normal,
-                                          fontSize: 12.0
-                                      )),
+                                  child: Text("暂无持仓", style: StyleFactory.hintStyle)
                                 )
                               ],
                             ),

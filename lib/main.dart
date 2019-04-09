@@ -34,14 +34,6 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
           ),
-        textTheme: TextTheme(
-          button: TextStyle(
-            color: Palette.buttonPrimaryColor,
-            fontWeight: FontWeight.w600,
-            fontStyle: FontStyle.normal,
-            fontSize: 16.0
-            )
-        )
       ),
       home: ExchangePage(title: '.BXBT'),
     );

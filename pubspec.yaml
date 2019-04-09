@@ -21,6 +21,9 @@ dependencies:
     sdk: flutter
   cybex_flutter_plugin:
     git: git@github.com:CybexDex/cybex_flutter_plugin.git
+  rxdart: ^0.21.0
+  dio: ^2.1.0
+  fluro: ^1.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

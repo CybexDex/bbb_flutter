@@ -9,4 +9,5 @@ class Palette {
 
   static const buttonPrimaryColor = const Color(0xffffffff);
   static const pagePrimaryColor = const Color(0xffffffff);
+  static const hintTitleColor = const Color(0xffcccccc);
 }
