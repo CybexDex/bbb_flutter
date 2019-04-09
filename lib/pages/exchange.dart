@@ -83,10 +83,3 @@ class _ExchangeState extends State<ExchangePage> {
     );
   }
 }
-
-//appBar: AppBar(
-//centerTitle: true,
-//title: Text(".BXBT"),
-//backgroundColor: Colors.transparent,
-//elevation: 0,
-//),
