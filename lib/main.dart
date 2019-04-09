@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:bbb_flutter/pages/exchange.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/BBBAPIProvider.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
