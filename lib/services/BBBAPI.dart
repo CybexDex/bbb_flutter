@@ -1,6 +1,5 @@
-
-import 'package:bbb_flutter/models/ref_data.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 
 abstract class BBBAPI {
-  Future<RefData> getRefData();
+  Future<RefContractResponseModel> getRefData();
 }

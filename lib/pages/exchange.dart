@@ -1,5 +1,5 @@
 import 'package:bbb_flutter/colors/palette.dart';
-import 'package:bbb_flutter/components/style_factory.dart';
+import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 
@@ -27,7 +27,7 @@ class _ExchangeState extends State<ExchangePage> {
           elevation: 0,
         ),
         SafeArea(
-          child: Container(
+            child: Container(
               margin: WidgetFactory.pageMargin,
               child: Column(
                 children: <Widget>[

@@ -1,4 +1,4 @@
-import 'package:bbb_flutter/models/ref_data.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/BBBAPI.dart';
 import 'package:dio/dio.dart';
 
@@ -23,8 +23,8 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<RefData> getRefData() async {
+  Future<RefContractResponseModel> getRefData() async {
     var response = await dio.get('/refData');
-    return RefData.fromJSON(response.data);
+    return Future.value(RefContractResponseModel.fromJson(response.data));
   }
 }
