@@ -1,4 +1,4 @@
-import 'package:bbb_flutter/components/style_factory.dart';
+import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:flutter/material.dart';
 
