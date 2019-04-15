@@ -1,45 +1,7 @@
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:flutter/material.dart';
 
-class DecorationFactory {
-  static const cornerShadowDecoration = BoxDecoration(
-      color: Palette.pagePrimaryColor,
-      borderRadius: StyleFactory.corner,
-      boxShadow: [StyleFactory.shadow]
-  );
-
-  static const pageTopDecoration = BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage("res/assets/images/mask.png"),
-        fit: BoxFit.fill,
-      )
-  );
-}
-
-class WidgetFactory {
-//  static buttonTopBottomPadding = Padding();
-  static Padding buttonTopBottomPadding(Widget child) => Padding(padding: EdgeInsets.only(top: 14, bottom: 14), child: child);
-
-  static const pageMargin = EdgeInsets.only(left: 20, right: 20);
-
-  static RaisedButton button({String data, Color color, @required VoidCallback onPressed}) {
-    return RaisedButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        onPressed: onPressed,
-        color: color,
-        textColor: Colors.white,
-        child: WidgetFactory.buttonTopBottomPadding(Text(data, style: StyleFactory.buttonTitleStyle)));
-  }
-
-  static Container pageTopContainer({double height = 130}) {
-    return Container(
-      height: height,
-      decoration: DecorationFactory.pageTopDecoration,
-    );
-  }
-
-
-}
+import 'dimen.dart';
 
 class StyleFactory {
   static const shadow = BoxShadow(
@@ -49,27 +11,41 @@ class StyleFactory {
       blurRadius: 8
   );
 
-  static const corner = BorderRadius.all(Radius.circular(10));
+  static const corner = BorderRadius.all(Radius.circular(Dimen.corner));
 
   static const title = TextStyle(
-    color: Palette.buttonPrimaryColor,
+    color: Palette.titleColor,
     fontWeight: FontWeight.w600,
     fontStyle: FontStyle.normal,
-    fontSize: 18.0
+    fontSize: Dimen.titleFontSize
   );
 
   static const buttonTitleStyle = TextStyle(
       color: Palette.buttonPrimaryColor,
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
-      fontSize: 16.0
+      fontSize: Dimen.largeButtonFontSize
   );
 
-  static const hintStyle = const TextStyle(
+  static const hintStyle = TextStyle(
       color: Palette.hintTitleColor,
       fontWeight: FontWeight.w400,
       fontStyle:  FontStyle.normal,
-      fontSize: 12.0
+      fontSize: Dimen.smallLabelFontSize
+  );
+
+  static const subTitleStyle = const TextStyle(
+      color: Palette.subTitleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle:  FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize
+  );
+
+  static const cellTitleStyle = const TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle:  FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize
   );
   
   static const loginFontStyle = TextStyle(

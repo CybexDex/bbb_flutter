@@ -1,5 +1,8 @@
 import 'package:bbb_flutter/colors/palette.dart';
+import 'package:bbb_flutter/common/decoration_factory.dart';
+import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
+import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
@@ -29,7 +32,7 @@ class _ExchangeState extends State<ExchangePage> {
         ),
         SafeArea(
           child: Container(
-              margin: WidgetFactory.pageMargin,
+              margin: Dimen.pageMargin,
               child: Column(
                 children: <Widget>[
                   Container(
@@ -59,12 +62,18 @@ class _ExchangeState extends State<ExchangePage> {
                       ],
                     ),
                   ),
-                  Container(
-                    decoration: DecorationFactory.cornerShadowDecoration,
-                    height: 194,
-                    margin: EdgeInsets.only(top: 46),
-                    child: _stockWidget(),
-                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        decoration: DecorationFactory.cornerShadowDecoration,
+                        height: 194,
+                        margin: EdgeInsets.only(bottom: 0),
+                        child: _stockWidget(),
+                      ),
+                    ),
+                  )
+
                 ],
               )),
         )
@@ -74,7 +83,7 @@ class _ExchangeState extends State<ExchangePage> {
 
   Widget _emptyStockWidget() {
     return Container(
-      margin: WidgetFactory.pageMargin,
+      margin: Dimen.pageMargin,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
