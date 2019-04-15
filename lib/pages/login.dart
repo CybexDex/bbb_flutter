@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
+import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
@@ -41,7 +42,7 @@ class _LoginState extends State<LoginPage> {
                         child: Column(
                           children: <Widget>[
                             Padding(padding: EdgeInsets.only(top: 40)),
-                            Image.asset("res/assets/icons/icAccount.png"),
+                            ImageFactory.account,
                             Expanded(
                                 child: ListView(
                                     padding:

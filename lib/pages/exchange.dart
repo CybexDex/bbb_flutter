@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
+import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
@@ -24,7 +25,7 @@ class _ExchangeState extends State<ExchangePage> {
       children: <Widget>[
         WidgetFactory.pageTopContainer(),
         AppBar(
-          leading: Image.asset("res/assets/icons/icPersonWhite.png"),
+          leading: ImageFactory.personal,
           centerTitle: true,
           title: Text(".BXBT", style: StyleFactory.title),
           backgroundColor: Colors.transparent,
@@ -88,7 +89,7 @@ class _ExchangeState extends State<ExchangePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset("res/assets/images/icEmpty.png"),
+            ImageFactory.emptyStock,
             Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text("暂无持仓", style: StyleFactory.hintStyle))
