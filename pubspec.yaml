@@ -59,8 +59,16 @@ flutter:
     - res/assets/icons/icPerson.png
     - res/assets/images/mask.png
     - res/assets/images/icEmpty.png
-    - res/assets/icons/icNotifyBackWhite.png
+    - res/assets/icons/icNotifyBack.png
     - res/assets/icons/icAccount.png
+    - res/assets/icons/icAdd.png
+    - res/assets/icons/icChange.png
+    - res/assets/icons/icReduce.png
+    - res/assets/icons/icUpRed14.png
+    - res/assets/icons/icRiseRed18.png
+    - res/assets/icons/icDownGreen14.png
+    - res/assets/icons/icFallGreen.png
+    - res/assets/icons/icTabArrow.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

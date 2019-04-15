@@ -27,6 +27,13 @@ class StyleFactory {
       fontSize: Dimen.largeButtonFontSize
   );
 
+  static const smallButtonTitleStyle = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.verySmallLabelFontSize
+  );
+
   static const hintStyle = TextStyle(
       color: Palette.hintTitleColor,
       fontWeight: FontWeight.w400,

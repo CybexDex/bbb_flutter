@@ -18,3 +18,7 @@ class DecorationFactory {
       )
   );
 }
+
+class BorderFactory {
+  static const buttonBorder = BorderSide(color: Palette.redOrange, width: 0.5);
+}
