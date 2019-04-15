@@ -21,28 +21,27 @@ class _ExchangeState extends State<ExchangePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        WidgetFactory.pageTopContainer(),
-        AppBar(
+        appBar: AppBar(
           leading: ImageFactory.personal,
           centerTitle: true,
           title: Text(".BXBT", style: StyleFactory.title),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
           elevation: 0,
         ),
-        SafeArea(
+        body: SafeArea(
           child: Container(
               margin: Dimen.pageMargin,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Container(
+                  Expanded(child: Container(
                     decoration: DecorationFactory.cornerShadowDecoration,
-                    height: 270,
-                    margin: EdgeInsets.only(top: 48),
-                  ),
+                    height: double.infinity,
+                    margin: EdgeInsets.only(top: 1),
+                  )),
                   Container(
-                    margin: EdgeInsets.only(top: 18),
+                    margin: EdgeInsets.only(bottom: 46, top: 20),
                     child: Row(
                       children: <Widget>[
                         Expanded(
@@ -63,23 +62,15 @@ class _ExchangeState extends State<ExchangePage> {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        decoration: DecorationFactory.cornerShadowDecoration,
-                        height: 194,
-                        margin: EdgeInsets.only(bottom: 0),
-                        child: _stockWidget(),
-                      ),
-                    ),
-                  )
-
+                  Container(
+                    decoration: DecorationFactory.cornerShadowDecoration,
+                    height: 194,
+                    child: _stockWidget(),
+                  ),
                 ],
-              )),
-        )
-      ],
-    ));
+              ),
+          )
+        ));
   }
 
   Widget _emptyStockWidget() {

@@ -56,7 +56,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - res/assets/icons/icPersonWhite.png
+    - res/assets/icons/icPerson.png
     - res/assets/images/mask.png
     - res/assets/images/icEmpty.png
     - res/assets/icons/icNotifyBackWhite.png

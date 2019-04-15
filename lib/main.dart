@@ -12,21 +12,17 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 
+import 'colors/palette.dart';
+
 main() async {
   Env.apiClient = BBBAPIProvider();
   Routes.register();
 
-  var injector = InjectorWidget(child : MyApp());
+  var injector = InjectorWidget(child: MyApp());
   // assume that the `init` method is an async operation
   await injector.init();
 
   runApp(injector);
-
-  if (Platform.isAndroid) {
-// 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
-    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -35,17 +31,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BBB',
-      localizationsDelegates: const <LocalizationsDelegate<WidgetsLocalizations>>[
-        S.delegate
-      ],
+      localizationsDelegates: const <
+          LocalizationsDelegate<WidgetsLocalizations>>[S.delegate],
       supportedLocales: S.delegate.supportedLocales,
-      localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en', '')),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-          iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
-          ),
-      ),
+      localeResolutionCallback:
+          S.delegate.resolution(fallback: const Locale('en', '')),
       home: ExchangePage(title: '.BXBT'),
     );
   }

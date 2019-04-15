@@ -5,10 +5,10 @@ import 'dimen.dart';
 
 class StyleFactory {
   static const shadow = BoxShadow(
-      color: Color.fromRGBO(102, 102, 102, 0.1),
+      color: Color.fromRGBO(0, 0, 0, 0.1),
       offset: Offset(0, 4),
-      spreadRadius: 2,
-      blurRadius: 8
+      spreadRadius: 0,
+      blurRadius: 12
   );
 
   static const corner = BorderRadius.all(Radius.circular(Dimen.corner));

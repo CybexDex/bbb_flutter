@@ -5,9 +5,8 @@ class AssetImageFactory {
 
 }
 
-
 class ImageFactory {
-  static final personal = Image.asset("res/assets/icons/icPersonWhite.png");
+  static final personal = Image.asset("res/assets/icons/icPerson.png");
   static final emptyStock = Image.asset("res/assets/images/icEmpty.png");
   static final account = Image.asset("res/assets/icons/icAccount.png");
 }
