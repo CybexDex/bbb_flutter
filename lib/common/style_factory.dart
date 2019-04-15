@@ -49,9 +49,9 @@ class StyleFactory {
   );
   
   static const loginFontStyle = TextStyle(
-    color: Palette.textPrimaryColor,
+    color: Palette.subTitleColor,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
-    fontSize: 12.0
+    fontSize: Dimen.smallLabelFontSize
   );
 }

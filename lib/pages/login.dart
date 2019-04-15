@@ -1,4 +1,7 @@
+import 'package:bbb_flutter/common/decoration_factory.dart';
+import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
+import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +30,7 @@ class _LoginState extends State<LoginPage> {
             ),
             SafeArea(
               child: Container(
-                  margin: WidgetFactory.pageMargin,
+                  margin: Dimen.pageMargin,
                   child: Column(
                     children: <Widget>[
                       Container(
