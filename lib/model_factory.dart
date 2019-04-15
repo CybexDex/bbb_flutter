@@ -1,7 +1,7 @@
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
-import 'package:bbb_flutter/models/request/amend_contract_request_model.dart';
+import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 
 class ModelFactory {
@@ -14,8 +14,8 @@ class ModelFactory {
       return PostOrderResponseModel.fromJson(json) as T;
     } else if (T.toString() == "MarketHistoryResponseModel") {
       return MarketHistoryResponseModel.fromJson(json) as T;
-    } else if (T.toString() == "AmendContractRequestModel") {
-      return AmendContractRequestModel.fromJson(json) as T;
+    } else if (T.toString() == "AmendOrderRequestModel") {
+      return AmendOrderRequestModel.fromJson(json) as T;
     } else if (T.toString() == "PostOrderRequestModel") {
       return PostOrderRequestModel.fromJson(json) as T;
     } else {

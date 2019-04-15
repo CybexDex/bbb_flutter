@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
+import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 
@@ -27,7 +28,7 @@ class _ExchangeState extends State<ExchangePage> {
           elevation: 0,
         ),
         SafeArea(
-            child: Container(
+          child: Container(
               margin: WidgetFactory.pageMargin,
               child: Column(
                 children: <Widget>[
@@ -58,27 +59,37 @@ class _ExchangeState extends State<ExchangePage> {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: WidgetFactory.pageMargin,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset("res/assets/images/icEmpty.png"),
-                            Padding(
-                                padding: EdgeInsets.only(top: 8),
-                                child:
-                                    Text("暂无持仓", style: StyleFactory.hintStyle))
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
+                  Container(
+                    decoration: DecorationFactory.cornerShadowDecoration,
+                    height: 194,
+                    margin: EdgeInsets.only(top: 46),
+                    child: _stockWidget(),
+                  ),
                 ],
               )),
         )
       ],
     ));
+  }
+
+  Widget _emptyStockWidget() {
+    return Container(
+      margin: WidgetFactory.pageMargin,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset("res/assets/images/icEmpty.png"),
+            Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: Text("暂无持仓", style: StyleFactory.hintStyle))
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _stockWidget() {
+    return OrderInfo();
   }
 }

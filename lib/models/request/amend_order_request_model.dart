@@ -1,4 +1,4 @@
-class AmendContractRequestModel {
+class AmendOrderRequestModel {
 	String transactionType;
 	String seller;
 	String refBuyOrderTxId;
@@ -9,9 +9,9 @@ class AmendContractRequestModel {
 	String execNowPx;
 	int forceExpiration;
 
-	AmendContractRequestModel({this.transactionType, this.seller, this.refBuyOrderTxId, this.signature, this.takeProfitPx, this.cutLossPx, this.txId, this.execNowPx, this.forceExpiration});
+	AmendOrderRequestModel({this.transactionType, this.seller, this.refBuyOrderTxId, this.signature, this.takeProfitPx, this.cutLossPx, this.txId, this.execNowPx, this.forceExpiration});
 
-	AmendContractRequestModel.fromJson(Map<String, dynamic> json) {
+	AmendOrderRequestModel.fromJson(Map<String, dynamic> json) {
 		transactionType = json['transactionType'];
 		seller = json['seller'];
 		refBuyOrderTxId = json['refBuyOrderTxId'];
