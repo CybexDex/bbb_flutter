@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/pages/exchange.dart';
+import 'package:bbb_flutter/pages/login.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -12,5 +13,11 @@ class Routes {
     });
 
     router.define("/exchange", handler: exchangeHandler);
+
+    var loginHandler = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      return LoginPage();
+    });
+
+    router.define("/login", handler: loginHandler);
   }
 }

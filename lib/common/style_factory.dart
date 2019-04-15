@@ -71,4 +71,11 @@ class StyleFactory {
       fontStyle:  FontStyle.normal,
       fontSize: 12.0
   );
+  
+  static const loginFontStyle = TextStyle(
+    color: Palette.textPrimaryColor,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+    fontSize: 12.0
+  );
 }

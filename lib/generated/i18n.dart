@@ -19,6 +19,19 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get account_name => "账户名";
+  String get account_name_hint => "请输入账户名";
+  String get already_register => "已注册，请登录";
+  String get create_new_account => "创建新账户";
+  String get get_pin_code => "获取验证码";
+  String get log_in => "登录";
+  String get password => "密码";
+  String get password_confirm => "确认密码";
+  String get password_confirm_hint => "请再次确认密码";
+  String get password_hint => "请输入密码";
+  String get pin_code => "验证码";
+  String get pin_code_hint => "请输入验证码";
+  String get register => "注册";
   String buy_up_price(String price) => "买涨/$price";
 }
 
@@ -32,6 +45,32 @@ class $zh extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  @override
+  String get account_name_hint => "请输入账户名";
+  @override
+  String get already_register => "已注册，请登录";
+  @override
+  String get password_confirm => "确认密码";
+  @override
+  String get create_new_account => "创建新账户";
+  @override
+  String get pin_code => "验证码";
+  @override
+  String get pin_code_hint => "请输入验证码";
+  @override
+  String get password_hint => "请输入密码";
+  @override
+  String get get_pin_code => "获取验证码";
+  @override
+  String get password => "密码";
+  @override
+  String get password_confirm_hint => "请再次确认密码";
+  @override
+  String get log_in => "登录";
+  @override
+  String get account_name => "账户名";
+  @override
+  String get register => "注册";
   @override
   String buy_up_price(String price) => "买涨/$price";
 }

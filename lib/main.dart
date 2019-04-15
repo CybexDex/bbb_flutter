@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:bbb_flutter/pages/exchange.dart';
+import 'package:bbb_flutter/pages/login.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/BBBAPIProvider.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
