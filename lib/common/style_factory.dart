@@ -27,6 +27,13 @@ class StyleFactory {
       fontSize: Dimen.largeButtonFontSize
   );
 
+  static const navButtonTitleStyle = TextStyle(
+      color: Palette.actionButtonColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleButtonFontSize
+  );
+
   static const smallButtonTitleStyle = TextStyle(
       color: Palette.redOrange,
       fontWeight: FontWeight.w400,
@@ -48,9 +55,23 @@ class StyleFactory {
       fontSize: Dimen.smallLabelFontSize
   );
 
+  static const smallCellTitleStyle = const TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle:  FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize
+  );
+
   static const cellTitleStyle = const TextStyle(
       color: Palette.titleColor,
       fontWeight: FontWeight.w400,
+      fontStyle:  FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize
+  );
+
+  static const cellBoldTitleStyle = const TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w600,
       fontStyle:  FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize
   );

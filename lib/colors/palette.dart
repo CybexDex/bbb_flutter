@@ -15,4 +15,7 @@ class Palette {
   static const descColor = const Color(0xff999999);
   static const subTitleColor = const Color(0xff666666);
   static const titleColor = const Color(0xff333333);
+
+  static const backButtonColor = const Color(0xff606060);
+  static const actionButtonColor = const Color(0xff666666);
 }

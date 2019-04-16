@@ -17,8 +17,8 @@ class Dimen {
   static const double buttonTopPadding = 14.0;
 
   static const double buttonSize = 44.0;
-  static const double smallButtonSize = 16.0;
+  static const double smallButtonSize = 18.0;
 
   static const pageMargin = EdgeInsets.only(left: 20, right: 20);
-  static const smallButtonPadding = EdgeInsets.fromLTRB(6, 3, 6, 3);
+  static const smallButtonPadding = EdgeInsets.fromLTRB(6, 1, 6, 1);
 }

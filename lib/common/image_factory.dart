@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class AssetImageFactory {
   static const pageTopBg = AssetImage("res/assets/images/mask.png");
-
+  static final countAdd = AssetImage("res/assets/icons/icAdd.png");
+  static final countReduce = AssetImage("res/assets/icons/icReduce.png");
 }
 
 class ImageFactory {

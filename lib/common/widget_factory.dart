@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'decoration_factory.dart';
 import 'dimen.dart';
+import 'image_factory.dart';
 
 class WidgetFactory {
 //  static buttonTopBottomPadding = Padding();
@@ -24,18 +25,19 @@ class WidgetFactory {
             Text(data, style: StyleFactory.buttonTitleStyle)));
   }
 
-  static Widget smallButton(
-      {String data, @required VoidCallback onPressed}) {
-    return ButtonTheme(height: Dimen.smallButtonSize, minWidth: 0, child: RaisedButton(
-        elevation: 0,
-        padding: Dimen.smallButtonPadding,
-        shape: RoundedRectangleBorder(
+  static Widget smallButton({String data, @required VoidCallback onPressed}) {
+    return GestureDetector(
+      child: Container(
+        decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
           side: BorderFactory.buttonBorder,
-          borderRadius: BorderRadius.circular(Dimen.smallCorner),),
-        onPressed: onPressed,
-        color: Colors.white,
-        textColor: Palette.redOrange,
-        child: Text(data, style: StyleFactory.smallButtonTitleStyle)));
+          borderRadius: BorderRadius.circular(Dimen.smallCorner),
+        )),
+        child: Text(data, style: StyleFactory.smallButtonTitleStyle),
+        padding: Dimen.smallButtonPadding,
+      ),
+      onTap: onPressed,
+    );
   }
 
   static Container pageTopContainer({double height = 130}) {

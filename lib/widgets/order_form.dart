@@ -1,11 +1,9 @@
-import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:flutter/material.dart';
 
 import 'istep.dart';
 
-class OrderInfo extends StatelessWidget {
+class OrderForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,32 +11,12 @@ class OrderInfo extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: ImageFactory.upIcon14,
-              ),
               Text(
-                ".BXBT",
-                style: StyleFactory.smallCellTitleStyle,
-              ),
-              Expanded(
-                  child: Align(
-                alignment: Alignment.centerRight,
-                child: WidgetFactory.smallButton(data: "平仓", onPressed: () {}),
-              )),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                "当前预计收益",
+                "当前每份价格",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
-                "23 USDT≈213 RMB",
+                "90 USDT",
                 style: StyleFactory.smallCellTitleStyle,
               )
             ],
@@ -50,11 +28,11 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "实际杠杆",
+                "剩余份数",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
-                "0.0001 USDT / 50%",
+                "21 份",
                 style: StyleFactory.smallCellTitleStyle,
               )
             ],
@@ -66,11 +44,37 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "投资",
+                "投资份数",
+                style: StyleFactory.subTitleStyle,
+              ),
+              SizedBox(width: 76, child: IStep(text: "0"),)
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                "止盈",
+                style: StyleFactory.subTitleStyle,
+              ),
+              SizedBox(width: 76, child: IStep(text: "50%"),)
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                "止盈收益",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
-                "23 USDT≈213 RMB",
+                "4 USDT",
                 style: StyleFactory.smallCellTitleStyle,
               )
             ],
@@ -82,26 +86,10 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止盈/止损",
+                "止损",
                 style: StyleFactory.subTitleStyle,
               ),
-              Expanded(
-                  child: Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Text(
-                        "50% / 50%",
-                        style: StyleFactory.smallCellTitleStyle,
-                      ),
-                    ),
-                    WidgetFactory.smallButton(data: "修改", onPressed: () {}),
-                  ],
-                ),
-              )),
+              SizedBox(width: 76, child: IStep(text: "50%"),)
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
@@ -111,18 +99,15 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "自动平仓时间",
+                "止损亏损",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
-                "2019.04.01 14:00",
+                "4 USDT",
                 style: StyleFactory.smallCellTitleStyle,
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          ),
-          SizedBox(
-            height: 10,
           ),
         ],
       ),
