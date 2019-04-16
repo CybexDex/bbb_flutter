@@ -9,11 +9,10 @@ import 'package:bbb_flutter/services/BBBAPIProvider.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:flutter/services.dart';
-import 'colors/palette.dart';
 
 main() async {
+  initLogger(package: 'bbb');
   Env.apiClient = BBBAPIProvider();
   Routes.register();
 
