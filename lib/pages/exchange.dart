@@ -4,11 +4,13 @@ import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/models/entity/user_entity.dart';
+import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 
 class ExchangePage extends StatefulWidget {
   ExchangePage({Key key, this.title}) : super(key: key);
@@ -29,9 +31,11 @@ class _ExchangeState extends State<ExchangePage> {
 
   @override
   Widget build(BuildContext context) {
+    final injector = InjectorWidget.of(context);
+
     return Scaffold(
-      key: _scaffoldKey,
-      drawer: _drawer(),
+        key: _scaffoldKey,
+        drawer: _drawer(),
         appBar: AppBar(
           actions: <Widget>[
             GestureDetector(
@@ -46,15 +50,29 @@ class _ExchangeState extends State<ExchangePage> {
                 ),
               ),
               onTap: () {
-
+                if (injector.userBloc.userSubject.value.isLogin) {
+                  injector.userBloc.logout();
+                } else {
+                  injector.userBloc.loginWith(name: "xx");
+                }
               },
             )
           ],
-          leading: GestureDetector(
-            child: ImageFactory.personal,
-            onTap: () {
-              _scaffoldKey.currentState.openDrawer();
+          leading: StreamBuilder<UserEntity>(
+            initialData: UserEntity(),
+            builder: (context, snapshot) {
+              if (!snapshot.data.isLogin) {
+                return GestureDetector(
+                  child: ImageFactory.personal,
+                  onTap: () {
+                    _scaffoldKey.currentState.openDrawer();
+                  },
+                );
+              } else {
+                return ImageFactory.upIcon14;
+              }
             },
+            stream: injector.userBloc.userSubject.stream,
           ),
           centerTitle: true,
           title: Text(".BXBT", style: StyleFactory.title),
@@ -84,7 +102,8 @@ class _ExchangeState extends State<ExchangePage> {
                             data: S.of(context).buy_up_price("0.21863"),
                             color: Palette.redOrange,
                             onPressed: () {
-                              router.navigateTo(context, "/trade", transition: TransitionType.inFromRight);
+                              router.navigateTo(context, "/trade",
+                                  transition: TransitionType.inFromRight);
                             })),
                     Container(
                       width: 20,
@@ -95,7 +114,8 @@ class _ExchangeState extends State<ExchangePage> {
                             data: S.of(context).buy_up_price("0.21863"),
                             color: Palette.shamrockGreen,
                             onPressed: () {
-                              router.navigateTo(context, "/trade", transition: TransitionType.inFromRight);
+                              router.navigateTo(context, "/trade",
+                                  transition: TransitionType.inFromRight);
                             })),
                   ],
                 ),
@@ -114,7 +134,10 @@ class _ExchangeState extends State<ExchangePage> {
                 margin: EdgeInsets.only(bottom: 30),
                 decoration: DecorationFactory.cornerShadowDecoration,
                 height: 194,
-                child: Padding(padding: EdgeInsets.fromLTRB(20, 16, 20, 0), child: _stockWidget(),),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: _stockWidget(),
+                ),
               ),
             ],
           ),
@@ -151,60 +174,96 @@ class _ExchangeState extends State<ExchangePage> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Column(children: <Widget>[
-              Align(child: GestureDetector(
-                child: ImageFactory.back,
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ), alignment: Alignment.topLeft,)
-            ],),
-
+            child: Column(
+              children: <Widget>[
+                Align(
+                  child: GestureDetector(
+                    child: ImageFactory.back,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  alignment: Alignment.topLeft,
+                )
+              ],
+            ),
           ),
           ListTile(
-            title: Text('充值', style: StyleFactory.cellTitleStyle,),
-            trailing: GestureDetector(child: ImageFactory.rowArrow, onTap: () {
-
-            },),
+            title: Text(
+              '充值',
+              style: StyleFactory.cellTitleStyle,
+            ),
+            trailing: GestureDetector(
+              child: ImageFactory.rowArrow,
+              onTap: () {},
+            ),
             onTap: () {
               // Update the state of the app
               // ...
             },
           ),
-          Container(height: 0.5, margin: EdgeInsets.only(left: 20, right: 20), color: Palette.separatorColor,),
+          Container(
+            height: 0.5,
+            margin: EdgeInsets.only(left: 20, right: 20),
+            color: Palette.separatorColor,
+          ),
           ListTile(
-            title: Text('提现', style: StyleFactory.cellTitleStyle,),
-            trailing: GestureDetector(child: ImageFactory.rowArrow, onTap: () {
-
-            },),
+            title: Text(
+              '提现',
+              style: StyleFactory.cellTitleStyle,
+            ),
+            trailing: GestureDetector(
+              child: ImageFactory.rowArrow,
+              onTap: () {},
+            ),
             onTap: () {
               // Update the state of the app
               // ...
             },
           ),
-          Container(height: 0.5, margin: EdgeInsets.only(left: 20, right: 20), color: Palette.separatorColor,),
+          Container(
+            height: 0.5,
+            margin: EdgeInsets.only(left: 20, right: 20),
+            color: Palette.separatorColor,
+          ),
           ListTile(
-            title: Text('充提记录', style: StyleFactory.cellTitleStyle,),
-            trailing: GestureDetector(child: ImageFactory.rowArrow, onTap: () {
-
-            },),
+            title: Text(
+              '充提记录',
+              style: StyleFactory.cellTitleStyle,
+            ),
+            trailing: GestureDetector(
+              child: ImageFactory.rowArrow,
+              onTap: () {},
+            ),
             onTap: () {
               // Update the state of the app
               // ...
             },
           ),
-          Container(height: 0.5, margin: EdgeInsets.only(left: 20, right: 20), color: Palette.separatorColor,),
+          Container(
+            height: 0.5,
+            margin: EdgeInsets.only(left: 20, right: 20),
+            color: Palette.separatorColor,
+          ),
           ListTile(
-            title: Text('交易记录', style: StyleFactory.cellTitleStyle,),
-            trailing: GestureDetector(child: ImageFactory.rowArrow, onTap: () {
-
-            },),
+            title: Text(
+              '交易记录',
+              style: StyleFactory.cellTitleStyle,
+            ),
+            trailing: GestureDetector(
+              child: ImageFactory.rowArrow,
+              onTap: () {},
+            ),
             onTap: () {
               // Update the state of the app
               // ...
             },
           ),
-          Container(height: 0.5, margin: EdgeInsets.only(left: 20, right: 20), color: Palette.separatorColor,),
+          Container(
+            height: 0.5,
+            margin: EdgeInsets.only(left: 20, right: 20),
+            color: Palette.separatorColor,
+          ),
         ],
       ),
     );
