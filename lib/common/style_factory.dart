@@ -12,6 +12,9 @@ class StyleFactory {
 
   static const corner = BorderRadius.all(Radius.circular(Dimen.corner));
 
+  static const dialogCorner =
+      BorderRadius.all(Radius.circular(Dimen.dialogCorner));
+
   static var title = TextStyle(
       color: Palette.titleColor,
       fontWeight: FontWeight.w600,
@@ -71,4 +74,16 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
+
+  static var dialogContentStyle = TextStyle(
+      color: Palette.subTitleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
+
+  static var dialogButtonFontStyle = TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.largeButtonFontSize);
 }

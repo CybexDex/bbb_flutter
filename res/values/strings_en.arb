@@ -38,5 +38,13 @@
   "get_pin_code": "获取验证码",
   "register": "注册",
   "create_new_account": "创建新账户",
-  "already_register": "已注册，请登录"
+  "already_register": "已注册，请登录",
+
+
+  "dialog_cancel_button": "取消",
+  "dialog_sell_title": "平仓",
+  "dialog_sell_content": "当前平仓预计收益:",
+  "dialog_log_out_title": "登出",
+  "dialog_log_out_content": "确定你已妥善保存了你的密码,并确定希望登出你的账户。",
+  "dialog_log_out_confirm_button": "确认登出"
 }

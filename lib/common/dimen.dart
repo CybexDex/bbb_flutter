@@ -15,6 +15,7 @@ class Dimen {
 
   static const double smallCorner = 2.0;
   static const double corner = 4.0;
+  static const double dialogCorner = 10.0;
   static const double buttonTopPadding = 14.0;
 
   static const double buttonSize = 44.0;

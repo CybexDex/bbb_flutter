@@ -17,6 +17,12 @@ class DecorationFactory {
         fit: BoxFit.fill,
       )
   );
+
+  static var dialogBackgroundDecoration = BoxDecoration(
+    color: Palette.pagePrimaryColor.withOpacity(0.8),
+    borderRadius: StyleFactory.dialogCorner,
+    boxShadow: [StyleFactory.shadow]
+  );
 }
 
 class BorderFactory {
