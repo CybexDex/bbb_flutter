@@ -43,7 +43,7 @@ class _ExchangeState extends State<ExchangePage> {
                 padding: EdgeInsets.only(right: 20),
                 child: Center(
                   child: Text(
-                    "充值",
+                    S.of(context).top_up,
                     style: StyleFactory.navButtonTitleStyle,
                     textScaleFactor: 1,
                   ),
@@ -99,7 +99,7 @@ class _ExchangeState extends State<ExchangePage> {
                     Expanded(
                         flex: 1,
                         child: WidgetFactory.button(
-                            data: S.of(context).buy_up_price("0.21863"),
+                            data: S.of(context).buy_up,
                             color: Palette.redOrange,
                             onPressed: () {
                               router.navigateTo(context, "/trade",
@@ -111,7 +111,7 @@ class _ExchangeState extends State<ExchangePage> {
                     Expanded(
                         flex: 1,
                         child: WidgetFactory.button(
-                            data: S.of(context).buy_up_price("0.21863"),
+                            data: S.of(context).buy_down,
                             color: Palette.shamrockGreen,
                             onPressed: () {
                               router.navigateTo(context, "/trade",
@@ -124,7 +124,7 @@ class _ExchangeState extends State<ExchangePage> {
                 padding: EdgeInsets.only(bottom: 10),
                 child: Align(
                   child: Text(
-                    "我的持仓",
+                    S.of(context).my_orders_stock,
                     style: StyleFactory.title,
                   ),
                   alignment: Alignment.bottomLeft,
@@ -153,7 +153,8 @@ class _ExchangeState extends State<ExchangePage> {
             ImageFactory.emptyStock,
             Padding(
                 padding: EdgeInsets.only(top: 8),
-                child: Text("暂无持仓", style: StyleFactory.hintStyle))
+                child: Text(S.of(context).order_empty,
+                    style: StyleFactory.hintStyle))
           ],
         ),
       ),
@@ -190,7 +191,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              '充值',
+              S.of(context).top_up,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
@@ -209,7 +210,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              '提现',
+              S.of(context).withdraw,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
@@ -228,7 +229,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              '充提记录',
+              S.of(context).cash_records,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
@@ -247,7 +248,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              '交易记录',
+              S.of(context).transaction_records,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(

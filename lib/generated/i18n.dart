@@ -12,7 +12,7 @@ class S implements WidgetsLocalizations {
   const S();
 
   static const GeneratedLocalizationsDelegate delegate =
-    GeneratedLocalizationsDelegate();
+      GeneratedLocalizationsDelegate();
 
   static S of(BuildContext context) => Localizations.of<S>(context, S);
 
@@ -21,18 +21,44 @@ class S implements WidgetsLocalizations {
 
   String get account_name => "账户名";
   String get account_name_hint => "请输入账户名";
+  String get act_level => "实际杠杆";
   String get already_register => "已注册，请登录";
+  String get amend => "修改";
+  String get balance => "余额";
+  String get buy_down => "买跌";
+  String get buy_up => "买涨";
+  String get cash_records => "充提记录";
+  String get close_out => "平仓";
+  String get contain_fee => "包含手续费";
   String get create_new_account => "创建新账户";
+  String get cut_loss => "止损";
+  String get force_expiration => "自动平仓时间";
+  String get future_profit => "当前预计收益";
+  String get gain => "收益";
   String get get_pin_code => "获取验证码";
+  String get invest => "投资";
+  String get invest_amount => "投资份数";
   String get log_in => "登录";
+  String get logout => "退出登录";
+  String get loss => "亏损";
+  String get my_asset => "我的资产";
+  String get my_orders_stock => "我的持仓";
+  String get next_round_start => "下轮开始";
+  String get order_empty => "暂无持仓";
   String get password => "密码";
   String get password_confirm => "确认密码";
   String get password_confirm_hint => "请再次确认密码";
   String get password_hint => "请输入密码";
+  String get per_price => "当前每份价格";
   String get pin_code => "验证码";
   String get pin_code_hint => "请输入验证码";
   String get register => "注册";
-  String buy_up_price(String price) => "买涨/$price";
+  String get rest_amount => "剩余份数";
+  String get round_end => "结束下注";
+  String get take_profit => "止盈";
+  String get top_up => "充值";
+  String get transaction_records => "交易记录";
+  String get withdraw => "提现";
 }
 
 class $en extends S {
@@ -52,27 +78,65 @@ class $zh extends S {
   @override
   String get password_confirm => "确认密码";
   @override
+  String get act_level => "实际杠杆";
+  @override
+  String get invest_amount => "投资份数";
+  @override
+  String get contain_fee => "包含手续费";
+  @override
   String get create_new_account => "创建新账户";
+  @override
+  String get top_up => "充值";
+  @override
+  String get invest => "投资";
   @override
   String get pin_code => "验证码";
   @override
-  String get pin_code_hint => "请输入验证码";
+  String get order_empty => "暂无持仓";
   @override
   String get password_hint => "请输入密码";
   @override
+  String get gain => "收益";
+  @override
+  String get buy_up => "买涨";
+  @override
   String get get_pin_code => "获取验证码";
+  @override
+  String get loss => "亏损";
   @override
   String get password => "密码";
   @override
-  String get password_confirm_hint => "请再次确认密码";
+  String get take_profit => "止盈";
+  @override
+  String get balance => "余额";
   @override
   String get log_in => "登录";
   @override
   String get account_name => "账户名";
   @override
-  String get register => "注册";
+  String get round_end => "结束下注";
   @override
-  String buy_up_price(String price) => "买涨/$price";
+  String get rest_amount => "剩余份数";
+  @override
+  String get my_orders_stock => "我的持仓";
+  @override
+  String get buy_down => "买跌";
+  @override
+  String get next_round_start => "下轮开始";
+  @override
+  String get pin_code_hint => "请输入验证码";
+  @override
+  String get cut_loss => "止损";
+  @override
+  String get per_price => "当前每份价格";
+  @override
+  String get future_profit => "当前预计收益";
+  @override
+  String get password_confirm_hint => "请再次确认密码";
+  @override
+  String get force_expiration => "自动平仓时间";
+  @override
+  String get register => "注册";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
@@ -85,7 +149,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     ];
   }
 
-  LocaleListResolutionCallback listResolution({Locale fallback, bool withCountry = true}) {
+  LocaleListResolutionCallback listResolution(
+      {Locale fallback, bool withCountry = true}) {
     return (List<Locale> locales, Iterable<Locale> supported) {
       if (locales == null || locales.isEmpty) {
         return fallback ?? supported.first;
@@ -95,7 +160,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     };
   }
 
-  LocaleResolutionCallback resolution({Locale fallback, bool withCountry = true}) {
+  LocaleResolutionCallback resolution(
+      {Locale fallback, bool withCountry = true}) {
     return (Locale locale, Iterable<Locale> supported) {
       return _resolve(locale, fallback, supported, withCountry);
     };
@@ -111,7 +177,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         case "zh":
           return SynchronousFuture<S>(const $zh());
         default:
-          // NO-OP.
+        // NO-OP.
       }
     }
     return SynchronousFuture<S>(const S());
@@ -126,7 +192,8 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
   ///
   /// Internal method to resolve a locale from a list of locales.
   ///
-  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported, bool withCountry) {
+  Locale _resolve(Locale locale, Locale fallback, Iterable<Locale> supported,
+      bool withCountry) {
     if (locale == null || !_isSupported(locale, withCountry)) {
       return fallback ?? supported.first;
     }
@@ -159,7 +226,9 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
         }
 
         // If no country requirement is requested, check if this locale has no country.
-        if (true != withCountry && (supportedLocale.countryCode == null || supportedLocale.countryCode.isEmpty)) {
+        if (true != withCountry &&
+            (supportedLocale.countryCode == null ||
+                supportedLocale.countryCode.isEmpty)) {
           return true;
         }
       }
@@ -169,7 +238,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
 }
 
 String getLang(Locale l) => l == null
-  ? null
-  : l.countryCode != null && l.countryCode.isEmpty
-    ? l.languageCode
-    : l.toString();
+    ? null
+    : l.countryCode != null && l.countryCode.isEmpty
+        ? l.languageCode
+        : l.toString();

@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/common/style_factory.dart';
+import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:flutter/material.dart';
 
 import 'istep.dart';
@@ -12,7 +13,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "当前每份价格",
+                S.of(context).per_price,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -28,7 +29,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "剩余份数",
+                S.of(context).rest_amount,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -44,10 +45,13 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "投资份数",
+                S.of(context).invest_amount,
                 style: StyleFactory.subTitleStyle,
               ),
-              SizedBox(width: 76, child: IStep(text: "0"),)
+              SizedBox(
+                width: 76,
+                child: IStep(text: "0"),
+              )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
@@ -57,10 +61,13 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止盈",
+                S.of(context).take_profit,
                 style: StyleFactory.subTitleStyle,
               ),
-              SizedBox(width: 76, child: IStep(text: "50%"),)
+              SizedBox(
+                width: 76,
+                child: IStep(text: "50%"),
+              )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
@@ -70,7 +77,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止盈收益",
+                "${S.of(context).take_profit}${S.of(context).gain}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -86,10 +93,13 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止损",
+                S.of(context).cut_loss,
                 style: StyleFactory.subTitleStyle,
               ),
-              SizedBox(width: 76, child: IStep(text: "50%"),)
+              SizedBox(
+                width: 76,
+                child: IStep(text: "50%"),
+              )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           ),
@@ -99,7 +109,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止损亏损",
+                "${S.of(context).cut_loss}${S.of(context).loss}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(

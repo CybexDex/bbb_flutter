@@ -1,9 +1,8 @@
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:flutter/material.dart';
-
-import 'istep.dart';
 
 class OrderInfo extends StatelessWidget {
   @override
@@ -24,7 +23,8 @@ class OrderInfo extends StatelessWidget {
               Expanded(
                   child: Align(
                 alignment: Alignment.centerRight,
-                child: WidgetFactory.smallButton(data: "平仓", onPressed: () {}),
+                child: WidgetFactory.smallButton(
+                    data: S.of(context).close_out, onPressed: () {}),
               )),
             ],
           ),
@@ -34,7 +34,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "当前预计收益",
+                S.of(context).future_profit,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -50,7 +50,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "实际杠杆",
+                S.of(context).act_level,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -66,7 +66,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "投资",
+                S.of(context).invest,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -82,7 +82,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "止盈/止损",
+                "${S.of(context).take_profit}/${S.of(context).cut_loss}",
                 style: StyleFactory.subTitleStyle,
               ),
               Expanded(
@@ -98,7 +98,8 @@ class OrderInfo extends StatelessWidget {
                         style: StyleFactory.smallCellTitleStyle,
                       ),
                     ),
-                    WidgetFactory.smallButton(data: "修改", onPressed: () {}),
+                    WidgetFactory.smallButton(
+                        data: S.of(context).amend, onPressed: () {}),
                   ],
                 ),
               )),
@@ -111,7 +112,7 @@ class OrderInfo extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "自动平仓时间",
+                S.of(context).force_expiration,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
