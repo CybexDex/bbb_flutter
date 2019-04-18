@@ -78,4 +78,34 @@ class DialogFactory {
       ],
     );
   }
+
+  static CupertinoAlertDialog successDialog(BuildContext context,
+      {String value}) {
+    return CupertinoAlertDialog(
+      title: Column(
+        children: <Widget>[
+          Image.asset("res/assets/icons/icSuccess.png"),
+          Text("平仓成功", style: StyleFactory.dialogButtonFontStyle)
+        ],
+      ),
+      content: Column(
+        children: <Widget>[
+          Text("此次平仓收益", style: StyleFactory.dialogContentStyle),
+          Text(value, style: StyleFactory.dialogButtonFontStyle)
+        ],
+      ),
+    );
+  }
+
+  static CupertinoAlertDialog failDialog(BuildContext context,
+      {String content}) {
+    return CupertinoAlertDialog(
+      title: Column(
+        children: <Widget>[
+          Image.asset("res/assets/icons/icFail.png"),
+          Text("平仓失败", style: StyleFactory.dialogButtonFontStyle)
+        ],
+      ),
+    );
+  }
 }

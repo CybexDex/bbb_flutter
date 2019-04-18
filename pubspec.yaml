@@ -76,6 +76,9 @@ flutter:
     - res/assets/icons/icDownGreen14.png
     - res/assets/icons/icFallGreen.png
     - res/assets/icons/icTabArrow.png
+    - res/assets/icons/icSuccess.png
+    - res/assets/icons/icFail.png
+
     - res/assets/icons/icTime.png
     - res/assets/icons/icHand.png
 

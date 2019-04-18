@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
+import 'package:bbb_flutter/common/dialog_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
@@ -36,7 +37,19 @@ class _TradeState extends State<TradePage> {
                   ),
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    Future.delayed(Duration(seconds: 3), () {
+                      Navigator.of(context).pop(true);
+                    });
+                    return DialogFactory.failDialog(context,
+                        content: "23 USDT");
+                  },
+                  barrierDismissible: false,
+                );
+              },
             )
           ],
           centerTitle: true,
