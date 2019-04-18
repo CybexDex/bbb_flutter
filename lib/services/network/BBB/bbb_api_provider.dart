@@ -1,8 +1,12 @@
+import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
+import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/services/BBBAPI.dart';
+import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:dio/dio.dart';
 
 class BBBAPIProvider extends BBBAPI {
@@ -64,5 +68,25 @@ class BBBAPIProvider extends BBBAPI {
         .toList()
         .toList();
     return Future.value(model);
+  }
+
+  @override
+  Future<PostOrderResponseModel> amendOrder(
+      {AmendOrderRequestModel order}) async {
+    var response = await dio.post("/transaction");
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
+  }
+
+  @override
+  Future<PostOrderResponseModel> postOrder(
+      {PostOrderRequestModel order}) async {
+    var response = await dio.post("/transaction");
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
+  }
+
+  @override
+  Future<AccountResponseModel> getAccount({String name}) async {
+    var response = await dio.get("/account?accountName=$name");
+    return Future.value(AccountResponseModel.fromJson(response.data["result"]));
   }
 }
