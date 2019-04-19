@@ -86,4 +86,10 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.largeButtonFontSize);
+
+  static var hyperText = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
 }

@@ -78,6 +78,15 @@ flutter:
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icSuccess.png
     - res/assets/icons/icFail.png
+    - res/assets/icons/icUser.png
+    - res/assets/icons/icPassword.png
+    - res/assets/icons/icCode.png
+    - res/assets/icons/icWarn.png
+
+
+
+
+
 
     - res/assets/icons/icTime.png
     - res/assets/icons/icHand.png

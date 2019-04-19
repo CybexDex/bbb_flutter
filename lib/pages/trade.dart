@@ -4,8 +4,12 @@ import 'package:bbb_flutter/common/dialog_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
+import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
+import 'package:bbb_flutter/widgets/order_info.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 class TradePage extends StatefulWidget {
@@ -61,7 +65,10 @@ class _TradeState extends State<TradePage> {
               ),
               GestureDetector(
                 child: ImageFactory.trendSwitch,
-                onTap: () {},
+                onTap: () {
+                  router.navigateTo(context, "/login",
+                      transition: TransitionType.inFromRight);
+                },
               )
             ],
             mainAxisSize: MainAxisSize.min,

@@ -8,16 +8,16 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final String title;
 
-  LoginPage({Key key, this.title}) : super(key: key);
+  RegisterPage({Key key, this.title}) : super(key: key);
 
   @override
-  State createState() => _LoginState();
+  State createState() => _RegisterState();
 }
 
-class _LoginState extends State<LoginPage> {
+class _RegisterState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +26,7 @@ class _LoginState extends State<LoginPage> {
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text("登录", style: StyleFactory.title),
+          title: Text("注册", style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
@@ -41,7 +41,7 @@ class _LoginState extends State<LoginPage> {
                       Container(
                         width: double.infinity,
                         decoration: DecorationFactory.cornerShadowDecoration,
-                        height: 200,
+                        height: 310,
                         margin: EdgeInsets.only(top: 20),
                         child: Column(
                           children: <Widget>[
@@ -55,7 +55,7 @@ class _LoginState extends State<LoginPage> {
                                     Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "欢迎登录您的账户!",
+                                        "欢迎注册您的账户!",
                                         style: StyleFactory.title,
                                       ),
                                     ),
@@ -100,34 +100,93 @@ class _LoginState extends State<LoginPage> {
                                                     width: 0.5))),
                                       )
                                     ],
-                                  )
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      TextField(
+                                        decoration: InputDecoration(
+                                            hintText: "请再次确认密码",
+                                            hintStyle:
+                                                StyleFactory.textFieldHint,
+                                            icon: Image.asset(
+                                                "res/assets/icons/icPassword.png"),
+                                            border: InputBorder.none),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color:
+                                                        Palette.separatorColor,
+                                                    width: 0.5))),
+                                      )
+                                    ],
+                                  ),
+                                  Column(
+                                    children: <Widget>[
+                                      TextField(
+                                        decoration: InputDecoration(
+                                            hintText: "请输入验证码",
+                                            hintStyle:
+                                                StyleFactory.textFieldHint,
+                                            icon: Image.asset(
+                                                "res/assets/icons/icCode.png"),
+                                            border: InputBorder.none),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color:
+                                                        Palette.separatorColor,
+                                                    width: 0.5))),
+                                      )
+                                    ],
+                                  ),
                                 ]))
                           ],
                         ),
                       ),
                       Container(
                           alignment: Alignment.bottomCenter,
-                          margin: EdgeInsets.only(top: 190),
+                          margin: EdgeInsets.only(top: 300),
                           child: ButtonTheme(
                             minWidth: 200,
                             child: WidgetFactory.button(
                                 onPressed: () {},
                                 color: Palette.redOrange,
-                                data: "登录"),
+                                data: "注册"),
                           ))
                     ],
                   ),
                   SizedBox(
-                    height: 60,
+                    height: 32,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Image.asset("res/assets/icons/icWarn.png"),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "为了您的资金安全请妥善保存您的密码，该密码无法找回!",
+                        style: StyleFactory.subTitleStyle,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 48,
                   ),
                   GestureDetector(
-                    child: Text(
-                      "创建新账户",
-                      style: StyleFactory.hyperText,
-                    ),
+                    child: RichText(
+                        text: new TextSpan(children: [
+                      new TextSpan(
+                          style: StyleFactory.textFieldHint, text: "已注册？"),
+                      new TextSpan(style: StyleFactory.hyperText, text: "去登录")
+                    ])),
                     onTap: () {
-                      router.navigateTo(context, "/register",
-                          transition: TransitionType.inFromRight);
+                      router.navigateTo(context, "/login",
+                          transition: TransitionType.inFromLeft);
                     },
                   )
                 ],
