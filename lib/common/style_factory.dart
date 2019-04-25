@@ -8,78 +8,67 @@ class StyleFactory {
       color: Color.fromRGBO(0, 0, 0, 0.1),
       offset: Offset(0, 4),
       spreadRadius: 0,
-      blurRadius: 12
-  );
+      blurRadius: 12);
 
   static const corner = BorderRadius.all(Radius.circular(Dimen.corner));
 
-  static const title = TextStyle(
-    color: Palette.titleColor,
-    fontWeight: FontWeight.w600,
-    fontStyle: FontStyle.normal,
-    fontSize: Dimen.titleFontSize
-  );
+  static var title = TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.titleFontSize);
 
-  static const buttonTitleStyle = TextStyle(
+  static var buttonTitleStyle = TextStyle(
       color: Palette.buttonPrimaryColor,
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.largeButtonFontSize
-  );
+      fontSize: Dimen.largeButtonFontSize);
 
-  static const navButtonTitleStyle = TextStyle(
+  static var navButtonTitleStyle = TextStyle(
       color: Palette.actionButtonColor,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.middleButtonFontSize
-  );
+      fontSize: Dimen.middleButtonFontSize);
 
-  static const smallButtonTitleStyle = TextStyle(
+  static var smallButtonTitleStyle = TextStyle(
       color: Palette.redOrange,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.verySmallLabelFontSize
-  );
+      fontSize: Dimen.verySmallLabelFontSize);
 
-  static const hintStyle = TextStyle(
+  static var hintStyle = TextStyle(
       color: Palette.hintTitleColor,
       fontWeight: FontWeight.w400,
-      fontStyle:  FontStyle.normal,
-      fontSize: Dimen.smallLabelFontSize
-  );
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 
-  static const subTitleStyle = const TextStyle(
+  static var subTitleStyle = TextStyle(
       color: Palette.subTitleColor,
       fontWeight: FontWeight.w400,
-      fontStyle:  FontStyle.normal,
-      fontSize: Dimen.smallLabelFontSize
-  );
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 
-  static const smallCellTitleStyle = const TextStyle(
+  static var smallCellTitleStyle = TextStyle(
       color: Palette.titleColor,
       fontWeight: FontWeight.w400,
-      fontStyle:  FontStyle.normal,
-      fontSize: Dimen.smallLabelFontSize
-  );
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 
-  static const cellTitleStyle = const TextStyle(
+  static var cellTitleStyle = TextStyle(
       color: Palette.titleColor,
       fontWeight: FontWeight.w400,
-      fontStyle:  FontStyle.normal,
-      fontSize: Dimen.middleLabelFontSize
-  );
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
 
-  static const cellBoldTitleStyle = const TextStyle(
+  static var cellBoldTitleStyle = TextStyle(
       color: Palette.titleColor,
       fontWeight: FontWeight.w600,
-      fontStyle:  FontStyle.normal,
-      fontSize: Dimen.smallLabelFontSize
-  );
-  
-  static const loginFontStyle = TextStyle(
-    color: Palette.subTitleColor,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-    fontSize: Dimen.smallLabelFontSize
-  );
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
+
+  static var loginFontStyle = TextStyle(
+      color: Palette.subTitleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }

@@ -19,5 +19,6 @@ class ImageFactory {
   static final downIcon18 = Image.asset("res/assets/icons/icFallGreen.png");
   static final rowArrow = Image.asset("res/assets/icons/icTabArrow.png");
   static final back = Image.asset("res/assets/icons/icNotifyBack.png");
-
+  static final icHand = Image.asset("res/assets/icons/icHand.png");
+  static final icTime = Image.asset("res/assets/icons/icTime.png");
 }

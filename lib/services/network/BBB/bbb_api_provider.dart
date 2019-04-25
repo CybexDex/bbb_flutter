@@ -47,7 +47,6 @@ class BBBAPIProvider extends BBBAPI {
     var responseData = response.data as List<Map<String, dynamic>>;
     List<OrderResponseModel> model = responseData
         .map((data) => OrderResponseModel.fromJson(data))
-        .toList()
         .toList();
 
     return Future.value(model);

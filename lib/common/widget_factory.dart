@@ -1,10 +1,8 @@
-import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:flutter/material.dart';
 
 import 'decoration_factory.dart';
 import 'dimen.dart';
-import 'image_factory.dart';
 
 class WidgetFactory {
 //  static buttonTopBottomPadding = Padding();
@@ -33,7 +31,11 @@ class WidgetFactory {
           side: BorderFactory.buttonBorder,
           borderRadius: BorderRadius.circular(Dimen.smallCorner),
         )),
-        child: Text(data, style: StyleFactory.smallButtonTitleStyle),
+        child: Text(
+          data,
+          style: StyleFactory.smallButtonTitleStyle,
+          textAlign: TextAlign.center,
+        ),
         padding: Dimen.smallButtonPadding,
       ),
       onTap: onPressed,

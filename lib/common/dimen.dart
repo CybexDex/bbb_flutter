@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Dimen {
-  static const double titleFontSize = 18.0;
-  static const double verySmallLabelFontSize = 10.0;
-  static const double smallLabelFontSize = 12.0;
-  static const double middleLabelFontSize = 14.0;
-  static const double largeLabelFontSize = 16.0;
-  static const double veryLargeLabelFontSize = 20.0;
+  static double titleFontSize = ScreenUtil.getInstance().setSp(18.0);
+  static double verySmallLabelFontSize = ScreenUtil.getInstance().setSp(10.0);
+  static double smallLabelFontSize = ScreenUtil.getInstance().setSp(12.0);
+  static double middleLabelFontSize = ScreenUtil.getInstance().setSp(14.0);
+  static double largeLabelFontSize = ScreenUtil.getInstance().setSp(16.0);
+  static double veryLargeLabelFontSize = ScreenUtil.getInstance().setSp(20.0);
 
-  static const double largeButtonFontSize = 16.0;
-  static const double middleButtonFontSize = 14.0;
-  static const double smallButtonFontSize = 12.0;
+  static double largeButtonFontSize = ScreenUtil.getInstance().setSp(16.0);
+  static double middleButtonFontSize = ScreenUtil.getInstance().setSp(14.0);
+  static double smallButtonFontSize = ScreenUtil.getInstance().setSp(12.0);
 
   static const double smallCorner = 2.0;
   static const double corner = 4.0;
