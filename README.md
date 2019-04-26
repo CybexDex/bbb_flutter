@@ -1,16 +1,11 @@
 # bbb_flutter
 
-A new Flutter project.
+A Flutter project of Cybex Micro-Contract.
 
-## Getting Started
+## Cybex Micro-Contract Product Definition
 
-This project is a starting point for a Flutter application.
+Cybex Micro-Contract is a contract that provides high leverage trading in Cybex. It is designed to have a simple pricing formula that’s easy to understand for retail customers. The product has its origin from CBBC (callable bull bear contract) and CFD (contract for difference).
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+● MicroFuture, 微期货
+● BBB, bull-bear bond， 牛熊棒
+● Crypto CBBC ， 加密牛熊证
