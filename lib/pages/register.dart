@@ -1,12 +1,21 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../env.dart';
 
 class RegisterPage extends StatefulWidget {
   final String title;
@@ -18,6 +27,43 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterState extends State<RegisterPage> {
+  Timer timer;
+  Widget _widget = Text(
+    "获取验证码",
+    style: StyleFactory.pinCodeText,
+  );
+
+  displaySvg() {
+    getSvg();
+    if (timer != null) {
+      timer.cancel();
+    }
+    timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      getSvg();
+    });
+  }
+
+  getSvg() {
+    Future<FaucetCaptchaResponseModel> response =
+        FaucetAPIProvider().getCaptcha();
+    response.then((FaucetCaptchaResponseModel model) {
+      String rawSvg = model.data;
+      setState(() {
+        _widget = SvgPicture.string(
+          rawSvg,
+          width: 20,
+          height: 20,
+        );
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +108,11 @@ class _RegisterState extends State<RegisterPage> {
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    TextField(
+                                    TextFormField(
                                       decoration: InputDecoration(
                                           hintText:
                                               S.of(context).account_name_hint,
-                                          hintStyle: StyleFactory.textFieldHint,
+                                          hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
                                           border: InputBorder.none),
@@ -85,8 +131,7 @@ class _RegisterState extends State<RegisterPage> {
                                         decoration: InputDecoration(
                                             hintText:
                                                 S.of(context).password_confirm,
-                                            hintStyle:
-                                                StyleFactory.textFieldHint,
+                                            hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
                                                 "res/assets/icons/icPassword.png"),
                                             border: InputBorder.none),
@@ -106,8 +151,7 @@ class _RegisterState extends State<RegisterPage> {
                                       TextField(
                                         decoration: InputDecoration(
                                             hintText: "请再次确认密码",
-                                            hintStyle:
-                                                StyleFactory.textFieldHint,
+                                            hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
                                                 "res/assets/icons/icPassword.png"),
                                             border: InputBorder.none),
@@ -124,14 +168,26 @@ class _RegisterState extends State<RegisterPage> {
                                   ),
                                   Column(
                                     children: <Widget>[
-                                      TextField(
-                                        decoration: InputDecoration(
-                                            hintText: "请输入验证码",
-                                            hintStyle:
-                                                StyleFactory.textFieldHint,
-                                            icon: Image.asset(
-                                                "res/assets/icons/icCode.png"),
-                                            border: InputBorder.none),
+                                      Row(
+                                        children: <Widget>[
+                                          Flexible(
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                  hintText: "请输入验证码",
+                                                  hintStyle:
+                                                      StyleFactory.hintStyle,
+                                                  icon: Image.asset(
+                                                      "res/assets/icons/icCode.png"),
+                                                  border: InputBorder.none),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            child: _widget,
+                                            onTap: () {
+                                              displaySvg();
+                                            },
+                                          )
+                                        ],
                                       ),
                                       Container(
                                         decoration: BoxDecoration(
@@ -180,8 +236,7 @@ class _RegisterState extends State<RegisterPage> {
                   GestureDetector(
                     child: RichText(
                         text: new TextSpan(children: [
-                      new TextSpan(
-                          style: StyleFactory.textFieldHint, text: "已注册？"),
+                      new TextSpan(style: StyleFactory.hintStyle, text: "已注册？"),
                       new TextSpan(style: StyleFactory.hyperText, text: "去登录")
                     ])),
                     onTap: () {

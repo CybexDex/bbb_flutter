@@ -92,4 +92,10 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.middleLabelFontSize);
+
+  static var pinCodeText = TextStyle(
+      color: Palette.sunYellow,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }

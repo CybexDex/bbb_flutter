@@ -66,7 +66,7 @@ class _LoginState extends State<LoginPage> {
                                       decoration: InputDecoration(
                                           hintText:
                                               S.of(context).account_name_hint,
-                                          hintStyle: StyleFactory.textFieldHint,
+                                          hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
                                           border: InputBorder.none),
@@ -85,8 +85,7 @@ class _LoginState extends State<LoginPage> {
                                         decoration: InputDecoration(
                                             hintText:
                                                 S.of(context).password_confirm,
-                                            hintStyle:
-                                                StyleFactory.textFieldHint,
+                                            hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
                                                 "res/assets/icons/icPassword.png"),
                                             border: InputBorder.none),
