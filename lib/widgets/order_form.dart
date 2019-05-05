@@ -1,5 +1,5 @@
 import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:flutter/material.dart';
 
 import 'istep.dart';
@@ -13,7 +13,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                I18n.of(context).per_price,
+                I18n.of(context).perPrice,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -29,7 +29,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                I18n.of(context).rest_amount,
+                I18n.of(context).restAmount,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -45,7 +45,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                I18n.of(context).invest_amount,
+                I18n.of(context).investAmount,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -61,7 +61,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                I18n.of(context).take_profit,
+                I18n.of(context).takeProfit,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -77,7 +77,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "${I18n.of(context).take_profit}${I18n.of(context).gain}",
+                "${I18n.of(context).takeProfit}${I18n.of(context).gain}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -93,7 +93,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                I18n.of(context).cut_loss,
+                I18n.of(context).cutLoss,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -109,7 +109,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "${I18n.of(context).cut_loss}${I18n.of(context).loss}",
+                "${I18n.of(context).cutLoss}${I18n.of(context).loss}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(

@@ -7,7 +7,7 @@ import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
@@ -111,7 +111,7 @@ class _RegisterState extends State<RegisterPage> {
                                     TextFormField(
                                       decoration: InputDecoration(
                                           hintText: I18n.of(context)
-                                              .account_name_hint,
+                                              .accountNameHint,
                                           hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
@@ -130,7 +130,7 @@ class _RegisterState extends State<RegisterPage> {
                                       TextField(
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
-                                                .password_confirm,
+                                                .passwordConfirm,
                                             hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
                                                 "res/assets/icons/icPassword.png"),

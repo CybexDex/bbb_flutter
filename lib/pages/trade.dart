@@ -6,7 +6,7 @@ import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:fluro/fluro.dart';
@@ -35,7 +35,7 @@ class _TradeState extends State<TradePage> {
                 padding: EdgeInsets.only(right: 20),
                 child: Center(
                   child: Text(
-                    I18n.of(context).top_up,
+                    I18n.of(context).topUp,
                     style: StyleFactory.navButtonTitleStyle,
                     textScaleFactor: 1,
                   ),
@@ -91,7 +91,7 @@ class _TradeState extends State<TradePage> {
                         text: TextSpan(children: [
                       TextSpan(
                           style: StyleFactory.subTitleStyle,
-                          text: "${I18n.of(context).round_end} "),
+                          text: "${I18n.of(context).roundEnd} "),
                       TextSpan(
                           style: StyleFactory.cellBoldTitleStyle,
                           text: "05:21"),
@@ -100,7 +100,7 @@ class _TradeState extends State<TradePage> {
                         text: TextSpan(children: [
                       TextSpan(
                           style: StyleFactory.subTitleStyle,
-                          text: "${I18n.of(context).next_round_start} "),
+                          text: "${I18n.of(context).nextRoundStart} "),
                       TextSpan(
                           style: StyleFactory.cellBoldTitleStyle,
                           text: "10:21"),

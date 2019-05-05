@@ -1,7 +1,7 @@
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:flutter/material.dart';
 
 class OrderInfo extends StatelessWidget {
@@ -26,7 +26,7 @@ class OrderInfo extends StatelessWidget {
                     child: Align(
                   alignment: Alignment.centerRight,
                   child: WidgetFactory.smallButton(
-                      data: I18n.of(context).close_out, onPressed: () {}),
+                      data: I18n.of(context).closeOut, onPressed: () {}),
                 )),
               ],
             ),
@@ -41,7 +41,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    I18n.of(context).future_profit,
+                    I18n.of(context).futureProfit,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
@@ -61,7 +61,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    I18n.of(context).act_level,
+                    I18n.of(context).actLevel,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
@@ -101,7 +101,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "${I18n.of(context).take_profit}/${I18n.of(context).cut_loss}",
+                    "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
                     style: StyleFactory.subTitleStyle,
                   ),
                   Expanded(
@@ -135,7 +135,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    I18n.of(context).force_expiration,
+                    I18n.of(context).forceExpiration,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(

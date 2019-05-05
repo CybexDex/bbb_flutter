@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:bbb_flutter/env.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:bbb_flutter/pages/exchange.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 main() async {
   initLogger(package: 'bbb');
@@ -35,10 +35,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BBB',
-      localizationsDelegates: [I18n.delegate],
-      supportedLocales: I18n.delegate.supportedLocales,
-      localeResolutionCallback:
-          I18n.delegate.resolution(fallback: const Locale('en', 'US')),
+      localizationsDelegates: [
+        I18n.delegate
+      ],
+      locale: Locale("en"),
+      supportedLocales: [
+        const Locale("en"),
+        const Locale("zh"),
+      ],
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        return Locale("en");
+      },
       home: ExchangePage(title: '.BXBT'),
     );
   }

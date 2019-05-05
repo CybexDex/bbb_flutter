@@ -4,7 +4,7 @@ import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
-import 'package:bbb_flutter/generated/i18n.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
@@ -48,7 +48,7 @@ class _ExchangeState extends State<ExchangePage> {
                 padding: EdgeInsets.only(right: 20),
                 child: Center(
                   child: Text(
-                    I18n.of(context).top_up,
+                    I18n.of(context).topUp,
                     style: StyleFactory.navButtonTitleStyle,
                     textScaleFactor: 1,
                   ),
@@ -155,7 +155,7 @@ class _ExchangeState extends State<ExchangePage> {
                     Expanded(
                         flex: 1,
                         child: WidgetFactory.button(
-                            data: I18n.of(context).buy_up,
+                            data: I18n.of(context).buyUp,
                             color: Palette.redOrange,
                             onPressed: () {
                               router.navigateTo(context, "/trade",
@@ -167,7 +167,7 @@ class _ExchangeState extends State<ExchangePage> {
                     Expanded(
                         flex: 1,
                         child: WidgetFactory.button(
-                            data: I18n.of(context).buy_down,
+                            data: I18n.of(context).buyDown,
                             color: Palette.shamrockGreen,
                             onPressed: () {
                               router.navigateTo(context, "/trade",
@@ -181,7 +181,7 @@ class _ExchangeState extends State<ExchangePage> {
                 margin: Dimen.pageMargin,
                 child: Align(
                   child: Text(
-                    I18n.of(context).my_orders_stock,
+                    I18n.of(context).myOrdersStock,
                     style: StyleFactory.title,
                   ),
                   alignment: Alignment.bottomLeft,
@@ -202,7 +202,7 @@ class _ExchangeState extends State<ExchangePage> {
             ImageFactory.emptyStock,
             Padding(
                 padding: EdgeInsets.only(top: 8),
-                child: Text(I18n.of(context).order_empty,
+                child: Text(I18n.of(context).orderEmpty,
                     style: StyleFactory.hintStyle))
           ],
         ),
@@ -294,7 +294,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              I18n.of(context).top_up,
+              I18n.of(context).topUp,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
@@ -332,7 +332,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              I18n.of(context).cash_records,
+              I18n.of(context).cashRecords,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
@@ -351,7 +351,7 @@ class _ExchangeState extends State<ExchangePage> {
           ),
           ListTile(
             title: Text(
-              I18n.of(context).transaction_records,
+              I18n.of(context).transactionRecords,
               style: StyleFactory.cellTitleStyle,
             ),
             trailing: GestureDetector(
