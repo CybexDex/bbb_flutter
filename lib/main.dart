@@ -35,11 +35,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BBB',
-      localizationsDelegates: const <
-          LocalizationsDelegate<WidgetsLocalizations>>[S.delegate],
-      supportedLocales: S.delegate.supportedLocales,
+      localizationsDelegates: [I18n.delegate],
+      supportedLocales: I18n.delegate.supportedLocales,
       localeResolutionCallback:
-          S.delegate.resolution(fallback: const Locale('en', '')),
+          I18n.delegate.resolution(fallback: const Locale('en', 'US')),
       home: ExchangePage(title: '.BXBT'),
     );
   }

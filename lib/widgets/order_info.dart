@@ -26,7 +26,7 @@ class OrderInfo extends StatelessWidget {
                     child: Align(
                   alignment: Alignment.centerRight,
                   child: WidgetFactory.smallButton(
-                      data: S.of(context).close_out, onPressed: () {}),
+                      data: I18n.of(context).close_out, onPressed: () {}),
                 )),
               ],
             ),
@@ -41,11 +41,11 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    S.of(context).future_profit,
+                    I18n.of(context).future_profit,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    "23 USDT≈213 RMB",
+                    "25 USDT≈213 RMB",
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -61,7 +61,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    S.of(context).act_level,
+                    I18n.of(context).act_level,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
@@ -81,7 +81,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    S.of(context).invest,
+                    I18n.of(context).invest,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
@@ -101,7 +101,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "${S.of(context).take_profit}/${S.of(context).cut_loss}",
+                    "${I18n.of(context).take_profit}/${I18n.of(context).cut_loss}",
                     style: StyleFactory.subTitleStyle,
                   ),
                   Expanded(
@@ -113,12 +113,12 @@ class OrderInfo extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(right: 10),
                           child: Text(
-                            "50% / 50%",
+                            "40% / 50%",
                             style: StyleFactory.smallCellTitleStyle,
                           ),
                         ),
                         WidgetFactory.smallButton(
-                            data: S.of(context).amend, onPressed: () {}),
+                            data: I18n.of(context).amend, onPressed: () {}),
                       ],
                     ),
                   )),
@@ -135,7 +135,7 @@ class OrderInfo extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Text(
-                    S.of(context).force_expiration,
+                    I18n.of(context).force_expiration,
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(

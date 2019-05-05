@@ -110,8 +110,8 @@ class _RegisterState extends State<RegisterPage> {
                                     ),
                                     TextFormField(
                                       decoration: InputDecoration(
-                                          hintText:
-                                              S.of(context).account_name_hint,
+                                          hintText: I18n.of(context)
+                                              .account_name_hint,
                                           hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
@@ -129,8 +129,8 @@ class _RegisterState extends State<RegisterPage> {
                                     children: <Widget>[
                                       TextField(
                                         decoration: InputDecoration(
-                                            hintText:
-                                                S.of(context).password_confirm,
+                                            hintText: I18n.of(context)
+                                                .password_confirm,
                                             hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
                                                 "res/assets/icons/icPassword.png"),

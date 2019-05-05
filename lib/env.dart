@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/generated/i18n.dart';
 import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';

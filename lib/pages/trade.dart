@@ -35,7 +35,7 @@ class _TradeState extends State<TradePage> {
                 padding: EdgeInsets.only(right: 20),
                 child: Center(
                   child: Text(
-                    S.of(context).top_up,
+                    I18n.of(context).top_up,
                     style: StyleFactory.navButtonTitleStyle,
                     textScaleFactor: 1,
                   ),
@@ -91,7 +91,7 @@ class _TradeState extends State<TradePage> {
                         text: TextSpan(children: [
                       TextSpan(
                           style: StyleFactory.subTitleStyle,
-                          text: "${S.of(context).round_end} "),
+                          text: "${I18n.of(context).round_end} "),
                       TextSpan(
                           style: StyleFactory.cellBoldTitleStyle,
                           text: "05:21"),
@@ -100,7 +100,7 @@ class _TradeState extends State<TradePage> {
                         text: TextSpan(children: [
                       TextSpan(
                           style: StyleFactory.subTitleStyle,
-                          text: "${S.of(context).next_round_start} "),
+                          text: "${I18n.of(context).next_round_start} "),
                       TextSpan(
                           style: StyleFactory.cellBoldTitleStyle,
                           text: "10:21"),

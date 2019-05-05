@@ -13,7 +13,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                S.of(context).per_price,
+                I18n.of(context).per_price,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -29,7 +29,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                S.of(context).rest_amount,
+                I18n.of(context).rest_amount,
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -45,7 +45,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                S.of(context).invest_amount,
+                I18n.of(context).invest_amount,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -61,7 +61,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                S.of(context).take_profit,
+                I18n.of(context).take_profit,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -77,7 +77,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "${S.of(context).take_profit}${S.of(context).gain}",
+                "${I18n.of(context).take_profit}${I18n.of(context).gain}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
@@ -93,7 +93,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                S.of(context).cut_loss,
+                I18n.of(context).cut_loss,
                 style: StyleFactory.subTitleStyle,
               ),
               SizedBox(
@@ -109,7 +109,7 @@ class OrderForm extends StatelessWidget {
           Row(
             children: <Widget>[
               Text(
-                "${S.of(context).cut_loss}${S.of(context).loss}",
+                "${I18n.of(context).cut_loss}${I18n.of(context).loss}",
                 style: StyleFactory.subTitleStyle,
               ),
               Text(
