@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
@@ -6,6 +8,8 @@ import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
+import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
+import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
@@ -14,11 +18,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../env.dart';
 
 class ExchangePage extends StatefulWidget {
-  ExchangePage({Key key, this.title}) : super(key: key);
+  ExchangePage({Key key, this.title, this.channel}) : super(key: key);
 
   final String title;
+  final WebSocketChannel channel;
 
   @override
   State<StatefulWidget> createState() => _ExchangeState();
@@ -27,6 +35,7 @@ class ExchangePage extends StatefulWidget {
 class _ExchangeState extends State<ExchangePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _current = 0;
+  List<TickerData> _listTickerData = [];
 
   @override
   void initState() {
@@ -37,6 +46,13 @@ class _ExchangeState extends State<ExchangePage> {
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
+    injector.marketHistoryBloc.fetchPriceHistory(
+        startTime: DateTime.now()
+            .subtract(Duration(days: 15))
+            .toUtc()
+            .toIso8601String(),
+        endTime: DateTime.now().toUtc().toIso8601String(),
+        asset: "BXBT");
 
     return Scaffold(
         key: _scaffoldKey,
@@ -96,56 +112,58 @@ class _ExchangeState extends State<ExchangePage> {
                 height: double.infinity,
                 margin: EdgeInsets.only(top: 1, left: 20, right: 20),
                 child: Container(
-                  child: Sparkline(
-                    data: [
-                      TickerData(
-                          3.4,
-                          DateTime.now()
-                              .subtract(Duration(minutes: 14, seconds: 22))),
-                      TickerData(
-                          5.4,
-                          DateTime.now()
-                              .subtract(Duration(minutes: 10, seconds: 28))),
-                      TickerData(
-                          8.4,
-                          DateTime.now()
-                              .subtract(Duration(minutes: 5, seconds: 42))),
-                      TickerData(
-                          1.4,
-                          DateTime.now()
-                              .add(Duration(minutes: 11, seconds: 12))),
-                      TickerData(
-                          3.5,
-                          DateTime.now()
-                              .add(Duration(minutes: 13, seconds: 2))),
-                      TickerData(
-                          1.7,
-                          DateTime.now()
-                              .add(Duration(minutes: 14, seconds: 2))),
-                    ],
-                    suppleData: SuppleData(
-                        stopTime: DateTime.now().add(Duration(minutes: 2)),
-                        endTime: DateTime.now().add(Duration(minutes: 12)),
-                        cutOff: 1.7,
-                        takeProfit: 7.8,
-                        underOrder: 4.5,
-                        current: 6.0),
-                    startTime: DateTime.now().subtract(Duration(minutes: 15)),
-                    startLineOfTime:
-                        DateTime.now().subtract(Duration(minutes: 15)),
-                    endTime: DateTime.now().add(Duration(minutes: 15)),
-                    lineColor: Palette.darkSkyBlue,
-                    lineWidth: 2,
-                    gridLineWidth: 0.5,
-                    fillGradient: LinearGradient(colors: [
-                      Palette.darkSkyBlue.withAlpha(100),
-                      Palette.darkSkyBlue.withAlpha(0)
-                    ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                    gridLineColor: Palette.veryLightPinkTwo,
-                    pointSize: 8.0,
-                    pointColor: Palette.darkSkyBlue,
-                  ),
-                ),
+                    child: StreamBuilder<List<TickerData>>(
+                  builder: (context, snapshot) {
+                    var response = snapshot.data;
+                    log.info(response.toString());
+                    _listTickerData.addAll(response);
+                    widget.channel.sink.add(jsonEncode(WebSocketRequestEntity(
+                            type: "subscribe", topic: "FAIRPRICE.BXBT"))
+                        .toString());
+                    return StreamBuilder(
+                      builder: (context, wbSnapShot) {
+                        var wbResponse =
+                            WebSocketNXPriceResponseEntity.fromJson(
+                                json.decode(wbSnapShot.data));
+                        return Sparkline(
+                          data: _listTickerData
+                            ..add(TickerData(wbResponse.px,
+                                DateTime.parse(wbResponse.time))),
+                          suppleData: SuppleData(
+                              stopTime:
+                                  DateTime.now().add(Duration(minutes: 2)),
+                              endTime:
+                                  DateTime.now().add(Duration(minutes: 12)),
+                              cutOff: 1.7,
+                              takeProfit: 7.8,
+                              underOrder: 4.5,
+                              current: 6.0),
+                          startTime:
+                              DateTime.now().subtract(Duration(minutes: 15)),
+                          startLineOfTime:
+                              DateTime.now().subtract(Duration(minutes: 15)),
+                          endTime: DateTime.now().add(Duration(minutes: 15)),
+                          lineColor: Palette.darkSkyBlue,
+                          lineWidth: 2,
+                          gridLineWidth: 0.5,
+                          fillGradient: LinearGradient(
+                              colors: [
+                                Palette.darkSkyBlue.withAlpha(100),
+                                Palette.darkSkyBlue.withAlpha(0)
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          gridLineColor: Palette.veryLightPinkTwo,
+                          pointSize: 8.0,
+                          pointColor: Palette.darkSkyBlue,
+                        );
+                      },
+                      stream: widget.channel.stream,
+                    );
+                  },
+                  stream:
+                      injector.marketHistoryBloc.marketHistorySubject.stream,
+                )),
               )),
               Container(
                 margin:
@@ -170,8 +188,7 @@ class _ExchangeState extends State<ExchangePage> {
                             data: I18n.of(context).buyDown,
                             color: Palette.shamrockGreen,
                             onPressed: () {
-                              router.navigateTo(context, "/trade",
-                                  transition: TransitionType.inFromRight);
+                              sendMessage();
                             })),
                   ],
                 ),
@@ -191,6 +208,18 @@ class _ExchangeState extends State<ExchangePage> {
             ],
           ),
         )));
+  }
+
+  @override
+  void dispose() {
+    widget.channel.sink.close();
+    super.dispose();
+  }
+
+  sendMessage() {
+    widget.channel.sink.add(jsonEncode(
+            WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
+        .toString());
   }
 
   Widget _emptyStockWidget() {

@@ -9,6 +9,9 @@ import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 
+import 'models/request/web_socket_request_entity.dart';
+import 'models/response/web_socket_n_x_price_response_entity.dart';
+
 class ModelFactory {
   static T generateOBJ<T>(json) {
     if (1 == 0) {
@@ -33,6 +36,10 @@ class ModelFactory {
       return RegisterRequestModel.fromJson(json) as T;
     } else if (T.toString() == "PostOrderRequestModel") {
       return PostOrderRequestModel.fromJson(json) as T;
+    } else if (T.toString() == "WebSocketNXPriceResponseEntity") {
+      return WebSocketNXPriceResponseEntity.fromJson(json) as T;
+    } else if (T.toString() == "WebSocketRequestEntity") {
+      return WebSocketRequestEntity.fromJson(json) as T;
     } else {
       return null;
     }

@@ -8,6 +8,7 @@ import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
@@ -27,6 +28,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _accountNameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _passwordConfirmController = TextEditingController();
+  final _pinCodeController = TextEditingController();
+  bool _errorMessageVisibility = false;
+  bool _isButtonDisabled = true;
+  bool _isAccountNamePassChecker = false;
+  bool _isPasswordPassChecker = false;
+  bool _isPasswordConfirmChecker = false;
+  String _errorMessage = "s";
   Timer timer;
   Widget _widget = Text(
     "获取验证码",
@@ -59,9 +71,104 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
+  void initState() {
+    super.initState();
+    controllerListener();
+    createFocusNode();
+  }
+
+  controllerListener() {
+    _accountNameController.addListener(() {
+      _checkAccountName(_accountNameController.text);
+    });
+
+    _passwordController.addListener(() {});
+
+    _passwordConfirmController.addListener(() {});
+  }
+
+  _checkAccountName(String accountName) {
+    if (accountName.isEmpty) {
+      setState(() {
+        _errorMessage = "请输入账号";
+        _errorMessageVisibility = true;
+      });
+    } else if (!accountName.startsWith(RegExp("[a-zA-Z]"))) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageStartOnlyLetter;
+        _errorMessageVisibility = true;
+      });
+    } else if (!RegExp("^[a-z0-9-]+").hasMatch(accountName)) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageContainLowercase;
+        _errorMessageVisibility = true;
+      });
+    } else if (accountName.length < 3) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageShortNameLength;
+        _errorMessageVisibility = true;
+      });
+    } else if (accountName.contains("--")) {
+      setState(() {
+        _errorMessage =
+            I18n.of(context).registerErrorMessageShouldNotContainContinuesDash;
+        _errorMessageVisibility = true;
+      });
+    } else if (RegExp("^[a-z]+").hasMatch(accountName)) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageOnlyContainLetter;
+        _errorMessageVisibility = true;
+      });
+    } else {
+      _processAccountCheck(accountName);
+    }
+    _setButtonState();
+  }
+
+  _checkPassword(String password) {
+    if (password.isEmpty) {
+    } else if (!RegExp(
+            "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{12,}")
+        .hasMatch(password)) {
+      if (_accountNameController.text.isEmpty || _isAccountNamePassChecker) {
+        setState(() {
+          _errorMessageVisibility = true;
+          _errorMessage = I18n.of(context).registerErrorMessagePasswordChecker;
+        });
+      } else {
+        _errorMessageVisibility = false;
+        _isPasswordPassChecker = true;
+        _checkPasswordConfirmation(_passwordConfirmController.text);
+      }
+    }
+  }
+
+  _checkPasswordConfirmation(String confirmPassword) {}
+
+  createFocusNode() {
+    var _accountNameFocusNode = FocusNode();
+    var _passwordFocusNode = FocusNode();
+    var _passwordConfirmFocusNode = FocusNode();
+  }
+
+  _processAccountCheck(String accountName) async {
+    AccountResponseModel response =
+        await Env.apiClient.getAccount(name: accountName);
+    if (response != null && accountName == response.name) {
+      setState(() {
+        _errorMessageVisibility = true;
+        _errorMessage =
+            I18n.of(context).registerErrorMessageAccountHasAlreadyExist;
+      });
+    } else {
+      setState(() {
+        _errorMessageVisibility = false;
+      });
+    }
+  }
+
+  _setButtonState() {
+    setState(() {});
   }
 
   @override
@@ -78,8 +185,10 @@ class _RegisterState extends State<RegisterPage> {
           elevation: 0,
         ),
         body: SafeArea(
-          child: Container(
-              margin: Dimen.pageMargin,
+            child: Container(
+          margin: Dimen.pageMargin,
+          child: Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
                   Stack(
@@ -87,7 +196,7 @@ class _RegisterState extends State<RegisterPage> {
                       Container(
                         width: double.infinity,
                         decoration: DecorationFactory.cornerShadowDecoration,
-                        height: 310,
+                        height: 333,
                         margin: EdgeInsets.only(top: 20),
                         child: Column(
                           children: <Widget>[
@@ -99,19 +208,33 @@ class _RegisterState extends State<RegisterPage> {
                                     children: <Widget>[
                                   Column(children: <Widget>[
                                     Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("注册",
+                                            style: StyleFactory.title)),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Align(
                                       alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "欢迎注册您的账户!",
-                                        style: StyleFactory.title,
+                                      child: Visibility(
+                                        visible: !_errorMessageVisibility,
+                                        child: Text(
+                                          "欢迎注册您的账户!",
+                                          style: StyleFactory.cellTitleStyle,
+                                        ),
+                                        replacement: Text(_errorMessage,
+                                            style:
+                                                StyleFactory.errorMessageText),
                                       ),
                                     ),
                                     SizedBox(
-                                      height: 15,
+                                      height: 22,
                                     ),
                                     TextFormField(
+                                      controller: _accountNameController,
                                       decoration: InputDecoration(
-                                          hintText: I18n.of(context)
-                                              .accountNameHint,
+                                          hintText:
+                                              I18n.of(context).accountNameHint,
                                           hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
@@ -127,7 +250,8 @@ class _RegisterState extends State<RegisterPage> {
                                   ]),
                                   Column(
                                     children: <Widget>[
-                                      TextField(
+                                      TextFormField(
+                                        controller: _passwordController,
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
                                                 .passwordConfirm,
@@ -148,7 +272,8 @@ class _RegisterState extends State<RegisterPage> {
                                   ),
                                   Column(
                                     children: <Widget>[
-                                      TextField(
+                                      TextFormField(
+                                        controller: _passwordConfirmController,
                                         decoration: InputDecoration(
                                             hintText: "请再次确认密码",
                                             hintStyle: StyleFactory.hintStyle,
@@ -171,7 +296,8 @@ class _RegisterState extends State<RegisterPage> {
                                       Row(
                                         children: <Widget>[
                                           Flexible(
-                                            child: TextField(
+                                            child: TextFormField(
+                                              controller: _pinCodeController,
                                               decoration: InputDecoration(
                                                   hintText: "请输入验证码",
                                                   hintStyle:
@@ -205,12 +331,14 @@ class _RegisterState extends State<RegisterPage> {
                       ),
                       Container(
                           alignment: Alignment.bottomCenter,
-                          margin: EdgeInsets.only(top: 300),
+                          margin: EdgeInsets.only(top: 325),
                           child: ButtonTheme(
                             minWidth: 200,
                             child: WidgetFactory.button(
                                 onPressed: () {},
-                                color: Palette.redOrange,
+                                color: _isButtonDisabled
+                                    ? Palette.subTitleColor
+                                    : Palette.redOrange,
                                 data: "注册"),
                           ))
                     ],
@@ -240,12 +368,25 @@ class _RegisterState extends State<RegisterPage> {
                       new TextSpan(style: StyleFactory.hyperText, text: "去登录")
                     ])),
                     onTap: () {
-                      router.navigateTo(context, "/login",
-                          transition: TransitionType.inFromLeft);
+                      Navigator.pop(context);
                     },
                   )
                 ],
               )),
-        ));
+        )));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    disposeController();
+    super.dispose();
+  }
+
+  disposeController() {
+    _accountNameController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
+    _pinCodeController.dispose();
   }
 }

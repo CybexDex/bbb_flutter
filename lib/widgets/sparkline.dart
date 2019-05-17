@@ -7,12 +7,19 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
 
+import '../env.dart';
+
 @immutable
 class TickerData {
   final double value;
   final DateTime time;
 
   TickerData(this.value, this.time);
+
+  @override
+  String toString() {
+    return "$value " + ", time:" + time.toString();
+  }
 }
 
 @immutable
@@ -121,6 +128,7 @@ class Sparkline extends StatelessWidget {
     var filterData = data
         .where((t) => (t.time.isAfter(startTime)) && (t.time.isBefore(endTime)))
         .toList();
+    log.info(filterData.toString());
     double max = filterData.map((t) => t.value).reduce(math.max);
     double min = filterData.map((t) => t.value).reduce(math.min);
     double space = (max - min) / 6; //  2 / 3 空间展示
@@ -388,11 +396,12 @@ class _TimeSharePainter extends CustomPainter {
     Offset startPoint, endPoint;
     final Path path = Path();
 
-    final double widthNormalizer = size.width / data.length;
+    final double widthNormalizer = size.width / 1800;
     final double heightNormalizer = size.height / (maxValue - minValue);
 
     for (int i = 0; i < data.length; i++) {
-      double x = i * widthNormalizer;
+      double x =
+          widthNormalizer * (data[i].time.difference(startTime).inSeconds);
       double y = size.height - (data[i].value - minValue) * heightNormalizer;
 
       if (i == 0) {

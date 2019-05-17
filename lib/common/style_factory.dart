@@ -98,4 +98,10 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
+
+  static var errorMessageText = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
 }

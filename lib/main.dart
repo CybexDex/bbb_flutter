@@ -8,6 +8,7 @@ import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:web_socket_channel/io.dart';
 
 main() async {
   initLogger(package: 'bbb');
@@ -35,9 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BBB',
-      localizationsDelegates: [
-        I18n.delegate
-      ],
+      localizationsDelegates: [I18n.delegate],
       locale: Locale("en"),
       supportedLocales: [
         const Locale("en"),
@@ -46,7 +45,10 @@ class MyApp extends StatelessWidget {
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         return Locale("en");
       },
-      home: ExchangePage(title: '.BXBT'),
+      home: ExchangePage(
+        title: '.BXBT',
+//        channel: IOWebSocketChannel.connect("wss://nxmdptest.cybex.io/"),
+      ),
     );
   }
 }

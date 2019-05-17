@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
@@ -8,6 +10,8 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:dio/dio.dart';
+
+import '../../../env.dart';
 
 class BBBAPIProvider extends BBBAPI {
   factory BBBAPIProvider() => _sharedInstance();
@@ -45,9 +49,8 @@ class BBBAPIProvider extends BBBAPI {
   Future<List<OrderResponseModel>> getOrders({String name}) async {
     var response = await dio.get('/order?accountName=$name');
     var responseData = response.data as List<Map<String, dynamic>>;
-    List<OrderResponseModel> model = responseData
-        .map((data) => OrderResponseModel.fromJson(data))
-        .toList();
+    List<OrderResponseModel> model =
+        responseData.map((data) => OrderResponseModel.fromJson(data)).toList();
 
     return Future.value(model);
   }
@@ -56,16 +59,22 @@ class BBBAPIProvider extends BBBAPI {
       {String startTime, String endTime, String asset}) async {
     var response = await dio
         .get('/ticker?startTime=$startTime&endTime=$endTime&asset=$asset');
-    var responseData = response.data as List<List>;
-    List<MarketHistoryResponseModel> model = responseData
-        .map((data) {
-          var model = MarketHistoryResponseModel();
-          model.xts = data[0];
-          model.px = data[1];
-          return model;
-        })
-        .toList()
-        .toList();
+    var responseData = json.decode(response.data) as List;
+    log.info(responseData.toString());
+    List<MarketHistoryResponseModel> model = responseData.map((data) {
+      var model = MarketHistoryResponseModel();
+      model.xts = data[0];
+      model.px = double.parse(data[1]);
+      return model;
+    }).toList();
+
+//    responseData
+//        .map((data) {
+//          var model = MarketHistoryResponseModel();
+//          model.xts = data[0];
+//          model.px = double.parse(data[1]);
+//          return model;
+//        });
     return Future.value(model);
   }
 

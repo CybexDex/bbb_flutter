@@ -122,6 +122,33 @@ class _$Keys {
 
   static final String dialogLogOutConfirmButton =
       'dialog_log_out_confirm_button';
+
+  static final String registerErrorMessageContainLowercase =
+      'register_error_message_contain_lowercase';
+
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
+
+  static final String registerErrorMessageShortNameLength =
+      'register_error_message_short_name_length';
+
+  static final String registerErrorMessageShouldNotContainContinuesDash =
+      'register_error_message_should_not_contain_continues_dash';
+
+  static final String registerErrorMessageDashEnd =
+      'register_error_message_dash_end';
+
+  static final String registerErrorMessageOnlyContainLetter =
+      'register_error_message_only_contain_letter';
+
+  static final String registerErrorMessageAccountHasAlreadyExist =
+      'register_error_message_account_has_already_exist';
+
+  static final String registerErrorMessagePasswordChecker =
+      'register_error_message_password_checker';
+
+  static final String registerErrorMessagePasswordConfirm =
+      'register_error_message_password_confirm';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -191,4 +218,22 @@ abstract class _$I18nHelper {
   String get dialogLogOutContent => _translate(_$Keys.dialogLogOutContent);
   String get dialogLogOutConfirmButton =>
       _translate(_$Keys.dialogLogOutConfirmButton);
+  String get registerErrorMessageContainLowercase =>
+      _translate(_$Keys.registerErrorMessageContainLowercase);
+  String get registerErrorMessageStartOnlyLetter =>
+      _translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get registerErrorMessageShortNameLength =>
+      _translate(_$Keys.registerErrorMessageShortNameLength);
+  String get registerErrorMessageShouldNotContainContinuesDash =>
+      _translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
+  String get registerErrorMessageDashEnd =>
+      _translate(_$Keys.registerErrorMessageDashEnd);
+  String get registerErrorMessageOnlyContainLetter =>
+      _translate(_$Keys.registerErrorMessageOnlyContainLetter);
+  String get registerErrorMessageAccountHasAlreadyExist =>
+      _translate(_$Keys.registerErrorMessageAccountHasAlreadyExist);
+  String get registerErrorMessagePasswordChecker =>
+      _translate(_$Keys.registerErrorMessagePasswordChecker);
+  String get registerErrorMessagePasswordConfirm =>
+      _translate(_$Keys.registerErrorMessagePasswordConfirm);
 }
