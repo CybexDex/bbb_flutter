@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bbb_flutter/blocs/bloc_refData.dart';
+import 'package:bbb_flutter/blocs/get_order_bloc.dart';
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
@@ -9,8 +11,11 @@ import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
+import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/websocket/websocket_bloc.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
@@ -23,10 +28,9 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../env.dart';
 
 class ExchangePage extends StatefulWidget {
-  ExchangePage({Key key, this.title, this.channel}) : super(key: key);
+  ExchangePage({Key key, this.title}) : super(key: key);
 
   final String title;
-  final WebSocketChannel channel;
 
   @override
   State<StatefulWidget> createState() => _ExchangeState();
@@ -34,6 +38,7 @@ class ExchangePage extends StatefulWidget {
 
 class _ExchangeState extends State<ExchangePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GetOrderBloc _getOrderBloc = GetOrderBloc();
   int _current = 0;
   List<TickerData> _listTickerData = [];
 
@@ -46,9 +51,10 @@ class _ExchangeState extends State<ExchangePage> {
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
     ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
+    _getOrderBloc.getOrder(name: "abigale1989");
     injector.marketHistoryBloc.fetchPriceHistory(
         startTime: DateTime.now()
-            .subtract(Duration(days: 15))
+            .subtract(Duration(days: 30))
             .toUtc()
             .toIso8601String(),
         endTime: DateTime.now().toUtc().toIso8601String(),
@@ -114,14 +120,16 @@ class _ExchangeState extends State<ExchangePage> {
                 child: Container(
                     child: StreamBuilder<List<TickerData>>(
                   builder: (context, snapshot) {
-                    var response = snapshot.data;
-                    log.info(response.toString());
+                    if (snapshot == null || !snapshot.hasData) {
+                      return Container();
+                    }
+                    List<TickerData> response = snapshot.data;
                     _listTickerData.addAll(response);
-                    widget.channel.sink.add(jsonEncode(WebSocketRequestEntity(
-                            type: "subscribe", topic: "FAIRPRICE.BXBT"))
-                        .toString());
                     return StreamBuilder(
                       builder: (context, wbSnapShot) {
+                        if (wbSnapShot == null || !wbSnapShot.hasData) {
+                          return Container();
+                        }
                         var wbResponse =
                             WebSocketNXPriceResponseEntity.fromJson(
                                 json.decode(wbSnapShot.data));
@@ -158,7 +166,9 @@ class _ExchangeState extends State<ExchangePage> {
                           pointColor: Palette.darkSkyBlue,
                         );
                       },
-                      stream: widget.channel.stream,
+                      stream: WebSocketBloc()
+                          .getChannelStream()
+                          .asBroadcastStream(),
                     );
                   },
                   stream:
@@ -176,7 +186,7 @@ class _ExchangeState extends State<ExchangePage> {
                             data: I18n.of(context).buyUp,
                             color: Palette.redOrange,
                             onPressed: () {
-                              router.navigateTo(context, "/trade",
+                              router.navigateTo(context, "/trade/buyUp",
                                   transition: TransitionType.inFromRight);
                             })),
                     Container(
@@ -188,7 +198,8 @@ class _ExchangeState extends State<ExchangePage> {
                             data: I18n.of(context).buyDown,
                             color: Palette.shamrockGreen,
                             onPressed: () {
-                              sendMessage();
+                              router.navigateTo(context, "/trade/buyDown",
+                                  transition: TransitionType.inFromRight);
                             })),
                   ],
                 ),
@@ -204,7 +215,41 @@ class _ExchangeState extends State<ExchangePage> {
                   alignment: Alignment.bottomLeft,
                 ),
               ),
-              _stockWidget(),
+              StreamBuilder<List<OrderResponseModel>>(
+                stream: _getOrderBloc.getOrderBloc.stream,
+                builder: (context, snapShot) {
+                  if (snapShot == null || !snapShot.hasData) {
+                    return _emptyStockWidget();
+                  } else {
+                    List<OrderResponseModel> orderResponse = snapShot.data;
+                    return Container();
+//                    return StreamBuilder(
+//                      stream: WebSocketBloc().getChannelStream().stream,
+//                      builder: (context, snapShot) {
+//                        if (snapShot == null || !snapShot.hasData) {
+//                          return _emptyStockWidget();
+//                        } else {
+//                          var webSocketResponse =
+//                              WebSocketNXPriceResponseEntity.fromJson(
+//                                  json.decode(snapShot.data));
+//                          bloc.getRefData();
+//                          return StreamBuilder<RefContractResponseModel>(
+//                            stream: bloc.subject.stream,
+//                            builder: (context, snapShot) {
+//                              if (snapShot != null || !snapShot.hasData) {
+//                                return _emptyStockWidget();
+//                              } else {
+//                                var response = snapShot.data;
+//                                return _stockWidget();
+//                              }
+//                            },
+//                          );
+//                        }
+//                      },
+//                    );
+                  }
+                },
+              )
             ],
           ),
         )));
@@ -212,15 +257,15 @@ class _ExchangeState extends State<ExchangePage> {
 
   @override
   void dispose() {
-    widget.channel.sink.close();
+    WebSocketBloc().reset();
+    _getOrderBloc.dispose();
+
+    bloc.dispose();
+
     super.dispose();
   }
 
-  sendMessage() {
-    widget.channel.sink.add(jsonEncode(
-            WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
-        .toString());
-  }
+  sendMessage() {}
 
   Widget _emptyStockWidget() {
     return Container(

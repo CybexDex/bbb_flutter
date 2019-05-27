@@ -104,4 +104,16 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.middleLabelFontSize);
+
+  static var buySellValueText = TextStyle(
+      color: Palette.titleColor,
+      fontSize: Dimen.veryLargeLabelFontSize,
+      fontStyle: FontStyle.normal,
+      fontWeight: FontWeight.w400);
+
+  static var buySellExplainText = TextStyle(
+      color: Palette.subTitleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.verySmallLabelFontSize);
 }

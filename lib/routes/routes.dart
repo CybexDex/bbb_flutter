@@ -12,10 +12,10 @@ class Routes {
   static register() {
     var tradeHandler = Handler(
         handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      return TradePage();
+      return TradePage(isUp: params["isUp"][0]);
     });
 
-    router.define("/trade", handler: tradeHandler);
+    router.define("/trade/:isUp", handler: tradeHandler);
 
     var loginHandler = Handler(
         handlerFunc: (BuildContext context, Map<String, dynamic> params) {

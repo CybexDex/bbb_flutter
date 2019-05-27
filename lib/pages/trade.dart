@@ -7,15 +7,17 @@ import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 class TradePage extends StatefulWidget {
-  TradePage({Key key, this.title}) : super(key: key);
+  TradePage({Key key, this.title, this.isUp}) : super(key: key);
 
   final String title;
+  final String isUp;
 
   @override
   State<StatefulWidget> createState() => _TradeState();
@@ -123,7 +125,19 @@ class _TradeState extends State<TradePage> {
               Container(
                 margin: EdgeInsets.only(bottom: 0),
                 height: 60,
-                color: Colors.red,
+                child: BuyOrSellBottom(
+                    totalAmount: "341.0",
+                    feeAmount: "0.0001",
+                    balanceAmount: "1000",
+                    button: widget.isUp == "buyUp"
+                        ? WidgetFactory.button(
+                            data: I18n.of(context).buyUp,
+                            color: Palette.redOrange,
+                            onPressed: () {})
+                        : WidgetFactory.button(
+                            data: I18n.of(context).buyDown,
+                            color: Palette.shamrockGreen,
+                            onPressed: () {})),
               )
             ],
           ),

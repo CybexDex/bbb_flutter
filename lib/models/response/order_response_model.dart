@@ -1,84 +1,100 @@
+import 'dart:convert';
+
+OrderResponseModel orderResponseModelFromJson(String str) =>
+    OrderResponseModel.fromJson(json.decode(str));
+
+String orderResponseModelToJson(OrderResponseModel data) =>
+    json.encode(data.toJson());
+
 class OrderResponseModel {
-  String commissionInUsd;
   String accountName;
-  String takeProfitPx;
-  String contract;
-  String refBXBT;
-  String buyAmountInUsd;
-  String knockOutTime;
-  String qtyContract;
-  String settleAtBXBT;
-  String createTime;
-  String cutLossPx;
-  String settleAmountInUsd;
-  String buyAtBXBT;
-  String execNowPx;
-  int forceExpiration;
   String status;
   String buyOrderTxId;
+  String contractId;
+  String underlyingSpotPx;
+  String cutLossPx;
+  String takeProfitPx;
+  DateTime expiration;
+  double qtyContract;
+  double commission;
+  double boughtPx;
+  String boughtContractPx;
+  String boughtNotional;
+  String soldPx;
+  String soldContractPx;
+  String soldNotional;
+  String closeReason;
+  String settleTime;
+  String createTime;
   String lastUpdateTime;
 
-  OrderResponseModel(
-      {this.commissionInUsd,
-      this.accountName,
-      this.takeProfitPx,
-      this.contract,
-      this.refBXBT,
-      this.buyAmountInUsd,
-      this.knockOutTime,
-      this.qtyContract,
-      this.settleAtBXBT,
-      this.createTime,
-      this.cutLossPx,
-      this.settleAmountInUsd,
-      this.buyAtBXBT,
-      this.execNowPx,
-      this.forceExpiration,
-      this.status,
-      this.buyOrderTxId,
-      this.lastUpdateTime});
+  OrderResponseModel({
+    this.accountName,
+    this.status,
+    this.buyOrderTxId,
+    this.contractId,
+    this.underlyingSpotPx,
+    this.cutLossPx,
+    this.takeProfitPx,
+    this.expiration,
+    this.qtyContract,
+    this.commission,
+    this.boughtPx,
+    this.boughtContractPx,
+    this.boughtNotional,
+    this.soldPx,
+    this.soldContractPx,
+    this.soldNotional,
+    this.closeReason,
+    this.settleTime,
+    this.createTime,
+    this.lastUpdateTime,
+  });
 
-  OrderResponseModel.fromJson(Map<String, dynamic> json) {
-    commissionInUsd = json['commissionInUsd'];
-    accountName = json['accountName'];
-    takeProfitPx = json['takeProfitPx'];
-    contract = json['contract'];
-    refBXBT = json['refBXBT'];
-    buyAmountInUsd = json['buyAmountInUsd'];
-    knockOutTime = json['knockOutTime'];
-    qtyContract = json['qtyContract'];
-    settleAtBXBT = json['settleAtBXBT'];
-    createTime = json['createTime'];
-    cutLossPx = json['cutLossPx'];
-    settleAmountInUsd = json['settleAmountInUsd'];
-    buyAtBXBT = json['buyAtBXBT'];
-    execNowPx = json['execNowPx'];
-    forceExpiration = json['forceExpiration'];
-    status = json['status'];
-    buyOrderTxId = json['buyOrderTxId'];
-    lastUpdateTime = json['lastUpdateTime'];
-  }
+  factory OrderResponseModel.fromJson(Map<String, dynamic> json) =>
+      new OrderResponseModel(
+        accountName: json["accountName"],
+        status: json["status"],
+        buyOrderTxId: json["buyOrderTxId"],
+        contractId: json["contractId"],
+        underlyingSpotPx: json["underlyingSpotPx"],
+        cutLossPx: json["cutLossPx"],
+        takeProfitPx: json["takeProfitPx"],
+        expiration: DateTime.parse(json["expiration"]),
+        qtyContract: double.parse(json["qtyContract"]),
+        commission: double.parse(json["commission"]),
+        boughtPx: double.parse(json["boughtPx"]),
+        boughtContractPx: json["boughtContractPx"],
+        boughtNotional: json["boughtNotional"],
+        soldPx: json["soldPx"],
+        soldContractPx: json["soldContractPx"],
+        soldNotional: json["soldNotional"],
+        closeReason: json["closeReason"],
+        settleTime: json["settleTime"],
+        createTime: json["createTime"],
+        lastUpdateTime: json["lastUpdateTime"],
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['commissionInUsd'] = this.commissionInUsd;
-    data['accountName'] = this.accountName;
-    data['takeProfitPx'] = this.takeProfitPx;
-    data['contract'] = this.contract;
-    data['refBXBT'] = this.refBXBT;
-    data['buyAmountInUsd'] = this.buyAmountInUsd;
-    data['knockOutTime'] = this.knockOutTime;
-    data['qtyContract'] = this.qtyContract;
-    data['settleAtBXBT'] = this.settleAtBXBT;
-    data['createTime'] = this.createTime;
-    data['cutLossPx'] = this.cutLossPx;
-    data['settleAmountInUsd'] = this.settleAmountInUsd;
-    data['buyAtBXBT'] = this.buyAtBXBT;
-    data['execNowPx'] = this.execNowPx;
-    data['forceExpiration'] = this.forceExpiration;
-    data['status'] = this.status;
-    data['buyOrderTxId'] = this.buyOrderTxId;
-    data['lastUpdateTime'] = this.lastUpdateTime;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "accountName": accountName,
+        "status": status,
+        "buyOrderTxId": buyOrderTxId,
+        "contractId": contractId,
+        "underlyingSpotPx": underlyingSpotPx,
+        "cutLossPx": cutLossPx,
+        "takeProfitPx": takeProfitPx,
+        "expiration": expiration.toIso8601String(),
+        "qtyContract": qtyContract,
+        "commission": commission,
+        "boughtPx": boughtPx,
+        "boughtContractPx": boughtContractPx,
+        "boughtNotional": boughtNotional,
+        "soldPx": soldPx,
+        "soldContractPx": soldContractPx,
+        "soldNotional": soldNotional,
+        "closeReason": closeReason,
+        "settleTime": settleTime,
+        "createTime": createTime,
+        "lastUpdateTime": lastUpdateTime,
+      };
 }

@@ -17,14 +17,15 @@ class MarketHistoryBloc {
     marketHistorySubject.close();
   }
 
-  startWebSocket() {
-    WebSocketChannel channel =
-        IOWebSocketChannel.connect("wss://nxmdptest.cybex.io/");
-    channel.sink.add(jsonEncode(
-        WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT")));
-    channel.stream.listen((message) {},
-        onError: () {}, onDone: () {}, cancelOnError: true);
-  }
+//  startWebSocket() {
+//    WebSocketChannel channel =
+//        IOWebSocketChannel.connect("wss://nxmdptest.cybex.io/");
+//    channel.sink.add(jsonEncode(
+//        WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT")));
+//    channel.stream.listen((message) {
+//      log.info(message);
+//    }, onError: () {}, onDone: () {}, cancelOnError: true);
+//  }
 
   fetchPriceHistory({String startTime, String endTime, String asset}) async {
     List<MarketHistoryResponseModel> _list = await Env.apiClient

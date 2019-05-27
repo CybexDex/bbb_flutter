@@ -48,7 +48,8 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<List<OrderResponseModel>> getOrders({String name}) async {
     var response = await dio.get('/order?accountName=$name');
-    var responseData = response.data as List<Map<String, dynamic>>;
+    var responseData = json.decode(response.data) as List;
+    log.info(responseData.toString());
     List<OrderResponseModel> model =
         responseData.map((data) => OrderResponseModel.fromJson(data)).toList();
 

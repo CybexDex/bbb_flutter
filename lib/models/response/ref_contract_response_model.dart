@@ -1,111 +1,148 @@
 class RefContractResponseModel {
-	String chainId;
-	List<RefContractResponseAvailableasset> availableAssets;
-	List<RefContractResponseContract> contract;
-	String refBlockId;
+  String chainId;
+  List<RefContractResponseAvailableasset> availableAssets;
+  List<RefContractResponseContract> contract;
+  String refBlockId;
 
-	RefContractResponseModel({this.chainId, this.availableAssets, this.contract, this.refBlockId});
+  RefContractResponseModel(
+      {this.chainId, this.availableAssets, this.contract, this.refBlockId});
 
-	RefContractResponseModel.fromJson(Map<String, dynamic> json) {
-		chainId = json['chainId'];
-		if (json['availableAssets'] != null) {
-			availableAssets = new List<RefContractResponseAvailableasset>();
-			(json['availableAssets'] as List).forEach((v) { availableAssets.add(new RefContractResponseAvailableasset.fromJson(v)); });
-		}
-		if (json['contract'] != null) {
-			contract = new List<RefContractResponseContract>();
-			(json['contract'] as List).forEach((v) { contract.add(new RefContractResponseContract.fromJson(v)); });
-		}
-		refBlockId = json['refBlockId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['chainId'] = this.chainId;
-		if (this.availableAssets != null) {
-      data['availableAssets'] = this.availableAssets.map((v) => v.toJson()).toList();
+  RefContractResponseModel.fromJson(Map<String, dynamic> json) {
+    chainId = json['chainId'];
+    if (json['availableAssets'] != null) {
+      availableAssets = new List<RefContractResponseAvailableasset>();
+      (json['availableAssets'] as List).forEach((v) {
+        availableAssets.add(new RefContractResponseAvailableasset.fromJson(v));
+      });
     }
-		if (this.contract != null) {
+    if (json['contract'] != null) {
+      contract = new List<RefContractResponseContract>();
+      (json['contract'] as List).forEach((v) {
+        contract.add(new RefContractResponseContract.fromJson(v));
+      });
+    }
+    refBlockId = json['refBlockId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['chainId'] = this.chainId;
+    if (this.availableAssets != null) {
+      data['availableAssets'] =
+          this.availableAssets.map((v) => v.toJson()).toList();
+    }
+    if (this.contract != null) {
       data['contract'] = this.contract.map((v) => v.toJson()).toList();
     }
-		data['refBlockId'] = this.refBlockId;
-		return data;
-	}
+    data['refBlockId'] = this.refBlockId;
+    return data;
+  }
 }
 
 class RefContractResponseAvailableasset {
-	String assetId;
-	int precision;
-	String assetName;
+  String assetId;
+  int precision;
+  String assetName;
 
-	RefContractResponseAvailableasset({this.assetId, this.precision, this.assetName});
+  RefContractResponseAvailableasset(
+      {this.assetId, this.precision, this.assetName});
 
-	RefContractResponseAvailableasset.fromJson(Map<String, dynamic> json) {
-		assetId = json['assetId'];
-		precision = json['precision'];
-		assetName = json['assetName'];
-	}
+  RefContractResponseAvailableasset.fromJson(Map<String, dynamic> json) {
+    assetId = json['assetId'];
+    precision = json['precision'];
+    assetName = json['assetName'];
+  }
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['assetId'] = this.assetId;
-		data['precision'] = this.precision;
-		data['assetName'] = this.assetName;
-		return data;
-	}
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['assetId'] = this.assetId;
+    data['precision'] = this.precision;
+    data['assetName'] = this.assetName;
+    return data;
+  }
 }
 
 class RefContractResponseContract {
-	String commissionRate;
-	String knockOutPrice;
-	String remainingInventory;
-	String underlying;
-	String tradingStop;
-	String conversionRate;
-	String assetId;
-	String contractId;
-	String tradingStart;
-	String assetName;
-	String strikeLevel;
-	String expiration;
-	String settlementPrice;
-	String status;
+  String contractId;
+  String assetName;
+  String underlying;
+  double conversionRate;
+  String startGearing;
+  String tradingStartTime;
+  String tradingStopTime;
+  String expiration;
+  String availableInventory;
+  String tickSize;
+  String commissionRate;
+  String quoteAsset;
+  String status;
+  double strikeLevel;
+  String knockOutTime;
+  String settlementUnderlyingPrice;
+  String settlementPrice;
+  String modificationTime;
 
-	RefContractResponseContract({this.commissionRate, this.knockOutPrice, this.remainingInventory, this.underlying, this.tradingStop, this.conversionRate, this.assetId, this.contractId, this.tradingStart, this.assetName, this.strikeLevel, this.expiration, this.settlementPrice, this.status});
+  RefContractResponseContract({
+    this.contractId,
+    this.assetName,
+    this.underlying,
+    this.conversionRate,
+    this.startGearing,
+    this.tradingStartTime,
+    this.tradingStopTime,
+    this.expiration,
+    this.availableInventory,
+    this.tickSize,
+    this.commissionRate,
+    this.quoteAsset,
+    this.status,
+    this.strikeLevel,
+    this.knockOutTime,
+    this.settlementUnderlyingPrice,
+    this.settlementPrice,
+    this.modificationTime,
+  });
 
-	RefContractResponseContract.fromJson(Map<String, dynamic> json) {
-		commissionRate = json['commissionRate'];
-		knockOutPrice = json['knockOutPrice'];
-		remainingInventory = json['remainingInventory'];
-		underlying = json['underlying'];
-		tradingStop = json['tradingStop'];
-		conversionRate = json['conversionRate'];
-		assetId = json['assetId'];
-		contractId = json['contractId'];
-		tradingStart = json['tradingStart'];
-		assetName = json['assetName'];
-		strikeLevel = json['strikeLevel'];
-		expiration = json['expiration'];
-		settlementPrice = json['settlementPrice'];
-		status = json['status'];
-	}
+  factory RefContractResponseContract.fromJson(Map<String, dynamic> json) =>
+      new RefContractResponseContract(
+        contractId: json["contractId"],
+        assetName: json["assetName"],
+        underlying: json["underlying"],
+        conversionRate: double.parse(json["conversionRate"]),
+        startGearing: json["startGearing"],
+        tradingStartTime: json["tradingStartTime"],
+        tradingStopTime: json["tradingStopTime"],
+        expiration: json["expiration"],
+        availableInventory: json["availableInventory"],
+        tickSize: json["tickSize"],
+        commissionRate: json["commissionRate"],
+        quoteAsset: json["quoteAsset"],
+        status: json["status"],
+        strikeLevel: double.parse(json["strikeLevel"]),
+        knockOutTime: json["knockOutTime"],
+        settlementUnderlyingPrice: json["settlementUnderlyingPrice"],
+        settlementPrice: json["settlementPrice"],
+        modificationTime: json["modificationTime"],
+      );
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['commissionRate'] = this.commissionRate;
-		data['knockOutPrice'] = this.knockOutPrice;
-		data['remainingInventory'] = this.remainingInventory;
-		data['underlying'] = this.underlying;
-		data['tradingStop'] = this.tradingStop;
-		data['conversionRate'] = this.conversionRate;
-		data['assetId'] = this.assetId;
-		data['contractId'] = this.contractId;
-		data['tradingStart'] = this.tradingStart;
-		data['assetName'] = this.assetName;
-		data['strikeLevel'] = this.strikeLevel;
-		data['expiration'] = this.expiration;
-		data['settlementPrice'] = this.settlementPrice;
-		data['status'] = this.status;
-		return data;
-	}
+  Map<String, dynamic> toJson() => {
+        "contractId": contractId,
+        "assetName": assetName,
+        "underlying": underlying,
+        "conversionRate": conversionRate,
+        "startGearing": startGearing,
+        "tradingStartTime": tradingStartTime,
+        "tradingStopTime": tradingStopTime,
+        "expiration": expiration,
+        "availableInventory": availableInventory,
+        "tickSize": tickSize,
+        "commissionRate": commissionRate,
+        "quoteAsset": quoteAsset,
+        "status": status,
+        "strikeLevel": strikeLevel,
+        "knockOutTime": knockOutTime,
+        "settlementUnderlyingPrice": settlementUnderlyingPrice,
+        "settlementPrice": settlementPrice,
+        "modificationTime": modificationTime,
+      };
 }
