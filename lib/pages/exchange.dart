@@ -109,157 +109,150 @@ class _ExchangeState extends State<ExchangePage> {
         ),
         body: SafeArea(
             child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Expanded(
-                  child: Container(
-                decoration: DecorationFactory.cornerShadowDecoration,
-                height: double.infinity,
-                margin: EdgeInsets.only(top: 1, left: 20, right: 20),
-                child: Container(
-                    child: StreamBuilder<List<TickerData>>(
-                  builder: (context, snapshot) {
-                    if (snapshot == null || !snapshot.hasData) {
-                      return Container();
-                    }
-                    List<TickerData> response = snapshot.data;
-                    _listTickerData.addAll(response);
-                    return StreamBuilder(
-                      builder: (context, wbSnapShot) {
-                        if (wbSnapShot == null || !wbSnapShot.hasData) {
-                          return Container();
-                        }
-                        var wbResponse =
-                            WebSocketNXPriceResponseEntity.fromJson(
-                                json.decode(wbSnapShot.data));
-                        return Sparkline(
-                          data: _listTickerData
-                            ..add(TickerData(wbResponse.px,
-                                DateTime.parse(wbResponse.time))),
-                          suppleData: SuppleData(
-                              stopTime:
-                                  DateTime.now().add(Duration(minutes: 2)),
-                              endTime:
-                                  DateTime.now().add(Duration(minutes: 12)),
-                              cutOff: 1.7,
-                              takeProfit: 7.8,
-                              underOrder: 4.5,
-                              current: 6.0),
-                          startTime:
-                              DateTime.now().subtract(Duration(minutes: 15)),
-                          startLineOfTime:
-                              DateTime.now().subtract(Duration(minutes: 15)),
-                          endTime: DateTime.now().add(Duration(minutes: 15)),
-                          lineColor: Palette.darkSkyBlue,
-                          lineWidth: 2,
-                          gridLineWidth: 0.5,
-                          fillGradient: LinearGradient(
-                              colors: [
-                                Palette.darkSkyBlue.withAlpha(100),
-                                Palette.darkSkyBlue.withAlpha(0)
+                child: StreamBuilder(
+                    stream: WebSocketBloc().getChannelStream(),
+                    builder: (context, wbSnapshot) {
+                      if (wbSnapshot == null || !wbSnapshot.hasData) {
+                        return Container();
+                      }
+                      var wbResponse = WebSocketNXPriceResponseEntity.fromJson(
+                          json.decode(wbSnapshot.data));
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                              child: Container(
+                            decoration:
+                                DecorationFactory.cornerShadowDecoration,
+                            height: double.infinity,
+                            margin:
+                                EdgeInsets.only(top: 1, left: 20, right: 20),
+                            child: Container(
+                                child: StreamBuilder<List<TickerData>>(
+                              builder: (context, snapshot) {
+                                if (snapshot == null || !snapshot.hasData) {
+                                  return Container();
+                                }
+                                List<TickerData> response = snapshot.data;
+                                _listTickerData.addAll(response);
+                                return Sparkline(
+                                  data: _listTickerData
+                                    ..add(TickerData(wbResponse.px,
+                                        DateTime.parse(wbResponse.time))),
+                                  suppleData: SuppleData(
+                                      stopTime: DateTime.now()
+                                          .add(Duration(minutes: 2)),
+                                      endTime: DateTime.now()
+                                          .add(Duration(minutes: 12)),
+                                      cutOff: 1.7,
+                                      takeProfit: 7.8,
+                                      underOrder: 4.5,
+                                      current: 6.0),
+                                  startTime: DateTime.now()
+                                      .subtract(Duration(minutes: 15)),
+                                  startLineOfTime: DateTime.now()
+                                      .subtract(Duration(minutes: 15)),
+                                  endTime:
+                                      DateTime.now().add(Duration(minutes: 15)),
+                                  lineColor: Palette.darkSkyBlue,
+                                  lineWidth: 2,
+                                  gridLineWidth: 0.5,
+                                  fillGradient: LinearGradient(
+                                      colors: [
+                                        Palette.darkSkyBlue.withAlpha(100),
+                                        Palette.darkSkyBlue.withAlpha(0)
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter),
+                                  gridLineColor: Palette.veryLightPinkTwo,
+                                  pointSize: 8.0,
+                                  pointColor: Palette.darkSkyBlue,
+                                );
+                              },
+                              stream: injector.marketHistoryBloc
+                                  .marketHistorySubject.stream,
+                            )),
+                          )),
+                          Container(
+                            margin: EdgeInsets.only(
+                                bottom: 20, top: 20, left: 20, right: 20),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 1,
+                                    child: WidgetFactory.button(
+                                        data: I18n.of(context).buyUp,
+                                        color: Palette.redOrange,
+                                        onPressed: () {
+                                          router.navigateTo(
+                                              context, "/trade/buyUp",
+                                              transition:
+                                                  TransitionType.inFromRight);
+                                        })),
+                                Container(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                    flex: 1,
+                                    child: WidgetFactory.button(
+                                        data: I18n.of(context).buyDown,
+                                        color: Palette.shamrockGreen,
+                                        onPressed: () {
+                                          router.navigateTo(
+                                              context, "/trade/buyDown",
+                                              transition:
+                                                  TransitionType.inFromRight);
+                                        })),
                               ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter),
-                          gridLineColor: Palette.veryLightPinkTwo,
-                          pointSize: 8.0,
-                          pointColor: Palette.darkSkyBlue,
-                        );
-                      },
-                      stream: WebSocketBloc()
-                          .getChannelStream()
-                          .asBroadcastStream(),
-                    );
-                  },
-                  stream:
-                      injector.marketHistoryBloc.marketHistorySubject.stream,
-                )),
-              )),
-              Container(
-                margin:
-                    EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        flex: 1,
-                        child: WidgetFactory.button(
-                            data: I18n.of(context).buyUp,
-                            color: Palette.redOrange,
-                            onPressed: () {
-                              router.navigateTo(context, "/trade/buyUp",
-                                  transition: TransitionType.inFromRight);
-                            })),
-                    Container(
-                      width: 20,
-                    ),
-                    Expanded(
-                        flex: 1,
-                        child: WidgetFactory.button(
-                            data: I18n.of(context).buyDown,
-                            color: Palette.shamrockGreen,
-                            onPressed: () {
-                              router.navigateTo(context, "/trade/buyDown",
-                                  transition: TransitionType.inFromRight);
-                            })),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(bottom: 10),
-                margin: Dimen.pageMargin,
-                child: Align(
-                  child: Text(
-                    I18n.of(context).myOrdersStock,
-                    style: StyleFactory.title,
-                  ),
-                  alignment: Alignment.bottomLeft,
-                ),
-              ),
-              StreamBuilder<List<OrderResponseModel>>(
-                stream: _getOrderBloc.getOrderBloc.stream,
-                builder: (context, snapShot) {
-                  if (snapShot == null || !snapShot.hasData) {
-                    return _emptyStockWidget();
-                  } else {
-                    List<OrderResponseModel> orderResponse = snapShot.data;
-                    return Container();
-//                    return StreamBuilder(
-//                      stream: WebSocketBloc().getChannelStream().stream,
-//                      builder: (context, snapShot) {
-//                        if (snapShot == null || !snapShot.hasData) {
-//                          return _emptyStockWidget();
-//                        } else {
-//                          var webSocketResponse =
-//                              WebSocketNXPriceResponseEntity.fromJson(
-//                                  json.decode(snapShot.data));
-//                          bloc.getRefData();
-//                          return StreamBuilder<RefContractResponseModel>(
-//                            stream: bloc.subject.stream,
-//                            builder: (context, snapShot) {
-//                              if (snapShot != null || !snapShot.hasData) {
-//                                return _emptyStockWidget();
-//                              } else {
-//                                var response = snapShot.data;
-//                                return _stockWidget();
-//                              }
-//                            },
-//                          );
-//                        }
-//                      },
-//                    );
-                  }
-                },
-              )
-            ],
-          ),
-        )));
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            margin: Dimen.pageMargin,
+                            child: Align(
+                              child: Text(
+                                I18n.of(context).myOrdersStock,
+                                style: StyleFactory.title,
+                              ),
+                              alignment: Alignment.bottomLeft,
+                            ),
+                          ),
+                          StreamBuilder<List<OrderResponseModel>>(
+                            stream: _getOrderBloc.getOrderBloc.stream,
+                            builder: (context, snapShot) {
+                              if (snapShot == null || !snapShot.hasData) {
+                                return _emptyStockWidget();
+                              } else {
+                                List<OrderResponseModel> orderResponse =
+                                    snapShot.data;
+                                bloc.getRefData();
+                                return StreamBuilder<RefContractResponseModel>(
+                                  stream: bloc.subject.stream,
+                                  builder: (context, snapShot) {
+                                    log.info(snapShot.data.chainId);
+                                    if (snapShot == null || !snapShot.hasData) {
+                                      return _emptyStockWidget();
+                                    } else {
+                                      var response = snapShot.data;
+                                      return _stockWidget(
+                                          orderResponse: orderResponse,
+                                          refContract: response,
+                                          webSocketResponse: wbResponse);
+                                    }
+                                  },
+                                );
+                              }
+                            },
+                          )
+                        ],
+                      );
+                    }))));
   }
 
   @override
   void dispose() {
     WebSocketBloc().reset();
     _getOrderBloc.dispose();
-
     bloc.dispose();
 
     super.dispose();
@@ -284,7 +277,10 @@ class _ExchangeState extends State<ExchangePage> {
     );
   }
 
-  CarouselSlider _slide() {
+  CarouselSlider _slide(
+      {List<OrderResponseModel> orderResponse,
+      RefContractResponseModel refContract,
+      WebSocketNXPriceResponseEntity webSocketResponse}) {
     return CarouselSlider(
         height: 226,
         viewportFraction: 0.93,
@@ -297,7 +293,7 @@ class _ExchangeState extends State<ExchangePage> {
             _current = index;
           });
         },
-        items: [1, 2, 3, 4, 5].map((i) {
+        items: orderResponse.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return Container(
@@ -305,22 +301,32 @@ class _ExchangeState extends State<ExchangePage> {
                   margin: EdgeInsets.only(bottom: 30, left: 5, right: 5),
                   padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
                   width: ScreenUtil.screenWidth,
-                  child: OrderInfo());
+                  child: OrderInfo(
+                    orderResponseModel: i,
+                    refContractResponseModel: refContract,
+                    webSocketNXPriceResponseEntity: webSocketResponse,
+                  ));
             },
           );
         }).toList());
   }
 
-  Widget _stockWidget() {
+  Widget _stockWidget(
+      {List<OrderResponseModel> orderResponse,
+      RefContractResponseModel refContract,
+      WebSocketNXPriceResponseEntity webSocketResponse}) {
     return Stack(children: [
-      _slide(),
+      _slide(
+          orderResponse: orderResponse,
+          refContract: refContract,
+          webSocketResponse: webSocketResponse),
       Positioned(
           top: 200.0,
           left: 0.0,
           right: 0.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [1, 2, 3, 4, 5]
+            children: orderResponse
                 .asMap()
                 .map((i, element) {
                   return MapEntry(

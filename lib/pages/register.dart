@@ -34,7 +34,7 @@ class _RegisterState extends State<RegisterPage> {
   final _passwordConfirmController = TextEditingController();
   final _pinCodeController = TextEditingController();
   bool _errorMessageVisibility = false;
-  bool _isButtonDisabled = true;
+  bool _isButtonEnabled = false;
   bool _isAccountNamePassChecker = false;
   bool _isPasswordPassChecker = false;
   bool _isPasswordConfirmChecker = false;
@@ -63,8 +63,6 @@ class _RegisterState extends State<RegisterPage> {
       setState(() {
         _widget = SvgPicture.string(
           rawSvg,
-          width: 20,
-          height: 20,
         );
       });
     });
@@ -82,9 +80,20 @@ class _RegisterState extends State<RegisterPage> {
       _checkAccountName(_accountNameController.text);
     });
 
-    _passwordController.addListener(() {});
+    _passwordController.addListener(() {
+      _checkPassword(_passwordController.text);
+    });
 
-    _passwordConfirmController.addListener(() {});
+    _passwordConfirmController.addListener(() {
+      _checkPasswordConfirmation(_passwordConfirmController.text);
+    });
+
+    _pinCodeController.addListener(() {
+      _setButtonState(_isAccountNamePassChecker &&
+          _isPasswordPassChecker &&
+          _isPasswordConfirmChecker &&
+          _pinCodeController.text.isNotEmpty);
+    });
   }
 
   _checkAccountName(String accountName) {
@@ -92,41 +101,51 @@ class _RegisterState extends State<RegisterPage> {
       setState(() {
         _errorMessage = "请输入账号";
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
     } else if (!accountName.startsWith(RegExp("[a-zA-Z]"))) {
       setState(() {
         _errorMessage = I18n.of(context).registerErrorMessageStartOnlyLetter;
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
-    } else if (!RegExp("^[a-z0-9-]+").hasMatch(accountName)) {
+    } else if (!RegExp("^[a-z0-9-]+\$").hasMatch(accountName)) {
       setState(() {
         _errorMessage = I18n.of(context).registerErrorMessageContainLowercase;
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
     } else if (accountName.length < 3) {
       setState(() {
         _errorMessage = I18n.of(context).registerErrorMessageShortNameLength;
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
     } else if (accountName.contains("--")) {
       setState(() {
         _errorMessage =
             I18n.of(context).registerErrorMessageShouldNotContainContinuesDash;
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
-    } else if (RegExp("^[a-z]+").hasMatch(accountName)) {
+    } else if (RegExp("^[a-z]+\$").hasMatch(accountName)) {
       setState(() {
         _errorMessage = I18n.of(context).registerErrorMessageOnlyContainLetter;
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
       });
     } else {
       _processAccountCheck(accountName);
     }
-    _setButtonState();
+    _setButtonState(_isAccountNamePassChecker &&
+        _isPasswordPassChecker &&
+        _isPasswordConfirmChecker &&
+        _pinCodeController.text.isNotEmpty);
   }
 
   _checkPassword(String password) {
     if (password.isEmpty) {
+      _checkPasswordConfirmation(_passwordConfirmController.text);
     } else if (!RegExp(
             "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{12,}")
         .hasMatch(password)) {
@@ -134,16 +153,48 @@ class _RegisterState extends State<RegisterPage> {
         setState(() {
           _errorMessageVisibility = true;
           _errorMessage = I18n.of(context).registerErrorMessagePasswordChecker;
+          _isPasswordPassChecker = false;
         });
-      } else {
+      }
+    } else {
+      setState(() {
         _errorMessageVisibility = false;
         _isPasswordPassChecker = true;
         _checkPasswordConfirmation(_passwordConfirmController.text);
-      }
+      });
     }
+    _setButtonState(_isAccountNamePassChecker &&
+        _isPasswordPassChecker &&
+        _isPasswordConfirmChecker &&
+        _pinCodeController.text.isNotEmpty);
   }
 
-  _checkPasswordConfirmation(String confirmPassword) {}
+  _checkPasswordConfirmation(String confirmPassword) {
+    if (!_isPasswordPassChecker) {
+      return;
+    }
+    if (_passwordController.text != confirmPassword) {
+      if ((_accountNameController.text.isEmpty || _isAccountNamePassChecker) &&
+          (_isPasswordPassChecker || _passwordController.text.isEmpty)) {
+        setState(() {
+          _errorMessageVisibility = true;
+          _errorMessage = "账号不一样";
+        });
+        _isPasswordConfirmChecker = false;
+      } else {
+        if (_passwordController.text.isNotEmpty) {
+          setState(() {
+            _isPasswordConfirmChecker = true;
+            _errorMessageVisibility = false;
+          });
+        }
+      }
+      _setButtonState(_isAccountNamePassChecker &&
+          _isPasswordPassChecker &&
+          _isPasswordConfirmChecker &&
+          _pinCodeController.text.isNotEmpty);
+    }
+  }
 
   createFocusNode() {
     var _accountNameFocusNode = FocusNode();
@@ -157,18 +208,23 @@ class _RegisterState extends State<RegisterPage> {
     if (response != null && accountName == response.name) {
       setState(() {
         _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
         _errorMessage =
             I18n.of(context).registerErrorMessageAccountHasAlreadyExist;
       });
     } else {
       setState(() {
         _errorMessageVisibility = false;
+        _isAccountNamePassChecker = true;
+        _errorMessage = "";
       });
     }
   }
 
-  _setButtonState() {
-    setState(() {});
+  _setButtonState(bool isEnabled) {
+    setState(() {
+      _isButtonEnabled = isEnabled;
+    });
   }
 
   @override
@@ -336,7 +392,7 @@ class _RegisterState extends State<RegisterPage> {
                             minWidth: 200,
                             child: WidgetFactory.button(
                                 onPressed: () {},
-                                color: _isButtonDisabled
+                                color: _isButtonEnabled
                                     ? Palette.subTitleColor
                                     : Palette.redOrange,
                                 data: "注册"),

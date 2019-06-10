@@ -36,7 +36,9 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<RefContractResponseModel> getRefData() async {
     var response = await dio.get('/refData');
-    return Future.value(RefContractResponseModel.fromJson(response.data));
+    var responseData = json.decode(response.data);
+    log.info(responseData.toString());
+    return Future.value(RefContractResponseModel.fromJson(responseData));
   }
 
   @override
@@ -96,6 +98,9 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<AccountResponseModel> getAccount({String name}) async {
     var response = await dio.get("/account?accountName=$name");
-    return Future.value(AccountResponseModel.fromJson(response.data["result"]));
+    var responseData = json.decode(response.data);
+    return Future.value(responseData["result"] == null
+        ? null
+        : AccountResponseModel.fromJson(responseData["result"]));
   }
 }

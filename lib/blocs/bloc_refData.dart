@@ -3,10 +3,12 @@ import 'package:rxdart/rxdart.dart';
 import 'package:bbb_flutter/env.dart';
 
 class RefDataBloc {
-  final BehaviorSubject<RefContractResponseModel> _subject = BehaviorSubject<RefContractResponseModel>();
+  final BehaviorSubject<RefContractResponseModel> _subject =
+      BehaviorSubject<RefContractResponseModel>();
 
   getRefData() async {
     RefContractResponseModel response = await Env.apiClient.getRefData();
+    log.info(response.chainId);
     _subject.sink.add(response);
   }
 
@@ -15,6 +17,6 @@ class RefDataBloc {
   }
 
   BehaviorSubject<RefContractResponseModel> get subject => _subject;
-
 }
+
 final bloc = RefDataBloc();

@@ -42,6 +42,6 @@ class WebSocketBloc {
   }
 
   Stream getChannelStream() {
-    return _channel.stream.asBroadcastStream();
+    return _channel.stream;
   }
 }

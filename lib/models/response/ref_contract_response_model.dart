@@ -1,20 +1,12 @@
 class RefContractResponseModel {
   String chainId;
-  List<RefContractResponseAvailableasset> availableAssets;
   List<RefContractResponseContract> contract;
   String refBlockId;
 
-  RefContractResponseModel(
-      {this.chainId, this.availableAssets, this.contract, this.refBlockId});
+  RefContractResponseModel({this.chainId, this.contract, this.refBlockId});
 
   RefContractResponseModel.fromJson(Map<String, dynamic> json) {
     chainId = json['chainId'];
-    if (json['availableAssets'] != null) {
-      availableAssets = new List<RefContractResponseAvailableasset>();
-      (json['availableAssets'] as List).forEach((v) {
-        availableAssets.add(new RefContractResponseAvailableasset.fromJson(v));
-      });
-    }
     if (json['contract'] != null) {
       contract = new List<RefContractResponseContract>();
       (json['contract'] as List).forEach((v) {
@@ -27,10 +19,6 @@ class RefContractResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['chainId'] = this.chainId;
-    if (this.availableAssets != null) {
-      data['availableAssets'] =
-          this.availableAssets.map((v) => v.toJson()).toList();
-    }
     if (this.contract != null) {
       data['contract'] = this.contract.map((v) => v.toJson()).toList();
     }
@@ -39,28 +27,28 @@ class RefContractResponseModel {
   }
 }
 
-class RefContractResponseAvailableasset {
-  String assetId;
-  int precision;
-  String assetName;
-
-  RefContractResponseAvailableasset(
-      {this.assetId, this.precision, this.assetName});
-
-  RefContractResponseAvailableasset.fromJson(Map<String, dynamic> json) {
-    assetId = json['assetId'];
-    precision = json['precision'];
-    assetName = json['assetName'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['assetId'] = this.assetId;
-    data['precision'] = this.precision;
-    data['assetName'] = this.assetName;
-    return data;
-  }
-}
+//class RefContractResponseAvailableasset {
+//  String assetId;
+//  int precision;
+//  String assetName;
+//
+//  RefContractResponseAvailableasset(
+//      {this.assetId, this.precision, this.assetName});
+//
+//  RefContractResponseAvailableasset.fromJson(Map<String, dynamic> json) {
+//    assetId = json['assetId'];
+//    precision = json['precision'];
+//    assetName = json['assetName'];
+//  }
+//
+//  Map<String, dynamic> toJson() {
+//    final Map<String, dynamic> data = new Map<String, dynamic>();
+//    data['assetId'] = this.assetId;
+//    data['precision'] = this.precision;
+//    data['assetName'] = this.assetName;
+//    return data;
+//  }
+//}
 
 class RefContractResponseContract {
   String contractId;

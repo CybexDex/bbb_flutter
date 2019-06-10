@@ -2,11 +2,30 @@ import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
 import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
+import 'package:bbb_flutter/utils/order_calculate_util.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OrderInfo extends StatelessWidget {
+  final OrderResponseModel orderResponseModel;
+  final RefContractResponseModel refContractResponseModel;
+  final WebSocketNXPriceResponseEntity webSocketNXPriceResponseEntity;
+
+  OrderInfo(
+      {Key key,
+      this.orderResponseModel,
+      this.refContractResponseModel,
+      this.webSocketNXPriceResponseEntity})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    RefContractResponseContract currentContract = getCorrespondContract(
+        refContract: refContractResponseModel,
+        orderResponse: orderResponseModel);
     return Container(
       child: Column(
         children: <Widget>[
@@ -16,10 +35,12 @@ class OrderInfo extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(right: 10),
-                  child: ImageFactory.upIcon14,
+                  child: getUpOrDownIcon(
+                      orderResponse: orderResponseModel,
+                      refContract: refContractResponseModel),
                 ),
                 Text(
-                  ".BXBT",
+                  orderResponseModel.contractId,
                   style: StyleFactory.smallCellTitleStyle,
                 ),
                 Expanded(
@@ -45,7 +66,12 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    "25 USDT≈213 RMB",
+                    OrderCalculate.calculateRealTimeRevenue(
+                        currentPx: webSocketNXPriceResponseEntity.px,
+                        orderBoughtPx: orderResponseModel.boughtPx,
+                        conversionRate: currentContract.conversionRate,
+                        orderCommission: orderResponseModel.commission,
+                        orderQtyContract: orderResponseModel.qtyContract),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -65,7 +91,10 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    "0.0001 USDT / 50%",
+                    OrderCalculate.calculateRealLeverage(
+                        currentPx: webSocketNXPriceResponseEntity.px,
+                        strikeLevel: currentContract.strikeLevel,
+                        isUp: currentContract.conversionRate > 0),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -85,7 +114,10 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    "23 USDT≈213 RMB",
+                    OrderCalculate.calculateInvest(
+                        orderQtyContract: orderResponseModel.qtyContract,
+                        orderBoughtContractPx:
+                            orderResponseModel.boughtContractPx),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -139,7 +171,8 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    "2019.04.01 14:00",
+                    DateFormat("yyyy.MM.dd HH:mm")
+                        .format(orderResponseModel.expiration),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -153,5 +186,34 @@ class OrderInfo extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getUpOrDownIcon(
+      {OrderResponseModel orderResponse,
+      RefContractResponseModel refContract}) {
+    for (RefContractResponseContract refContractResponseContract
+        in refContract.contract) {
+      if (refContractResponseContract.contractId == orderResponse.contractId) {
+        if (refContractResponseContract.conversionRate > 0) {
+          return ImageFactory.upIcon14;
+        } else {
+          return ImageFactory.downIcon14;
+        }
+      }
+    }
+    return null;
+  }
+
+  RefContractResponseContract getCorrespondContract(
+      {OrderResponseModel orderResponse,
+      RefContractResponseModel refContract}) {
+    for (RefContractResponseContract refContractResponseContract
+        in refContract.contract) {
+      if (orderResponse.contractId == refContractResponseContract.contractId) {
+        return refContractResponseContract;
+      }
+    }
+
+    return null;
   }
 }

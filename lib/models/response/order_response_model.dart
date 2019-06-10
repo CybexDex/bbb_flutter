@@ -18,7 +18,7 @@ class OrderResponseModel {
   double qtyContract;
   double commission;
   double boughtPx;
-  String boughtContractPx;
+  double boughtContractPx;
   String boughtNotional;
   String soldPx;
   String soldContractPx;
@@ -64,7 +64,7 @@ class OrderResponseModel {
         qtyContract: double.parse(json["qtyContract"]),
         commission: double.parse(json["commission"]),
         boughtPx: double.parse(json["boughtPx"]),
-        boughtContractPx: json["boughtContractPx"],
+        boughtContractPx: double.parse(json["boughtContractPx"]),
         boughtNotional: json["boughtNotional"],
         soldPx: json["soldPx"],
         soldContractPx: json["soldContractPx"],
