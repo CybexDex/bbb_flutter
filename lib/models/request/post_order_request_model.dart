@@ -1,342 +1,197 @@
+// To parse this JSON data, do
+//
+//     final postOrderRequestModel = postOrderRequestModelFromJson(jsonString);
+
+import 'dart:convert';
+
 class PostOrderRequestModel {
-	String transactionType;
-	PostOrderRequestTransfer transfer;
-	PostOrderRequestSellorder sellOrder;
-	String transferTxId;
-	String spotBXBT;
-	String takeProfitPx;
-	String cutLossPx;
-	PostOrderRequestBuyorder buyOrder;
-	int forceExpiration;
-	String sellOrderTxId;
-	String buyOrderTxId;
+    String transactionType;
+    String buyOrderTxId;
+    Order buyOrder;
+    Commission commission;
+    String contractId;
+    String underlyingSpotPx;
+    Order sellOrder;
+    String sellOrderTxId;
+    String cutLossPx;
+    String takeProfitPx;
+    int expiration;
 
-	PostOrderRequestModel({this.transactionType, this.transfer, this.sellOrder, this.transferTxId, this.spotBXBT, this.takeProfitPx, this.cutLossPx, this.buyOrder, this.forceExpiration, this.sellOrderTxId, this.buyOrderTxId});
+    PostOrderRequestModel({
+        this.transactionType,
+        this.buyOrderTxId,
+        this.buyOrder,
+        this.commission,
+        this.contractId,
+        this.underlyingSpotPx,
+        this.sellOrder,
+        this.sellOrderTxId,
+        this.cutLossPx,
+        this.takeProfitPx,
+        this.expiration,
+    });
 
-	PostOrderRequestModel.fromJson(Map<String, dynamic> json) {
-		transactionType = json['transactionType'];
-		transfer = json['transfer'] != null ? new PostOrderRequestTransfer.fromJson(json['transfer']) : null;
-		sellOrder = json['sellOrder'] != null ? new PostOrderRequestSellorder.fromJson(json['sellOrder']) : null;
-		transferTxId = json['transferTxId'];
-		spotBXBT = json['spotBXBT'];
-		takeProfitPx = json['takeProfitPx'];
-		cutLossPx = json['cutLossPx'];
-		buyOrder = json['buyOrder'] != null ? new PostOrderRequestBuyorder.fromJson(json['buyOrder']) : null;
-		forceExpiration = json['forceExpiration'];
-		sellOrderTxId = json['sellOrderTxId'];
-		buyOrderTxId = json['buyOrderTxId'];
-	}
+    factory PostOrderRequestModel.fromRawJson(String str) => PostOrderRequestModel.fromJson(json.decode(str));
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['transactionType'] = this.transactionType;
-		if (this.transfer != null) {
-      data['transfer'] = this.transfer.toJson();
-    }
-		if (this.sellOrder != null) {
-      data['sellOrder'] = this.sellOrder.toJson();
-    }
-		data['transferTxId'] = this.transferTxId;
-		data['spotBXBT'] = this.spotBXBT;
-		data['takeProfitPx'] = this.takeProfitPx;
-		data['cutLossPx'] = this.cutLossPx;
-		if (this.buyOrder != null) {
-      data['buyOrder'] = this.buyOrder.toJson();
-    }
-		data['forceExpiration'] = this.forceExpiration;
-		data['sellOrderTxId'] = this.sellOrderTxId;
-		data['buyOrderTxId'] = this.buyOrderTxId;
-		return data;
-	}
+    String toRawJson() => json.encode(toJson());
+
+    factory PostOrderRequestModel.fromJson(Map<String, dynamic> json) => new PostOrderRequestModel(
+        transactionType: json["transactionType"],
+        buyOrderTxId: json["buyOrderTxId"],
+        buyOrder: Order.fromJson(json["buyOrder"]),
+        commission: Commission.fromJson(json["commission"]),
+        contractId: json["contractId"],
+        underlyingSpotPx: json["underlyingSpotPx"],
+        sellOrder: Order.fromJson(json["sellOrder"]),
+        sellOrderTxId: json["sellOrderTxId"],
+        cutLossPx: json["cutLossPx"],
+        takeProfitPx: json["takeProfitPx"],
+        expiration: json["expiration"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "transactionType": transactionType,
+        "buyOrderTxId": buyOrderTxId,
+        "buyOrder": buyOrder.toJson(),
+        "commission": commission.toJson(),
+        "contractId": contractId,
+        "underlyingSpotPx": underlyingSpotPx,
+        "sellOrder": sellOrder.toJson(),
+        "sellOrderTxId": sellOrderTxId,
+        "cutLossPx": cutLossPx,
+        "takeProfitPx": takeProfitPx,
+        "expiration": expiration,
+    };
 }
 
-class PostOrderRequestTransfer {
-	PostOrderRequestTransferAmount amount;
-	String signature;
-	PostOrderRequestTransferFee fee;
-	int txExpiration;
-	String from;
-	String to;
-	int refBlockNum;
-	int refBlockPrefix;
+class Order {
+    int refBlockNum;
+    int refBlockPrefix;
+    int txExpiration;
+    AmountToSell fee;
+    String seller;
+    AmountToSell amountToSell;
+    AmountToSell minToReceive;
+    int expiration;
+    int fillOrKill;
+    String signature;
 
-	PostOrderRequestTransfer({this.amount, this.signature, this.fee, this.txExpiration, this.from, this.to, this.refBlockNum, this.refBlockPrefix});
+    Order({
+        this.refBlockNum,
+        this.refBlockPrefix,
+        this.txExpiration,
+        this.fee,
+        this.seller,
+        this.amountToSell,
+        this.minToReceive,
+        this.expiration,
+        this.fillOrKill,
+        this.signature,
+    });
 
-	PostOrderRequestTransfer.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'] != null ? new PostOrderRequestTransferAmount.fromJson(json['amount']) : null;
-		signature = json['signature'];
-		fee = json['fee'] != null ? new PostOrderRequestTransferFee.fromJson(json['fee']) : null;
-		txExpiration = json['txExpiration'];
-		from = json['from'];
-		to = json['to'];
-		refBlockNum = json['refBlockNum'];
-		refBlockPrefix = json['refBlockPrefix'];
-	}
+    factory Order.fromRawJson(String str) => Order.fromJson(json.decode(str));
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		if (this.amount != null) {
-      data['amount'] = this.amount.toJson();
-    }
-		data['signature'] = this.signature;
-		if (this.fee != null) {
-      data['fee'] = this.fee.toJson();
-    }
-		data['txExpiration'] = this.txExpiration;
-		data['from'] = this.from;
-		data['to'] = this.to;
-		data['refBlockNum'] = this.refBlockNum;
-		data['refBlockPrefix'] = this.refBlockPrefix;
-		return data;
-	}
+    String toRawJson() => json.encode(toJson());
+
+    factory Order.fromJson(Map<String, dynamic> json) => new Order(
+        refBlockNum: json["refBlockNum"],
+        refBlockPrefix: json["refBlockPrefix"],
+        txExpiration: json["txExpiration"],
+        fee: AmountToSell.fromJson(json["fee"]),
+        seller: json["seller"],
+        amountToSell: AmountToSell.fromJson(json["amountToSell"]),
+        minToReceive: AmountToSell.fromJson(json["minToReceive"]),
+        expiration: json["expiration"],
+        fillOrKill: json["fill_or_kill"],
+        signature: json["signature"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "refBlockNum": refBlockNum,
+        "refBlockPrefix": refBlockPrefix,
+        "txExpiration": txExpiration,
+        "fee": fee.toJson(),
+        "seller": seller,
+        "amountToSell": amountToSell.toJson(),
+        "minToReceive": minToReceive.toJson(),
+        "expiration": expiration,
+        "fill_or_kill": fillOrKill,
+        "signature": signature,
+    };
 }
 
-class PostOrderRequestTransferAmount {
-	int amount;
-	String assetId;
+class AmountToSell {
+    String assetId;
+    int amount;
 
-	PostOrderRequestTransferAmount({this.amount, this.assetId});
+    AmountToSell({
+        this.assetId,
+        this.amount,
+    });
 
-	PostOrderRequestTransferAmount.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
+    factory AmountToSell.fromRawJson(String str) => AmountToSell.fromJson(json.decode(str));
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
+    String toRawJson() => json.encode(toJson());
+
+    factory AmountToSell.fromJson(Map<String, dynamic> json) => new AmountToSell(
+        assetId: json["assetId"],
+        amount: json["amount"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "assetId": assetId,
+        "amount": amount,
+    };
 }
 
-class PostOrderRequestTransferFee {
-	int amount;
-	String assetId;
+class Commission {
+    int refBlockNum;
+    int refBlockPrefix;
+    int txExpiration;
+    AmountToSell fee;
+    String from;
+    String to;
+    AmountToSell amount;
+    String signature;
+    String txId;
 
-	PostOrderRequestTransferFee({this.amount, this.assetId});
+    Commission({
+        this.refBlockNum,
+        this.refBlockPrefix,
+        this.txExpiration,
+        this.fee,
+        this.from,
+        this.to,
+        this.amount,
+        this.signature,
+        this.txId,
+    });
 
-	PostOrderRequestTransferFee.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
+    factory Commission.fromRawJson(String str) => Commission.fromJson(json.decode(str));
 
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
+    String toRawJson() => json.encode(toJson());
 
-class PostOrderRequestSellorder {
-	String seller;
-	String signature;
-	int fillOrKill;
-	PostOrderRequestSellorderFee fee;
-	PostOrderRequestSellorderMintoreceive minToReceive;
-	PostOrderRequestSellorderAmounttosell amountToSell;
-	int txExpiration;
-	int expiration;
-	int refBlockNum;
-	int refBlockPrefix;
+    factory Commission.fromJson(Map<String, dynamic> json) => new Commission(
+        refBlockNum: json["refBlockNum"],
+        refBlockPrefix: json["refBlockPrefix"],
+        txExpiration: json["txExpiration"],
+        fee: AmountToSell.fromJson(json["fee"]),
+        from: json["from"],
+        to: json["to"],
+        amount: AmountToSell.fromJson(json["amount"]),
+        signature: json["signature"],
+        txId: json["txId"],
+    );
 
-	PostOrderRequestSellorder({this.seller, this.signature, this.fillOrKill, this.fee, this.minToReceive, this.amountToSell, this.txExpiration, this.expiration, this.refBlockNum, this.refBlockPrefix});
-
-	PostOrderRequestSellorder.fromJson(Map<String, dynamic> json) {
-		seller = json['seller'];
-		signature = json['signature'];
-		fillOrKill = json['fill_or_kill'];
-		fee = json['fee'] != null ? new PostOrderRequestSellorderFee.fromJson(json['fee']) : null;
-		minToReceive = json['minToReceive'] != null ? new PostOrderRequestSellorderMintoreceive.fromJson(json['minToReceive']) : null;
-		amountToSell = json['amountToSell'] != null ? new PostOrderRequestSellorderAmounttosell.fromJson(json['amountToSell']) : null;
-		txExpiration = json['txExpiration'];
-		expiration = json['expiration'];
-		refBlockNum = json['refBlockNum'];
-		refBlockPrefix = json['refBlockPrefix'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['seller'] = this.seller;
-		data['signature'] = this.signature;
-		data['fill_or_kill'] = this.fillOrKill;
-		if (this.fee != null) {
-      data['fee'] = this.fee.toJson();
-    }
-		if (this.minToReceive != null) {
-      data['minToReceive'] = this.minToReceive.toJson();
-    }
-		if (this.amountToSell != null) {
-      data['amountToSell'] = this.amountToSell.toJson();
-    }
-		data['txExpiration'] = this.txExpiration;
-		data['expiration'] = this.expiration;
-		data['refBlockNum'] = this.refBlockNum;
-		data['refBlockPrefix'] = this.refBlockPrefix;
-		return data;
-	}
-}
-
-class PostOrderRequestSellorderFee {
-	int amount;
-	String assetId;
-
-	PostOrderRequestSellorderFee({this.amount, this.assetId});
-
-	PostOrderRequestSellorderFee.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
-
-class PostOrderRequestSellorderMintoreceive {
-	int amount;
-	String assetId;
-
-	PostOrderRequestSellorderMintoreceive({this.amount, this.assetId});
-
-	PostOrderRequestSellorderMintoreceive.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
-
-class PostOrderRequestSellorderAmounttosell {
-	int amount;
-	String assetId;
-
-	PostOrderRequestSellorderAmounttosell({this.amount, this.assetId});
-
-	PostOrderRequestSellorderAmounttosell.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
-
-class PostOrderRequestBuyorder {
-	String seller;
-	String signature;
-	int fillOrKill;
-	PostOrderRequestBuyorderFee fee;
-	PostOrderRequestBuyorderMintoreceive minToReceive;
-	PostOrderRequestBuyorderAmounttosell amountToSell;
-	int txExpiration;
-	int expiration;
-	int refBlockNum;
-	int refBlockPrefix;
-
-	PostOrderRequestBuyorder({this.seller, this.signature, this.fillOrKill, this.fee, this.minToReceive, this.amountToSell, this.txExpiration, this.expiration, this.refBlockNum, this.refBlockPrefix});
-
-	PostOrderRequestBuyorder.fromJson(Map<String, dynamic> json) {
-		seller = json['seller'];
-		signature = json['signature'];
-		fillOrKill = json['fill_or_kill'];
-		fee = json['fee'] != null ? new PostOrderRequestBuyorderFee.fromJson(json['fee']) : null;
-		minToReceive = json['minToReceive'] != null ? new PostOrderRequestBuyorderMintoreceive.fromJson(json['minToReceive']) : null;
-		amountToSell = json['amountToSell'] != null ? new PostOrderRequestBuyorderAmounttosell.fromJson(json['amountToSell']) : null;
-		txExpiration = json['txExpiration'];
-		expiration = json['expiration'];
-		refBlockNum = json['refBlockNum'];
-		refBlockPrefix = json['refBlockPrefix'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['seller'] = this.seller;
-		data['signature'] = this.signature;
-		data['fill_or_kill'] = this.fillOrKill;
-		if (this.fee != null) {
-      data['fee'] = this.fee.toJson();
-    }
-		if (this.minToReceive != null) {
-      data['minToReceive'] = this.minToReceive.toJson();
-    }
-		if (this.amountToSell != null) {
-      data['amountToSell'] = this.amountToSell.toJson();
-    }
-		data['txExpiration'] = this.txExpiration;
-		data['expiration'] = this.expiration;
-		data['refBlockNum'] = this.refBlockNum;
-		data['refBlockPrefix'] = this.refBlockPrefix;
-		return data;
-	}
-}
-
-class PostOrderRequestBuyorderFee {
-	int amount;
-	String assetId;
-
-	PostOrderRequestBuyorderFee({this.amount, this.assetId});
-
-	PostOrderRequestBuyorderFee.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
-
-class PostOrderRequestBuyorderMintoreceive {
-	int amount;
-	String assetId;
-
-	PostOrderRequestBuyorderMintoreceive({this.amount, this.assetId});
-
-	PostOrderRequestBuyorderMintoreceive.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
-}
-
-class PostOrderRequestBuyorderAmounttosell {
-	int amount;
-	String assetId;
-
-	PostOrderRequestBuyorderAmounttosell({this.amount, this.assetId});
-
-	PostOrderRequestBuyorderAmounttosell.fromJson(Map<String, dynamic> json) {
-		amount = json['amount'];
-		assetId = json['assetId'];
-	}
-
-	Map<String, dynamic> toJson() {
-		final Map<String, dynamic> data = new Map<String, dynamic>();
-		data['amount'] = this.amount;
-		data['assetId'] = this.assetId;
-		return data;
-	}
+    Map<String, dynamic> toJson() => {
+        "refBlockNum": refBlockNum,
+        "refBlockPrefix": refBlockPrefix,
+        "txExpiration": txExpiration,
+        "fee": fee.toJson(),
+        "from": from,
+        "to": to,
+        "amount": amount.toJson(),
+        "signature": signature,
+        "txId": txId,
+    };
 }
