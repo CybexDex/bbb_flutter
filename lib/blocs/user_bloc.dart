@@ -2,6 +2,7 @@ import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/shared_pref.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
 class UserBloc {
   BehaviorSubject<UserEntity> userSubject = BehaviorSubject<UserEntity>();
