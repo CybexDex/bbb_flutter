@@ -225,9 +225,9 @@ class _ExchangeState extends State<ExchangePage> {
                               } else {
                                 List<OrderResponseModel> orderResponse =
                                     snapShot.data;
-                                bloc.getRefData();
+                                refDataBloc.getRefData();
                                 return StreamBuilder<RefContractResponseModel>(
-                                  stream: bloc.subject.stream,
+                                  stream: refDataBloc.subject.stream,
                                   builder: (context, snapShot) {
                                     log.info(snapShot.data.chainId);
                                     if (snapShot == null || !snapShot.hasData) {
@@ -253,7 +253,7 @@ class _ExchangeState extends State<ExchangePage> {
   void dispose() {
     WebSocketBloc().reset();
     _getOrderBloc.dispose();
-    bloc.dispose();
+    refDataBloc.dispose();
 
     super.dispose();
   }

@@ -3,7 +3,9 @@ import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/env.dart';
@@ -18,6 +20,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
+  final _accountNameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _errorMessageVisible = false;
+  String _errorMessage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,19 +59,25 @@ class _LoginState extends State<LoginPage> {
                                     children: <Widget>[
                                   Column(children: <Widget>[
                                     Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "欢迎登录您的账户!",
-                                        style: StyleFactory.title,
-                                      ),
-                                    ),
+                                        alignment: Alignment.centerLeft,
+                                        child: Visibility(
+                                          visible: _errorMessageVisible,
+                                          child: Text(
+                                            "欢迎登录您的账户!",
+                                            style: StyleFactory.title,
+                                          ),
+                                          replacement: Text(_errorMessage,
+                                              style: StyleFactory
+                                                  .errorMessageText),
+                                        )),
                                     SizedBox(
                                       height: 15,
                                     ),
                                     TextField(
+                                      controller: _accountNameController,
                                       decoration: InputDecoration(
-                                          hintText: I18n.of(context)
-                                              .accountNameHint,
+                                          hintText:
+                                              I18n.of(context).accountNameHint,
                                           hintStyle: StyleFactory.hintStyle,
                                           icon: Image.asset(
                                               "res/assets/icons/icUser.png"),
@@ -82,6 +94,7 @@ class _LoginState extends State<LoginPage> {
                                   Column(
                                     children: <Widget>[
                                       TextField(
+                                        controller: _passwordController,
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
                                                 .passwordConfirm,
@@ -110,7 +123,9 @@ class _LoginState extends State<LoginPage> {
                           child: ButtonTheme(
                             minWidth: 200,
                             child: WidgetFactory.button(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _logIn();
+                                },
                                 color: Palette.redOrange,
                                 data: "登录"),
                           ))
@@ -132,5 +147,15 @@ class _LoginState extends State<LoginPage> {
                 ],
               )),
         ));
+  }
+
+  _logIn() async {
+    AccountResponseModel response =
+        await Env.apiClient.getAccount(name: _accountNameController.text);
+    if (response != null) {
+      String keys = await CybexFlutterPlugin.getUserKeyWith(
+          _accountNameController.text, _passwordController.text);
+      if (keys.contains(response.active.keyAuths[0][0])) {}
+    }
   }
 }

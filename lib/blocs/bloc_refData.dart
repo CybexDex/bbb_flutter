@@ -3,6 +3,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:bbb_flutter/env.dart';
 
 class RefDataBloc {
+  static RefDataBloc _singleton = RefDataBloc._internal();
+  RefDataBloc._internal();
+
+  factory RefDataBloc() {
+    _singleton = _singleton ?? RefDataBloc._internal();
+    return _singleton;
+  }
+
   final BehaviorSubject<RefContractResponseModel> _subject =
       BehaviorSubject<RefContractResponseModel>();
 
@@ -19,4 +27,4 @@ class RefDataBloc {
   BehaviorSubject<RefContractResponseModel> get subject => _subject;
 }
 
-final bloc = RefDataBloc();
+final refDataBloc = RefDataBloc();

@@ -23,7 +23,7 @@ class OrderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RefContractResponseContract currentContract = getCorrespondContract(
+    Contract currentContract = getCorrespondContract(
         refContract: refContractResponseModel,
         orderResponse: orderResponseModel);
     return Container(
@@ -69,7 +69,8 @@ class OrderInfo extends StatelessWidget {
                     OrderCalculate.calculateRealTimeRevenue(
                         currentPx: webSocketNXPriceResponseEntity.px,
                         orderBoughtPx: orderResponseModel.boughtPx,
-                        conversionRate: currentContract.conversionRate,
+                        conversionRate:
+                            double.parse(currentContract.conversionRate),
                         orderCommission: orderResponseModel.commission,
                         orderQtyContract: orderResponseModel.qtyContract),
                     style: StyleFactory.smallCellTitleStyle,
@@ -93,8 +94,8 @@ class OrderInfo extends StatelessWidget {
                   Text(
                     OrderCalculate.calculateRealLeverage(
                         currentPx: webSocketNXPriceResponseEntity.px,
-                        strikeLevel: currentContract.strikeLevel,
-                        isUp: currentContract.conversionRate > 0),
+                        strikeLevel: double.parse(currentContract.strikeLevel),
+                        isUp: double.parse(currentContract.conversionRate) > 0),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -191,10 +192,9 @@ class OrderInfo extends StatelessWidget {
   Widget getUpOrDownIcon(
       {OrderResponseModel orderResponse,
       RefContractResponseModel refContract}) {
-    for (RefContractResponseContract refContractResponseContract
-        in refContract.contract) {
+    for (Contract refContractResponseContract in refContract.contract) {
       if (refContractResponseContract.contractId == orderResponse.contractId) {
-        if (refContractResponseContract.conversionRate > 0) {
+        if (double.parse(refContractResponseContract.conversionRate) > 0) {
           return ImageFactory.upIcon14;
         } else {
           return ImageFactory.downIcon14;
@@ -204,11 +204,10 @@ class OrderInfo extends StatelessWidget {
     return null;
   }
 
-  RefContractResponseContract getCorrespondContract(
+  Contract getCorrespondContract(
       {OrderResponseModel orderResponse,
       RefContractResponseModel refContract}) {
-    for (RefContractResponseContract refContractResponseContract
-        in refContract.contract) {
+    for (Contract refContractResponseContract in refContract.contract) {
       if (orderResponse.contractId == refContractResponseContract.contractId) {
         return refContractResponseContract;
       }

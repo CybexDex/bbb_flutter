@@ -1,60 +1,53 @@
+// To parse this JSON data, do
+//
+//     final refContractResponseModel = refContractResponseModelFromJson(jsonString);
+
+import 'dart:convert';
+
 class RefContractResponseModel {
   String chainId;
-  List<RefContractResponseContract> contract;
   String refBlockId;
+  int refBlockNum;
+  int refBlockPrefix;
+  List<Contract> contract;
 
-  RefContractResponseModel({this.chainId, this.contract, this.refBlockId});
+  RefContractResponseModel({
+    this.chainId,
+    this.refBlockId,
+    this.refBlockNum,
+    this.refBlockPrefix,
+    this.contract,
+  });
 
-  RefContractResponseModel.fromJson(Map<String, dynamic> json) {
-    chainId = json['chainId'];
-    if (json['contract'] != null) {
-      contract = new List<RefContractResponseContract>();
-      (json['contract'] as List).forEach((v) {
-        contract.add(new RefContractResponseContract.fromJson(v));
-      });
-    }
-    refBlockId = json['refBlockId'];
-  }
+  factory RefContractResponseModel.fromRawJson(String str) =>
+      RefContractResponseModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['chainId'] = this.chainId;
-    if (this.contract != null) {
-      data['contract'] = this.contract.map((v) => v.toJson()).toList();
-    }
-    data['refBlockId'] = this.refBlockId;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory RefContractResponseModel.fromJson(Map<String, dynamic> json) =>
+      new RefContractResponseModel(
+        chainId: json["chainId"],
+        refBlockId: json["refBlockId"],
+        refBlockNum: json["refBlockNum"],
+        refBlockPrefix: json["refBlockPrefix"],
+        contract: new List<Contract>.from(
+            json["contract"].map((x) => Contract.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "chainId": chainId,
+        "refBlockId": refBlockId,
+        "refBlockNum": refBlockNum,
+        "refBlockPrefix": refBlockPrefix,
+        "contract": new List<dynamic>.from(contract.map((x) => x.toJson())),
+      };
 }
 
-//class RefContractResponseAvailableasset {
-//  String assetId;
-//  int precision;
-//  String assetName;
-//
-//  RefContractResponseAvailableasset(
-//      {this.assetId, this.precision, this.assetName});
-//
-//  RefContractResponseAvailableasset.fromJson(Map<String, dynamic> json) {
-//    assetId = json['assetId'];
-//    precision = json['precision'];
-//    assetName = json['assetName'];
-//  }
-//
-//  Map<String, dynamic> toJson() {
-//    final Map<String, dynamic> data = new Map<String, dynamic>();
-//    data['assetId'] = this.assetId;
-//    data['precision'] = this.precision;
-//    data['assetName'] = this.assetName;
-//    return data;
-//  }
-//}
-
-class RefContractResponseContract {
+class Contract {
   String contractId;
   String assetName;
   String underlying;
-  double conversionRate;
+  String conversionRate;
   String startGearing;
   String tradingStartTime;
   String tradingStopTime;
@@ -64,13 +57,13 @@ class RefContractResponseContract {
   String commissionRate;
   String quoteAsset;
   String status;
-  double strikeLevel;
+  String strikeLevel;
   String knockOutTime;
   String settlementUnderlyingPrice;
   String settlementPrice;
   String modificationTime;
 
-  RefContractResponseContract({
+  Contract({
     this.contractId,
     this.assetName,
     this.underlying,
@@ -91,12 +84,16 @@ class RefContractResponseContract {
     this.modificationTime,
   });
 
-  factory RefContractResponseContract.fromJson(Map<String, dynamic> json) =>
-      new RefContractResponseContract(
+  factory Contract.fromRawJson(String str) =>
+      Contract.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Contract.fromJson(Map<String, dynamic> json) => new Contract(
         contractId: json["contractId"],
         assetName: json["assetName"],
         underlying: json["underlying"],
-        conversionRate: double.parse(json["conversionRate"]),
+        conversionRate: json["conversionRate"],
         startGearing: json["startGearing"],
         tradingStartTime: json["tradingStartTime"],
         tradingStopTime: json["tradingStopTime"],
@@ -106,7 +103,7 @@ class RefContractResponseContract {
         commissionRate: json["commissionRate"],
         quoteAsset: json["quoteAsset"],
         status: json["status"],
-        strikeLevel: double.parse(json["strikeLevel"]),
+        strikeLevel: json["strikeLevel"],
         knockOutTime: json["knockOutTime"],
         settlementUnderlyingPrice: json["settlementUnderlyingPrice"],
         settlementPrice: json["settlementPrice"],

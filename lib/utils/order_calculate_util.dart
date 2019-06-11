@@ -24,4 +24,8 @@ class OrderCalculate {
       {double orderBoughtContractPx, double orderQtyContract}) {
     return (orderQtyContract * orderBoughtContractPx).toString();
   }
+
+  static double calculatePrice(double currentPx, double conversionRate) {
+    return conversionRate * conversionRate;
+  }
 }

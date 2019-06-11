@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/blocs/bloc_refData.dart';
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dialog_factory.dart';
@@ -5,11 +6,15 @@ import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
+import 'package:cybex_flutter_plugin/common.dart';
+import 'package:cybex_flutter_plugin/order.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -119,7 +124,7 @@ class _TradeState extends State<TradePage> {
               )),
               Container(
                 margin: EdgeInsets.only(bottom: 30, top: 20),
-                height: 190,
+                height: 200,
                 child: OrderForm(),
               ),
               Container(
@@ -137,10 +142,27 @@ class _TradeState extends State<TradePage> {
                         : WidgetFactory.button(
                             data: I18n.of(context).buyDown,
                             color: Palette.shamrockGreen,
-                            onPressed: () {})),
+                            onPressed: () {
+                              _openOrder();
+                            })),
               )
             ],
           ),
         )));
+  }
+
+  _openOrder() {
+    RefContractResponseModel refContractResponseModel =
+        refDataBloc.subject.value;
+    Order order = Order();
+    order.chainid = refContractResponseModel.chainId;
+    order.refBlockNum = refContractResponseModel.refBlockPrefix;
+    order.txExpiration = 600;
+    order.fee = AmountToSell(amount: 55, assetId: "1.3.0");
+    order.seller = "1.2.30411";
+    order.amountToSell = AmountToSell(amount: 20, assetId: "1.3.2");
+    order.minToReceive = AmountToSell(amount: 10, assetId: "1.3.3");
+    order.expiration = 1800;
+    order.fillOrKill = 1;
   }
 }
