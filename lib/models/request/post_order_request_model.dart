@@ -19,9 +19,9 @@ class PostOrderRequestModel {
   String cutLossPx;
   String takeProfitPx;
   int expiration;
-
+  
   PostOrderRequestModel({
-    this.transactionType,
+    this.transactionType = "NxOrder",
     this.buyOrderTxId,
     this.buyOrder,
     this.commission,
@@ -29,9 +29,9 @@ class PostOrderRequestModel {
     this.underlyingSpotPx,
     this.sellOrder,
     this.sellOrderTxId,
-    this.cutLossPx,
-    this.takeProfitPx,
-    this.expiration,
+    this.cutLossPx = "0",
+    this.takeProfitPx = "0",
+    this.expiration = 0,
   });
 
   factory PostOrderRequestModel.fromRawJson(String str) =>

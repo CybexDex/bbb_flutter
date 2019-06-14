@@ -13,8 +13,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:web_socket_channel/io.dart';
 
 import 'models/request/web_socket_request_entity.dart';
+import 'ordertest.dart';
 
 main() async {
+  await testOrder();
+
   initLogger(package: 'bbb');
   Env.apiClient = BBBAPIProvider();
   Routes.register();
@@ -25,9 +28,6 @@ main() async {
   runApp(injector);
   WebSocketBloc webSocketBloc = new WebSocketBloc();
   webSocketBloc.initCommunication();
-  webSocketBloc.send(jsonEncode(
-          WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
-      .toString());
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

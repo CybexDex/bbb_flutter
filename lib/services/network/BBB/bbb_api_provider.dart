@@ -91,8 +91,11 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<PostOrderResponseModel> postOrder(
       {PostOrderRequestModel order}) async {
-    var response = await dio.post("/transaction");
-    return Future.value(PostOrderResponseModel.fromJson(response.data));
+    var response = await dio.post("/transaction", data: order.toJson());
+    var responseData = json.decode(response.data);
+
+    log.info(response.data);
+    return Future.value(PostOrderResponseModel.fromJson(responseData));
   }
 
   @override

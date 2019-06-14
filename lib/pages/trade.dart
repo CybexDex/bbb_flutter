@@ -11,6 +11,7 @@ import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
+import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:cybex_flutter_plugin/common.dart';
@@ -23,7 +24,6 @@ class TradePage extends StatefulWidget {
 
   final String title;
   final String isUp;
-
   @override
   State<StatefulWidget> createState() => _TradeState();
 }
@@ -31,6 +31,8 @@ class TradePage extends StatefulWidget {
 class _TradeState extends State<TradePage> {
   @override
   Widget build(BuildContext context) {
+    final injector = InjectorWidget.of(context);
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -116,12 +118,7 @@ class _TradeState extends State<TradePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
               ),
-              Expanded(
-                  child: Container(
-                decoration: DecorationFactory.cornerShadowDecoration,
-                height: double.infinity,
-                margin: EdgeInsets.only(top: 1),
-              )),
+              injector.exchangeWidget,
               Container(
                 margin: EdgeInsets.only(bottom: 30, top: 20),
                 height: 200,

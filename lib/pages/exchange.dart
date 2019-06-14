@@ -40,7 +40,6 @@ class _ExchangeState extends State<ExchangePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GetOrderBloc _getOrderBloc = GetOrderBloc();
   int _current = 0;
-  List<TickerData> _listTickerData = [];
 
   @override
   void initState() {
@@ -109,144 +108,85 @@ class _ExchangeState extends State<ExchangePage> {
         ),
         body: SafeArea(
             child: Container(
-                child: StreamBuilder(
-                    stream: WebSocketBloc().getChannelStream(),
-                    builder: (context, wbSnapshot) {
-                      if (wbSnapshot == null || !wbSnapshot.hasData) {
-                        return Container();
-                      }
-                      var wbResponse = WebSocketNXPriceResponseEntity.fromJson(
-                          json.decode(wbSnapshot.data));
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Expanded(
-                              child: Container(
-                            decoration:
-                                DecorationFactory.cornerShadowDecoration,
-                            height: double.infinity,
-                            margin:
-                                EdgeInsets.only(top: 1, left: 20, right: 20),
-                            child: Container(
-                                child: StreamBuilder<List<TickerData>>(
-                              builder: (context, snapshot) {
-                                if (snapshot == null || !snapshot.hasData) {
-                                  return Container();
-                                }
-                                List<TickerData> response = snapshot.data;
-                                _listTickerData.addAll(response);
-                                return Sparkline(
-                                  data: _listTickerData
-                                    ..add(TickerData(wbResponse.px,
-                                        DateTime.parse(wbResponse.time))),
-                                  suppleData: SuppleData(
-                                      stopTime: DateTime.now()
-                                          .add(Duration(minutes: 2)),
-                                      endTime: DateTime.now()
-                                          .add(Duration(minutes: 12)),
-                                      cutOff: 1.7,
-                                      takeProfit: 7.8,
-                                      underOrder: 4.5,
-                                      current: 6.0),
-                                  startTime: DateTime.now()
-                                      .subtract(Duration(minutes: 15)),
-                                  startLineOfTime: DateTime.now()
-                                      .subtract(Duration(minutes: 15)),
-                                  endTime:
-                                      DateTime.now().add(Duration(minutes: 15)),
-                                  lineColor: Palette.darkSkyBlue,
-                                  lineWidth: 2,
-                                  gridLineWidth: 0.5,
-                                  fillGradient: LinearGradient(
-                                      colors: [
-                                        Palette.darkSkyBlue.withAlpha(100),
-                                        Palette.darkSkyBlue.withAlpha(0)
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter),
-                                  gridLineColor: Palette.veryLightPinkTwo,
-                                  pointSize: 8.0,
-                                  pointColor: Palette.darkSkyBlue,
-                                );
-                              },
-                              stream: injector.marketHistoryBloc
-                                  .marketHistorySubject.stream,
-                            )),
-                          )),
-                          Container(
-                            margin: EdgeInsets.only(
-                                bottom: 20, top: 20, left: 20, right: 20),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 1,
-                                    child: WidgetFactory.button(
-                                        data: I18n.of(context).buyUp,
-                                        color: Palette.redOrange,
-                                        onPressed: () {
-                                          router.navigateTo(
-                                              context, "/trade/buyUp",
-                                              transition:
-                                                  TransitionType.inFromRight);
-                                        })),
-                                Container(
-                                  width: 20,
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: WidgetFactory.button(
-                                        data: I18n.of(context).buyDown,
-                                        color: Palette.shamrockGreen,
-                                        onPressed: () {
-                                          router.navigateTo(
-                                              context, "/trade/buyDown",
-                                              transition:
-                                                  TransitionType.inFromRight);
-                                        })),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(bottom: 10),
-                            margin: Dimen.pageMargin,
-                            child: Align(
-                              child: Text(
-                                I18n.of(context).myOrdersStock,
-                                style: StyleFactory.title,
-                              ),
-                              alignment: Alignment.bottomLeft,
-                            ),
-                          ),
-                          StreamBuilder<List<OrderResponseModel>>(
-                            stream: _getOrderBloc.getOrderBloc.stream,
-                            builder: (context, snapShot) {
-                              if (snapShot == null || !snapShot.hasData) {
-                                return _emptyStockWidget();
-                              } else {
-                                List<OrderResponseModel> orderResponse =
-                                    snapShot.data;
-                                refDataBloc.getRefData();
-                                return StreamBuilder<RefContractResponseModel>(
-                                  stream: refDataBloc.subject.stream,
-                                  builder: (context, snapShot) {
-                                    log.info(snapShot.data.chainId);
-                                    if (snapShot == null || !snapShot.hasData) {
-                                      return _emptyStockWidget();
-                                    } else {
-                                      var response = snapShot.data;
-                                      return _stockWidget(
-                                          orderResponse: orderResponse,
-                                          refContract: response,
-                                          webSocketResponse: wbResponse);
-                                    }
-                                  },
-                                );
+                child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            injector.exchangeWidget,
+            Container(
+              margin: EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: WidgetFactory.button(
+                          data: I18n.of(context).buyUp,
+                          color: Palette.redOrange,
+                          onPressed: () {
+                            router.navigateTo(context, "/trade/buyUp",
+                                transition: TransitionType.inFromRight);
+                          })),
+                  Container(
+                    width: 20,
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: WidgetFactory.button(
+                          data: I18n.of(context).buyDown,
+                          color: Palette.shamrockGreen,
+                          onPressed: () {
+                            router.navigateTo(context, "/trade/buyDown",
+                                transition: TransitionType.inFromRight);
+                          })),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 10),
+              margin: Dimen.pageMargin,
+              child: Align(
+                child: Text(
+                  I18n.of(context).myOrdersStock,
+                  style: StyleFactory.title,
+                ),
+                alignment: Alignment.bottomLeft,
+              ),
+            ),
+            StreamBuilder<List<OrderResponseModel>>(
+              stream: _getOrderBloc.getOrderBloc.stream,
+              builder: (context, snapShot) {
+                if (snapShot == null || !snapShot.hasData) {
+                  return _emptyStockWidget();
+                } else {
+                  List<OrderResponseModel> orderResponse = snapShot.data;
+                  refDataBloc.getRefData();
+                  return StreamBuilder<RefContractResponseModel>(
+                    stream: refDataBloc.subject.stream,
+                    builder: (context, snapShot) {
+                      log.info(snapShot.data.chainId);
+                      if (snapShot == null || !snapShot.hasData) {
+                        return _emptyStockWidget();
+                      } else {
+                        var response = snapShot.data;
+                        return StreamBuilder<WebSocketNXPriceResponseEntity>(
+                            stream: WebSocketBloc().getNXPriceBloc.stream,
+                            builder: (context, wbSnapshot) {
+                              if (wbSnapshot == null || !wbSnapshot.hasData) {
+                                return Container();
                               }
-                            },
-                          )
-                        ],
-                      );
-                    }))));
+                              var wbResponse = wbSnapshot.data;
+                              return _stockWidget(
+                                  orderResponse: orderResponse,
+                                  refContract: response,
+                                  webSocketResponse: wbResponse);
+                            });
+                      }
+                    },
+                  );
+                }
+              },
+            )
+          ],
+        ))));
   }
 
   @override
