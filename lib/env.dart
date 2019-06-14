@@ -29,6 +29,14 @@ void initLogger({@required String package, String tag}) {
   log = Logger(tag?.toUpperCase() ?? package.toUpperCase());
 }
 
+void printWrapped(String text,
+    {Level logLevel = Level.INFO, Object error, StackTrace stackTrace}) {
+  final pattern = new RegExp('.{1,800}');
+  pattern
+      .allMatches(text)
+      .forEach((match) => log.log(logLevel, match.group(0), error, stackTrace));
+}
+
 Frame _findCallerFrame(Trace trace) {
   bool foundLogging = false;
 

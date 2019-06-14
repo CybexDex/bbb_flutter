@@ -65,7 +65,7 @@ void testOrder() async {
   // });
 
   // test("post Order", () async {
-  debugPrint(order.toRawJson());
+  printWrapped(order.toRawJson());
   PostOrderResponseModel res = await Env.apiClient.postOrder(order: order);
   // expect(res.status, "Successful");
   // });
@@ -83,6 +83,7 @@ Order getBuyOrder(RefContractResponseModel refData, Contract contract) {
   order.chainid = refData.chainId;
   order.refBlockNum = refData.refBlockNum;
   order.refBlockPrefix = refData.refBlockPrefix;
+  order.refBlockId = refData.refBlockId;
   order.fee = cyb;
   order.seller = user;
   order.amountToSell = buyAmount;
@@ -98,6 +99,7 @@ Order getSellOrder(RefContractResponseModel refData, Contract contract) {
   Order order = Order();
   order.chainid = refData.chainId;
   order.refBlockNum = refData.refBlockNum;
+  order.refBlockId = refData.refBlockId;
   order.refBlockPrefix = refData.refBlockPrefix;
   order.fee = cyb;
   order.seller = user;
@@ -120,6 +122,8 @@ Commission getCommission(RefContractResponseModel refData, Contract contract) {
   comm.chainid = refData.chainId;
   comm.refBlockNum = refData.refBlockNum;
   comm.refBlockPrefix = refData.refBlockPrefix;
+  comm.refBlockId = refData.refBlockId;
+
   comm.txExpiration = expir + 5 * 60;
   comm.fee = cyb;
   comm.from = user;

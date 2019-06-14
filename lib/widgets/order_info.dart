@@ -68,11 +68,14 @@ class OrderInfo extends StatelessWidget {
                   Text(
                     OrderCalculate.calculateRealTimeRevenue(
                         currentPx: webSocketNXPriceResponseEntity.px,
-                        orderBoughtPx: orderResponseModel.boughtPx,
+                        orderBoughtPx:
+                            double.parse(orderResponseModel.boughtPx),
                         conversionRate:
                             double.parse(currentContract.conversionRate),
-                        orderCommission: orderResponseModel.commission,
-                        orderQtyContract: orderResponseModel.qtyContract),
+                        orderCommission:
+                            double.parse(orderResponseModel.commission),
+                        orderQtyContract:
+                            double.parse(orderResponseModel.qtyContract)),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -116,9 +119,10 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     OrderCalculate.calculateInvest(
-                        orderQtyContract: orderResponseModel.qtyContract,
+                        orderQtyContract:
+                            double.parse(orderResponseModel.qtyContract),
                         orderBoughtContractPx:
-                            orderResponseModel.boughtContractPx),
+                            double.parse(orderResponseModel.boughtContractPx)),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],

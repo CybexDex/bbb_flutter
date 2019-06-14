@@ -19,7 +19,7 @@ class PostOrderRequestModel {
   String cutLossPx;
   String takeProfitPx;
   int expiration;
-  
+
   PostOrderRequestModel({
     this.transactionType = "NxOrder",
     this.buyOrderTxId,
