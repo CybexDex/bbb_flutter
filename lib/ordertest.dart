@@ -51,6 +51,8 @@ void testOrder() async {
   order.commission = commission;
   order.underlyingSpotPx = btc;
   order.contractId = contractId;
+  order.expiration =
+      (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000) + 24 * 60 * 60;
   // });
 
   // test("sign Order", () async {
