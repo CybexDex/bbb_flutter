@@ -1,8 +1,9 @@
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bbb_flutter/env.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 
-class RefDataBloc {
+class RefDataBloc implements Bloc {
   static RefDataBloc _singleton = RefDataBloc._internal();
   RefDataBloc._internal();
 
@@ -16,15 +17,13 @@ class RefDataBloc {
 
   getRefData() async {
     RefContractResponseModel response = await Env.apiClient.getRefData();
-    log.info(response.chainId);
     _subject.sink.add(response);
   }
 
-  dispose() {
-    _subject.close();
+  @override
+  dispose() async {
+    await _subject.close();
   }
 
   BehaviorSubject<RefContractResponseModel> get subject => _subject;
 }
-
-final refDataBloc = RefDataBloc();

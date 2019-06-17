@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/blocs/bloc_refData.dart';
 import 'package:bbb_flutter/blocs/market_history_bloc.dart';
 import 'package:bbb_flutter/blocs/user_bloc.dart';
 import 'package:bbb_flutter/colors/palette.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InjectorWidget extends InheritedWidget {
   final UserBloc userBloc = UserBloc();
+  final RefDataBloc refDataBloc = RefDataBloc();
   final MarketHistoryBloc marketHistoryBloc = MarketHistoryBloc();
 
   List<TickerData> _listTickerData = [];

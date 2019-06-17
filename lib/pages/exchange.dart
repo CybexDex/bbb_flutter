@@ -19,6 +19,7 @@ import 'package:bbb_flutter/websocket/websocket_bloc.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,8 @@ class _ExchangeState extends State<ExchangePage> {
   @override
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
+    final refDataBloc = injector.refDataBloc;
+
     ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
     _getOrderBloc.getOrder(name: "abigale1989");
     injector.marketHistoryBloc.fetchPriceHistory(
@@ -122,7 +125,8 @@ class _ExchangeState extends State<ExchangePage> {
                           data: I18n.of(context).buyUp,
                           color: Palette.redOrange,
                           onPressed: () {
-                            router.navigateTo(context, "/trade/buyUp",
+                            router.navigateTo(
+                                context, "/trade/NBTC6200X070100/buyUp",
                                 transition: TransitionType.inFromRight);
                           })),
                   Container(
@@ -134,7 +138,8 @@ class _ExchangeState extends State<ExchangePage> {
                           data: I18n.of(context).buyDown,
                           color: Palette.shamrockGreen,
                           onPressed: () {
-                            router.navigateTo(context, "/trade/buyDown",
+                            router.navigateTo(
+                                context, "/trade/NBTC6200X070100/buyDown",
                                 transition: TransitionType.inFromRight);
                           })),
                 ],
@@ -193,7 +198,6 @@ class _ExchangeState extends State<ExchangePage> {
   void dispose() {
     WebSocketBloc().reset();
     _getOrderBloc.dispose();
-    refDataBloc.dispose();
 
     super.dispose();
   }

@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/blocs/bloc_refData.dart';
+import 'package:bbb_flutter/blocs/order_form_bloc.dart';
 import 'package:bbb_flutter/colors/palette.dart';
 import 'package:bbb_flutter/common/decoration_factory.dart';
 import 'package:bbb_flutter/common/dialog_factory.dart';
@@ -6,10 +7,11 @@ import 'package:bbb_flutter/common/dimen.dart';
 import 'package:bbb_flutter/common/image_factory.dart';
 import 'package:bbb_flutter/common/style_factory.dart';
 import 'package:bbb_flutter/common/widget_factory.dart';
+import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
@@ -18,6 +20,7 @@ import 'package:cybex_flutter_plugin/common.dart';
 import 'package:cybex_flutter_plugin/order.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 
 class TradePage extends StatefulWidget {
   TradePage({Key key, this.title, this.isUp}) : super(key: key);
@@ -32,6 +35,8 @@ class _TradeState extends State<TradePage> {
   @override
   Widget build(BuildContext context) {
     final injector = InjectorWidget.of(context);
+    final refDataBloc = injector.refDataBloc;
+    final OrderFormBloc bloc = BlocProvider.of<OrderFormBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -122,44 +127,40 @@ class _TradeState extends State<TradePage> {
               Container(
                 margin: EdgeInsets.only(bottom: 30, top: 20),
                 height: 200,
-                child: OrderForm(),
+                child: OrderFormWidget(),
               ),
-              Container(
-                margin: EdgeInsets.only(bottom: 0),
-                height: 60,
-                child: BuyOrSellBottom(
-                    totalAmount: "341.0",
-                    feeAmount: "0.0001",
-                    balanceAmount: "1000",
-                    button: widget.isUp == "buyUp"
-                        ? WidgetFactory.button(
-                            data: I18n.of(context).buyUp,
-                            color: Palette.redOrange,
-                            onPressed: () {})
-                        : WidgetFactory.button(
-                            data: I18n.of(context).buyDown,
-                            color: Palette.shamrockGreen,
-                            onPressed: () {
-                              _openOrder();
-                            })),
-              )
+              StreamBuilder(
+                  stream: bloc.orderFormSubject.stream,
+                  initialData: OrderForm(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data == null) {
+                      return Container();
+                    } else {
+                      OrderForm data = snapshot.data;
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 0),
+                        height: 60,
+                        child: BuyOrSellBottom(
+                            totalAmount:
+                                "${data.totalAmount.amount.toString()} ${data.totalAmount.symbol}",
+                            feeAmount: "${data.fee.amount.toString()}",
+                            balanceAmount: "1000",
+                            button: widget.isUp == "buyUp"
+                                ? WidgetFactory.button(
+                                    data: I18n.of(context).buyUp,
+                                    color: Palette.redOrange,
+                                    onPressed: () {})
+                                : WidgetFactory.button(
+                                    data: I18n.of(context).buyDown,
+                                    color: Palette.shamrockGreen,
+                                    onPressed: () async {
+                                      await bloc.postOrder();
+                                    })),
+                      );
+                    }
+                  })
             ],
           ),
         )));
-  }
-
-  _openOrder() {
-    RefContractResponseModel refContractResponseModel =
-        refDataBloc.subject.value;
-    Order order = Order();
-    order.chainid = refContractResponseModel.chainId;
-    order.refBlockNum = refContractResponseModel.refBlockPrefix;
-    order.txExpiration = 600;
-    order.fee = AmountToSell(amount: 55, assetId: "1.3.0");
-    order.seller = "1.2.30411";
-    order.amountToSell = AmountToSell(amount: 20, assetId: "1.3.2");
-    order.minToReceive = AmountToSell(amount: 10, assetId: "1.3.3");
-    order.expiration = 1800;
-    order.fillOrKill = 1;
   }
 }

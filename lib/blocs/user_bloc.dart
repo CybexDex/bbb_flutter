@@ -3,12 +3,22 @@ import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/shared_pref.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 
-class UserBloc {
+class UserBloc implements Bloc {
   BehaviorSubject<UserEntity> userSubject = BehaviorSubject<UserEntity>();
 
-  dispose() {
-    userSubject.close();
+  static UserBloc _singleton = UserBloc._internal();
+  UserBloc._internal();
+
+  factory UserBloc() {
+    _singleton = _singleton ?? UserBloc._internal();
+    return _singleton;
+  }
+
+  @override
+  dispose() async {
+    await userSubject.close();
   }
 
   refreshUserInfo() {

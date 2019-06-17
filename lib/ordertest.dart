@@ -67,8 +67,9 @@ void testOrder() async {
   // });
 
   // test("post Order", () async {
-  printWrapped(order.toRawJson());
   PostOrderResponseModel res = await Env.apiClient.postOrder(order: order);
+  printWrapped(res.toRawJson());
+
   // expect(res.status, "Successful");
   // });
   // });

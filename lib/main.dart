@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bbb_flutter/blocs/bloc_refData.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/pages/exchange.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/websocket/websocket_bloc.dart';
 import 'package:bbb_flutter/widgets/injector.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -44,20 +46,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BBB',
-      localizationsDelegates: [I18n.delegate],
-      locale: Locale("en"),
-      supportedLocales: [
-        const Locale("en"),
-        const Locale("zh"),
-      ],
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        return Locale("en");
-      },
-      home: ExchangePage(
-        title: '.BXBT',
-      ),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'BBB',
+        localizationsDelegates: [I18n.delegate],
+        locale: Locale("en"),
+        supportedLocales: [
+          const Locale("en"),
+          const Locale("zh"),
+        ],
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          return Locale("en");
+        },
+        home: ExchangePage(
+          title: '.BXBT',
+        ));
   }
 }

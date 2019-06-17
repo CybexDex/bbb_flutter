@@ -1,56 +1,43 @@
+// To parse this JSON data, do
+//
+//     final postOrderResponseModel = postOrderResponseModelFromJson(jsonString);
+
+import 'dart:convert';
+
 class PostOrderResponseModel {
   String status;
-  String seller;
-  int orderSequence;
-  String rejectReason;
-  String rejectCode;
-  String signature;
-  String txId;
-  String txType;
-  String time;
   String reason;
   String details;
+  String txId;
+  DateTime time;
 
-  PostOrderResponseModel(
-      {this.status,
-      this.seller,
-      this.orderSequence,
-      this.rejectReason,
-      this.rejectCode,
-      this.signature,
-      this.txId,
-      this.txType,
-      this.time,
-      this.reason,
-      this.details});
+  PostOrderResponseModel({
+    this.status,
+    this.reason,
+    this.details,
+    this.txId,
+    this.time,
+  });
 
-  PostOrderResponseModel.fromJson(Map<String, dynamic> json) {
-    status = json['Status'];
-    seller = json['seller'];
-    orderSequence = json['orderSequence'];
-    rejectReason = json['rejectReason'];
-    rejectCode = json['rejectCode'];
-    signature = json['signature'];
-    txId = json['txId'];
-    txType = json['txType'];
-    time = json['time'];
-    reason = json['reason'];
-    details = json['details'];
-  }
+  factory PostOrderResponseModel.fromRawJson(String str) =>
+      PostOrderResponseModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Status'] = this.status;
-    data['seller'] = this.seller;
-    data['orderSequence'] = this.orderSequence;
-    data['rejectReason'] = this.rejectReason;
-    data['rejectCode'] = this.rejectCode;
-    data['signature'] = this.signature;
-    data['txId'] = this.txId;
-    data['txType'] = this.txType;
-    data['time'] = this.time;
-    data['reason'] = this.reason;
-    data['details'] = this.details;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory PostOrderResponseModel.fromJson(Map<String, dynamic> json) =>
+      new PostOrderResponseModel(
+        status: json["Status"],
+        reason: json["reason"],
+        details: json["details"],
+        txId: json["txId"],
+        time: DateTime.parse(json["time"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Status": status,
+        "reason": reason,
+        "details": details,
+        "txId": txId,
+        "time": time.toIso8601String(),
+      };
 }

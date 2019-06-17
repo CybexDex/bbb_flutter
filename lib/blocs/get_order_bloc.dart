@@ -2,13 +2,15 @@ import 'package:bbb_flutter/models/response/order_response_model.dart';
 
 import '../env.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:bloc_provider/bloc_provider.dart';
 
-class GetOrderBloc {
+class GetOrderBloc implements Bloc {
   BehaviorSubject<List<OrderResponseModel>> getOrderBloc =
       BehaviorSubject<List<OrderResponseModel>>();
 
-  dispose() {
-    getOrderBloc.close();
+  @override
+  dispose() async {
+    await getOrderBloc.close();
   }
 
   getOrder({String name}) async {

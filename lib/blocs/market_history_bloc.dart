@@ -1,15 +1,16 @@
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
-
+import 'package:bloc_provider/bloc_provider.dart';
 import '../env.dart';
 
-class MarketHistoryBloc {
+class MarketHistoryBloc implements Bloc {
   BehaviorSubject<List<TickerData>> marketHistorySubject =
       BehaviorSubject<List<TickerData>>();
 
-  dispose() {
-    marketHistorySubject.close();
+  @override
+  dispose() async {
+    await marketHistorySubject.close();
   }
 
   fetchPriceHistory({String startTime, String endTime, String asset}) async {
