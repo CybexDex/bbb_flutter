@@ -1,35 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:bbb_flutter/blocs/bloc_refData.dart';
-import 'package:bbb_flutter/env.dart';
-import 'package:bbb_flutter/pages/exchange.dart';
+import 'package:bbb_flutter/localization/i18n.dart';
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
-import 'package:bbb_flutter/websocket/websocket_bloc.dart';
-import 'package:bbb_flutter/widgets/injector.dart';
-import 'package:bloc_provider/bloc_provider.dart';
+import 'package:bbb_flutter/setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:web_socket_channel/io.dart';
-
-import 'models/request/web_socket_request_entity.dart';
-import 'ordertest.dart';
+import 'package:provider/provider.dart';
 
 main() async {
-  await testOrder();
-
-  initLogger(package: 'bbb');
-  Env.apiClient = BBBAPIProvider();
-  Routes.register();
-
-  var injector = InjectorWidget(child: MyApp());
-  // assume that the `init` method is an async operation
-  await injector.init();
-  runApp(injector);
-  WebSocketBloc webSocketBloc = new WebSocketBloc();
-  webSocketBloc.initCommunication();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
@@ -39,6 +17,11 @@ main() async {
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
+  await setupLocator();
+  Provider.debugCheckInvalidValueType = null;
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -46,19 +29,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'BBB',
-        localizationsDelegates: [I18n.delegate],
-        locale: Locale("en"),
-        supportedLocales: [
-          const Locale("en"),
-          const Locale("zh"),
-        ],
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          return Locale("en");
-        },
-        home: ExchangePage(
-          title: '.BXBT',
-        ));
+      debugShowCheckedModeBanner: false,
+      title: 'BBB',
+      localizationsDelegates: [I18n.delegate],
+      locale: Locale("en"),
+      supportedLocales: [
+        const Locale("en"),
+        const Locale("zh"),
+      ],
+      localeResolutionCallback: (deviceLocale, supportedLocales) {
+        return Locale("en");
+      },
+      initialRoute: RoutePaths.Home,
+      onGenerateRoute: Routes.generateRoute,
+    );
   }
 }

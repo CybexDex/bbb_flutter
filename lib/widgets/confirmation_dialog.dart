@@ -1,20 +1,17 @@
 import 'dart:ui';
 
-import 'package:bbb_flutter/common/decoration_factory.dart';
-import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:flutter/material.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title, description, cancelText, confirmText;
   final VoidCallback onPressed;
 
-  ConfirmationDialog({
-    @required this.title,
-    @required this.description,
-    @required this.cancelText,
-    @required this.confirmText,
-    this.onPressed
-  });
+  ConfirmationDialog(
+      {@required this.title,
+      @required this.description,
+      @required this.cancelText,
+      @required this.confirmText,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +29,7 @@ class ConfirmationDialog extends StatelessWidget {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
       child: Container(
-        padding: EdgeInsets.only(top:24, left: 37, right: 37),
+        padding: EdgeInsets.only(top: 24, left: 37, right: 37),
         decoration: DecorationFactory.dialogBackgroundDecoration,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -43,14 +40,12 @@ class ConfirmationDialog extends StatelessWidget {
               description,
               style: StyleFactory.dialogContentStyle,
               textAlign: TextAlign.center,
-
             ),
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
             Row(
-              children: <Widget>[
-                GestureDetector(
-                )
-              ],
+              children: <Widget>[GestureDetector()],
             )
           ],
         ),

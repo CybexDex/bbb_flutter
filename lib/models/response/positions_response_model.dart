@@ -1,47 +1,61 @@
+import 'dart:convert';
+
 class PositionsResponseModel {
   String accountName;
-  List<PositionsResponsePosition> positions;
-  String time;
+  List<Position> positions;
+  DateTime time;
 
-  PositionsResponseModel({this.accountName, this.positions, this.time});
+  PositionsResponseModel({
+    this.accountName,
+    this.positions,
+    this.time,
+  });
 
-  PositionsResponseModel.fromJson(Map<String, dynamic> json) {
-    accountName = json['accountName'];
-    if (json['positions'] != null) {
-      positions = new List<PositionsResponsePosition>();
-      (json['positions'] as List).forEach((v) {
-        positions.add(new PositionsResponsePosition.fromJson(v));
-      });
-    }
-    time = json['time'];
-  }
+  factory PositionsResponseModel.fromRawJson(String str) =>
+      PositionsResponseModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accountName'] = this.accountName;
-    if (this.positions != null) {
-      data['positions'] = this.positions.map((v) => v.toJson()).toList();
-    }
-    data['time'] = this.time;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory PositionsResponseModel.fromJson(Map<String, dynamic> json) =>
+      new PositionsResponseModel(
+        accountName: json["accountName"],
+        positions: new List<Position>.from(
+            json["positions"].map((x) => Position.fromJson(x))),
+        time: DateTime.parse(json["time"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "accountName": accountName,
+        "positions": new List<dynamic>.from(positions.map((x) => x.toJson())),
+        "time": time.toIso8601String(),
+      };
 }
 
-class PositionsResponsePosition {
-  int quantity;
+class Position {
   String assetName;
+  String assetId;
+  double quantity;
 
-  PositionsResponsePosition({this.quantity, this.assetName});
+  Position({
+    this.assetName,
+    this.assetId,
+    this.quantity,
+  });
 
-  PositionsResponsePosition.fromJson(Map<String, dynamic> json) {
-    quantity = json['quantity'];
-    assetName = json['assetName'];
-  }
+  factory Position.fromRawJson(String str) =>
+      Position.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['quantity'] = this.quantity;
-    data['assetName'] = this.assetName;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory Position.fromJson(Map<String, dynamic> json) => new Position(
+        assetName: json["assetName"],
+        assetId: json["assetId"],
+        quantity: json["quantity"].toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "assetName": assetName,
+        "assetId": assetId,
+        "quantity": quantity,
+      };
 }

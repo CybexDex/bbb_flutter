@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 import 'dart:ui' as dui;
 
+import 'package:bbb_flutter/helper/log_helper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
-
-import '../env.dart';
 
 @immutable
 class TickerData {
@@ -125,10 +124,10 @@ class Sparkline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterData = data
-        .where((t) => (t.time.isAfter(startTime)) && (t.time.isBefore(endTime)))
-        .toList();
-    log.info(filterData.toString());
+    var filterData = data;
+    // .where((t) => (t.time.isAfter(startTime)) && (t.time.isBefore(endTime)))
+    // .toList();
+    Log(package: "").printWrapped(filterData.toString());
     double max = filterData.map((t) => t.value).reduce(math.max);
     double min = filterData.map((t) => t.value).reduce(math.min);
     double space = (max - min) / 6; //  2 / 3 空间展示

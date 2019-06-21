@@ -1,6 +1,4 @@
-import 'package:bbb_flutter/common/image_factory.dart';
-import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:flutter/material.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 
 class IStep extends StatelessWidget {
   final GestureTapCallback minusOnTap;

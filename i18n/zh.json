@@ -55,6 +55,8 @@
 	"register_error_message_only_contain_letter": "帐户名不能只包含字母",
 	"register_error_message_account_has_already_exist": "账户已存在",
 	"register_error_message_password_checker": "密码需包含大小写字母、数字、特殊字符，长度不少于12个字符",
-	"register_error_message_password_confirm": "密码输入不一致"
+	"register_error_message_password_confirm": "密码输入不一致",
+	"account_log_in_error": "账号密码不正确",
+	"account_log_out": "退出登录"
 
 }

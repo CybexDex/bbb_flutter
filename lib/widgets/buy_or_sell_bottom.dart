@@ -1,5 +1,4 @@
-import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:flutter/material.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 
 class BuyOrSellBottom extends StatelessWidget {
   final String totalAmount;

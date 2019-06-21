@@ -1,39 +1,46 @@
-import 'package:bbb_flutter/blocs/order_form_bloc.dart';
-import 'package:bbb_flutter/pages/exchange.dart';
-import 'package:bbb_flutter/pages/login.dart';
-import 'package:bbb_flutter/pages/register.dart';
-import 'package:bbb_flutter/pages/trade.dart';
-import 'package:bloc_provider/bloc_provider.dart';
-import 'package:fluro/fluro.dart';
+import 'package:bbb_flutter/screen/deposit.dart';
+import 'package:bbb_flutter/screen/exchange.dart';
+import 'package:bbb_flutter/screen/login.dart';
+import 'package:bbb_flutter/screen/register.dart';
+import 'package:bbb_flutter/screen/trade.dart';
+import 'package:bbb_flutter/shared/types.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-final router = Router();
+class RoutePaths {
+  static const String Login = 'login';
+  static const String Home = '/';
+  static const String Register = 'register';
+  static const String Trade = 'trade';
+  static const String Deposit = 'deposit';
+}
 
 class Routes {
-  // router.navigateTo(context, "/trade", transition: TransitionType.fadeIn);
-  static register() {
-    var tradeHandler = Handler(
-        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      return BlocProvider<OrderFormBloc>(
-        creator: (_context, _bag) => OrderFormBloc(contractId: params["contractId"][0]),
-        child: TradePage(isUp: params["isUp"][0]),
-      );
-    });
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case RoutePaths.Home:
+        return CupertinoPageRoute(builder: (_) => ExchangePage(title: '.BXBT'));
+      case RoutePaths.Login:
+        return CupertinoPageRoute(builder: (_) => LoginPage());
+      case RoutePaths.Register:
+        return CupertinoPageRoute(builder: (_) => RegisterPage());
+      case RoutePaths.Deposit:
+        return CupertinoPageRoute(builder: (_) => DepositPage());
 
-    router.define("/trade/:contractId/:isUp", handler: tradeHandler);
+      case RoutePaths.Trade:
+        RouteParamsOfTrade param = settings.arguments as RouteParamsOfTrade;
+        return CupertinoPageRoute(
+            builder: (_) => TradePage(
+                  params: param,
+                ));
 
-    var loginHandler = Handler(
-        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      return LoginPage();
-    });
-
-    router.define("/login", handler: loginHandler);
-
-    var registerHandler = Handler(
-        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      return RegisterPage();
-    });
-
-    router.define("/register", handler: registerHandler);
+      default:
+        return MaterialPageRoute(
+            builder: (_) => Scaffold(
+                  body: Center(
+                    child: Text('No route defined for ${settings.name}'),
+                  ),
+                ));
+    }
   }
 }

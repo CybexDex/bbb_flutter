@@ -10,24 +10,12 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:dio/dio.dart';
-
-import '../../../env.dart';
+import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 
 class BBBAPIProvider extends BBBAPI {
-  factory BBBAPIProvider() => _sharedInstance();
-
-  static BBBAPIProvider _sharedInstance() {
-    if (_instance == null) {
-      _instance = BBBAPIProvider._();
-    }
-    return _instance;
-  }
-
-  static BBBAPIProvider _instance;
-
   Dio dio = Dio();
 
-  BBBAPIProvider._() {
+  BBBAPIProvider() {
     dio.options.baseUrl = "https://nxapitest.cybex.io/v1";
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
@@ -37,21 +25,23 @@ class BBBAPIProvider extends BBBAPI {
   Future<RefContractResponseModel> getRefData() async {
     var response = await dio.get('/refData');
     var responseData = json.decode(response.data);
-    log.info(responseData.toString());
     return Future.value(RefContractResponseModel.fromJson(responseData));
   }
 
   @override
   Future<PositionsResponseModel> getPositions({String name}) async {
     var response = await dio.get('/position?accountName=$name');
-    return Future.value(PositionsResponseModel.fromJson(response.data));
+    var responseData = json.decode(response.data);
+    return Future.value(PositionsResponseModel.fromJson(responseData));
   }
 
   @override
   Future<List<OrderResponseModel>> getOrders({String name}) async {
     var response = await dio.get('/order?accountName=$name');
     var responseData = json.decode(response.data) as List;
-    log.info(responseData.toString());
+    if (responseData == null) {
+      return Future.value([]);
+    }
     List<OrderResponseModel> model =
         responseData.map((data) => OrderResponseModel.fromJson(data)).toList();
 
@@ -63,7 +53,6 @@ class BBBAPIProvider extends BBBAPI {
     var response = await dio
         .get('/ticker?startTime=$startTime&endTime=$endTime&asset=$asset');
     var responseData = json.decode(response.data) as List;
-    log.info(responseData.toString());
     List<MarketHistoryResponseModel> model = responseData.map((data) {
       var model = MarketHistoryResponseModel();
       model.xts = data[0];
@@ -82,6 +71,14 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
+  Future<DepositResponseModel> getDeposit({String name, String asset}) async {
+    var response =
+        await dio.get('/depositAddress?accountName=$name&asset=$asset');
+    var responseData = json.decode(response.data);
+    return Future.value(DepositResponseModel.fromJson(responseData));
+  }
+
+  @override
   Future<PostOrderResponseModel> amendOrder(
       {AmendOrderRequestModel order}) async {
     var response = await dio.post("/transaction");
@@ -94,7 +91,6 @@ class BBBAPIProvider extends BBBAPI {
     var response = await dio.post("/transaction", data: order.toJson());
     var responseData = json.decode(response.data);
 
-    log.info(response.data);
     return Future.value(PostOrderResponseModel.fromJson(responseData));
   }
 

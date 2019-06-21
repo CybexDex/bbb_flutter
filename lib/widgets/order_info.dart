@@ -1,31 +1,23 @@
-import 'package:bbb_flutter/common/image_factory.dart';
-import 'package:bbb_flutter/common/style_factory.dart';
-import 'package:bbb_flutter/common/widget_factory.dart';
-import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/manager/market_manager.dart';
+
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
-import 'package:bbb_flutter/utils/order_calculate_util.dart';
-import 'package:flutter/material.dart';
+import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
 
 class OrderInfo extends StatelessWidget {
-  final OrderResponseModel orderResponseModel;
-  final RefContractResponseModel refContractResponseModel;
-  final WebSocketNXPriceResponseEntity webSocketNXPriceResponseEntity;
-
-  OrderInfo(
-      {Key key,
-      this.orderResponseModel,
-      this.refContractResponseModel,
-      this.webSocketNXPriceResponseEntity})
-      : super(key: key);
+  final OrderResponseModel _model;
+  OrderInfo({Key key, OrderResponseModel model})
+      : _model = model,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Contract currentContract = getCorrespondContract(
-        refContract: refContractResponseModel,
-        orderResponse: orderResponseModel);
+    Contract currentContract = locator<RefManager>().currentContract;
+
     return Container(
       child: Column(
         children: <Widget>[
@@ -36,11 +28,10 @@ class OrderInfo extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: getUpOrDownIcon(
-                      orderResponse: orderResponseModel,
-                      refContract: refContractResponseModel),
+                      orderResponse: _model, refContract: currentContract),
                 ),
                 Text(
-                  orderResponseModel.contractId,
+                  _model.contractId,
                   style: StyleFactory.smallCellTitleStyle,
                 ),
                 Expanded(
@@ -67,15 +58,11 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     OrderCalculate.calculateRealTimeRevenue(
-                        currentPx: webSocketNXPriceResponseEntity.px,
-                        orderBoughtPx:
-                            double.parse(orderResponseModel.boughtPx),
-                        conversionRate:
-                            double.parse(currentContract.conversionRate),
-                        orderCommission:
-                            double.parse(orderResponseModel.commission),
-                        orderQtyContract:
-                            double.parse(orderResponseModel.qtyContract)),
+                        currentPx: locator<MarketManager>().lastTicker.value,
+                        orderBoughtPx: double.parse(_model.boughtPx),
+                        conversionRate: currentContract.conversionRate,
+                        orderCommission: double.parse(_model.commission),
+                        orderQtyContract: double.parse(_model.qtyContract)),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -96,9 +83,9 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     OrderCalculate.calculateRealLeverage(
-                        currentPx: webSocketNXPriceResponseEntity.px,
-                        strikeLevel: double.parse(currentContract.strikeLevel),
-                        isUp: double.parse(currentContract.conversionRate) > 0),
+                        currentPx: locator<MarketManager>().lastTicker.value,
+                        strikeLevel: currentContract.strikeLevel.toDouble(),
+                        isUp: currentContract.conversionRate > 0),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -119,10 +106,9 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     OrderCalculate.calculateInvest(
-                        orderQtyContract:
-                            double.parse(orderResponseModel.qtyContract),
+                        orderQtyContract: double.parse(_model.qtyContract),
                         orderBoughtContractPx:
-                            double.parse(orderResponseModel.boughtContractPx)),
+                            double.parse(_model.boughtContractPx)),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -176,8 +162,7 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.subTitleStyle,
                   ),
                   Text(
-                    DateFormat("yyyy.MM.dd HH:mm")
-                        .format(orderResponseModel.expiration),
+                    DateFormat("yyyy.MM.dd HH:mm").format(_model.expiration),
                     style: StyleFactory.smallCellTitleStyle,
                   )
                 ],
@@ -194,15 +179,12 @@ class OrderInfo extends StatelessWidget {
   }
 
   Widget getUpOrDownIcon(
-      {OrderResponseModel orderResponse,
-      RefContractResponseModel refContract}) {
-    for (Contract refContractResponseContract in refContract.contract) {
-      if (refContractResponseContract.contractId == orderResponse.contractId) {
-        if (double.parse(refContractResponseContract.conversionRate) > 0) {
-          return ImageFactory.upIcon14;
-        } else {
-          return ImageFactory.downIcon14;
-        }
+      {OrderResponseModel orderResponse, Contract refContract}) {
+    if (refContract.contractId == orderResponse.contractId) {
+      if (refContract.conversionRate > 0) {
+        return ImageFactory.upIcon14;
+      } else {
+        return ImageFactory.downIcon14;
       }
     }
     return null;

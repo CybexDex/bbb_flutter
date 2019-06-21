@@ -1,82 +1,91 @@
+import 'dart:convert';
+
 class RegisterRequestModel {
-  RegisterRequestCap cap;
-  RegisterRequestAccount account;
+  Cap cap;
+  Account account;
 
-  RegisterRequestModel({this.cap, this.account});
+  RegisterRequestModel({
+    this.cap,
+    this.account,
+  });
 
-  RegisterRequestModel.fromJson(Map<String, dynamic> json) {
-    cap = json['cap'] != null
-        ? new RegisterRequestCap.fromJson(json['cap'])
-        : null;
-    account = json['account'] != null
-        ? new RegisterRequestAccount.fromJson(json['account'])
-        : null;
-  }
+  factory RegisterRequestModel.fromRawJson(String str) =>
+      RegisterRequestModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.cap != null) {
-      data['cap'] = this.cap.toJson();
-    }
-    if (this.account != null) {
-      data['account'] = this.account.toJson();
-    }
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory RegisterRequestModel.fromJson(Map<String, dynamic> json) =>
+      new RegisterRequestModel(
+        cap: Cap.fromJson(json["cap"]),
+        account: Account.fromJson(json["account"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "cap": cap.toJson(),
+        "account": account.toJson(),
+      };
 }
 
-class RegisterRequestCap {
+class Account {
+  String ownerKey;
+  dynamic referrer;
+  String memoKey;
+  String name;
+  dynamic refcode;
+  String activeKey;
+
+  Account({
+    this.ownerKey,
+    this.referrer,
+    this.memoKey,
+    this.name,
+    this.refcode,
+    this.activeKey,
+  });
+
+  factory Account.fromRawJson(String str) => Account.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Account.fromJson(Map<String, dynamic> json) => new Account(
+        ownerKey: json["owner_key"],
+        referrer: json["referrer"],
+        memoKey: json["memo_key"],
+        name: json["name"],
+        refcode: json["refcode"],
+        activeKey: json["active_key"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "owner_key": ownerKey,
+        "referrer": referrer,
+        "memo_key": memoKey,
+        "name": name,
+        "refcode": refcode,
+        "active_key": activeKey,
+      };
+}
+
+class Cap {
   String captcha;
   String id;
 
-  RegisterRequestCap({this.captcha, this.id});
+  Cap({
+    this.captcha,
+    this.id,
+  });
 
-  RegisterRequestCap.fromJson(Map<String, dynamic> json) {
-    captcha = json['captcha'];
-    id = json['id'];
-  }
+  factory Cap.fromRawJson(String str) => Cap.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['captcha'] = this.captcha;
-    data['id'] = this.id;
-    return data;
-  }
-}
+  String toRawJson() => json.encode(toJson());
 
-class RegisterRequestAccount {
-  String ownerKey;
-  String referrer;
-  String memoKey;
-  String name;
-  String refcode;
-  String activeKey;
+  factory Cap.fromJson(Map<String, dynamic> json) => new Cap(
+        captcha: json["captcha"],
+        id: json["id"],
+      );
 
-  RegisterRequestAccount(
-      {this.ownerKey,
-      this.referrer,
-      this.memoKey,
-      this.name,
-      this.refcode,
-      this.activeKey});
-
-  RegisterRequestAccount.fromJson(Map<String, dynamic> json) {
-    ownerKey = json['owner_key'];
-    referrer = json['referrer'];
-    memoKey = json['memo_key'];
-    name = json['name'];
-    refcode = json['refcode'];
-    activeKey = json['active_key'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['owner_key'] = this.ownerKey;
-    data['referrer'] = this.referrer;
-    data['memo_key'] = this.memoKey;
-    data['name'] = this.name;
-    data['refcode'] = this.refcode;
-    data['active_key'] = this.activeKey;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "captcha": captcha,
+        "id": id,
+      };
 }

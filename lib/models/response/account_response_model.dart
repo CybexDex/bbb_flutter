@@ -1,288 +1,207 @@
+import 'dart:convert';
+
 class AccountResponseModel {
-  AccountResponseOwner owner;
-  List whitelistedAccounts;
+  String id;
+  DateTime membershipExpirationDate;
   String registrar;
-  List ownerSpecialAuthority;
+  String referrer;
   String lifetimeReferrer;
+  int networkFeePercentage;
   int lifetimeReferrerFeePercentage;
   int referrerRewardsPercentage;
-  List activeSpecialAuthority;
-  List blacklistingAccounts;
-  AccountResponseActive active;
-  int topNControlFlags;
-  int networkFeePercentage;
-  String referrer;
-  String membershipExpirationDate;
   String name;
-  AccountResponseOptions options;
-  String id;
-  List blacklistedAccounts;
-  List whitelistingAccounts;
+  Active owner;
+  Active active;
+  Options options;
   String statistics;
+  List<dynamic> whitelistingAccounts;
+  List<dynamic> blacklistingAccounts;
+  List<dynamic> whitelistedAccounts;
+  List<dynamic> blacklistedAccounts;
+  String cashbackVb;
+  List<dynamic> ownerSpecialAuthority;
+  List<dynamic> activeSpecialAuthority;
+  int topNControlFlags;
 
-  AccountResponseModel(
-      {this.owner,
-      this.whitelistedAccounts,
-      this.registrar,
-      this.ownerSpecialAuthority,
-      this.lifetimeReferrer,
-      this.lifetimeReferrerFeePercentage,
-      this.referrerRewardsPercentage,
-      this.activeSpecialAuthority,
-      this.blacklistingAccounts,
-      this.active,
-      this.topNControlFlags,
-      this.networkFeePercentage,
-      this.referrer,
-      this.membershipExpirationDate,
-      this.name,
-      this.options,
-      this.id,
-      this.blacklistedAccounts,
-      this.whitelistingAccounts,
-      this.statistics});
+  AccountResponseModel({
+    this.id,
+    this.membershipExpirationDate,
+    this.registrar,
+    this.referrer,
+    this.lifetimeReferrer,
+    this.networkFeePercentage,
+    this.lifetimeReferrerFeePercentage,
+    this.referrerRewardsPercentage,
+    this.name,
+    this.owner,
+    this.active,
+    this.options,
+    this.statistics,
+    this.whitelistingAccounts,
+    this.blacklistingAccounts,
+    this.whitelistedAccounts,
+    this.blacklistedAccounts,
+    this.cashbackVb,
+    this.ownerSpecialAuthority,
+    this.activeSpecialAuthority,
+    this.topNControlFlags,
+  });
 
-  AccountResponseModel.fromJson(Map<String, dynamic> json) {
-    owner = json['owner'] != null
-        ? new AccountResponseOwner.fromJson(json['owner'])
-        : null;
-    if (json['whitelisted_accounts'] != null) {
-      whitelistedAccounts = new List();
-      (json['whitelisted_accounts'] as List).forEach((v) {
-        whitelistedAccounts.add(v);
-      });
-    }
-    registrar = json['registrar'];
-    ownerSpecialAuthority = json['owner_special_authority'].cast<int>();
-    lifetimeReferrer = json['lifetime_referrer'];
-    lifetimeReferrerFeePercentage = json['lifetime_referrer_fee_percentage'];
-    referrerRewardsPercentage = json['referrer_rewards_percentage'];
-    activeSpecialAuthority = json['active_special_authority'].cast<int>();
-    if (json['blacklisting_accounts'] != null) {
-      blacklistingAccounts = new List();
-      (json['blacklisting_accounts'] as List).forEach((v) {
-        blacklistingAccounts.add(v);
-      });
-    }
-    active = json['active'] != null
-        ? new AccountResponseActive.fromJson(json['active'])
-        : null;
-    topNControlFlags = json['top_n_control_flags'];
-    networkFeePercentage = json['network_fee_percentage'];
-    referrer = json['referrer'];
-    membershipExpirationDate = json['membership_expiration_date'];
-    name = json['name'];
-    options = json['options'] != null
-        ? new AccountResponseOptions.fromJson(json['options'])
-        : null;
-    id = json['id'];
-    if (json['blacklisted_accounts'] != null) {
-      blacklistedAccounts = new List();
-      (json['blacklisted_accounts'] as List).forEach((v) {
-        blacklistedAccounts.add(v);
-      });
-    }
-    if (json['whitelisting_accounts'] != null) {
-      whitelistingAccounts = new List();
-      (json['whitelisting_accounts'] as List).forEach((v) {
-        whitelistingAccounts.add(v);
-      });
-    }
-    statistics = json['statistics'];
-  }
+  factory AccountResponseModel.fromRawJson(String str) =>
+      AccountResponseModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.owner != null) {
-      data['owner'] = this.owner.toJson();
-    }
-    if (this.whitelistedAccounts != null) {
-      data['whitelisted_accounts'] =
-          this.whitelistedAccounts.map((v) => v.toJson()).toList();
-    }
-    data['registrar'] = this.registrar;
-    data['owner_special_authority'] = this.ownerSpecialAuthority;
-    data['lifetime_referrer'] = this.lifetimeReferrer;
-    data['lifetime_referrer_fee_percentage'] =
-        this.lifetimeReferrerFeePercentage;
-    data['referrer_rewards_percentage'] = this.referrerRewardsPercentage;
-    data['active_special_authority'] = this.activeSpecialAuthority;
-    if (this.blacklistingAccounts != null) {
-      data['blacklisting_accounts'] =
-          this.blacklistingAccounts.map((v) => v.toJson()).toList();
-    }
-    if (this.active != null) {
-      data['active'] = this.active.toJson();
-    }
-    data['top_n_control_flags'] = this.topNControlFlags;
-    data['network_fee_percentage'] = this.networkFeePercentage;
-    data['referrer'] = this.referrer;
-    data['membership_expiration_date'] = this.membershipExpirationDate;
-    data['name'] = this.name;
-    if (this.options != null) {
-      data['options'] = this.options.toJson();
-    }
-    data['id'] = this.id;
-    if (this.blacklistedAccounts != null) {
-      data['blacklisted_accounts'] =
-          this.blacklistedAccounts.map((v) => v.toJson()).toList();
-    }
-    if (this.whitelistingAccounts != null) {
-      data['whitelisting_accounts'] =
-          this.whitelistingAccounts.map((v) => v.toJson()).toList();
-    }
-    data['statistics'] = this.statistics;
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory AccountResponseModel.fromJson(Map<String, dynamic> json) =>
+      new AccountResponseModel(
+        id: json["id"],
+        membershipExpirationDate:
+            DateTime.parse(json["membership_expiration_date"]),
+        registrar: json["registrar"],
+        referrer: json["referrer"],
+        lifetimeReferrer: json["lifetime_referrer"],
+        networkFeePercentage: json["network_fee_percentage"],
+        lifetimeReferrerFeePercentage: json["lifetime_referrer_fee_percentage"],
+        referrerRewardsPercentage: json["referrer_rewards_percentage"],
+        name: json["name"],
+        owner: Active.fromJson(json["owner"]),
+        active: Active.fromJson(json["active"]),
+        options: Options.fromJson(json["options"]),
+        statistics: json["statistics"],
+        whitelistingAccounts:
+            new List<dynamic>.from(json["whitelisting_accounts"].map((x) => x)),
+        blacklistingAccounts:
+            new List<dynamic>.from(json["blacklisting_accounts"].map((x) => x)),
+        whitelistedAccounts:
+            new List<dynamic>.from(json["whitelisted_accounts"].map((x) => x)),
+        blacklistedAccounts:
+            new List<dynamic>.from(json["blacklisted_accounts"].map((x) => x)),
+        cashbackVb: json["cashback_vb"],
+        ownerSpecialAuthority: new List<dynamic>.from(
+            json["owner_special_authority"].map((x) => x)),
+        activeSpecialAuthority: new List<dynamic>.from(
+            json["active_special_authority"].map((x) => x)),
+        topNControlFlags: json["top_n_control_flags"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "membership_expiration_date":
+            membershipExpirationDate.toIso8601String(),
+        "registrar": registrar,
+        "referrer": referrer,
+        "lifetime_referrer": lifetimeReferrer,
+        "network_fee_percentage": networkFeePercentage,
+        "lifetime_referrer_fee_percentage": lifetimeReferrerFeePercentage,
+        "referrer_rewards_percentage": referrerRewardsPercentage,
+        "name": name,
+        "owner": owner.toJson(),
+        "active": active.toJson(),
+        "options": options.toJson(),
+        "statistics": statistics,
+        "whitelisting_accounts":
+            new List<dynamic>.from(whitelistingAccounts.map((x) => x)),
+        "blacklisting_accounts":
+            new List<dynamic>.from(blacklistingAccounts.map((x) => x)),
+        "whitelisted_accounts":
+            new List<dynamic>.from(whitelistedAccounts.map((x) => x)),
+        "blacklisted_accounts":
+            new List<dynamic>.from(blacklistedAccounts.map((x) => x)),
+        "cashback_vb": cashbackVb,
+        "owner_special_authority":
+            new List<dynamic>.from(ownerSpecialAuthority.map((x) => x)),
+        "active_special_authority":
+            new List<dynamic>.from(activeSpecialAuthority.map((x) => x)),
+        "top_n_control_flags": topNControlFlags,
+      };
 }
 
-class AccountResponseOwner {
-  List<Null> addressAuths;
-  List<List> keyAuths;
+class Active {
   int weightThreshold;
-  List<Null> accountAuths;
+  List<dynamic> accountAuths;
+  List<List<dynamic>> keyAuths;
+  List<dynamic> addressAuths;
 
-  AccountResponseOwner(
-      {this.addressAuths,
-      this.keyAuths,
-      this.weightThreshold,
-      this.accountAuths});
+  Active({
+    this.weightThreshold,
+    this.accountAuths,
+    this.keyAuths,
+    this.addressAuths,
+  });
 
-  AccountResponseOwner.fromJson(Map<String, dynamic> json) {
-    if (json['address_auths'] != null) {
-      addressAuths = new List();
-      (json['address_auths'] as List).forEach((v) {
-        addressAuths.add(v);
-      });
-    }
-    if (json['key_auths'] != null) {
-      keyAuths = new List<List>();
-      (json['key_auths'] as List).forEach((v) {
-        keyAuths.add(v);
-      });
-    }
-    weightThreshold = json['weight_threshold'];
-    if (json['account_auths'] != null) {
-      accountAuths = new List();
-      (json['account_auths'] as List).forEach((v) {
-        accountAuths.add(v);
-      });
-    }
-  }
+  factory Active.fromRawJson(String str) => Active.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.addressAuths != null) {
-      data['address_auths'] = this.addressAuths;
-    }
-    if (this.keyAuths != null) {
-      data['key_auths'] = this.keyAuths;
-    }
-    data['weight_threshold'] = this.weightThreshold;
-    if (this.accountAuths != null) {
-      data['account_auths'] = this.accountAuths;
-    }
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory Active.fromJson(Map<String, dynamic> json) => new Active(
+        weightThreshold: json["weight_threshold"],
+        accountAuths:
+            new List<dynamic>.from(json["account_auths"].map((x) => x)),
+        keyAuths: new List<List<dynamic>>.from(json["key_auths"]
+            .map((x) => new List<dynamic>.from(x.map((x) => x)))),
+        addressAuths:
+            new List<dynamic>.from(json["address_auths"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "weight_threshold": weightThreshold,
+        "account_auths": new List<dynamic>.from(accountAuths.map((x) => x)),
+        "key_auths": new List<dynamic>.from(
+            keyAuths.map((x) => new List<dynamic>.from(x.map((x) => x)))),
+        "address_auths": new List<dynamic>.from(addressAuths.map((x) => x)),
+      };
 }
 
-class AccountResponseActive {
-  List<Null> addressAuths;
-  List<List> keyAuths;
-  int weightThreshold;
-  List<Null> accountAuths;
+class ActiveSpecialAuthorityClass {
+  ActiveSpecialAuthorityClass();
 
-  AccountResponseActive(
-      {this.addressAuths,
-      this.keyAuths,
-      this.weightThreshold,
-      this.accountAuths});
+  factory ActiveSpecialAuthorityClass.fromRawJson(String str) =>
+      ActiveSpecialAuthorityClass.fromJson(json.decode(str));
 
-  AccountResponseActive.fromJson(Map<String, dynamic> json) {
-    if (json['address_auths'] != null) {
-      addressAuths = new List();
-      (json['address_auths'] as List).forEach((v) {
-        addressAuths.add(v);
-      });
-    }
-    if (json['key_auths'] != null) {
-      keyAuths = new List<List>();
-      (json['key_auths'] as List).forEach((v) {
-        keyAuths.add(v);
-      });
-    }
-    weightThreshold = json['weight_threshold'];
-    if (json['account_auths'] != null) {
-      accountAuths = new List();
-      (json['account_auths'] as List).forEach((v) {
-        accountAuths.add(v);
-      });
-    }
-  }
+  String toRawJson() => json.encode(toJson());
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.addressAuths != null) {
-      data['address_auths'] = this.addressAuths;
-    }
-    if (this.keyAuths != null) {
-      data['key_auths'] = this.keyAuths;
-    }
-    data['weight_threshold'] = this.weightThreshold;
-    if (this.accountAuths != null) {
-      data['account_auths'] = this.accountAuths;
-    }
-    return data;
-  }
+  factory ActiveSpecialAuthorityClass.fromJson(Map<String, dynamic> json) =>
+      new ActiveSpecialAuthorityClass();
+
+  Map<String, dynamic> toJson() => {};
 }
 
-class AccountResponseOptions {
-  int numWitness;
-  List<Null> extensions;
+class Options {
   String memoKey;
   String votingAccount;
+  int numWitness;
   int numCommittee;
-  List<Null> votes;
+  List<dynamic> votes;
+  List<dynamic> extensions;
 
-  AccountResponseOptions(
-      {this.numWitness,
-      this.extensions,
-      this.memoKey,
-      this.votingAccount,
-      this.numCommittee,
-      this.votes});
+  Options({
+    this.memoKey,
+    this.votingAccount,
+    this.numWitness,
+    this.numCommittee,
+    this.votes,
+    this.extensions,
+  });
 
-  AccountResponseOptions.fromJson(Map<String, dynamic> json) {
-    numWitness = json['num_witness'];
-    if (json['extensions'] != null) {
-      extensions = new List();
-      (json['extensions'] as List).forEach((v) {
-        extensions.add(v);
-      });
-    }
-    memoKey = json['memo_key'];
-    votingAccount = json['voting_account'];
-    numCommittee = json['num_committee'];
-    if (json['votes'] != null) {
-      votes = new List();
-      (json['votes'] as List).forEach((v) {
-        votes.add(v);
-      });
-    }
-  }
+  factory Options.fromRawJson(String str) => Options.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['num_witness'] = this.numWitness;
-    if (this.extensions != null) {
-      data['extensions'] = this.extensions;
-    }
-    data['memo_key'] = this.memoKey;
-    data['voting_account'] = this.votingAccount;
-    data['num_committee'] = this.numCommittee;
-    if (this.votes != null) {
-      data['votes'] = this.votes;
-    }
-    return data;
-  }
+  String toRawJson() => json.encode(toJson());
+
+  factory Options.fromJson(Map<String, dynamic> json) => new Options(
+        memoKey: json["memo_key"],
+        votingAccount: json["voting_account"],
+        numWitness: json["num_witness"],
+        numCommittee: json["num_committee"],
+        votes: new List<dynamic>.from(json["votes"].map((x) => x)),
+        extensions: new List<dynamic>.from(json["extensions"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "memo_key": memoKey,
+        "voting_account": votingAccount,
+        "num_witness": numWitness,
+        "num_committee": numCommittee,
+        "votes": new List<dynamic>.from(votes.map((x) => x)),
+        "extensions": new List<dynamic>.from(extensions.map((x) => x)),
+      };
 }
