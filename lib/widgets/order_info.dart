@@ -1,7 +1,7 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
-
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
@@ -18,164 +18,166 @@ class OrderInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     Contract currentContract = locator<RefManager>().currentContract;
 
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 20,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: getUpOrDownIcon(
-                      orderResponse: _model, refContract: currentContract),
-                ),
-                Text(
-                  _model.contractId,
-                  style: StyleFactory.smallCellTitleStyle,
-                ),
-                Expanded(
-                    child: Align(
-                  alignment: Alignment.centerRight,
-                  child: WidgetFactory.smallButton(
-                      data: I18n.of(context).closeOut, onPressed: () {}),
-                )),
-              ],
-            ),
-          ),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              )),
-          Expanded(
-              flex: 16,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    I18n.of(context).futureProfit,
-                    style: StyleFactory.subTitleStyle,
-                  ),
-                  Text(
-                    OrderCalculate.calculateRealTimeRevenue(
-                        currentPx: locator<MarketManager>().lastTicker.value,
-                        orderBoughtPx: double.parse(_model.boughtPx),
-                        conversionRate: currentContract.conversionRate,
-                        orderCommission: double.parse(_model.commission),
-                        orderQtyContract: double.parse(_model.qtyContract)),
-                    style: StyleFactory.smallCellTitleStyle,
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              )),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              )),
-          Expanded(
-              flex: 16,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    I18n.of(context).actLevel,
-                    style: StyleFactory.subTitleStyle,
-                  ),
-                  Text(
-                    OrderCalculate.calculateRealLeverage(
-                        currentPx: locator<MarketManager>().lastTicker.value,
-                        strikeLevel: currentContract.strikeLevel.toDouble(),
-                        isUp: currentContract.conversionRate > 0),
-                    style: StyleFactory.smallCellTitleStyle,
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              )),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              )),
-          Expanded(
-              flex: 16,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    I18n.of(context).invest,
-                    style: StyleFactory.subTitleStyle,
-                  ),
-                  Text(
-                    OrderCalculate.calculateInvest(
-                        orderQtyContract: double.parse(_model.qtyContract),
-                        orderBoughtContractPx:
-                            double.parse(_model.boughtContractPx)),
-                    style: StyleFactory.smallCellTitleStyle,
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              )),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              )),
-          Expanded(
+    return Consumer<List<TickerData>>(builder: (context, ticker, child) {
+      return Container(
+        child: Column(
+          children: <Widget>[
+            Expanded(
               flex: 20,
               child: Row(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: getUpOrDownIcon(
+                        orderResponse: _model, refContract: currentContract),
+                  ),
                   Text(
-                    "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
-                    style: StyleFactory.subTitleStyle,
+                    _model.contractId,
+                    style: StyleFactory.smallCellTitleStyle,
                   ),
                   Expanded(
                       child: Align(
                     alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Text(
-                            "40% / 50%",
-                            style: StyleFactory.smallCellTitleStyle,
-                          ),
-                        ),
-                        WidgetFactory.smallButton(
-                            data: I18n.of(context).amend, onPressed: () {}),
-                      ],
-                    ),
+                    child: WidgetFactory.smallButton(
+                        data: I18n.of(context).closeOut, onPressed: () {}),
                   )),
                 ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              )),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              )),
-          Expanded(
-              flex: 16,
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    I18n.of(context).forceExpiration,
-                    style: StyleFactory.subTitleStyle,
-                  ),
-                  Text(
-                    DateFormat("yyyy.MM.dd HH:mm").format(_model.expiration),
-                    style: StyleFactory.smallCellTitleStyle,
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              )),
-          Expanded(
-              flex: 15,
-              child: SizedBox(
-                height: 10,
-              ))
-        ],
-      ),
-    );
+              ),
+            ),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                )),
+            Expanded(
+                flex: 16,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).futureProfit,
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Text(
+                      OrderCalculate.calculateRealTimeRevenue(
+                          currentPx: ticker.last.value,
+                          orderBoughtPx: double.parse(_model.boughtPx),
+                          conversionRate: currentContract.conversionRate,
+                          orderCommission: double.parse(_model.commission),
+                          orderQtyContract: double.parse(_model.qtyContract)),
+                      style: StyleFactory.smallCellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                )),
+            Expanded(
+                flex: 16,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).actLevel,
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Text(
+                      OrderCalculate.calculateRealLeverage(
+                          currentPx: ticker.last.value,
+                          strikeLevel: currentContract.strikeLevel.toDouble(),
+                          isUp: currentContract.conversionRate > 0),
+                      style: StyleFactory.smallCellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                )),
+            Expanded(
+                flex: 16,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).invest,
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Text(
+                      OrderCalculate.calculateInvest(
+                          orderQtyContract: double.parse(_model.qtyContract),
+                          orderBoughtContractPx:
+                              double.parse(_model.boughtContractPx)),
+                      style: StyleFactory.smallCellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                )),
+            Expanded(
+                flex: 20,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Expanded(
+                        child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Text(
+                              "40% / 50%",
+                              style: StyleFactory.smallCellTitleStyle,
+                            ),
+                          ),
+                          WidgetFactory.smallButton(
+                              data: I18n.of(context).amend, onPressed: () {}),
+                        ],
+                      ),
+                    )),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                )),
+            Expanded(
+                flex: 16,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).forceExpiration,
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Text(
+                      DateFormat("yyyy.MM.dd HH:mm").format(_model.expiration),
+                      style: StyleFactory.smallCellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 15,
+                child: SizedBox(
+                  height: 10,
+                ))
+          ],
+        ),
+      );
+    });
   }
 
   Widget getUpOrDownIcon(

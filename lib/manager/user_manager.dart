@@ -7,6 +7,7 @@ import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
@@ -65,6 +66,14 @@ class UserManager extends BaseModel {
     if (account != null) {
       user.account = account;
       _pref.saveAccount(account: account);
+      notifyListeners();
+    }
+  }
+
+  fetchBalances({String name}) async {
+    PositionsResponseModel balances = await _api.getPositions(name: name);
+    if (balances != null) {
+      user.balances = balances;
       notifyListeners();
     }
   }

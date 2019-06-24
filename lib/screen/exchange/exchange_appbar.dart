@@ -25,19 +25,23 @@ AppBar exchangeAppBar() {
               ))
     ],
     leading: Consumer<UserManager>(
-      builder: (context, bloc, child) => !bloc.user.logined
-          ? GestureDetector(
-              child: child,
-              onTap: () {
-                if (bloc.user.logined) {
-                  Scaffold.of(context).openDrawer();
-                } else {
-                  Navigator.of(context).pushNamed(RoutePaths.Login);
-                }
-              },
-            )
-          : SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
-              fit: BoxFit.contain, height: 20, width: 20),
+      builder: (context, bloc, child) => GestureDetector(
+        child: !bloc.user.logined
+            ? child
+            : Padding(
+                padding: EdgeInsets.all(16),
+                child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
+                    fit: BoxFit.contain, height: 20, width: 20),
+              ),
+        onTap: () {
+          if (bloc.user.logined) {
+            bloc.fetchBalances(name: bloc.user.name);
+            Scaffold.of(context).openDrawer();
+          } else {
+            Navigator.of(context).pushNamed(RoutePaths.Login);
+          }
+        },
+      ),
       child: ImageFactory.personal,
     ),
     centerTitle: true,

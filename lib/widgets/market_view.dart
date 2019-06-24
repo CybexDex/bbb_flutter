@@ -9,7 +9,6 @@ class MarketView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<List<TickerData>>(
       builder: (context, data, child) {
-        locator.get<Log>().printWrapped("tttttttttttt");
         return data == null
             ? Container()
             : Expanded(

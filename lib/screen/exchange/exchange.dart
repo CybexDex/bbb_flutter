@@ -94,6 +94,9 @@ class ExchangePage extends StatelessWidget {
               builder: (_) => locator.get<OrderViewModel>(),
               child: Consumer2<UserManager, OrderViewModel>(
                 builder: (context, userMg, data, child) {
+                  if (userMg.user.logined && data.orders.isEmpty) {
+                    data.getOrders(name: "abigale1989");
+                  }
                   if (!userMg.user.logined || data.orders.isEmpty) {
                     return child;
                   }
@@ -103,16 +106,7 @@ class ExchangePage extends StatelessWidget {
               ),
             )
           ],
-        ))
-            // onModelReady: (model) {
-            //   if (EmptyString.contains(locator<UserManager>().user.name)) {
-            //     model.getOrders(name: "abigale1989");
-            //   } else {
-            //     model.getOrders(name: locator<UserManager>().user.name);
-            //   }
-            // },
-
-            ));
+        ))));
   }
 
   Widget _emptyStockWidget() {

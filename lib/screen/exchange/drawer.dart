@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class UserDrawer extends StatelessWidget {
@@ -13,19 +14,22 @@ class UserDrawer extends StatelessWidget {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
-            child: Column(
-              children: <Widget>[
-                Align(
-                  child: GestureDetector(
-                    child: ImageFactory.back,
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
+          Consumer<UserManager>(
+            builder: (context, userMg, child) => DrawerHeader(
+              child: Column(
+                children: <Widget>[
+                  Align(
+                    child: GestureDetector(
+                      child: ImageFactory.back,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    alignment: Alignment.topLeft,
                   ),
-                  alignment: Alignment.topLeft,
-                )
-              ],
+                  Text("${userMg.user.balances.positions.first.quantity}")
+                ],
+              ),
             ),
           ),
           ListTile(

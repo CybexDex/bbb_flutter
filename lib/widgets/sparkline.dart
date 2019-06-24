@@ -128,6 +128,9 @@ class Sparkline extends StatelessWidget {
         .where((t) => (t.time.isAfter(startTime)) && (t.time.isBefore(endTime)))
         .toList();
     // Log(package: "").printWrapped(filterData.toString());
+    if (filterData.length <= 1) {
+      return Container();
+    }
     double max = filterData.map((t) => t.value).reduce(math.max);
     double min = filterData.map((t) => t.value).reduce(math.min);
     double space = (max - min) / 6; //  2 / 3 空间展示

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -50,8 +51,9 @@ class MarketManager {
     _channel.stream.listen((onData) {
       var wbResponse =
           WebSocketNXPriceResponseEntity.fromJson(json.decode(onData));
-      _priceController.add(_priceController.value
-        ..add(TickerData(wbResponse.px, DateTime.parse(wbResponse.time))));
+      _priceController.value
+          .add(TickerData(wbResponse.px, DateTime.parse(wbResponse.time)));
+      _priceController.add(_priceController.value.toList());
     });
   }
 
