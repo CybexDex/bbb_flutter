@@ -30,6 +30,8 @@ class Log {
 
   void printWrapped(String text,
       {Level logLevel = Level.INFO, Object error, StackTrace stackTrace}) {
+    print(text);
+    return;
     final pattern = new RegExp('.{1,800}');
     pattern.allMatches(text).forEach(
         (match) => _logger.log(logLevel, match.group(0), error, stackTrace));

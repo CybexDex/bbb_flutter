@@ -128,7 +128,7 @@ class TradeViewModel extends BaseModel {
     order.sellOrderTxId = order.sellOrder.transactionid;
 
     PostOrderResponseModel res = await _api.postOrder(order: order);
-    Log().printWrapped(res.toRawJson());
+    // locator.get<Log>().printWrapped(res.toRawJson());
 
     return Future.value(res);
   }

@@ -1,9 +1,10 @@
 import 'package:bbb_flutter/screen/deposit.dart';
-import 'package:bbb_flutter/screen/exchange.dart';
+import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/login.dart';
 import 'package:bbb_flutter/screen/register.dart';
 import 'package:bbb_flutter/screen/trade.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,11 @@ class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RoutePaths.Home:
-        return CupertinoPageRoute(builder: (_) => ExchangePage(title: '.BXBT'));
+        return CupertinoPageRoute(builder: (context) {
+          ScreenUtil.instance = ScreenUtil(width: 375, height: 667)
+            ..init(context);
+          return ExchangePage(title: '.BXBT');
+        });
       case RoutePaths.Login:
         return CupertinoPageRoute(builder: (_) => LoginPage());
       case RoutePaths.Register:

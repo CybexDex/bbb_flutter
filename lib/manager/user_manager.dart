@@ -51,7 +51,6 @@ class UserManager extends BaseModel {
           keys.removePrivateKey();
           user.keys = keys;
           _pref.saveAccountKeys(keys: keys);
-          notifyListeners();
 
           return account;
         }

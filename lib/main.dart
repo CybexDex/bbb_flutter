@@ -1,11 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bbb_flutter/localization/i18n.dart';
+import 'package:bbb_flutter/manager/market_manager.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/setup.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import 'manager/ref_manager.dart';
+import 'models/request/web_socket_request_entity.dart';
 
 main() async {
   SystemChrome.setPreferredOrientations(
@@ -19,29 +26,48 @@ main() async {
   }
 
   await setupLocator();
-  Provider.debugCheckInvalidValueType = null;
 
   runApp(MyApp());
+
+  await locator.get<RefManager>().firstLoadData();
+
+  await locator<MarketManager>().loadMarketHistory(
+      startTime:
+          DateTime.now().subtract(Duration(days: 1)).toUtc().toIso8601String(),
+      endTime: DateTime.now().toUtc().toIso8601String(),
+      asset: "BXBT");
+  locator<MarketManager>().initCommunication();
+  locator<MarketManager>().send(jsonEncode(
+          WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
+      .toString());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BBB',
-      localizationsDelegates: [I18n.delegate],
-      locale: Locale("en"),
-      supportedLocales: [
-        const Locale("en"),
-        const Locale("zh"),
-      ],
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        return Locale("en");
-      },
-      initialRoute: RoutePaths.Home,
-      onGenerateRoute: Routes.generateRoute,
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: locator.get<UserManager>(),
+          ),
+          StreamProvider(
+              builder: (context) => locator.get<MarketManager>().prices)
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'BBB',
+          localizationsDelegates: [I18n.delegate],
+          locale: Locale("en"),
+          supportedLocales: [
+            const Locale("en"),
+            const Locale("zh"),
+          ],
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            return Locale("en");
+          },
+          initialRoute: RoutePaths.Home,
+          onGenerateRoute: Routes.generateRoute,
+        ));
   }
 }
