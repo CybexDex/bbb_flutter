@@ -1,6 +1,8 @@
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 AppBar exchangeAppBar() {
   return AppBar(
@@ -34,7 +36,8 @@ AppBar exchangeAppBar() {
                 }
               },
             )
-          : child,
+          : SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
+              fit: BoxFit.contain, height: 20, width: 20),
       child: ImageFactory.personal,
     ),
     centerTitle: true,

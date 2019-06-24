@@ -16,7 +16,7 @@ class AccountKeysEntity {
   });
 
   List<String> get pubkeys {
-    return keys.map((key) => key.publicKey);
+    return keys.map((key) => key.publicKey).toList();
   }
 
   List<Key> get keys {

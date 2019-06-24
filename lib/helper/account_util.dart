@@ -5,7 +5,7 @@ List<String> activePubkeysFrom({AccountResponseModel account}) {
   checkNotNull(account);
 
   final activeKeys =
-      account.active.keyAuths.map((auth) => auth.first) as List<String>;
+      account.active.keyAuths.map((auth) => auth.first).toList().cast<String>();
   return activeKeys;
 }
 
@@ -13,7 +13,7 @@ List<String> ownerPubkeysFrom({AccountResponseModel account}) {
   checkNotNull(account);
 
   final activeKeys =
-      account.owner.keyAuths.map((auth) => auth.first) as List<String>;
+      account.owner.keyAuths.map((auth) => auth.first).toList().cast<String>();
   return activeKeys;
 }
 

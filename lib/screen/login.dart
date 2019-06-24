@@ -1,5 +1,7 @@
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -12,7 +14,9 @@ class _LoginState extends State<LoginPage> {
   final _accountNameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _errorMessageVisible = false;
+  bool _loadingVisibility = false;
   String _errorMessage = "";
+  var userLocator = locator<UserManager>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +25,7 @@ class _LoginState extends State<LoginPage> {
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text("登录", style: StyleFactory.title),
+          title: Text(I18n.of(context).logIn, style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
@@ -50,7 +54,7 @@ class _LoginState extends State<LoginPage> {
                                     Align(
                                         alignment: Alignment.centerLeft,
                                         child: Visibility(
-                                          visible: _errorMessageVisible,
+                                          visible: !_errorMessageVisible,
                                           child: Text(
                                             "欢迎登录您的账户!",
                                             style: StyleFactory.title,
@@ -112,9 +116,27 @@ class _LoginState extends State<LoginPage> {
                           child: ButtonTheme(
                             minWidth: 200,
                             child: WidgetFactory.button(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  setState(() {
+                                    _loadingVisibility = true;
+                                  });
+                                  if (await userLocator.loginWith(
+                                      name: _accountNameController.text,
+                                      password: _passwordController.text)) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    setState(() {
+                                      _errorMessageVisible = true;
+                                      _errorMessage =
+                                          I18n.of(context).accountLogInError;
+                                    });
+                                  }
+                                  setState(() {
+                                    _loadingVisibility = false;
+                                  });
+                                },
                                 color: Palette.redOrange,
-                                data: "登录"),
+                                data: I18n.of(context).logIn),
                           ))
                     ],
                   ),
@@ -123,12 +145,19 @@ class _LoginState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     child: Text(
-                      "创建新账户",
+                      I18n.of(context).createNewAccount,
                       style: StyleFactory.hyperText,
                     ),
                     onTap: () {
                       Navigator.pushNamed(context, RoutePaths.Register);
                     },
+                  ),
+                  Visibility(
+                    visible: _loadingVisibility,
+                    child: SpinKitWave(
+                      color: Palette.redOrange,
+                      size: 50,
+                    ),
                   )
                 ],
               )),

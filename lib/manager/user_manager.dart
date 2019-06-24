@@ -57,7 +57,7 @@ class UserManager extends BaseModel {
       }
     }
 
-    return Future.error("unlock failed");
+    return null;
   }
 
   refreshAccount({String name}) async {
