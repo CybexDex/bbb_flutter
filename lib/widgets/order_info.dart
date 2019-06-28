@@ -1,7 +1,5 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
-import 'package:bbb_flutter/manager/market_manager.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
@@ -60,10 +58,10 @@ class OrderInfo extends StatelessWidget {
                     Text(
                       OrderCalculate.calculateRealTimeRevenue(
                           currentPx: ticker.last.value,
-                          orderBoughtPx: double.parse(_model.boughtPx),
+                          orderBoughtPx: _model.boughtPx,
                           conversionRate: currentContract.conversionRate,
-                          orderCommission: double.parse(_model.commission),
-                          orderQtyContract: double.parse(_model.qtyContract)),
+                          orderCommission: _model.commission,
+                          orderQtyContract: _model.qtyContract),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -107,9 +105,8 @@ class OrderInfo extends StatelessWidget {
                     ),
                     Text(
                       OrderCalculate.calculateInvest(
-                          orderQtyContract: double.parse(_model.qtyContract),
-                          orderBoughtContractPx:
-                              double.parse(_model.boughtContractPx)),
+                          orderQtyContract: _model.qtyContract,
+                          orderBoughtContractPx: _model.boughtContractPx),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],

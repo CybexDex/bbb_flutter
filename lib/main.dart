@@ -10,9 +10,10 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import 'package:bbb_flutter/helper/common_utils.dart';
 import 'manager/ref_manager.dart';
 import 'models/request/web_socket_request_entity.dart';
+import 'manager/timer_manager.dart';
 
 main() async {
   SystemChrome.setPreferredOrientations(
@@ -25,21 +26,13 @@ main() async {
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 
+  setupLog();
   await setupLocator();
 
   runApp(MyApp());
 
   await locator.get<RefManager>().firstLoadData();
-
-  await locator<MarketManager>().loadMarketHistory(
-      startTime:
-          DateTime.now().subtract(Duration(days: 1)).toUtc().toIso8601String(),
-      endTime: DateTime.now().toUtc().toIso8601String(),
-      asset: "BXBT");
-  locator<MarketManager>().initCommunication();
-  locator<MarketManager>().send(jsonEncode(
-          WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
-      .toString());
+  locator.get<MarketManager>().loadAllData("BXBT");
 }
 
 class MyApp extends StatelessWidget {
@@ -52,7 +45,13 @@ class MyApp extends StatelessWidget {
             value: locator.get<UserManager>(),
           ),
           StreamProvider(
-              builder: (context) => locator.get<MarketManager>().prices)
+              builder: (context) => locator.get<MarketManager>().prices),
+          StreamProvider(
+              builder: (context) =>
+                  locator.get<MarketManager>().lastTicker.stream),
+          StreamProvider(
+            builder: (context) => locator.get<TimerManager>().tick,
+          )
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

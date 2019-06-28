@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
+import 'package:bbb_flutter/helper/common_utils.dart';
+import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
@@ -11,7 +12,7 @@ import 'package:web_socket_channel/io.dart';
 
 class MarketManager {
   Stream<List<TickerData>> get prices => _priceController.stream;
-  TickerData get lastTicker => _priceController.value.last;
+  BehaviorSubject<TickerData> lastTicker = BehaviorSubject<TickerData>();
 
   static const String _SERVER_ADDRESS = "wss://nxmdptest.cybex.io/";
 
@@ -22,6 +23,21 @@ class MarketManager {
   BBBAPIProvider _api;
 
   MarketManager({BBBAPIProvider api}) : _api = api;
+
+  String _assetName;
+
+  loadAllData(String assetName) async {
+    _assetName = assetName;
+    int now = getNowEpochSeconds();
+    await loadMarketHistory(
+        startTime: (now - 300 * 60).toString(),
+        endTime: now.toString(),
+        asset: assetName);
+    initCommunication();
+    send(jsonEncode(WebSocketRequestEntity(
+            type: "subscribe", topic: "FAIRPRICE.$assetName"))
+        .toString());
+  }
 
 // startTime: DateTime.now()
 //             .subtract(Duration(days: 30))
@@ -39,6 +55,7 @@ class MarketManager {
     }).toList();
 
     _priceController.add(data);
+    lastTicker.add(data.last);
   }
 
 // send(jsonEncode(
@@ -51,9 +68,25 @@ class MarketManager {
     _channel.stream.listen((onData) {
       var wbResponse =
           WebSocketNXPriceResponseEntity.fromJson(json.decode(onData));
-      _priceController.value
-          .add(TickerData(wbResponse.px, DateTime.parse(wbResponse.time)));
-      _priceController.add(_priceController.value.toList());
+      var t_time = DateTime.parse(wbResponse.time);
+
+      var t = TickerData(wbResponse.px, t_time);
+
+      lastTicker.add(t);
+      if (isAllEmpty(_priceController.value)) {
+        _priceController.value.add(t);
+        _priceController.add(_priceController.value.toList());
+        return;
+      }
+
+      var phase =
+          (_priceController.value.last.time.minute - t.time.minute).abs();
+      if (phase == 1) {
+        _priceController.value.add(t);
+        _priceController.add(_priceController.value.toList());
+      }
+    }, onError: (error) {
+      loadAllData(_assetName);
     });
   }
 

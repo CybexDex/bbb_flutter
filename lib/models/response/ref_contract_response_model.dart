@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:quiver/core.dart';
+
 class RefContractResponseModel {
   String chainId;
   String refBlockId;
@@ -179,4 +181,10 @@ class Contract {
         "maxOrderQty": maxOrderQty,
         "modificationTime": modificationTime,
       };
+
+  @override
+  bool operator ==(o) => o is Contract && o.contractId == contractId;
+
+  @override
+  int get hashCode => contractId.hashCode;
 }

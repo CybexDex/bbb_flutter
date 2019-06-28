@@ -2,6 +2,7 @@ class OrderForm {
   int investAmount;
   int takeProfit;
   int cutoff;
+  bool isUp;
 
   Asset totalAmount;
   Asset fee;
@@ -10,6 +11,7 @@ class OrderForm {
       {this.investAmount,
       this.takeProfit,
       this.cutoff,
+      this.isUp,
       this.fee,
       this.totalAmount});
 }

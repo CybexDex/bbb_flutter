@@ -14,8 +14,8 @@ class TradePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: locator<TradeViewModel>(),
+    return ChangeNotifierProvider(
+      builder: (context) => locator<TradeViewModel>(),
       child: Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(
@@ -100,7 +100,10 @@ class TradePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),
                 ),
-                MarketView(),
+                MarketView(
+                  isTrade: true,
+                  width: ScreenUtil.screenWidthDp - 40,
+                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 30, top: 20),
                   height: 200,

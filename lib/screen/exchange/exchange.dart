@@ -24,89 +24,99 @@ class ExchangePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: UserDrawer(),
-        appBar: exchangeAppBar(),
-        body: SafeArea(
-            child: Container(
-                child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            MarketView(),
-            Container(
-              margin: EdgeInsets.only(bottom: 20, top: 20, left: 20, right: 20),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                      flex: 1,
-                      child: WidgetFactory.button(
-                          data: I18n.of(context).buyUp,
-                          color: Palette.redOrange,
-                          onPressed: () {
-                            locator<TradeViewModel>().orderForm = OrderForm(
-                                cutoff: 50,
-                                takeProfit: 50,
-                                investAmount: 0,
-                                totalAmount: Asset(amount: 0, symbol: "USDT"),
-                                fee: Asset(amount: 0, symbol: "USDT"));
-                            Navigator.pushNamed(context, RoutePaths.Trade,
-                                arguments: RouteParamsOfTrade(
-                                    contract: Contract(),
-                                    isUp: true,
-                                    title: "ttes"));
-                          })),
-                  Container(
-                    width: 20,
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: WidgetFactory.button(
-                          data: I18n.of(context).buyDown,
-                          color: Palette.shamrockGreen,
-                          onPressed: () {
-                            locator<TradeViewModel>().orderForm = OrderForm(
-                                cutoff: 50,
-                                takeProfit: 50,
-                                investAmount: 0,
-                                totalAmount: Asset(amount: 0, symbol: "USDT"),
-                                fee: Asset(amount: 0, symbol: "USDT"));
-                            Navigator.pushNamed(context, RoutePaths.Trade,
-                                arguments: RouteParamsOfTrade(
-                                    contract: Contract(),
-                                    isUp: false,
-                                    title: "ttes"));
-                          })),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 10),
-              margin: Dimen.pageMargin,
-              child: Align(
-                child: Text(
-                  I18n.of(context).myOrdersStock,
-                  style: StyleFactory.title,
-                ),
-                alignment: Alignment.bottomLeft,
-              ),
-            ),
-            ChangeNotifierProvider(
-              builder: (_) => locator.get<OrderViewModel>(),
-              child: Consumer2<UserManager, OrderViewModel>(
-                builder: (context, userMg, data, child) {
-                  if (userMg.user.logined && data.orders.isEmpty) {
-                    data.getOrders(name: "abigale1989");
-                  }
-                  if (!userMg.user.logined || data.orders.isEmpty) {
-                    return child;
-                  }
-                  return _stockWidget(context, data);
-                },
-                child: _emptyStockWidget(),
-              ),
-            )
-          ],
-        ))));
+    return ChangeNotifierProvider(
+        builder: (_) => locator.get<OrderViewModel>(),
+        child: Scaffold(
+            drawer: UserDrawer(),
+            appBar: exchangeAppBar(),
+            body: SafeArea(
+                child: Container(
+                    margin: Dimen.pageMargin.add(EdgeInsets.only(top: 0)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        MarketView(
+                          isTrade: false,
+                          width: ScreenUtil.screenWidthDp - 40,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom: 20, top: 20, left: 0, right: 0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                  flex: 1,
+                                  child: WidgetFactory.button(
+                                      data: I18n.of(context).buyUp,
+                                      color: Palette.redOrange,
+                                      onPressed: () {
+                                        locator<TradeViewModel>().orderForm =
+                                            OrderForm(
+                                                isUp: true,
+                                                cutoff: 50,
+                                                takeProfit: 50,
+                                                investAmount: 0,
+                                                totalAmount: Asset(
+                                                    amount: 0, symbol: "USDT"),
+                                                fee: Asset(
+                                                    amount: 0, symbol: "USDT"));
+                                        Navigator.pushNamed(
+                                            context, RoutePaths.Trade,
+                                            arguments: RouteParamsOfTrade(
+                                                contract: Contract(),
+                                                isUp: true,
+                                                title: "ttes"));
+                                      })),
+                              Container(
+                                width: 20,
+                              ),
+                              Expanded(
+                                  flex: 1,
+                                  child: WidgetFactory.button(
+                                      data: I18n.of(context).buyDown,
+                                      color: Palette.shamrockGreen,
+                                      onPressed: () {
+                                        locator<TradeViewModel>().orderForm =
+                                            OrderForm(
+                                                isUp: false,
+                                                cutoff: 50,
+                                                takeProfit: 50,
+                                                investAmount: 0,
+                                                totalAmount: Asset(
+                                                    amount: 0, symbol: "USDT"),
+                                                fee: Asset(
+                                                    amount: 0, symbol: "USDT"));
+                                        Navigator.pushNamed(
+                                            context, RoutePaths.Trade,
+                                            arguments: RouteParamsOfTrade(
+                                                contract: Contract(),
+                                                isUp: false,
+                                                title: "ttes"));
+                                      })),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Align(
+                            child: Text(
+                              I18n.of(context).myOrdersStock,
+                              style: StyleFactory.title,
+                            ),
+                            alignment: Alignment.bottomLeft,
+                          ),
+                        ),
+                        Consumer2<UserManager, OrderViewModel>(
+                          builder: (context, userMg, data, child) {
+                            if (!userMg.user.logined || data.orders.isEmpty) {
+                              return child;
+                            }
+                            return _stockWidget(context, data);
+                          },
+                          child: _emptyStockWidget(),
+                        ),
+                      ],
+                    )))));
   }
 
   Widget _emptyStockWidget() {
@@ -137,6 +147,7 @@ class ExchangePage extends StatelessWidget {
           enlargeCenterPage: true,
           onPageChanged: (index) {
             bloc.index = index;
+            bloc.setBusy(false);
           },
           items: bloc.orders.map((i) {
             return Builder(

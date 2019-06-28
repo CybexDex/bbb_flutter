@@ -1,5 +1,8 @@
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/setup.dart';
+import 'package:bbb_flutter/manager/timer_manager.dart';
+import 'package:logging/logging.dart';
 import 'package:rxdart/subjects.dart';
 
 class RefManager {
@@ -29,6 +32,16 @@ class RefManager {
   firstLoadData() async {
     RefContractResponseModel data = await refreshRefData();
     _contractId = data.contract.first.contractId;
+
+    startLoop();
+  }
+
+  startLoop() {
+    var timerManager = locator.get<TimerManager>();
+    timerManager.tick.listen((_) {
+      refreshRefData();
+    });
+    timerManager.start();
   }
 
   Future<RefContractResponseModel> refreshRefData() async {
@@ -36,5 +49,4 @@ class RefManager {
     _refdataController.add(response);
     return response;
   }
-
 }

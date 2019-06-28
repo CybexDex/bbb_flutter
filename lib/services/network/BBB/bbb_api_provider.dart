@@ -48,15 +48,16 @@ class BBBAPIProvider extends BBBAPI {
     return Future.value(model);
   }
 
+  //assetName=BXBT&interval=1m&startTime=1561453047&endTime=1561453347
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
       {String startTime, String endTime, String asset}) async {
-    var response = await dio
-        .get('/ticker?startTime=$startTime&endTime=$endTime&asset=$asset');
+    var response = await dio.get(
+        '/klines?assetName=$asset&interval=1m&startTime=$startTime&endTime=$endTime&limit=300');
     var responseData = json.decode(response.data) as List;
     List<MarketHistoryResponseModel> model = responseData.map((data) {
       var model = MarketHistoryResponseModel();
-      model.xts = data[0];
-      model.px = double.parse(data[1]);
+      model.xts = data[0] * 1000000;
+      model.px = data[4];
       return model;
     }).toList();
 

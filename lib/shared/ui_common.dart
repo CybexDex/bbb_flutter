@@ -11,5 +11,5 @@ export 'package:bbb_flutter/shared/widget_factory.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:provider/provider.dart';
 export 'package:bbb_flutter/base/base_widget.dart';
-export 'package:bbb_flutter/helper/log_helper.dart';
 export 'package:bbb_flutter/setup.dart';
+export 'package:bbb_flutter/base/stateless_wrap_widget.dart';

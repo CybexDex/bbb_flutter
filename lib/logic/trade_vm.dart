@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
-import 'package:bbb_flutter/helper/log_helper.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -36,7 +35,7 @@ class TradeViewModel extends BaseModel {
 
   updateAmountAndFee() {
     var contract = _refm.currentContract;
-    var ticker = _mtm.lastTicker;
+    var ticker = _mtm.lastTicker.value;
     var amount =
         (ticker.value - contract.strikeLevel) * contract.conversionRate;
 
@@ -71,28 +70,28 @@ class TradeViewModel extends BaseModel {
 
   void increaseTakeProfit() {
     if (orderForm.takeProfit < 100) {
-      orderForm.takeProfit += 10;
+      orderForm.takeProfit += 1;
       setBusy(false);
     }
   }
 
   void decreaseTakeProfit() {
-    if (orderForm.takeProfit > 10) {
-      orderForm.takeProfit -= 10;
+    if (orderForm.takeProfit > 1) {
+      orderForm.takeProfit -= 1;
       setBusy(false);
     }
   }
 
   void increaseCutLoss() {
     if (orderForm.cutoff < 100) {
-      orderForm.cutoff += 10;
+      orderForm.cutoff += 1;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
-    if (orderForm.cutoff > 10) {
-      orderForm.cutoff -= 10;
+    if (orderForm.cutoff > 1) {
+      orderForm.cutoff -= 1;
       setBusy(false);
     }
   }

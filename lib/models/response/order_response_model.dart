@@ -11,18 +11,20 @@ class OrderResponseModel {
   String contractId;
   double latestContractPx;
   double pnl;
-  String underlyingSpotPx;
-  String cutLossPx;
-  String takeProfitPx;
+  double underlyingSpotPx;
+  double cutLossPx;
+  double takeProfitPx;
+  double forceClosePx;
   DateTime expiration;
-  String qtyContract;
-  String commission;
-  String boughtPx;
-  String boughtContractPx;
-  String boughtNotional;
-  String soldPx;
-  String soldContractPx;
-  String soldNotional;
+  double qtyContract;
+  double commission;
+  double accruedInterest;
+  double boughtPx;
+  double boughtContractPx;
+  double boughtNotional;
+  double soldPx;
+  double soldContractPx;
+  double soldNotional;
   String closeReason;
   String settleTime;
   DateTime createTime;
@@ -39,9 +41,11 @@ class OrderResponseModel {
     this.underlyingSpotPx,
     this.cutLossPx,
     this.takeProfitPx,
+    this.forceClosePx,
     this.expiration,
     this.qtyContract,
     this.commission,
+    this.accruedInterest,
     this.boughtPx,
     this.boughtContractPx,
     this.boughtNotional,
@@ -68,18 +72,20 @@ class OrderResponseModel {
         contractId: json["contractId"],
         latestContractPx: json["latestContractPx"].toDouble(),
         pnl: json["pnl"].toDouble(),
-        underlyingSpotPx: json["underlyingSpotPx"],
-        cutLossPx: json["cutLossPx"],
-        takeProfitPx: json["takeProfitPx"],
+        underlyingSpotPx: json["underlyingSpotPx"].toDouble(),
+        cutLossPx: json["cutLossPx"].toDouble(),
+        takeProfitPx: json["takeProfitPx"].toDouble(),
+        forceClosePx: json["forceClosePx"].toDouble(),
         expiration: DateTime.parse(json["expiration"]),
-        qtyContract: json["qtyContract"],
-        commission: json["commission"],
-        boughtPx: json["boughtPx"],
-        boughtContractPx: json["boughtContractPx"],
-        boughtNotional: json["boughtNotional"],
-        soldPx: json["soldPx"],
-        soldContractPx: json["soldContractPx"],
-        soldNotional: json["soldNotional"],
+        qtyContract: json["qtyContract"].toDouble(),
+        commission: json["commission"].toDouble(),
+        accruedInterest: json["accruedInterest"].toDouble(),
+        boughtPx: json["boughtPx"].toDouble(),
+        boughtContractPx: json["boughtContractPx"].toDouble(),
+        boughtNotional: json["boughtNotional"].toDouble(),
+        soldPx: json["soldPx"].toDouble(),
+        soldContractPx: json["soldContractPx"].toDouble(),
+        soldNotional: json["soldNotional"].toDouble(),
         closeReason: json["closeReason"],
         settleTime: json["settleTime"],
         createTime: DateTime.parse(json["createTime"]),
@@ -97,9 +103,11 @@ class OrderResponseModel {
         "underlyingSpotPx": underlyingSpotPx,
         "cutLossPx": cutLossPx,
         "takeProfitPx": takeProfitPx,
+        "forceClosePx": forceClosePx,
         "expiration": expiration.toIso8601String(),
         "qtyContract": qtyContract,
         "commission": commission,
+        "accruedInterest": accruedInterest,
         "boughtPx": boughtPx,
         "boughtContractPx": boughtContractPx,
         "boughtNotional": boughtNotional,

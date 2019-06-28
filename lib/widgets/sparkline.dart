@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 import 'dart:ui' as dui;
 
-import 'package:bbb_flutter/helper/log_helper.dart';
+import 'package:bbb_flutter/helper/common_utils.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
+import 'package:logging/logging.dart';
 
 @immutable
 class TickerData {
@@ -45,7 +47,7 @@ class Sparkline extends StatelessWidget {
     @required this.data,
     @required this.startTime,
     @required this.endTime,
-    @required this.startLineOfTime,
+    this.startLineOfTime,
     this.suppleData,
     this.timeLineGap = const Duration(minutes: 5),
     this.marginSpace = 20,
@@ -53,12 +55,14 @@ class Sparkline extends StatelessWidget {
     this.lineColor = Colors.lightBlue,
     this.lineGradient,
     this.pointSize = 4.0,
+    this.width,
     this.pointColor = const Color(0xFF0277BD), //Colors.lightBlue[800]
     this.fillColor = const Color(0xFF81D4FA), //Colors.lightBlue[200]
     this.fillGradient,
     this.gridLineColor = Colors.grey,
     this.gridLineAmount = 6,
     this.gridLineWidth = 0.5,
+    this.repaint,
     this.labelStyle = const TextStyle(
         color: Color(0xffcccccc),
         fontSize: 10.0,
@@ -73,14 +77,16 @@ class Sparkline extends StatelessWidget {
         assert(fillColor != null),
         super(key: key);
 
-  final List<TickerData> data;
-  final DateTime startTime;
-  final DateTime endTime;
-  final DateTime startLineOfTime;
-  final SuppleData suppleData;
+  List<TickerData> data;
+  DateTime startTime;
+  DateTime endTime;
+  DateTime startLineOfTime;
+  SuppleData suppleData;
 
   final Duration timeLineGap;
   final double marginSpace;
+
+  final double width;
 
   final double lineWidth;
 
@@ -105,6 +111,11 @@ class Sparkline extends StatelessWidget {
 
   final double timeAreaHeight = 30;
 
+  DateTime realStartTime;
+  DateTime realEndTime;
+
+  Listenable repaint;
+
   Future<List<dui.Image>> loadImages() async {
     List<dui.Image> images = [];
     List<String> names = [
@@ -122,10 +133,32 @@ class Sparkline extends StatelessWidget {
     return images;
   }
 
+  clearExtraSeconds() {
+    startTime = removeSeconds(startTime);
+    endTime = removeSeconds(endTime);
+    startLineOfTime = removeSeconds(startLineOfTime);
+    data = data.map((d) => TickerData(d.value, removeSeconds(d.time))).toList();
+    if (suppleData != null) {
+      suppleData.stopTime = removeSeconds(suppleData.stopTime);
+      suppleData.endTime = removeSeconds(suppleData.endTime);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    clearExtraSeconds();
+    var calculateWidth = width - 2 * marginSpace;
+    var totalSeconds = endTime.difference(startTime).inSeconds;
+    var extraSeconds = totalSeconds * marginSpace / calculateWidth;
+    realStartTime = startTime.subtract(Duration(seconds: extraSeconds.toInt()));
+
+    realEndTime = endTime.add(Duration(seconds: extraSeconds.toInt()));
     var filterData = data
-        .where((t) => (t.time.isAfter(startTime)) && (t.time.isBefore(endTime)))
+        .where((t) =>
+            (t.time.isAfter(removeSeconds(realStartTime)) ||
+                t.time.isAtSameMomentAs(removeSeconds(realStartTime))) &&
+            (t.time.isBefore(ceilSecondsToMinute(realEndTime)) ||
+                t.time.isAtSameMomentAs(ceilSecondsToMinute(realEndTime))))
         .toList();
     // Log(package: "").printWrapped(filterData.toString());
     if (filterData.length <= 1) {
@@ -133,7 +166,7 @@ class Sparkline extends StatelessWidget {
     }
     double max = filterData.map((t) => t.value).reduce(math.max);
     double min = filterData.map((t) => t.value).reduce(math.min);
-    double space = (max - min) / 6; //  2 / 3 空间展示
+    double space = (max - min) / 4; //  2 / 3 空间展示
 
     return Stack(
       children: <Widget>[
@@ -157,14 +190,21 @@ class Sparkline extends StatelessWidget {
         Container(
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
+            double totalValue = ((max - min) * 3 / 2);
+            double unit =
+                (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) /
+                    totalValue;
             return Container(
-              padding:
-                  EdgeInsets.symmetric(vertical: constraints.maxHeight / 6),
+              padding: EdgeInsets.only(
+                  top: totalValue * unit / 6 + marginSpace,
+                  bottom: totalValue * unit / 6 + marginSpace + timeAreaHeight),
               child: CustomPaint(
                 size: Size.infinite,
                 painter: _TimeSharePainter(
                     data: filterData,
                     startTime: startTime,
+                    realStartTime: realStartTime,
+                    realEndTime: realEndTime,
                     endTime: endTime,
                     maxValue: max,
                     minValue: min,
@@ -172,7 +212,9 @@ class Sparkline extends StatelessWidget {
                     fillColor: fillColor,
                     lineColor: lineColor,
                     lineGradient: lineGradient,
-                    lineWidth: lineWidth),
+                    lineWidth: lineWidth,
+                    repaint: repaint,
+                    marginSpace: marginSpace),
               ),
             );
           }),
@@ -208,6 +250,34 @@ class Sparkline extends StatelessWidget {
                               timeAreaHeight: timeAreaHeight));
                   }
                 })),
+        Container(
+          child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            double totalValue = ((max - min) * 3 / 2);
+            double unit =
+                (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) /
+                    totalValue;
+            return Container(
+              padding: EdgeInsets.only(
+                  top: totalValue * unit / 6 + marginSpace,
+                  bottom: totalValue * unit / 6 + marginSpace + timeAreaHeight),
+              child: CustomPaint(
+                size: Size.infinite,
+                painter: _Pointer(
+                    data: filterData,
+                    startTime: startTime,
+                    realStartTime: realStartTime,
+                    realEndTime: realEndTime,
+                    endTime: endTime,
+                    maxValue: max,
+                    minValue: min,
+                    lineColor: lineColor,
+                    repaint: repaint,
+                    marginSpace: marginSpace),
+              ),
+            );
+          }),
+        )
       ],
     );
   }
@@ -271,16 +341,19 @@ class _CartesianPainter extends CustomPainter {
 //      }
 
       verticalTextPainters.add(TextPainter(
-          text: new TextSpan(
-              text: value.toStringAsPrecision(4), style: labelStyle),
+          text: new TextSpan(text: value.toStringAsFixed(4), style: labelStyle),
           textDirection: TextDirection.ltr));
       verticalTextPainters[i].layout();
     }
 
+    var totalSeconds = endTime.difference(startTime).inSeconds;
+
     /// horizontal
     DateTime time;
     int i = 0;
-    for (Duration d = Duration(); d < Duration(minutes: 30); d += timeLineGap) {
+    for (Duration d = Duration();
+        d <= Duration(seconds: totalSeconds);
+        d += timeLineGap) {
       time = startLineOfTime.add(d);
 
       horizontalTextPainters.add(TextPainter(
@@ -370,6 +443,8 @@ class _CartesianPainter extends CustomPainter {
 class _TimeSharePainter extends CustomPainter {
   List<TickerData> data;
   final DateTime startTime;
+  final DateTime realStartTime;
+  final DateTime realEndTime;
   final DateTime endTime;
   final double minValue;
   final double maxValue;
@@ -379,10 +454,14 @@ class _TimeSharePainter extends CustomPainter {
   final Gradient lineGradient;
   final Color fillColor;
   final Gradient fillGradient;
+  final double marginSpace;
+  final Listenable repaint;
 
   _TimeSharePainter(
       {@required this.data,
       @required this.startTime,
+      @required this.realStartTime,
+      @required this.realEndTime,
       @required this.endTime,
       @required this.minValue,
       @required this.maxValue,
@@ -390,7 +469,22 @@ class _TimeSharePainter extends CustomPainter {
       this.lineColor = Colors.blue,
       this.lineGradient,
       this.fillColor,
-      this.fillGradient});
+      this.fillGradient,
+      this.repaint,
+      this.marginSpace})
+      : super(repaint: repaint);
+
+  double getPixelX(int seconds, Size size) {
+    var totalSeconds = endTime.difference(startTime).inSeconds;
+    final double widthNormalizer =
+        (size.width - 2 * marginSpace) / totalSeconds;
+    return widthNormalizer * seconds;
+  }
+
+  getPixelY(double value, Size size) {
+    final double heightNormalizer = size.height / (maxValue - minValue);
+    return size.height - (value - minValue) * heightNormalizer;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -398,19 +492,44 @@ class _TimeSharePainter extends CustomPainter {
     Offset startPoint, endPoint;
     final Path path = Path();
 
-    final double widthNormalizer = size.width / 1800;
-    final double heightNormalizer = size.height / (maxValue - minValue);
+    double lX = 0.0, lY = 0.0;
 
     for (int i = 0; i < data.length; i++) {
-      double x =
-          widthNormalizer * (data[i].time.difference(startTime).inSeconds);
-      double y = size.height - (data[i].value - minValue) * heightNormalizer;
+      var seconds = data[i].time.difference(realStartTime).inSeconds;
+
+      double x = getPixelX(seconds, size);
+      double y = getPixelY(data[i].value, size);
 
       if (i == 0) {
-        startPoint = new Offset(x, y);
+        startPoint = Offset(x, y);
         path.moveTo(x, y);
       } else {
-        path.lineTo(x, y);
+        /// CurrentSpot
+        double px = x;
+        double py = y;
+
+        /// previous spot
+        double p0x = getPixelX(
+            data[i - 1].time.difference(realStartTime).inSeconds, size);
+        double p0y = getPixelY(data[i - 1].value, size);
+
+        double x1 = p0x + lX;
+        double y1 = p0y + lY;
+
+        /// next point
+        int nextIndex = i + 1 < data.length ? i + 1 : i;
+        double p1x = getPixelX(
+            data[nextIndex].time.difference(realStartTime).inSeconds, size);
+        double p1y = getPixelY(data[nextIndex].value, size);
+
+        double smoothness = 0.3; //0 - 1
+        lX = ((p1x - p0x) / 2) * smoothness;
+        lY = ((p1y - p0y) / 2) * smoothness;
+        double x2 = px - lX;
+        double y2 = py - lY;
+
+        path.cubicTo(x1, y1, x2, y2, px, py);
+        // path.lineTo(x, y);
       }
 
       if (i == data.length - 1) {
@@ -452,26 +571,89 @@ class _TimeSharePainter extends CustomPainter {
     canvas.drawPath(fillPath, fillPaint);
 
     canvas.drawPath(path, paint);
-
-    /// draw Point
-    Paint pointsPaint = new Paint()
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 8
-      ..color = Colors.blue;
-    canvas.drawPoints(dui.PointMode.points, [endPoint], pointsPaint);
-
-    canvas.drawPoints(
-        dui.PointMode.points,
-        [endPoint],
-        Paint()
-          ..strokeCap = StrokeCap.round
-          ..strokeWidth = 4
-          ..color = Colors.white);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
+  }
+}
+
+class _Pointer extends CustomPainter {
+  List<TickerData> data;
+  final DateTime startTime;
+  final DateTime realStartTime;
+  final DateTime realEndTime;
+  final DateTime endTime;
+  final double minValue;
+  final double maxValue;
+
+  final Color lineColor;
+
+  final double marginSpace;
+  final Listenable repaint;
+
+  _Pointer({
+    @required this.data,
+    @required this.startTime,
+    @required this.realStartTime,
+    @required this.realEndTime,
+    @required this.endTime,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.marginSpace,
+    this.lineColor = Colors.blue,
+    this.repaint,
+  }) : super(repaint: repaint);
+
+  double getPixelX(int seconds, Size size) {
+    var totalSeconds = endTime.difference(startTime).inSeconds;
+    final double widthNormalizer =
+        (size.width - 2 * marginSpace) / totalSeconds;
+    return widthNormalizer * seconds;
+  }
+
+  getPixelY(double value, Size size) {
+    final double heightNormalizer = size.height / (maxValue - minValue);
+    return size.height - (value - minValue) * heightNormalizer;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Offset endPoint;
+
+    if (data.last != null) {
+      if (realEndTime.compareTo(data.last.time) < 0) {
+        return;
+      }
+      var seconds = data.last.time.difference(realStartTime).inSeconds;
+
+      double x = getPixelX(seconds, size);
+      double y = getPixelY(data.last.value, size);
+      endPoint = Offset(x, y);
+    }
+
+    if (endPoint != null) {
+      /// draw Point
+      Paint pointsPaint = new Paint()
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = 8
+        ..color = lineColor;
+      canvas.drawPoints(dui.PointMode.points, [endPoint], pointsPaint);
+
+      canvas.drawPoints(
+          dui.PointMode.points,
+          [endPoint],
+          Paint()
+            ..strokeCap = StrokeCap.round
+            ..strokeWidth = 4
+            ..color = Colors.white);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
 
@@ -485,6 +667,7 @@ class _HorizontalSupplePainter extends CustomPainter {
   final double timeAreaHeight;
 
   final SuppleData suppleData;
+  final Listenable repaint;
 
   final List<TextPainter> textPainters = [];
 
@@ -494,7 +677,9 @@ class _HorizontalSupplePainter extends CustomPainter {
       @required this.gridLineAmount,
       @required this.suppleData,
       this.marginSpace,
-      this.timeAreaHeight});
+      this.repaint,
+      this.timeAreaHeight})
+      : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -520,8 +705,7 @@ class _HorizontalSupplePainter extends CustomPainter {
         (size.height - 2 * marginSpace - timeAreaHeight) / totalDist;
 
     var dy;
-    var textWidth = textPainters[0].width + 20;
-    var textHeight = textPainters[0].height + 6;
+
     var offset;
 
     final values = [
@@ -538,30 +722,35 @@ class _HorizontalSupplePainter extends CustomPainter {
       Color.fromARGB(255, 46, 149, 236),
     ];
 
-    textPainters.asMap().forEach((index, p) {
-      offset = values[index] - minValue;
-      gridPaint.color = colors[index];
-      fillTextPaint.color = colors[index].withAlpha(30);
-      textBorderPaint.color = colors[index];
+    values.asMap().forEach((index, value) {
+      if (value != null) {
+        var textWidth = textPainters[index].width + 20;
+        var textHeight = textPainters[index].height + 6;
 
-      if (offset > 0 && offset < totalDist) {
-        dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
-        canvas.drawLine(
-            Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                    textWidth, textHeight),
-                Radius.circular(2)),
-            fillTextPaint);
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                    textWidth, textHeight),
-                Radius.circular(2)),
-            textBorderPaint);
-        p.paint(canvas,
-            Offset(size.width - textWidth + 10, dy - textHeight / 2 + 4));
+        offset = value - minValue;
+        gridPaint.color = colors[index];
+        fillTextPaint.color = colors[index].withAlpha(30);
+        textBorderPaint.color = colors[index];
+
+        if (offset > 0 && offset < totalDist) {
+          dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
+          canvas.drawLine(
+              Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
+          canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
+                      textWidth, textHeight),
+                  Radius.circular(2)),
+              fillTextPaint);
+          canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                  Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
+                      textWidth, textHeight),
+                  Radius.circular(2)),
+              textBorderPaint);
+          textPainters[index].paint(canvas,
+              Offset(size.width - textWidth + 10, dy - textHeight / 2 + 4));
+        }
       }
     });
   }
@@ -574,31 +763,30 @@ class _HorizontalSupplePainter extends CustomPainter {
 
     textPainters.add(TextPainter(
         text: new TextSpan(
-            text: suppleData.cutOff.toStringAsPrecision(4), style: labelStyle),
+            text: suppleData.cutOff?.toStringAsFixed(4), style: labelStyle),
+        textDirection: TextDirection.ltr)
+      ..layout());
+
+    textPainters.add(TextPainter(
+        text: new TextSpan(
+            text: suppleData.takeProfit?.toStringAsFixed(4), style: labelStyle),
         textDirection: TextDirection.ltr)
       ..layout());
     textPainters.add(TextPainter(
         text: new TextSpan(
-            text: suppleData.takeProfit.toStringAsPrecision(4),
-            style: labelStyle),
+            text: suppleData.underOrder?.toStringAsFixed(4), style: labelStyle),
         textDirection: TextDirection.ltr)
       ..layout());
     textPainters.add(TextPainter(
         text: new TextSpan(
-            text: suppleData.underOrder.toStringAsPrecision(4),
-            style: labelStyle),
-        textDirection: TextDirection.ltr)
-      ..layout());
-    textPainters.add(TextPainter(
-        text: new TextSpan(
-            text: suppleData.current.toStringAsPrecision(4), style: labelStyle),
+            text: suppleData.current?.toStringAsFixed(4), style: labelStyle),
         textDirection: TextDirection.ltr)
       ..layout());
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }
 
@@ -609,13 +797,16 @@ class _VerticalSupplePainter extends CustomPainter {
 
   final double timeAreaHeight;
   final List<dui.Image> images;
+  final Listenable repaint;
 
   _VerticalSupplePainter(
       {@required this.startTime,
       @required this.endTime,
       @required this.suppleData,
       @required this.timeAreaHeight,
-      this.images});
+      this.repaint,
+      this.images})
+      : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -628,9 +819,13 @@ class _VerticalSupplePainter extends CustomPainter {
     final normalizer = size.width / (endTime.difference(startTime).inSeconds);
 
     var dx;
+    if (suppleData == null) {
+      return;
+    }
 
     /// stop
-    if (suppleData.stopTime.isAfter(startTime) &&
+    if (suppleData.stopTime != null &&
+        suppleData.stopTime.isAfter(startTime) &&
         suppleData.stopTime.isBefore(endTime)) {
       dx = (suppleData.stopTime.difference(startTime).inSeconds) * normalizer;
       canvas.drawLine(
@@ -643,7 +838,8 @@ class _VerticalSupplePainter extends CustomPainter {
     }
 
     ///over
-    if (suppleData.endTime.isAfter(startTime) &&
+    if (suppleData.endTime != null &&
+        suppleData.endTime.isAfter(startTime) &&
         suppleData.endTime.isBefore(endTime)) {
       dx = (suppleData.endTime.difference(startTime).inSeconds) * normalizer;
       canvas.drawLine(
@@ -658,6 +854,6 @@ class _VerticalSupplePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }
