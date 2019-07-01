@@ -20,6 +20,18 @@ class RefManager {
         ?.first;
   }
 
+  List<Contract> get upContract {
+    return lastData?.contract?.where((contract) {
+      return contract.conversionRate > 0;
+    })?.toList();
+  }
+
+  List<Contract> get downContract {
+    return lastData?.contract?.where((contract) {
+      return contract.conversionRate < 0;
+    })?.toList();
+  }
+
   BehaviorSubject<RefContractResponseModel> _refdataController =
       BehaviorSubject<RefContractResponseModel>();
 

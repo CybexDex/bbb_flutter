@@ -49,19 +49,17 @@ setupLocator() async {
 
 setupProviders() {
   providers = [
-          ChangeNotifierProvider.value(
-            value: locator.get<UserManager>(),
-          ),
-          StreamProvider(
-              builder: (context) => locator.get<MarketManager>().prices),
-          StreamProvider(
-              builder: (context) =>
-                  locator.get<MarketManager>().lastTicker.stream),
-          StreamProvider(
-            builder: (context) => locator.get<RefManager>().data,
-          ),
-          StreamProvider(
-            builder: (context) => locator.get<TimerManager>().tick,
-          )
-        ]
+    ChangeNotifierProvider.value(
+      value: locator.get<UserManager>(),
+    ),
+    StreamProvider(builder: (context) => locator.get<MarketManager>().prices),
+    StreamProvider(
+        builder: (context) => locator.get<MarketManager>().lastTicker.stream),
+    StreamProvider(
+      builder: (context) => locator.get<RefManager>().data,
+    ),
+    StreamProvider(
+      builder: (context) => locator.get<TimerManager>().tick,
+    )
+  ];
 }

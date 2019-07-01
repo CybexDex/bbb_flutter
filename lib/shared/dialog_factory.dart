@@ -108,4 +108,12 @@ class DialogFactory {
       ),
     );
   }
+
+  static Dialog customDialogTest() {
+    return Dialog(
+      child: Container(
+        child: Text("test"),
+      ),
+    );
+  }
 }

@@ -7,8 +7,8 @@ import 'package:jdenticon_dart/jdenticon_dart.dart';
 AppBar exchangeAppBar() {
   return AppBar(
     actions: <Widget>[
-      Builder(
-          builder: (context) => GestureDetector(
+      Consumer<UserManager>(
+          builder: (context, bloc, child) => GestureDetector(
                 child: Padding(
                   padding: EdgeInsets.only(right: 20),
                   child: Center(
@@ -20,28 +20,32 @@ AppBar exchangeAppBar() {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                  if (bloc.user.logined) {
+                    Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                  } else {
+                    Navigator.of(context).pushNamed(RoutePaths.Login);
+                  }
                 },
-              ))
+              )),
     ],
     leading: Consumer<UserManager>(
       builder: (context, bloc, child) => GestureDetector(
-        child: !bloc.user.logined
-            ? child
-            : Padding(
-                padding: EdgeInsets.all(16),
-                child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
-                    fit: BoxFit.contain, height: 20, width: 20),
-              ),
-        onTap: () {
-          if (bloc.user.logined) {
-            bloc.fetchBalances(name: bloc.user.name);
-            Scaffold.of(context).openDrawer();
-          } else {
-            Navigator.of(context).pushNamed(RoutePaths.Login);
-          }
-        },
-      ),
+            child: !bloc.user.logined
+                ? child
+                : Padding(
+                    padding: EdgeInsets.all(16),
+                    child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
+                        fit: BoxFit.contain, height: 20, width: 20),
+                  ),
+            onTap: () {
+              if (bloc.user.logined) {
+                bloc.fetchBalances(name: bloc.user.name);
+                Scaffold.of(context).openDrawer();
+              } else {
+                Navigator.of(context).pushNamed(RoutePaths.Login);
+              }
+            },
+          ),
       child: ImageFactory.personal,
     ),
     centerTitle: true,

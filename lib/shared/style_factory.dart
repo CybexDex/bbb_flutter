@@ -21,6 +21,12 @@ class StyleFactory {
       fontStyle: FontStyle.normal,
       fontSize: Dimen.titleFontSize);
 
+  static var hugeTitleStyle = TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.hugLabelFontSize);
+
   static var buttonTitleStyle = TextStyle(
       color: Palette.buttonPrimaryColor,
       fontWeight: FontWeight.w600,
@@ -116,4 +122,16 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.verySmallLabelFontSize);
+
+  static var buyDownText = TextStyle(
+      color: Palette.shamrockGreen,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
+
+  static var buyUpText = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }

@@ -86,12 +86,11 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      OrderCalculate.calculateRealLeverage(
+                        OrderCalculate.calculateRealLeverage(
                               currentPx: ticker.last.value,
                               strikeLevel:
                                   currentContract.strikeLevel.toDouble(),
-                              isUp: currentContract.conversionRate > 0)
-                          .toStringAsFixed(2),
+                              isUp: currentContract.conversionRate > 0).toStringAsFixed(2),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -113,8 +112,7 @@ class OrderInfo extends StatelessWidget {
                     Text(
                       OrderCalculate.calculateInvest(
                               orderQtyContract: _model.qtyContract,
-                              orderBoughtContractPx: _model.boughtContractPx)
-                          .toStringAsFixed(2) + " USDT",
+                              orderBoughtContractPx: _model.boughtContractPx).toStringAsFixed(2) + " USDT",
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],

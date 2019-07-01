@@ -21,12 +21,14 @@ class TradeViewModel extends BaseModel {
   MarketManager _mtm;
   RefManager _refm;
   UserManager _um;
+  double showDropdownMenuHeight = 0;
 
   TradeViewModel(
       {@required BBBAPIProvider api,
       @required MarketManager mtm,
       @required RefManager refm,
       @required UserManager um,
+      this.showDropdownMenuHeight,
       this.orderForm}) {
     _api = api;
     _mtm = mtm;
@@ -99,6 +101,19 @@ class TradeViewModel extends BaseModel {
       orderForm.cutoff -= 1;
       setBusy(false);
     }
+  }
+
+  void setDropdownMenuHeight() {
+    showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;
+    setBusy(false);
+  }
+
+  List<Contract> getUpContracts() {
+    return _refm.upContract;
+  }
+
+  List<Contract> getDownContracts() {
+    return _refm.downContract;
   }
 
   Future<PostOrderResponseModel> postOrder() async {

@@ -8,6 +8,7 @@ class Dimen {
   static double middleLabelFontSize = ScreenUtil.getInstance().setSp(14.0);
   static double largeLabelFontSize = ScreenUtil.getInstance().setSp(16.0);
   static double veryLargeLabelFontSize = ScreenUtil.getInstance().setSp(20.0);
+  static double hugLabelFontSize = ScreenUtil.getInstance().setSp(24.0);
 
   static double largeButtonFontSize = ScreenUtil.getInstance().setSp(16.0);
   static double middleButtonFontSize = ScreenUtil.getInstance().setSp(14.0);

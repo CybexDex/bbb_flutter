@@ -18,4 +18,6 @@ class Palette {
 
   static const backButtonColor = const Color(0xff606060);
   static const actionButtonColor = const Color(0xff666666);
+
+  static const dropDownIndicatorColor = const Color(0xfffef8f7);
 }

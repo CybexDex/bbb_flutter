@@ -21,4 +21,5 @@ class ImageFactory {
   static final back = Image.asset("res/assets/icons/icNotifyBack.png");
   static final icHand = Image.asset("res/assets/icons/icHand.png");
   static final icTime = Image.asset("res/assets/icons/icTime.png");
+  static final icDropdown = Image.asset("res/assets/icons/icDropdown.png");
 }

@@ -1,5 +1,8 @@
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 class UserDrawer extends StatelessWidget {
   const UserDrawer({Key key}) : super(key: key);
@@ -10,105 +13,151 @@ class UserDrawer extends StatelessWidget {
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the Drawer if there isn't enough vertical
       // space to fit everything.
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          Consumer<UserManager>(
-            builder: (context, userMg, child) => DrawerHeader(
-              child: Column(
-                children: <Widget>[
-                  Align(
-                    child: GestureDetector(
-                      child: ImageFactory.back,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    alignment: Alignment.topLeft,
+      child: Consumer<UserManager>(
+        builder: (context, userMg, child) => ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 8, top: 30),
+                  padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Align(
+                        child: GestureDetector(
+                          child: ImageFactory.back,
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: <Widget>[
+                          SvgPicture.string(Jdenticon.toSvg(userMg.user.name),
+                              fit: BoxFit.contain, height: 60, width: 60),
+                          SizedBox(width: 20),
+                          Text(userMg.user.name, style: StyleFactory.title)
+                        ],
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                          width: 300,
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Palette.buttonPrimaryColor,
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  color: Palette.actionButtonColor
+                                      .withOpacity(0.1),
+                                  offset: Offset(0, 4))
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(I18n.of(context).myAsset,
+                                  style: StyleFactory.cellTitleStyle),
+                              SizedBox(height: 10),
+                              Text(
+                                  "${userMg.user.balances.positions.first.quantity.toStringAsFixed(4)}",
+                                  style: StyleFactory.hugeTitleStyle)
+                            ],
+                          ))
+                    ],
                   ),
-                  Text("${userMg.user.balances.positions.first.quantity}")
-                ],
-              ),
+                ),
+                ListTile(
+                  title: Text(
+                    I18n.of(context).topUp,
+                    style: StyleFactory.cellTitleStyle,
+                  ),
+                  trailing: GestureDetector(
+                    child: ImageFactory.rowArrow,
+                    onTap: () {},
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                  },
+                ),
+                Container(
+                  height: 0.5,
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  color: Palette.separatorColor,
+                ),
+                ListTile(
+                  title: Text(
+                    I18n.of(context).withdraw,
+                    style: StyleFactory.cellTitleStyle,
+                  ),
+                  trailing: GestureDetector(
+                    child: ImageFactory.rowArrow,
+                    onTap: () {},
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                  },
+                ),
+                Container(
+                  height: 0.5,
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  color: Palette.separatorColor,
+                ),
+                ListTile(
+                  title: Text(
+                    I18n.of(context).cashRecords,
+                    style: StyleFactory.cellTitleStyle,
+                  ),
+                  trailing: GestureDetector(
+                    child: ImageFactory.rowArrow,
+                    onTap: () {},
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                  },
+                ),
+                Container(
+                  height: 0.5,
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  color: Palette.separatorColor,
+                ),
+                ListTile(
+                  title: Text(
+                    I18n.of(context).transactionRecords,
+                    style: StyleFactory.cellTitleStyle,
+                  ),
+                  trailing: GestureDetector(
+                    child: ImageFactory.rowArrow,
+                    onTap: () {},
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                  },
+                ),
+                Container(
+                  height: 0.5,
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  color: Palette.separatorColor,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+                  child: WidgetFactory.button(
+                      data: I18n.of(context).logout,
+                      color: Palette.redOrange,
+                      onPressed: () {
+                        userMg.logout();
+                        Navigator.pop(context);
+                      }),
+                )
+              ],
             ),
-          ),
-          ListTile(
-            title: Text(
-              I18n.of(context).topUp,
-              style: StyleFactory.cellTitleStyle,
-            ),
-            trailing: GestureDetector(
-              child: ImageFactory.rowArrow,
-              onTap: () {},
-            ),
-            onTap: () {
-              // Update the state of the app
-              // ...
-            },
-          ),
-          Container(
-            height: 0.5,
-            margin: EdgeInsets.only(left: 20, right: 20),
-            color: Palette.separatorColor,
-          ),
-          ListTile(
-            title: Text(
-              I18n.of(context).withdraw,
-              style: StyleFactory.cellTitleStyle,
-            ),
-            trailing: GestureDetector(
-              child: ImageFactory.rowArrow,
-              onTap: () {},
-            ),
-            onTap: () {
-              // Update the state of the app
-              // ...
-            },
-          ),
-          Container(
-            height: 0.5,
-            margin: EdgeInsets.only(left: 20, right: 20),
-            color: Palette.separatorColor,
-          ),
-          ListTile(
-            title: Text(
-              I18n.of(context).cashRecords,
-              style: StyleFactory.cellTitleStyle,
-            ),
-            trailing: GestureDetector(
-              child: ImageFactory.rowArrow,
-              onTap: () {},
-            ),
-            onTap: () {
-              // Update the state of the app
-              // ...
-            },
-          ),
-          Container(
-            height: 0.5,
-            margin: EdgeInsets.only(left: 20, right: 20),
-            color: Palette.separatorColor,
-          ),
-          ListTile(
-            title: Text(
-              I18n.of(context).transactionRecords,
-              style: StyleFactory.cellTitleStyle,
-            ),
-            trailing: GestureDetector(
-              child: ImageFactory.rowArrow,
-              onTap: () {},
-            ),
-            onTap: () {
-              // Update the state of the app
-              // ...
-            },
-          ),
-          Container(
-            height: 0.5,
-            margin: EdgeInsets.only(left: 20, right: 20),
-            color: Palette.separatorColor,
-          ),
-        ],
       ),
     );
   }

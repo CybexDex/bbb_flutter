@@ -41,6 +41,7 @@ dependencies:
     rosetta: ^0.1.2
 
     pointycastle: ^1.0.1
+    vertical_tabs: ^0.1.4
     logging: ^0.11.3+2
     carousel_slider: ^1.3.0
     flutter_screenutil: ^0.5.2
@@ -94,7 +95,7 @@ flutter:
         - res/assets/icons/icPassword.png
         - res/assets/icons/icCode.png
         - res/assets/icons/icWarn.png
-
+        - res/assets/icons/icDropdown.png
         - res/assets/icons/icTime.png
         - res/assets/icons/icHand.png
 

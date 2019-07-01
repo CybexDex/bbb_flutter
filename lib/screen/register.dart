@@ -34,7 +34,7 @@ class _RegisterState extends State<RegisterPage> {
   bool _isPasswordConfirmChecker = false;
   String _capid;
 
-  String _errorMessage = "s";
+  String _errorMessage = "";
   Timer timer;
   Widget _widget = Text(
     "获取验证码",
