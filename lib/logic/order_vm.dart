@@ -11,6 +11,8 @@ class OrderViewModel extends BaseModel {
   BBBAPIProvider _api;
   UserManager _um;
 
+  Function _getOrdersCallback;
+
   OrderViewModel({BBBAPIProvider api, UserManager um}) {
     _api = api;
     _um = um;
@@ -18,11 +20,15 @@ class OrderViewModel extends BaseModel {
     if (_um.user.logined) {
       getOrders(name: "abigale1989");
     }
-    um.addListener(() {
+
+    _getOrdersCallback = () {
       if (_um.user.logined) {
         getOrders(name: "abigale1989");
       }
-    });
+    };
+
+    um.removeListener(_getOrdersCallback);
+    um.addListener(_getOrdersCallback);
   }
 
   getOrders({String name}) async {
@@ -34,5 +40,12 @@ class OrderViewModel extends BaseModel {
 
   OrderResponseModel getCurrentOrder() {
     return isAllEmpty(orders) ? null : orders[index];
+  }
+
+  @override
+  void dispose() {
+    _um.removeListener(_getOrdersCallback);
+
+    super.dispose();
   }
 }

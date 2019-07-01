@@ -1,18 +1,9 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class BuyOrSellBottom extends StatelessWidget {
-  final String totalAmount;
-  final String feeAmount;
-  final String balanceAmount;
+  final double totalAmount;
   final Widget button;
-
-  BuyOrSellBottom(
-      {Key key,
-      this.totalAmount,
-      this.feeAmount,
-      this.balanceAmount,
-      this.button})
-      : super(key: key);
+  BuyOrSellBottom({Key key, this.totalAmount, this.button}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +19,20 @@ class BuyOrSellBottom extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  totalAmount != null ? totalAmount : "--",
+                  totalAmount > double.minPositive
+                      ? totalAmount.toStringAsFixed(4) + " USDT"
+                      : "-- USDT",
                   style: StyleFactory.buySellValueText,
                 ),
                 SizedBox(width: 8),
-                Text(
-                  'USDT',
-                  style: StyleFactory.cellTitleStyle,
-                )
               ],
             ),
             Row(
               children: <Widget>[
                 Text(
-                  feeAmount != null ? "包含手续费$feeAmount USDT" : "包含手续费-- USDT",
+                  "${I18n.of(context).investPay}",
                   style: StyleFactory.buySellExplainText,
                 ),
-                Text(
-                  balanceAmount != null
-                      ? "/ 余额$balanceAmount USDT"
-                      : "/ 余额-- USDT",
-                  style: StyleFactory.buySellExplainText,
-                )
               ],
             )
           ],

@@ -1,4 +1,6 @@
+import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
@@ -6,6 +8,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/widgets/sparkline.dart';
 
 class TradePage extends StatelessWidget {
   TradePage({Key key, this.params}) : super(key: key);
@@ -76,48 +79,59 @@ class TradePage extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Row(
-                    children: <Widget>[
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            style: StyleFactory.subTitleStyle,
-                            text: "${I18n.of(context).roundEnd} "),
-                        TextSpan(
-                            style: StyleFactory.cellBoldTitleStyle,
-                            text: "05:21"),
-                      ])),
-                      RichText(
-                          text: TextSpan(children: [
-                        TextSpan(
-                            style: StyleFactory.subTitleStyle,
-                            text: "${I18n.of(context).nextRoundStart} "),
-                        TextSpan(
-                            style: StyleFactory.cellBoldTitleStyle,
-                            text: "10:21"),
-                      ]))
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Consumer2<TickerData, RefContractResponseModel>(
+                    builder: (context, current, refdata, child) {
+                      Contract refreshContract = refdata.contract
+                          .where((c) => c == params.contract)
+                          .last;
+                      double price = OrderCalculate.calculatePrice(
+                          current.value,
+                          refreshContract.strikeLevel,
+                          refreshContract.conversionRate);
+                      return Row(
+                        children: <Widget>[
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                style: StyleFactory.subTitleStyle,
+                                text: "${I18n.of(context).perPrice}: "),
+                            TextSpan(
+                                style: StyleFactory.cellBoldTitleStyle,
+                                text: "${price.toStringAsFixed(2)} USDT"),
+                          ])),
+                          RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                style: StyleFactory.subTitleStyle,
+                                text: "${I18n.of(context).rest}: "),
+                            TextSpan(
+                                style: StyleFactory.cellBoldTitleStyle,
+                                text:
+                                    "${refreshContract.availableInventory.toStringAsFixed(0)}"),
+                          ]))
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      );
+                    },
                   ),
                 ),
-                MarketView(
+                Expanded(
+                    child: MarketView(
                   isTrade: true,
                   width: ScreenUtil.screenWidthDp - 40,
-                ),
+                )),
                 Container(
                   margin: EdgeInsets.only(bottom: 30, top: 20),
-                  height: 200,
-                  child: OrderFormWidget(),
+                  child: OrderFormWidget(
+                    contract: params.contract,
+                  ),
                 ),
                 Consumer<TradeViewModel>(builder: (context, model, child) {
                   return Container(
                     margin: EdgeInsets.only(bottom: 0),
                     height: 60,
                     child: BuyOrSellBottom(
-                        totalAmount:
-                            "${model.orderForm.totalAmount.amount.toString()} ${model.orderForm.totalAmount.symbol}",
-                        feeAmount: "${model.orderForm.fee.amount.toString()}",
-                        balanceAmount: "1000",
+                        totalAmount: model.orderForm.totalAmount.amount,
                         button: params.isUp
                             ? WidgetFactory.button(
                                 data: I18n.of(context).buyUp,

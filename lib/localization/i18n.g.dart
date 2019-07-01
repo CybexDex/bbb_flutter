@@ -68,11 +68,21 @@ class _$Keys {
 
   static final String invest = 'invest';
 
+  static final String investPay = 'invest_pay';
+
+  static final String interestRate = 'interest_rate';
+
+  static final String perDay = 'per_day';
+
   static final String forceExpiration = 'force_expiration';
+
+  static final String forcePrice = 'force_price';
 
   static final String perPrice = 'per_price';
 
   static final String restAmount = 'rest_amount';
+
+  static final String rest = 'rest';
 
   static final String investAmount = 'invest_amount';
 
@@ -82,7 +92,11 @@ class _$Keys {
 
   static final String containFee = 'contain_fee';
 
+  static final String fee = 'fee';
+
   static final String balance = 'balance';
+
+  static final String balanceAvailable = 'balance_available';
 
   static final String logIn = 'log_in';
 
@@ -194,14 +208,21 @@ abstract class _$I18nHelper {
   String get cutLoss => _translate(_$Keys.cutLoss);
   String get actLevel => _translate(_$Keys.actLevel);
   String get invest => _translate(_$Keys.invest);
+  String get investPay => _translate(_$Keys.investPay);
+  String get interestRate => _translate(_$Keys.interestRate);
+  String get perDay => _translate(_$Keys.perDay);
   String get forceExpiration => _translate(_$Keys.forceExpiration);
+  String get forcePrice => _translate(_$Keys.forcePrice);
   String get perPrice => _translate(_$Keys.perPrice);
   String get restAmount => _translate(_$Keys.restAmount);
+  String get rest => _translate(_$Keys.rest);
   String get investAmount => _translate(_$Keys.investAmount);
   String get gain => _translate(_$Keys.gain);
   String get loss => _translate(_$Keys.loss);
   String get containFee => _translate(_$Keys.containFee);
+  String get fee => _translate(_$Keys.fee);
   String get balance => _translate(_$Keys.balance);
+  String get balanceAvailable => _translate(_$Keys.balanceAvailable);
   String get logIn => _translate(_$Keys.logIn);
   String get accountName => _translate(_$Keys.accountName);
   String get accountNameHint => _translate(_$Keys.accountNameHint);

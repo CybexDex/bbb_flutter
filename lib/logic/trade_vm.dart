@@ -27,11 +27,16 @@ class TradeViewModel extends BaseModel {
       @required MarketManager mtm,
       @required RefManager refm,
       @required UserManager um,
-      this.orderForm})
-      : _api = api,
-        _mtm = mtm,
-        _refm = refm,
-        _um = um;
+      this.orderForm}) {
+    _api = api;
+    _mtm = mtm;
+    _refm = refm;
+    _um = um;
+
+    _refm.data.listen((onData) {
+      updateAmountAndFee();
+    });
+  }
 
   updateAmountAndFee() {
     var contract = _refm.currentContract;

@@ -8,10 +8,12 @@ import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logging/logging.dart';
 
 GetIt locator = GetIt();
+List<SingleChildCloneableWidget> providers = [];
 
 setupLog() {
   Logger.root.level = Level.ALL; // defaults to Level.INFO
@@ -43,4 +45,23 @@ setupLocator() async {
 
   locator.registerLazySingleton(() => OrderViewModel(
       api: locator<BBBAPIProvider>(), um: locator<UserManager>()));
+}
+
+setupProviders() {
+  providers = [
+          ChangeNotifierProvider.value(
+            value: locator.get<UserManager>(),
+          ),
+          StreamProvider(
+              builder: (context) => locator.get<MarketManager>().prices),
+          StreamProvider(
+              builder: (context) =>
+                  locator.get<MarketManager>().lastTicker.stream),
+          StreamProvider(
+            builder: (context) => locator.get<RefManager>().data,
+          ),
+          StreamProvider(
+            builder: (context) => locator.get<TimerManager>().tick,
+          )
+        ]
 }

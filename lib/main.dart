@@ -28,6 +28,7 @@ main() async {
 
   setupLog();
   await setupLocator();
+  setupProviders();
 
   runApp(MyApp());
 
@@ -40,19 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider.value(
-            value: locator.get<UserManager>(),
-          ),
-          StreamProvider(
-              builder: (context) => locator.get<MarketManager>().prices),
-          StreamProvider(
-              builder: (context) =>
-                  locator.get<MarketManager>().lastTicker.stream),
-          StreamProvider(
-            builder: (context) => locator.get<TimerManager>().tick,
-          )
-        ],
+        providers: providers,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'BBB',

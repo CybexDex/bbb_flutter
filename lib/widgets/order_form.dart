@@ -1,25 +1,33 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 import 'istep.dart';
 
 class OrderFormWidget extends StatelessWidget {
-  const OrderFormWidget({Key key}) : super(key: key);
+  final Contract _contract;
+  const OrderFormWidget({Key key, Contract contract})
+      : _contract = contract,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TradeViewModel>(builder: (context, model, child) {
+    return Consumer3<TradeViewModel, UserManager, RefContractResponseModel>(
+        builder: (context, model, userModel, refData, child) {
+      Contract refreshContract =
+          refData.contract.where((c) => c == _contract).last;
       return Container(
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
                 Text(
-                  I18n.of(context).perPrice,
+                  I18n.of(context).balanceAvailable,
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  "",
+                  " USDT",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],
@@ -31,11 +39,11 @@ class OrderFormWidget extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  I18n.of(context).restAmount,
+                  I18n.of(context).forcePrice,
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  " 份",
+                  "${refreshContract.strikeLevel.toStringAsFixed(0)} USDT",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],
@@ -91,22 +99,6 @@ class OrderFormWidget extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            // Row(
-            //   children: <Widget>[
-            //     Text(
-            //       "${I18n.of(context).takeProfit}${I18n.of(context).gain}",
-            //       style: StyleFactory.subTitleStyle,
-            //     ),
-            //     Text(
-            //       "4 USDT",
-            //       style: StyleFactory.smallCellTitleStyle,
-            //     )
-            //   ],
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // ),
-            // SizedBox(
-            //   height: 10,
-            // ),
             Row(
               children: <Widget>[
                 Text(
@@ -124,6 +116,38 @@ class OrderFormWidget extends StatelessWidget {
                       model.decreaseCutLoss();
                     },
                   ),
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  "${I18n.of(context).fee}",
+                  style: StyleFactory.subTitleStyle,
+                ),
+                Text(
+                  "${refreshContract.commissionRate} USDT",
+                  style: StyleFactory.smallCellTitleStyle,
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  "${I18n.of(context).interestRate}",
+                  style: StyleFactory.subTitleStyle,
+                ),
+                Text(
+                  "${refreshContract.dailyInterest} USDT${I18n.of(context).perDay}",
+                  style: StyleFactory.smallCellTitleStyle,
                 )
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

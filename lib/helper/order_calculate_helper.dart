@@ -1,5 +1,5 @@
 class OrderCalculate {
-  static String calculateRealTimeRevenue(
+  static double calculateRealTimeRevenue(
       {double currentPx,
       double orderBoughtPx,
       double conversionRate,
@@ -8,24 +8,25 @@ class OrderCalculate {
     var result =
         (currentPx - orderBoughtPx) * conversionRate * orderQtyContract -
             orderCommission;
-    return result.toString();
+    return result;
   }
 
-  static String calculateRealLeverage(
+  static double calculateRealLeverage(
       {double currentPx, double strikeLevel, bool isUp}) {
     if (isUp) {
-      return (currentPx / (currentPx - strikeLevel)).toString();
+      return (currentPx / (currentPx - strikeLevel));
     } else {
-      return (currentPx / (strikeLevel - currentPx)).toString();
+      return (currentPx / (strikeLevel - currentPx));
     }
   }
 
-  static String calculateInvest(
+  static double calculateInvest(
       {double orderBoughtContractPx, double orderQtyContract}) {
-    return (orderQtyContract * orderBoughtContractPx).toString();
+    return (orderQtyContract * orderBoughtContractPx);
   }
 
-  static double calculatePrice(double currentPx, double conversionRate) {
-    return conversionRate * conversionRate;
+  static double calculatePrice(
+      double currentPx, double strikeLevel, double conversionRate) {
+    return (currentPx - strikeLevel).abs() * conversionRate;
   }
 }

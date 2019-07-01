@@ -39,8 +39,7 @@ class MarketView extends StatelessWidget {
         }
         // locator.get<Logger>().finest(last.value);
 
-        return Expanded(
-            child: BaseWidget<MarketViewModel>(
+        return BaseWidget<MarketViewModel>(
           model: MarketViewModel(),
           onModelReady: (model) {
             model.seedToCurrent();
@@ -104,7 +103,7 @@ class MarketView extends StatelessWidget {
                   ),
                 ));
           },
-        ));
+        );
       },
     );
   }
