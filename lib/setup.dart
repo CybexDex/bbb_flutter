@@ -37,13 +37,13 @@ setupLocator() async {
       pref: locator<SharedPref>(),
       user: loadUserFromCache(locator<SharedPref>())));
 
-  locator.registerLazySingleton(() => TradeViewModel(
+  locator.registerFactory(() => TradeViewModel(
       api: locator<BBBAPIProvider>(),
       mtm: locator<MarketManager>(),
       refm: locator<RefManager>(),
       um: locator<UserManager>()));
 
-  locator.registerLazySingleton(() => OrderViewModel(
+  locator.registerFactory(() => OrderViewModel(
       api: locator<BBBAPIProvider>(), um: locator<UserManager>()));
 }
 

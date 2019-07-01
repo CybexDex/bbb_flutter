@@ -1,6 +1,8 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 import 'istep.dart';
@@ -17,6 +19,8 @@ class OrderFormWidget extends StatelessWidget {
         builder: (context, model, userModel, refData, child) {
       Contract refreshContract =
           refData.contract.where((c) => c == _contract).last;
+      Position usdt = userModel.fetchPositionFrom(AssetName.NXUSDT);
+
       return Container(
         child: Column(
           children: <Widget>[
@@ -27,7 +31,7 @@ class OrderFormWidget extends StatelessWidget {
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  " USDT",
+                  "${usdt.quantity.toStringAsFixed(4)} USDT",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],
@@ -76,6 +80,27 @@ class OrderFormWidget extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
+            Offstage(
+                offstage: model.isSatisfied,
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Image.asset("res/assets/icons/icWarn.png"),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "剩余份数不足，余额不足，单笔购买上限${refreshContract.maxOrderQty}",
+                          style: StyleFactory.smallButtonTitleStyle,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                )),
             Row(
               children: <Widget>[
                 Text(

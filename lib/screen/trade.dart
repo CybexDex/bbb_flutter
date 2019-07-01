@@ -12,15 +12,31 @@ import 'package:bbb_flutter/widgets/sparkline.dart';
 
 import 'dropdown.dart';
 
-class TradePage extends StatelessWidget {
+class TradePage extends StatefulWidget {
   TradePage({Key key, this.params}) : super(key: key);
 
   final RouteParamsOfTrade params;
 
   @override
+  _TradePageState createState() => _TradePageState();
+}
+
+class _TradePageState extends State<TradePage> {
+  double showDropdownMenuHeight = 0;
+
+  void setDropdownMenuHeight() {
+    showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => locator<TradeViewModel>(),
+      builder: (context) {
+        var vm = locator<TradeViewModel>();
+        vm.initForm(widget.params.isUp);
+        return vm;
+      },
       child: Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(
@@ -39,31 +55,7 @@ class TradePage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  locator<TradeViewModel>().setDropdownMenuHeight();
-//                  showGeneralDialog(
-//                      context: context,
-//                      pageBuilder: (BuildContext context,
-//                          Animation<double> animation,
-//                          Animation<double> secondaryAnimation) {
-////                      Future.delayed(Duration(seconds: 3), () {
-////                        Navigator.of(context).pop(true);
-////                      });
-//                        return Align(
-//                            alignment: Alignment.topCenter,
-//                            // Aligns the container to center
-//                            child: Container(
-//                              margin: EdgeInsets.only(top: 0),
-//                              // A simplified version of dialog.
-//                              width: ScreenUtil.screenHeightDp,
-//                              height: 56.0,
-//                              color: Colors.pink,
-//                            ));
-//                      },
-//                      barrierLabel: MaterialLocalizations.of(context)
-//                          .modalBarrierDismissLabel,
-//                      barrierDismissible: true,
-//                      barrierColor: Color.fromRGBO(0, 0, 0, 0.3),
-//                      transitionDuration: const Duration(milliseconds: 150));
+                  setDropdownMenuHeight();
                 },
               )
             ],
@@ -92,11 +84,11 @@ class TradePage extends StatelessWidget {
               return Stack(
                 children: <Widget>[
                   Container(
-                      foregroundDecoration: model.showDropdownMenuHeight != 0
+                      foregroundDecoration: showDropdownMenuHeight != 0
                           ? BoxDecoration(color: Color(000000).withOpacity(0.4))
                           : null,
                       child: IgnorePointer(
-                        ignoring: model.showDropdownMenuHeight != 0,
+                        ignoring: showDropdownMenuHeight != 0,
                         child: SafeArea(
                             child: Container(
                           margin: Dimen.pageMargin,
@@ -109,7 +101,8 @@ class TradePage extends StatelessWidget {
                                     RefContractResponseModel>(
                                   builder: (context, current, refdata, child) {
                                     Contract refreshContract = refdata.contract
-                                        .where((c) => c == params.contract)
+                                        .where(
+                                            (c) => c == widget.params.contract)
                                         .last;
                                     double price =
                                         OrderCalculate.calculatePrice(
@@ -157,8 +150,8 @@ class TradePage extends StatelessWidget {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 30, top: 20),
-                                child:
-                                    OrderFormWidget(contract: params.contract),
+                                child: OrderFormWidget(
+                                    contract: widget.params.contract),
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 0),
@@ -166,7 +159,7 @@ class TradePage extends StatelessWidget {
                                 child: BuyOrSellBottom(
                                     totalAmount:
                                         model.orderForm.totalAmount.amount,
-                                    button: params.isUp
+                                    button: widget.params.isUp
                                         ? WidgetFactory.button(
                                             data: I18n.of(context).buyUp,
                                             color: Palette.redOrange,
@@ -183,7 +176,7 @@ class TradePage extends StatelessWidget {
                         )),
                       )),
                   Dropdown(
-                      menuHeight: model.showDropdownMenuHeight,
+                      menuHeight: showDropdownMenuHeight,
                       tradeViewModel: model),
                 ],
               );

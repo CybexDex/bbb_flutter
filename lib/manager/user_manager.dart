@@ -10,6 +10,7 @@ import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
@@ -22,6 +23,15 @@ class UserManager extends BaseModel {
   UserManager({SharedPref pref, BBBAPIProvider api, this.user})
       : _pref = pref,
         _api = api;
+
+/**
+ *    //AssetName.CYB
+ */
+  Position fetchPositionFrom(String name) {
+    return user.balances.positions.where((position) {
+      return position.assetName == name;
+    }).first;
+  }
 
   Future<bool> loginWith({String name, String password}) async {
     var account = await unlockWith(name: name, password: password);

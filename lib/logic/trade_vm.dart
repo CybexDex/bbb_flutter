@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
@@ -17,27 +18,46 @@ import 'package:cybex_flutter_plugin/order.dart';
 
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
+  bool isSatisfied;
+
   BBBAPIProvider _api;
   MarketManager _mtm;
   RefManager _refm;
   UserManager _um;
-  double showDropdownMenuHeight = 0;
+
+  StreamSubscription _refSub;
 
   TradeViewModel(
       {@required BBBAPIProvider api,
       @required MarketManager mtm,
       @required RefManager refm,
       @required UserManager um,
-      this.showDropdownMenuHeight,
       this.orderForm}) {
     _api = api;
     _mtm = mtm;
     _refm = refm;
     _um = um;
+    isSatisfied = true;
 
-    _refm.data.listen((onData) {
+    _refSub = _refm.data.listen((onData) {
       updateAmountAndFee();
     });
+  }
+
+  @override
+  dispose() {
+    _refSub.cancel();
+    super.dispose();
+  }
+
+  initForm(bool isup) {
+    orderForm = OrderForm(
+        isUp: isup,
+        cutoff: 50,
+        takeProfit: 50,
+        investAmount: 0,
+        totalAmount: Asset(amount: 0, symbol: "USDT"),
+        fee: Asset(amount: 0, symbol: "USDT"));
   }
 
   updateAmountAndFee() {
@@ -101,11 +121,6 @@ class TradeViewModel extends BaseModel {
       orderForm.cutoff -= 1;
       setBusy(false);
     }
-  }
-
-  void setDropdownMenuHeight() {
-    showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;
-    setBusy(false);
   }
 
   List<Contract> getUpContracts() {

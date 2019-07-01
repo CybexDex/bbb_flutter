@@ -50,14 +50,6 @@ class ExchangePage extends StatelessWidget {
                               data: I18n.of(context).buyUp,
                               color: Palette.redOrange,
                               onPressed: () {
-                                locator<TradeViewModel>().orderForm = OrderForm(
-                                    isUp: true,
-                                    cutoff: 50,
-                                    takeProfit: 50,
-                                    investAmount: 0,
-                                    totalAmount:
-                                        Asset(amount: 0, symbol: "USDT"),
-                                    fee: Asset(amount: 0, symbol: "USDT"));
                                 Navigator.pushNamed(context, RoutePaths.Trade,
                                     arguments: RouteParamsOfTrade(
                                         contract: locator
@@ -75,14 +67,6 @@ class ExchangePage extends StatelessWidget {
                               data: I18n.of(context).buyDown,
                               color: Palette.shamrockGreen,
                               onPressed: () {
-                                locator<TradeViewModel>().orderForm = OrderForm(
-                                    isUp: false,
-                                    cutoff: 50,
-                                    takeProfit: 50,
-                                    investAmount: 0,
-                                    totalAmount:
-                                        Asset(amount: 0, symbol: "USDT"),
-                                    fee: Asset(amount: 0, symbol: "USDT"));
                                 Navigator.pushNamed(context, RoutePaths.Trade,
                                     arguments: RouteParamsOfTrade(
                                         contract: locator
