@@ -139,11 +139,9 @@ class TradeViewModel extends BaseModel {
 
     PostOrderRequestModel order = PostOrderRequestModel();
     Order buyOrder = getBuyOrder(refData, contract);
-    Order sellOrder = getSellOrder(refData, contract);
     Commission commission = getCommission(refData, contract);
 
     order.buyOrder = buyOrder;
-    order.sellOrder = sellOrder;
     order.commission = commission;
 
     order.underlyingSpotPx = ticker.value.toString();
@@ -152,14 +150,11 @@ class TradeViewModel extends BaseModel {
         (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000) + 24 * 60 * 60;
 
     order.buyOrder =
-        await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder);
-    order.sellOrder =
-        await CybexFlutterPlugin.limitOrderCreateOperation(sellOrder);
+        await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
+
     order.commission = await CybexFlutterPlugin.transferOperation(commission);
 
     order.buyOrderTxId = order.buyOrder.transactionid;
-
-    order.sellOrderTxId = order.sellOrder.transactionid;
 
     PostOrderResponseModel res = await _api.postOrder(order: order);
     // locator.get<Log>().printWrapped(res.toRawJson());
@@ -202,40 +197,6 @@ class TradeViewModel extends BaseModel {
     order.fillOrKill = 1;
     order.txExpiration = expir + 5 * 60;
     order.expiration = expir + 5 * 60;
-    return order;
-  }
-
-  Order getSellOrder(RefContractResponseModel refData, Contract contract) {
-    OrderForm form = orderForm;
-    AvailableAsset quoteAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == contract.quoteAsset;
-        })
-        .toList()
-        .first;
-
-    AvailableAsset baseAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == contract.assetName;
-        })
-        .toList()
-        .first;
-
-    int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
-    Order order = Order();
-    order.chainid = refData.chainId;
-    order.refBlockNum = refData.refBlockNum;
-    order.refBlockId = refData.refBlockId;
-    order.refBlockPrefix = refData.refBlockPrefix;
-    order.fee = AssetDef.CYB;
-    order.seller = _um.user.account.id;
-    order.amountToSell =
-        AmountToSell(amount: form.investAmount, assetId: baseAsset.assetId);
-    order.minToReceive =
-        AmountToSell(amount: 1 * pow(10, 6), assetId: quoteAsset.assetId);
-    order.fillOrKill = 1;
-    order.txExpiration = expir + 365 * 24 * 60 * 60;
-    order.expiration = 0;
     return order;
   }
 

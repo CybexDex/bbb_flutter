@@ -26,6 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
                     user_id:(int)user_id order_expiration:(NSTimeInterval)order_expiration
                    asset_id:(int)asset_id amount:(int64_t)amount receive_asset_id:(int)receive_asset_id
              receive_amount:(int64_t)receive_amount fee_id:(int)fee_id fee_amount:(int64_t)fee_amount  fillOrKill:(BOOL)fillOrKill;
++ (NSString *)getLimitOrderBySide:(bool)is_buy block_num:(int)block_num block_id:(NSString *)block_id
+                       expiration:(NSTimeInterval)expiration chain_id:(NSString *)chain_id
+                          user_id:(int)user_id order_expiration:(NSTimeInterval)order_expiration
+                         asset_id:(int)asset_id amount:(int64_t)amount receive_asset_id:(int)receive_asset_id
+                   receive_amount:(int64_t)receive_amount fee_id:(int)fee_id fee_amount:(int64_t)fee_amount fillOrKill:(BOOL)fillOrKill;
+
 + (NSString *)getLimitOrderOperation:(int)user_id expiration:(NSTimeInterval)expiration asset_id:(int)asset_id amount:(int64_t)amount receive_asset_id:(int)receive_asset_id receive_amount:(int64_t)receive_amount fee_id:(int)fee_id fee_amount:(int64_t)fee_amount fillOrKill:(BOOL)fillOrKill;
 + (NSString *)cancelLimitOrder:(int)block_num block_id:(NSString *)block_id
                     expiration:(NSTimeInterval)expiration chain_id:(NSString *)chain_id

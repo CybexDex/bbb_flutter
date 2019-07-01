@@ -58,14 +58,7 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      OrderCalculate.calculateRealTimeRevenue(
-                                  currentPx: ticker.last.value,
-                                  orderBoughtPx: _model.boughtPx,
-                                  conversionRate:
-                                      currentContract.conversionRate,
-                                  orderCommission: _model.commission,
-                                  orderQtyContract: _model.qtyContract)
-                              .toStringAsFixed(2) +
+                      (_model.pnl * _model.qtyContract).toStringAsFixed(2) +
                           " USDT",
                       style: StyleFactory.smallCellTitleStyle,
                     )
@@ -86,11 +79,12 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                        OrderCalculate.calculateRealLeverage(
+                      OrderCalculate.calculateRealLeverage(
                               currentPx: ticker.last.value,
                               strikeLevel:
                                   currentContract.strikeLevel.toDouble(),
-                              isUp: currentContract.conversionRate > 0).toStringAsFixed(2),
+                              isUp: currentContract.conversionRate > 0)
+                          .toStringAsFixed(2),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -111,8 +105,11 @@ class OrderInfo extends StatelessWidget {
                     ),
                     Text(
                       OrderCalculate.calculateInvest(
-                              orderQtyContract: _model.qtyContract,
-                              orderBoughtContractPx: _model.boughtContractPx).toStringAsFixed(2) + " USDT",
+                                  orderQtyContract: _model.qtyContract,
+                                  orderBoughtContractPx:
+                                      _model.boughtContractPx)
+                              .toStringAsFixed(2) +
+                          " USDT",
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],

@@ -14,8 +14,6 @@ class PostOrderRequestModel {
   Commission commission;
   String contractId;
   String underlyingSpotPx;
-  Order sellOrder;
-  String sellOrderTxId;
   String cutLossPx;
   String takeProfitPx;
   int expiration;
@@ -27,8 +25,6 @@ class PostOrderRequestModel {
     this.commission,
     this.contractId,
     this.underlyingSpotPx,
-    this.sellOrder,
-    this.sellOrderTxId,
     this.cutLossPx = "0",
     this.takeProfitPx = "0",
     this.expiration = 0,
@@ -47,8 +43,6 @@ class PostOrderRequestModel {
         commission: Commission.fromJson(json["commission"]),
         contractId: json["contractId"],
         underlyingSpotPx: json["underlyingSpotPx"],
-        sellOrder: Order.fromJson(json["sellOrder"]),
-        sellOrderTxId: json["sellOrderTxId"],
         cutLossPx: json["cutLossPx"],
         takeProfitPx: json["takeProfitPx"],
         expiration: json["expiration"],
@@ -61,8 +55,6 @@ class PostOrderRequestModel {
         "commission": commission.toJson(),
         "contractId": contractId,
         "underlyingSpotPx": underlyingSpotPx,
-        "sellOrder": sellOrder.toJson(),
-        "sellOrderTxId": sellOrderTxId,
         "cutLossPx": cutLossPx,
         "takeProfitPx": takeProfitPx,
         "expiration": expiration,
