@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -15,6 +16,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:cybex_flutter_plugin/order.dart';
+import 'package:logging/logging.dart';
 
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
@@ -26,6 +28,7 @@ class TradeViewModel extends BaseModel {
   UserManager _um;
 
   StreamSubscription _refSub;
+  StreamSubscription _lastTickerSub;
 
   TradeViewModel(
       {@required BBBAPIProvider api,
@@ -42,11 +45,16 @@ class TradeViewModel extends BaseModel {
     _refSub = _refm.data.listen((onData) {
       updateAmountAndFee();
     });
+
+    _lastTickerSub = _mtm.lastTicker.listen((onData) {
+      updateAmountAndFee();
+    });
   }
 
   @override
   dispose() {
     _refSub.cancel();
+    _lastTickerSub.cancel();
     super.dispose();
   }
 
@@ -71,8 +79,10 @@ class TradeViewModel extends BaseModel {
         contract.conversionRate *
         contract.commissionRate;
 
+    double extra = 0.1;
+
     orderForm.fee = Asset(amount: commiDouble, symbol: contract.quoteAsset);
-    double totalAmount = orderForm.investAmount * amount;
+    double totalAmount = orderForm.investAmount * amount + extra;
 
     orderForm.totalAmount =
         Asset(amount: totalAmount + commiDouble, symbol: contract.quoteAsset);
@@ -144,10 +154,9 @@ class TradeViewModel extends BaseModel {
     order.buyOrder = buyOrder;
     order.commission = commission;
 
-    order.underlyingSpotPx = ticker.value.toString();
+    order.underlyingSpotPx = ticker.value.value.toString();
     order.contractId = contract.contractId;
-    order.expiration =
-        (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000) + 24 * 60 * 60;
+    order.expiration = 0;
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
@@ -155,9 +164,10 @@ class TradeViewModel extends BaseModel {
     order.commission = await CybexFlutterPlugin.transferOperation(commission);
 
     order.buyOrderTxId = order.buyOrder.transactionid;
+    locator.get<Logger>().info(order.toRawJson());
 
     PostOrderResponseModel res = await _api.postOrder(order: order);
-    // locator.get<Log>().printWrapped(res.toRawJson());
+    locator.get<Logger>().warning(res.toRawJson());
 
     return Future.value(res);
   }
@@ -181,8 +191,8 @@ class TradeViewModel extends BaseModel {
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     var amount = (form.totalAmount.amount - form.fee.amount) *
         pow(10, quoteAsset.precision);
-    AmountToSell buyAmount =
-        AmountToSell(amount: amount.toInt(), assetId: quoteAsset.assetId);
+    AmountToSell buyAmount = AmountToSell(
+        amount: amount.toInt(), assetId: suffixId(quoteAsset.assetId));
 
     Order order = Order();
     order.chainid = refData.chainId;
@@ -190,10 +200,10 @@ class TradeViewModel extends BaseModel {
     order.refBlockPrefix = refData.refBlockPrefix;
     order.refBlockId = refData.refBlockId;
     order.fee = AssetDef.CYB;
-    order.seller = _um.user.account.id;
+    order.seller = suffixId(_um.user.account.id);
     order.amountToSell = buyAmount;
-    order.minToReceive =
-        AmountToSell(amount: form.investAmount, assetId: baseAsset.assetId);
+    order.minToReceive = AmountToSell(
+        amount: form.investAmount, assetId: suffixId(baseAsset.assetId));
     order.fillOrKill = 1;
     order.txExpiration = expir + 5 * 60;
     order.expiration = expir + 5 * 60;
@@ -219,10 +229,11 @@ class TradeViewModel extends BaseModel {
 
     comm.txExpiration = expir + 5 * 60;
     comm.fee = AssetDef.CYB;
-    comm.from = _um.user.account.id;
-    comm.to = refData.accountKeysEntityOperator.accountId;
+    comm.from = suffixId(_um.user.account.id);
+    comm.to = suffixId(refData.accountKeysEntityOperator.accountId);
     comm.amount = AmountToSell(
-        assetId: quoteAsset.assetId, amount: (form.fee.amount).toInt());
+        assetId: suffixId(quoteAsset.assetId),
+        amount: (form.fee.amount * pow(10, quoteAsset.precision)).toInt());
 
     return comm;
   }

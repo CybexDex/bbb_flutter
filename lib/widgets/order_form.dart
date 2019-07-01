@@ -155,7 +155,7 @@ class OrderFormWidget extends StatelessWidget {
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  "${refreshContract.commissionRate} USDT",
+                  "${model.orderForm.fee.amount.toStringAsFixed(4)} USDT",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],

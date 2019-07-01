@@ -9,6 +9,7 @@ import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:logging/logging.dart';
 
 import 'dropdown.dart';
 
@@ -163,12 +164,22 @@ class _TradePageState extends State<TradePage> {
                                         ? WidgetFactory.button(
                                             data: I18n.of(context).buyUp,
                                             color: Palette.redOrange,
-                                            onPressed: () {})
+                                            onPressed: () async {
+                                              try {
+                                                await model.postOrder();
+                                              } catch (e) {
+                                                locator.get<Logger>().severe(e);
+                                              }
+                                            })
                                         : WidgetFactory.button(
                                             data: I18n.of(context).buyDown,
                                             color: Palette.shamrockGreen,
                                             onPressed: () async {
-                                              await model.postOrder();
+                                              try {
+                                                await model.postOrder();
+                                              } catch (e) {
+                                                locator.get<Logger>().severe(e);
+                                              }
                                             })),
                               ),
                             ],

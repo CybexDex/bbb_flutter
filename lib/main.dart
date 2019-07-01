@@ -32,6 +32,11 @@ main() async {
 
   runApp(MyApp());
 
+  if (locator.get<UserManager>().user.logined) {
+    locator
+        .get<UserManager>()
+        .fetchBalances(name: locator.get<UserManager>().user.account.name);
+  }
   await locator.get<RefManager>().firstLoadData();
   locator.get<MarketManager>().loadAllData("BXBT");
 }
