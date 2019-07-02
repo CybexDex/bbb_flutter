@@ -10,13 +10,11 @@ import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:logging/logging.dart';
-
+import 'package:bbb_flutter/routes/routes.dart';
 import 'dropdown.dart';
 
 class TradePage extends StatefulWidget {
-  TradePage({Key key, this.params}) : super(key: key);
-
-  final RouteParamsOfTrade params;
+  TradePage({Key key}) : super(key: key);
 
   @override
   _TradePageState createState() => _TradePageState();
@@ -32,10 +30,12 @@ class _TradePageState extends State<TradePage> {
 
   @override
   Widget build(BuildContext context) {
+    final RouteParamsOfTrade params = ModalRoute.of(context).settings.arguments;
+
     return ChangeNotifierProvider(
       builder: (context) {
         var vm = locator<TradeViewModel>();
-        vm.initForm(widget.params.isUp);
+        vm.initForm(params.isUp);
         return vm;
       },
       child: Scaffold(
@@ -102,8 +102,7 @@ class _TradePageState extends State<TradePage> {
                                     RefContractResponseModel>(
                                   builder: (context, current, refdata, child) {
                                     Contract refreshContract = refdata.contract
-                                        .where(
-                                            (c) => c == widget.params.contract)
+                                        .where((c) => c == params.contract)
                                         .last;
                                     double price =
                                         OrderCalculate.calculatePrice(
@@ -151,8 +150,8 @@ class _TradePageState extends State<TradePage> {
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 30, top: 20),
-                                child: OrderFormWidget(
-                                    contract: widget.params.contract),
+                                child:
+                                    OrderFormWidget(contract: params.contract),
                               ),
                               Container(
                                 margin: EdgeInsets.only(bottom: 0),
@@ -160,7 +159,7 @@ class _TradePageState extends State<TradePage> {
                                 child: BuyOrSellBottom(
                                     totalAmount:
                                         model.orderForm.totalAmount.amount,
-                                    button: widget.params.isUp
+                                    button: params.isUp
                                         ? WidgetFactory.button(
                                             data: I18n.of(context).buyUp,
                                             color: Palette.redOrange,

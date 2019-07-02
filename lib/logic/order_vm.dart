@@ -18,12 +18,12 @@ class OrderViewModel extends BaseModel {
     _um = um;
 
     if (_um.user.logined) {
-      getOrders(name: "abigale1989");
+      getOrders(name: _um.user.account.name);
     }
 
     _getOrdersCallback = () {
       if (_um.user.logined) {
-        getOrders(name: "abigale1989");
+        getOrders(name: _um.user.account.name);
       }
     };
 

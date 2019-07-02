@@ -33,11 +33,8 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => DepositPage());
 
       case RoutePaths.Trade:
-        RouteParamsOfTrade param = settings.arguments as RouteParamsOfTrade;
         return CupertinoPageRoute(
-            builder: (_) => TradePage(
-                  params: param,
-                ));
+            builder: (_) => TradePage(), settings: settings);
 
       default:
         return MaterialPageRoute(

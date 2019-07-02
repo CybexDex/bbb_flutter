@@ -34,6 +34,12 @@ class MarketViewModel extends BaseModel {
           takeProfit: order.takeProfitPx,
           cutOff: order.cutLossPx,
           underOrder: order.boughtPx);
+    } else {
+      suppleData = SuppleData(
+          current: data.last.value,
+          takeProfit: null,
+          cutOff: null,
+          underOrder: null);
     }
   }
 
