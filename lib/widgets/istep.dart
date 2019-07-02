@@ -16,7 +16,7 @@ class IStep extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
               child: Container(
-                child: ImageFactory.countReduce,
+                child: Image.asset(R.resAssetsIconsIcReduce),
               ),
               onTap: minusOnTap),
           Text(
@@ -25,7 +25,7 @@ class IStep extends StatelessWidget {
           ),
           GestureDetector(
               child: Container(
-                child: ImageFactory.countAdd,
+                child: Image.asset(R.resAssetsIconsIcAdd),
               ),
               onTap: plusOnTap)
         ],

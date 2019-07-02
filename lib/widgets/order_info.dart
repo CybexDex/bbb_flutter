@@ -144,43 +144,19 @@ class OrderInfo extends StatelessWidget {
                           WidgetFactory.smallButton(
                               data: I18n.of(context).amend,
                               onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (context) => SafeArea(
-                                    bottom: false,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: <Widget>[
-                                        Container(
-                                          alignment: Alignment.bottomCenter,
-                                          color: Colors.white,
-                                          child: Column(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 8),
-                                                child: Text('Custom Dialog',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .none)),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 15, bottom: 8),
-                                                child: FlatButton(
-                                                    onPressed: () {
-                                                      // 关闭 Dialog
-                                                      // Navigator.pop(_);
-                                                    },
-                                                    child: Text('确定')),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                openDialog(
+                                  context,
+                                  (context) => Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      decoration: DecorationFactory
+                                          .dialogChooseDecoration,
+                                      child: SafeArea(
+                                        top: false,
+                                        child: Container(
+                                          height: 212,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -226,9 +202,9 @@ class OrderInfo extends StatelessWidget {
       {OrderResponseModel orderResponse, Contract refContract}) {
     if (refContract.contractId == orderResponse.contractId) {
       if (refContract.conversionRate > 0) {
-        return ImageFactory.upIcon14;
+        return Image.asset(R.resAssetsIconsIcUpRed14);
       } else {
-        return ImageFactory.downIcon14;
+        return Image.asset(R.resAssetsIconsIcDownGreen14);
       }
     }
     return null;
@@ -244,5 +220,37 @@ class OrderInfo extends StatelessWidget {
     }
 
     return null;
+  }
+
+  openDialog(BuildContext context, WidgetBuilder builder) {
+    showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation,
+          Animation<double> secondaryAnimation) {
+        final Widget pageChild = Builder(builder: builder);
+        return Builder(builder: (BuildContext context) {
+          return pageChild;
+        });
+      },
+      barrierDismissible: true,
+      barrierLabel: "",
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 150),
+      transitionBuilder: _buildMaterialDialogTransitions,
+    );
+  }
+
+  Widget _buildMaterialDialogTransitions(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child) {
+    return SlideTransition(
+      position: CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOut,
+      ).drive(Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)),
+      child: child,
+    );
   }
 }

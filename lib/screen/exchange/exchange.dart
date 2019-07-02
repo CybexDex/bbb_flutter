@@ -108,7 +108,7 @@ class ExchangePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    ImageFactory.emptyStock,
+                    Image.asset(R.resAssetsIconsIcEmpty),
                     Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: Text(I18n.of(context).orderEmpty,

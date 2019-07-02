@@ -1,7 +1,7 @@
 export 'package:flutter/material.dart';
 
 export 'package:bbb_flutter/localization/i18n.dart';
-export 'package:bbb_flutter/shared/image_factory.dart';
+export 'package:bbb_flutter/r.dart';
 export 'package:bbb_flutter/shared/palette.dart';
 export 'package:bbb_flutter/shared/decoration_factory.dart';
 export 'package:bbb_flutter/shared/dialog_factory.dart';

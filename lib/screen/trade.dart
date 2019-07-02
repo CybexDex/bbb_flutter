@@ -68,7 +68,7 @@ class _TradePageState extends State<TradePage> {
                   width: 7,
                 ),
                 GestureDetector(
-                  child: ImageFactory.icDropdown,
+                  child: Image.asset(R.resAssetsIconsIcDropdown),
                   onTap: () {
                     Navigator.pushNamed(context, RoutePaths.Login);
                   },

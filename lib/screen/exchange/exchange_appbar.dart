@@ -46,7 +46,7 @@ AppBar exchangeAppBar() {
               }
             },
           ),
-      child: ImageFactory.personal,
+      child: Image.asset(R.resAssetsIconsIcPerson),
     ),
     centerTitle: true,
     title: Text(".BXBT", style: StyleFactory.title),

@@ -45,7 +45,7 @@ class Dropdown extends StatelessWidget {
                       margin: EdgeInsets.only(left: 20),
                       child: Row(
                         children: <Widget>[
-                          ImageFactory.upIcon14,
+                          Image.asset(R.resAssetsIconsIcUpRed14),
                           SizedBox(
                             width: 5,
                           ),
@@ -60,7 +60,7 @@ class Dropdown extends StatelessWidget {
                       margin: EdgeInsets.only(left: 20),
                       child: Row(
                         children: <Widget>[
-                          ImageFactory.downIcon14,
+                          Image.asset(R.resAssetsIconsIcDownGreen14),
                           SizedBox(
                             width: 5,
                           ),

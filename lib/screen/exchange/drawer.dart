@@ -29,7 +29,7 @@ class UserDrawer extends StatelessWidget {
                 children: <Widget>[
                   Align(
                     child: GestureDetector(
-                      child: ImageFactory.back,
+                      child: Image.asset(R.resAssetsIconsIcNotifyBack),
                       onTap: () {
                         Navigator.of(context).pop();
                       },
@@ -79,7 +79,7 @@ class UserDrawer extends StatelessWidget {
                 style: StyleFactory.cellTitleStyle,
               ),
               trailing: GestureDetector(
-                child: ImageFactory.rowArrow,
+                child: Image.asset(R.resAssetsIconsIcTabArrow),
                 onTap: () {},
               ),
               onTap: () {
@@ -97,7 +97,7 @@ class UserDrawer extends StatelessWidget {
                 style: StyleFactory.cellTitleStyle,
               ),
               trailing: GestureDetector(
-                child: ImageFactory.rowArrow,
+                child: Image.asset(R.resAssetsIconsIcTabArrow),
                 onTap: () {},
               ),
               onTap: () {
@@ -116,7 +116,7 @@ class UserDrawer extends StatelessWidget {
                 style: StyleFactory.cellTitleStyle,
               ),
               trailing: GestureDetector(
-                child: ImageFactory.rowArrow,
+                child: Image.asset(R.resAssetsIconsIcTabArrow),
                 onTap: () {},
               ),
               onTap: () {
@@ -135,7 +135,7 @@ class UserDrawer extends StatelessWidget {
                 style: StyleFactory.cellTitleStyle,
               ),
               trailing: GestureDetector(
-                child: ImageFactory.rowArrow,
+                child: Image.asset(R.resAssetsIconsIcTabArrow),
                 onTap: () {},
               ),
               onTap: () {
