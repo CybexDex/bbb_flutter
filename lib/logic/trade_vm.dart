@@ -21,6 +21,8 @@ import 'package:logging/logging.dart';
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
   bool isSatisfied;
+  Contract get contract =>
+      orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
   BBBAPIProvider _api;
   MarketManager _mtm;
@@ -68,15 +70,24 @@ class TradeViewModel extends BaseModel {
         fee: Asset(amount: 0, symbol: "USDT"));
   }
 
+  updateCurrentContract(bool isUp, String contractId) {
+    if (isUp) {
+      _refm.changeUpContractId(contractId);
+    } else {
+      _refm.changeDownContractId(contractId);
+    }
+    orderForm.isUp = isUp;
+    updateAmountAndFee();
+  }
+
   updateAmountAndFee() {
-    var contract = _refm.currentContract;
     var ticker = _mtm.lastTicker.value;
     var amount =
         (ticker.value - contract.strikeLevel) * contract.conversionRate;
 
     double commiDouble = orderForm.investAmount *
         ticker.value *
-        contract.conversionRate *
+        contract.conversionRate.abs() *
         contract.commissionRate;
 
     double extra = 0.1;
@@ -90,7 +101,8 @@ class TradeViewModel extends BaseModel {
   }
 
   void increaseInvest() {
-    var contract = _refm.currentContract;
+    var contract =
+        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
     if (orderForm.investAmount < contract.availableInventory) {
       orderForm.investAmount += 1;
@@ -143,7 +155,8 @@ class TradeViewModel extends BaseModel {
 
   Future<PostOrderResponseModel> postOrder() async {
     var ticker = _mtm.lastTicker;
-    var contract = _refm.currentContract;
+    var contract =
+        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
     final refData = _refm.lastData;
 

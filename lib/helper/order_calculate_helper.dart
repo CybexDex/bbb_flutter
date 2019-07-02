@@ -27,6 +27,6 @@ class OrderCalculate {
 
   static double calculatePrice(
       double currentPx, double strikeLevel, double conversionRate) {
-    return (currentPx - strikeLevel).abs() * conversionRate;
+    return (currentPx - strikeLevel) * conversionRate;
   }
 }

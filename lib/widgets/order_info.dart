@@ -142,7 +142,49 @@ class OrderInfo extends StatelessWidget {
                             ),
                           ),
                           WidgetFactory.smallButton(
-                              data: I18n.of(context).amend, onPressed: () {}),
+                              data: I18n.of(context).amend,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (context) => SafeArea(
+                                    bottom: false,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        Container(
+                                          alignment: Alignment.bottomCenter,
+                                          color: Colors.white,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 8),
+                                                child: Text('Custom Dialog',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none)),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 15, bottom: 8),
+                                                child: FlatButton(
+                                                    onPressed: () {
+                                                      // 关闭 Dialog
+                                                      // Navigator.pop(_);
+                                                    },
+                                                    child: Text('确定')),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
                         ],
                       ),
                     )),

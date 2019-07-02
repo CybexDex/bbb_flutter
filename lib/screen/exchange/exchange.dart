@@ -54,7 +54,7 @@ class ExchangePage extends StatelessWidget {
                                     arguments: RouteParamsOfTrade(
                                         contract: locator
                                             .get<RefManager>()
-                                            .currentContract,
+                                            .currentUpContract,
                                         isUp: true,
                                         title: "ttes"));
                               })),
@@ -71,7 +71,7 @@ class ExchangePage extends StatelessWidget {
                                     arguments: RouteParamsOfTrade(
                                         contract: locator
                                             .get<RefManager>()
-                                            .currentContract,
+                                            .currentDownContract,
                                         isUp: false,
                                         title: "ttes"));
                               })),

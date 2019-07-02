@@ -101,9 +101,7 @@ class _TradePageState extends State<TradePage> {
                                 child: Consumer2<TickerData,
                                     RefContractResponseModel>(
                                   builder: (context, current, refdata, child) {
-                                    Contract refreshContract = refdata.contract
-                                        .where((c) => c == params.contract)
-                                        .last;
+                                    Contract refreshContract = model.contract;
                                     double price =
                                         OrderCalculate.calculatePrice(
                                             current.value,

@@ -7,14 +7,28 @@ import 'package:rxdart/subjects.dart';
 class RefManager {
   Stream<RefContractResponseModel> get data => _refdataController.stream;
   RefContractResponseModel get lastData => _refdataController.value;
+  String _upcontractId;
+  String _downcontractId;
 
-  Contract get currentContract {
-    if (_contractId == null) {
+  Contract get currentUpContract {
+    if (_upcontractId == null) {
       return null;
     }
     return lastData?.contract
         ?.where((contract) {
-          return contract.contractId == _contractId;
+          return contract.contractId == _upcontractId;
+        })
+        ?.toList()
+        ?.first;
+  }
+
+  Contract get currentDownContract {
+    if (_downcontractId == null) {
+      return null;
+    }
+    return lastData?.contract
+        ?.where((contract) {
+          return contract.contractId == _downcontractId;
         })
         ?.toList()
         ?.first;
@@ -36,15 +50,23 @@ class RefManager {
       BehaviorSubject<RefContractResponseModel>();
 
   BBBAPIProvider _api;
-  String _contractId;
 
   RefManager({BBBAPIProvider api}) : _api = api;
 
   firstLoadData() async {
-    RefContractResponseModel data = await refreshRefData();
-    _contractId = data.contract.first.contractId;
+    RefContractResponseModel _ = await refreshRefData();
+    changeUpContractId(upContract.first.contractId);
+    changeDownContractId(downContract.first.contractId);
 
     startLoop();
+  }
+
+  changeUpContractId(String id) {
+    _upcontractId = id;
+  }
+
+  changeDownContractId(String id) {
+    _downcontractId = id;
   }
 
   startLoop() {
