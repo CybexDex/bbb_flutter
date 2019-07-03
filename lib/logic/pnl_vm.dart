@@ -57,10 +57,10 @@ class PnlViewModel extends BaseModel {
     model.execNowPx = execNow ? 0 : ticker.value.toString();
     model.expiration = 0;
 
-    TransactionCommon trx =
-        await CybexFlutterPlugin.amendOrderOperation(model.toRawJson());
-    model.txId = trx.transactionid;
-    model.signature = trx.sig;
+    final sig =
+        await CybexFlutterPlugin.signMessageOperation(model.toStreamString());
+
+    model.signature = sig.replaceAll("\"", "");
 
     final result = await _api.amendOrder(order: model);
     print(result.toRawJson());

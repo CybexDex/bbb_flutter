@@ -31,12 +31,14 @@ class MarketViewModel extends BaseModel {
   supplyDataWithTrade(List<TickerData> data, OrderResponseModel order) {
     if (order != null) {
       suppleData = SuppleData(
+          alwaysShow: false,
           current: data.last.value,
           takeProfit: order.takeProfitPx,
           cutOff: order.cutLossPx,
           underOrder: order.boughtPx);
     } else {
       suppleData = SuppleData(
+          alwaysShow: false,
           current: data.last.value,
           takeProfit: null,
           cutOff: null,
@@ -49,11 +51,12 @@ class MarketViewModel extends BaseModel {
     if (order != null) {
       var current = data.last.value;
       suppleData = SuppleData(
+          alwaysShow: true,
           current: current,
           takeProfit: OrderCalculate.takeProfitPx(
               order.takeProfit, current, strikeLevel, order.isUp),
           cutOff: OrderCalculate.cutLossPx(
-              order.takeProfit, current, strikeLevel, order.isUp));
+              order.cutoff, current, strikeLevel, order.isUp));
     }
   }
 }

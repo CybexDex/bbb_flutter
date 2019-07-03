@@ -12,12 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NXSig : NSObject
 
-+ (NSString *)amendOrderWith:(NSString *)refId
-                  cutLossPx:(NSString *)cutLossPx
-               takeProfitPx:(NSString *)takeProfit
-                  execNowPx:(NSString *)execNowPx
-                 expiration:(NSString *)expiration
-                     seller:(NSString *)seller;
++ (NSString *)amendOrderWith:(NSString *)streamString;
 @end
 
 NS_ASSUME_NONNULL_END

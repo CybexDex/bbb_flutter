@@ -29,6 +29,7 @@ class SuppleData {
   final double takeProfit;
   final double underOrder;
   final double current;
+  final bool alwaysShow;
 
   DateTime stopTime;
   DateTime endTime;
@@ -36,6 +37,7 @@ class SuppleData {
       {this.cutOff,
       this.takeProfit,
       this.underOrder,
+      this.alwaysShow,
       this.current,
       this.stopTime,
       this.endTime});
@@ -732,25 +734,41 @@ class _HorizontalSupplePainter extends CustomPainter {
         fillTextPaint.color = colors[index].withAlpha(30);
         textBorderPaint.color = colors[index];
 
-        if (offset > 0 && offset < totalDist) {
-          dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
-          canvas.drawLine(
-              Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
-          canvas.drawRRect(
-              RRect.fromRectAndRadius(
-                  Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                      textWidth, textHeight),
-                  Radius.circular(2)),
-              fillTextPaint);
-          canvas.drawRRect(
-              RRect.fromRectAndRadius(
-                  Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                      textWidth, textHeight),
-                  Radius.circular(2)),
-              textBorderPaint);
-          textPainters[index].paint(canvas,
-              Offset(size.width - textWidth + 10, dy - textHeight / 2 + 4));
+        if (!suppleData.alwaysShow && (offset < 0 || offset > totalDist)) {
+          return;
         }
+
+        if (suppleData.alwaysShow) {
+          if (offset < 0) {
+            dy = size.height - timeAreaHeight - textHeight / 2;
+          } else if (offset > totalDist) {
+            dy = textHeight / 2;
+          } else {
+            dy = size.height -
+                timeAreaHeight -
+                marginSpace -
+                offset * normalizer;
+          }
+        } else {
+          dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
+        }
+
+        canvas.drawLine(
+            Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
+        canvas.drawRRect(
+            RRect.fromRectAndRadius(
+                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
+                    textWidth, textHeight),
+                Radius.circular(2)),
+            fillTextPaint);
+        canvas.drawRRect(
+            RRect.fromRectAndRadius(
+                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
+                    textWidth, textHeight),
+                Radius.circular(2)),
+            textBorderPaint);
+        textPainters[index].paint(canvas,
+            Offset(size.width - textWidth + 10, dy - textHeight / 2 + 4));
       }
     });
   }

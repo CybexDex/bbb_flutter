@@ -7,7 +7,6 @@ class AmendOrderRequestModel {
   String signature;
   String takeProfitPx;
   String cutLossPx;
-  String txId;
   String execNowPx;
   int expiration;
 
@@ -18,7 +17,6 @@ class AmendOrderRequestModel {
       this.signature,
       this.takeProfitPx,
       this.cutLossPx,
-      this.txId,
       this.execNowPx,
       this.expiration});
 
@@ -29,9 +27,20 @@ class AmendOrderRequestModel {
     signature = json['signature'];
     takeProfitPx = json['takeProfitPx'];
     cutLossPx = json['cutLossPx'];
-    txId = json['txId'];
     execNowPx = json['execNowPx'];
     expiration = json['expiration'];
+  }
+
+  String toStreamString() {
+    StringBuffer buff = StringBuffer();
+    buff.write(refBuyOrderTxId);
+    buff.write(cutLossPx);
+    buff.write(takeProfitPx);
+    buff.write(execNowPx);
+    buff.write(expiration);
+    buff.write(seller);
+
+    return buff.toString();
   }
 
   String toRawJson() => json.encode(toJson());
@@ -44,7 +53,6 @@ class AmendOrderRequestModel {
     data['signature'] = this.signature;
     data['takeProfitPx'] = this.takeProfitPx;
     data['cutLossPx'] = this.cutLossPx;
-    data['txId'] = this.txId;
     data['execNowPx'] = this.execNowPx;
     data['expiration'] = this.expiration;
     return data;
