@@ -1,7 +1,7 @@
 class OrderForm {
   int investAmount;
-  int takeProfit;
-  int cutoff;
+  double takeProfit;
+  double cutoff;
   bool isUp;
 
   Asset totalAmount;

@@ -2,6 +2,8 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/widgets/istep.dart';
+import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,16 @@ class OrderInfo extends StatelessWidget {
     RefContractResponseModel refData = locator<RefManager>().lastData;
     Contract currentContract =
         getCorrespondContract(orderResponse: _model, refContract: refData);
+    double takeprofit = OrderCalculate.getTakeProfit(
+        _model.takeProfitPx,
+        _model.underlyingSpotPx,
+        currentContract.strikeLevel,
+        currentContract.conversionRate > 0);
+    double cutLoss = OrderCalculate.getCutLoss(
+        _model.cutLossPx,
+        _model.underlyingSpotPx,
+        currentContract.strikeLevel,
+        currentContract.conversionRate > 0);
 
     return Consumer<List<TickerData>>(builder: (context, ticker, child) {
       return Container(
@@ -137,7 +149,7 @@ class OrderInfo extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
-                              "40% / 50%",
+                              "${takeprofit.toStringAsFixed(0)}% / ${cutLoss.toStringAsFixed(0)}%",
                               style: StyleFactory.smallCellTitleStyle,
                             ),
                           ),
@@ -146,19 +158,6 @@ class OrderInfo extends StatelessWidget {
                               onPressed: () {
                                 openDialog(
                                   context,
-                                  (context) => Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      decoration: DecorationFactory
-                                          .dialogChooseDecoration,
-                                      child: SafeArea(
-                                        top: false,
-                                        child: Container(
-                                          height: 212,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                 );
                               }),
                         ],
@@ -222,14 +221,15 @@ class OrderInfo extends StatelessWidget {
     return null;
   }
 
-  openDialog(BuildContext context, WidgetBuilder builder) {
+  openDialog(BuildContext context) {
     showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
-        final Widget pageChild = Builder(builder: builder);
         return Builder(builder: (BuildContext context) {
-          return pageChild;
+          return PnlForm(
+            model: _model,
+          );
         });
       },
       barrierDismissible: true,

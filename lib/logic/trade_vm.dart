@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
+import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -154,7 +155,7 @@ class TradeViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postOrder() async {
-    var ticker = _mtm.lastTicker;
+    var ticker = _mtm.lastTicker.value;
     var contract =
         orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
@@ -167,9 +168,15 @@ class TradeViewModel extends BaseModel {
     order.buyOrder = buyOrder;
     order.commission = commission;
 
-    order.underlyingSpotPx = ticker.value.value.toString();
+    order.underlyingSpotPx = ticker.value.toString();
     order.contractId = contract.contractId;
     order.expiration = 0;
+    order.takeProfitPx = OrderCalculate.takeProfitPx(orderForm.takeProfit,
+            ticker.value, contract.strikeLevel, orderForm.isUp)
+        .toStringAsFixed(6);
+    order.cutLossPx = OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
+            contract.strikeLevel, orderForm.isUp)
+        .toStringAsFixed(6);
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);

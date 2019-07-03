@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -43,20 +44,16 @@ class MarketViewModel extends BaseModel {
     }
   }
 
-  supplyDataWithOrder(List<TickerData> data, OrderForm order) {
+  supplyDataWithOrder(
+      List<TickerData> data, OrderForm order, double strikeLevel) {
     if (order != null) {
       var current = data.last.value;
-      if (order.isUp) {
-        suppleData = SuppleData(
-            current: current,
-            takeProfit: (order.takeProfit + 100) * current / 100,
-            cutOff: (100 - order.cutoff) * current / 100);
-      } else {
-        suppleData = SuppleData(
-            current: current,
-            takeProfit: (100 - order.takeProfit) * current / 100,
-            cutOff: (100 + order.cutoff) * current / 100);
-      }
+      suppleData = SuppleData(
+          current: current,
+          takeProfit: OrderCalculate.takeProfitPx(
+              order.takeProfit, current, strikeLevel, order.isUp),
+          cutOff: OrderCalculate.cutLossPx(
+              order.takeProfit, current, strikeLevel, order.isUp));
     }
   }
 }

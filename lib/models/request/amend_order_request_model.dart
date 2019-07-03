@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AmendOrderRequestModel {
   String transactionType;
   String seller;
@@ -31,6 +33,8 @@ class AmendOrderRequestModel {
     execNowPx = json['execNowPx'];
     expiration = json['expiration'];
   }
+
+  String toRawJson() => json.encode(toJson());
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

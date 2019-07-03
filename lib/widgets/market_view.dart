@@ -50,7 +50,8 @@ class MarketView extends StatelessWidget {
             }
 
             if (trade != null) {
-              model.supplyDataWithOrder(data, trade.orderForm);
+              model.supplyDataWithOrder(
+                  data, trade.orderForm, trade.contract.strikeLevel);
             }
 
             return Container(

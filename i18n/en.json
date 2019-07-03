@@ -53,7 +53,7 @@
 	"dialog_log_out_title": "登出",
 	"dialog_log_out_content": "确定你已妥善保存了你的密码,并确定希望登出你的账户。",
 	"dialog_log_out_confirm_button": "确认登出",
-
+	"confirm": "确认",
 	"register_error_message_contain_lowercase": "帐户名仅能包含小写字母、数字、横杠",
 	"register_error_message_start_only_letter": "帐户名需要以字母开头",
 	"register_error_message_short_name_length": "帐户名过短",

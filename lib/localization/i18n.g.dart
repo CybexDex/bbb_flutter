@@ -137,6 +137,8 @@ class _$Keys {
   static final String dialogLogOutConfirmButton =
       'dialog_log_out_confirm_button';
 
+  static final String confirm = 'confirm';
+
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
 
@@ -243,6 +245,7 @@ abstract class _$I18nHelper {
   String get dialogLogOutContent => _translate(_$Keys.dialogLogOutContent);
   String get dialogLogOutConfirmButton =>
       _translate(_$Keys.dialogLogOutConfirmButton);
+  String get confirm => _translate(_$Keys.confirm);
   String get registerErrorMessageContainLowercase =>
       _translate(_$Keys.registerErrorMessageContainLowercase);
   String get registerErrorMessageStartOnlyLetter =>

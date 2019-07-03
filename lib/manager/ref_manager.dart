@@ -14,24 +14,14 @@ class RefManager {
     if (_upcontractId == null) {
       return null;
     }
-    return lastData?.contract
-        ?.where((contract) {
-          return contract.contractId == _upcontractId;
-        })
-        ?.toList()
-        ?.first;
+    return getContractFromId(_upcontractId);
   }
 
   Contract get currentDownContract {
     if (_downcontractId == null) {
       return null;
     }
-    return lastData?.contract
-        ?.where((contract) {
-          return contract.contractId == _downcontractId;
-        })
-        ?.toList()
-        ?.first;
+    return getContractFromId(_downcontractId);
   }
 
   List<Contract> get upContract {
@@ -52,6 +42,15 @@ class RefManager {
   BBBAPIProvider _api;
 
   RefManager({BBBAPIProvider api}) : _api = api;
+
+  Contract getContractFromId(String id) {
+    return lastData?.contract
+        ?.where((contract) {
+          return contract.contractId == id;
+        })
+        ?.toList()
+        ?.first;
+  }
 
   firstLoadData() async {
     RefContractResponseModel _ = await refreshRefData();

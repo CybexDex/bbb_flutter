@@ -110,7 +110,7 @@ class OrderFormWidget extends StatelessWidget {
                 SizedBox(
                   width: 76,
                   child: IStep(
-                      text: "${model.orderForm.takeProfit}%",
+                      text: "${model.orderForm.takeProfit.toStringAsFixed(0)}%",
                       plusOnTap: () {
                         model.increaseTakeProfit();
                       },
@@ -133,7 +133,7 @@ class OrderFormWidget extends StatelessWidget {
                 SizedBox(
                   width: 76,
                   child: IStep(
-                    text: "${model.orderForm.cutoff}%",
+                    text: "${model.orderForm.cutoff.toStringAsFixed(0)}%",
                     plusOnTap: () {
                       model.increaseCutLoss();
                     },
