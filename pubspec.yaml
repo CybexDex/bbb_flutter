@@ -64,7 +64,6 @@ flutter:
     - res/assets/icons/icReduce.png
     - res/assets/icons/icFail.png
     - res/assets/icons/icDownGreen14.png
-    - res/assets/icons/icUsdt@2x.png
     - res/assets/icons/icDropdown.png
     - res/assets/icons/icPerson.png
     - res/assets/icons/icWarn.png
@@ -73,7 +72,6 @@ flutter:
     - res/assets/icons/icSuccess.png
     - res/assets/icons/icPassword.png
     - res/assets/icons/icEmpty.png
-    - res/assets/icons/icUsdt@3x.png
     - res/assets/icons/icTabDeposit.png
     - res/assets/icons/icFallGreen.png
     - res/assets/icons/icTime.png

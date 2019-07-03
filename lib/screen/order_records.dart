@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
 
 class OrderRecordsWidget extends StatelessWidget {
   const OrderRecordsWidget({Key key}) : super(key: key);
@@ -18,28 +19,88 @@ class OrderRecordsWidget extends StatelessWidget {
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
-          bottom: TabBar(
-            indicatorWeight: 1,
-            indicatorColor: Palette.redOrange,
-            unselectedLabelColor: Palette.subTitleColor,
-            labelColor: Palette.redOrange,
-            tabs: [
-              Tab(
-                text: I18n.of(context).all,
+          bottom: DecoratedTabBar(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Palette.separatorColor,
+                  width: 1.0,
+                ),
               ),
-              Tab(text: I18n.of(context).buyUp),
-              Tab(
-                text: I18n.of(context).buyDown,
-              ),
-            ],
+            ),
+            tabBar: TabBar(
+              indicatorWeight: 1,
+              indicatorColor: Palette.redOrange,
+              unselectedLabelColor: Palette.subTitleColor,
+              labelColor: Palette.redOrange,
+              tabs: [
+                Tab(
+                  text: I18n.of(context).all,
+                ),
+                Tab(text: I18n.of(context).buyUp),
+                Tab(
+                  text: I18n.of(context).buyDown,
+                ),
+              ],
+            ),
           ),
         ),
         body: SafeArea(
           child: TabBarView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => index != 0
+                      ? Divider(
+                          color: Palette.separatorColor,
+                        )
+                      : Container(),
+                  itemCount: 100,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 76,
+                      child: Text("$index"),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => index != 0
+                      ? Divider(
+                          color: Palette.separatorColor,
+                        )
+                      : Container(),
+                  itemCount: 100,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 76,
+                      child: Text("$index"),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => index != 0
+                      ? Divider(
+                          color: Palette.separatorColor,
+                        )
+                      : Container(),
+                  itemCount: 100,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 76,
+                      child: Text("$index"),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
