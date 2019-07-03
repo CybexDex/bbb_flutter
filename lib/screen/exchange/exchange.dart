@@ -10,10 +10,11 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
+import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
-import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/market_manager.dart';
 
 class ExchangePage extends StatelessWidget {
   ExchangePage({Key key, this.title}) : super(key: key);
@@ -46,35 +47,47 @@ class ExchangePage extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                           flex: 1,
-                          child: WidgetFactory.button(
-                              data: I18n.of(context).buyUp,
-                              color: Palette.redOrange,
-                              onPressed: () {
-                                Navigator.pushNamed(context, RoutePaths.Trade,
-                                    arguments: RouteParamsOfTrade(
-                                        contract: locator
-                                            .get<RefManager>()
-                                            .currentUpContract,
-                                        isUp: true,
-                                        title: "ttes"));
-                              })),
+                          child: Builder(
+                            builder: (context) => WidgetFactory.button(
+                                data: I18n.of(context).buyUp,
+                                color: Palette.redOrange,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, RoutePaths.Trade,
+                                          arguments: RouteParamsOfTrade(
+                                              contract: locator
+                                                  .get<RefManager>()
+                                                  .currentUpContract,
+                                              isUp: true,
+                                              title: "ttes"))
+                                      .then((v) {
+                                    Provider.of<OrderViewModel>(context)
+                                        .getOrders();
+                                  });
+                                }),
+                          )),
                       Container(
                         width: 20,
                       ),
                       Expanded(
                           flex: 1,
-                          child: WidgetFactory.button(
-                              data: I18n.of(context).buyDown,
-                              color: Palette.shamrockGreen,
-                              onPressed: () {
-                                Navigator.pushNamed(context, RoutePaths.Trade,
-                                    arguments: RouteParamsOfTrade(
-                                        contract: locator
-                                            .get<RefManager>()
-                                            .currentDownContract,
-                                        isUp: false,
-                                        title: "ttes"));
-                              })),
+                          child: Builder(
+                            builder: (context) => WidgetFactory.button(
+                                data: I18n.of(context).buyDown,
+                                color: Palette.shamrockGreen,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, RoutePaths.Trade,
+                                          arguments: RouteParamsOfTrade(
+                                              contract: locator
+                                                  .get<RefManager>()
+                                                  .currentDownContract,
+                                              isUp: false,
+                                              title: "ttes"))
+                                      .then((v) {
+                                    Provider.of<OrderViewModel>(context)
+                                        .getOrders();
+                                  });
+                                }),
+                          )),
                     ],
                   ),
                 ),
@@ -88,9 +101,13 @@ class ExchangePage extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                   ),
                 ),
-                Consumer2<UserManager, OrderViewModel>(
-                  builder: (context, userMg, data, child) {
-                    if (!userMg.user.logined || data.orders.isEmpty) {
+                Consumer4<UserManager, OrderViewModel, RefContractResponseModel,
+                    TickerData>(
+                  builder: (context, userMg, data, _, __, child) {
+                    if (!userMg.user.logined ||
+                        data.orders.isEmpty ||
+                        locator.get<RefManager>().currentUpContract == null ||
+                        locator.get<MarketManager>().lastTicker.value == null) {
                       return child;
                     }
                     return _stockWidget(context, data);
@@ -164,6 +181,9 @@ class ExchangePage extends StatelessWidget {
             })
             .values
             .toList(),
+      ),
+      SizedBox(
+        height: 10,
       )
     ]);
   }

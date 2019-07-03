@@ -40,6 +40,8 @@ class _$Keys {
 
   static final String withdraw = 'withdraw';
 
+  static final String all = 'all';
+
   static final String buyUp = 'buy_up';
 
   static final String buyDown = 'buy_down';
@@ -169,6 +171,10 @@ class _$Keys {
   static final String accountLogInError = 'account_log_in_error';
 
   static final String accountLogOut = 'account_log_out';
+
+  static final String updatedDate = 'updated_date';
+
+  static final String address = 'address';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -196,6 +202,7 @@ abstract class _$I18nHelper {
   String get logout => _translate(_$Keys.logout);
   String get myAsset => _translate(_$Keys.myAsset);
   String get withdraw => _translate(_$Keys.withdraw);
+  String get all => _translate(_$Keys.all);
   String get buyUp => _translate(_$Keys.buyUp);
   String get buyDown => _translate(_$Keys.buyDown);
   String get topUp => _translate(_$Keys.topUp);
@@ -266,4 +273,6 @@ abstract class _$I18nHelper {
       _translate(_$Keys.registerErrorMessagePasswordConfirm);
   String get accountLogInError => _translate(_$Keys.accountLogInError);
   String get accountLogOut => _translate(_$Keys.accountLogOut);
+  String get updatedDate => _translate(_$Keys.updatedDate);
+  String get address => _translate(_$Keys.address);
 }

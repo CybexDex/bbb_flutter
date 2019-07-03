@@ -58,11 +58,13 @@ flutter:
     - i18n/
     # assets-generator-begin
     # res/assets/icons/*
+    - res/assets/icons/.DS_Store
     - res/assets/icons/icMaskClose.png
     - res/assets/icons/icAdd.png
     - res/assets/icons/icReduce.png
     - res/assets/icons/icFail.png
     - res/assets/icons/icDownGreen14.png
+    - res/assets/icons/icUsdt@2x.png
     - res/assets/icons/icDropdown.png
     - res/assets/icons/icPerson.png
     - res/assets/icons/icWarn.png
@@ -71,6 +73,8 @@ flutter:
     - res/assets/icons/icSuccess.png
     - res/assets/icons/icPassword.png
     - res/assets/icons/icEmpty.png
+    - res/assets/icons/icUsdt@3x.png
+    - res/assets/icons/icTabDeposit.png
     - res/assets/icons/icFallGreen.png
     - res/assets/icons/icTime.png
     - res/assets/icons/icNotifyBack.png
@@ -79,6 +83,8 @@ flutter:
     - res/assets/icons/icCode.png
     - res/assets/icons/icUser.png
     - res/assets/icons/icHand.png
+    - res/assets/icons/icUsdt.png
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
+    - res/assets/icons/icTabWithdraw.png
     # assets-generator-end

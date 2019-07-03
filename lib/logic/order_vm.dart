@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/shared/types.dart';
 
 class OrderViewModel extends BaseModel {
   List<OrderResponseModel> orders = [];
@@ -17,25 +18,24 @@ class OrderViewModel extends BaseModel {
     _api = api;
     _um = um;
 
-    if (_um.user.logined) {
-      getOrders(name: _um.user.account.name);
-    }
+    getOrders();
 
     _getOrdersCallback = () {
-      if (_um.user.logined) {
-        getOrders(name: _um.user.account.name);
-      }
+      getOrders();
     };
 
     um.removeListener(_getOrdersCallback);
     um.addListener(_getOrdersCallback);
   }
 
-  getOrders({String name}) async {
-    setBusy(true);
-    orders = await _api.getOrders(name: name);
-    orders = orders.take(10).toList();
-    setBusy(false);
+  getOrders() async {
+    if (_um.user.logined) {
+      setBusy(true);
+      orders = await _api
+          .getOrders(_um.user.account.name, status: [OrderStatus.open]);
+      orders = orders.take(10).toList();
+      setBusy(false);
+    }
   }
 
   OrderResponseModel getCurrentOrder() {

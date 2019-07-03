@@ -120,8 +120,7 @@ class UserDrawer extends StatelessWidget {
                 onTap: () {},
               ),
               onTap: () {
-                // Update the state of the app
-                // ...
+                Navigator.pushNamed(context, RoutePaths.FundRecords);
               },
             ),
             Container(
@@ -139,8 +138,7 @@ class UserDrawer extends StatelessWidget {
                 onTap: () {},
               ),
               onTap: () {
-                // Update the state of the app
-                // ...
+                Navigator.pushNamed(context, RoutePaths.OrderRecords);
               },
             ),
             Container(

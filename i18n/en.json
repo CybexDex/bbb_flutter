@@ -4,6 +4,7 @@
 	"logout": "退出登录",
 	"my_asset": "我的资产",
 	"withdraw": "提现",
+	"all": "全部",
 	"buy_up": "买涨",
 	"buy_down": "买跌",
 	"top_up": "充值",
@@ -64,5 +65,7 @@
 	"register_error_message_password_checker": "密码需包含大小写字母、数字、特殊字符，长度不少于12个字符",
 	"register_error_message_password_confirm": "密码输入不一致",
 	"account_log_in_error": "账号密码不正确",
-	"account_log_out": "退出登录"
+	"account_log_out": "退出登录",
+	"updated_date": "更新时间",
+	"address": "地址"
 }

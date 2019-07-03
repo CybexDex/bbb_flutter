@@ -64,6 +64,22 @@ Order:
 }
 ```
 
+Fund
+```json
+{
+    "accountName": "abigale1989",
+    "txId": "3966643439623631636430653230663064316539",
+    "type": "USER_DEPOSIT_CYBEX",
+    "status": "COMPLETED",   // Possible values: IN_PROGRESS/REJECTED/COMPLETED/ERROR
+    "debugStatus": "DONE",          // This is for debug purpose. No need to show to end user.
+    "address": null,                // It is external USDT address if it is USER_DEPOSIT_EXTERN or USER_WITHDRAWAL_EXTERN
+    "assetName": "JADE.USDT",       // Asset name
+    "assetId": "1.3.27",            // Asset id
+    "amount": "1000",               // Amount
+    "lastUpdateTime": "2019-06-28T02:07:36.088080Z"
+  }
+```
+
 预估收益:
 
 > = `(Current bxbt price - Order's boughtPx ) * Contract's conversionRate * Order's qtyContract - Order's commission`

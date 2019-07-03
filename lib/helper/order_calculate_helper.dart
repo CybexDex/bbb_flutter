@@ -31,11 +31,11 @@ class OrderCalculate {
   }
 
   static double takeProfitPx(
-      double takeProfit, double currentPx, double strikeLevel, bool isUp) {
+      double takeProfit, double basePx, double strikeLevel, bool isUp) {
     if (isUp) {
-      return currentPx + (currentPx - strikeLevel) * takeProfit / 100;
+      return basePx + (basePx - strikeLevel) * takeProfit / 100;
     } else {
-      return currentPx - (strikeLevel - currentPx) * takeProfit / 100;
+      return basePx - (strikeLevel - basePx) * takeProfit / 100;
     }
   }
 
@@ -53,11 +53,11 @@ class OrderCalculate {
   }
 
   static double cutLossPx(
-      double cutLoss, double currentPx, double strikeLevel, bool isUp) {
+      double cutLoss, double basePx, double strikeLevel, bool isUp) {
     if (isUp) {
-      return currentPx - (currentPx - strikeLevel) * cutLoss / 100;
+      return basePx - (basePx - strikeLevel) * cutLoss / 100;
     } else {
-      return currentPx + (strikeLevel - currentPx) * cutLoss / 100;
+      return basePx + (strikeLevel - basePx) * cutLoss / 100;
     }
   }
 

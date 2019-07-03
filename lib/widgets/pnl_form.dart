@@ -110,7 +110,7 @@ class PnlForm extends StatelessWidget {
                           data: I18n.of(context).confirm,
                           color: Palette.redOrange,
                           onPressed: () async {
-                            await model.amend(_order, false);
+                            await model.amend(_order, true);
                           }),
                     )
                   ],

@@ -2,7 +2,7 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/widgets/istep.dart';
+import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -212,6 +212,9 @@ class OrderInfo extends StatelessWidget {
   Contract getCorrespondContract(
       {OrderResponseModel orderResponse,
       RefContractResponseModel refContract}) {
+    if (refContract == null) {
+      return null;
+    }
     for (Contract refContractResponseContract in refContract.contract) {
       if (orderResponse.contractId == refContractResponseContract.contractId) {
         return refContractResponseContract;
@@ -237,7 +240,9 @@ class OrderInfo extends StatelessWidget {
       barrierColor: Colors.black54,
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder: _buildMaterialDialogTransitions,
-    );
+    ).then((v) {
+      Provider.of<OrderViewModel>(context).getOrders();
+    });
   }
 
   Widget _buildMaterialDialogTransitions(

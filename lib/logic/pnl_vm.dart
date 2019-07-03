@@ -44,12 +44,12 @@ class PnlViewModel extends BaseModel {
     model.transactionType = "NxAmend";
     model.cutLossPx = execNow
         ? order.cutLossPx
-        : OrderCalculate.cutLossPx(takeProfit, ticker.value,
-                contract.strikeLevel, contract.conversionRate > 0)
+        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx, contract.strikeLevel,
+                contract.conversionRate > 0)
             .toStringAsFixed(6);
     model.takeProfitPx = execNow
         ? order.takeProfitPx
-        : OrderCalculate.takeProfitPx(takeProfit, ticker.value,
+        : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
                 contract.strikeLevel, contract.conversionRate > 0)
             .toStringAsFixed(6);
     model.seller = suffixId(_um.user.account.id);
@@ -62,6 +62,7 @@ class PnlViewModel extends BaseModel {
 
     model.signature = sig.replaceAll("\"", "");
 
+    print(model.toRawJson());
     final result = await _api.amendOrder(order: model);
     print(result.toRawJson());
   }
