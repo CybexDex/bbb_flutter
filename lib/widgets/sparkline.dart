@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 @immutable
 class TickerData {

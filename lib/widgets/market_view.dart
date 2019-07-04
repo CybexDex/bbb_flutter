@@ -7,7 +7,7 @@ import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 class MarketView extends StatelessWidget {
   final double width;

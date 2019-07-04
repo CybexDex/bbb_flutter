@@ -17,7 +17,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:cybex_flutter_plugin/order.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
@@ -179,10 +179,10 @@ class TradeViewModel extends BaseModel {
     order.commission = await CybexFlutterPlugin.transferOperation(commission);
 
     order.buyOrderTxId = order.buyOrder.transactionid;
-    locator.get<Logger>().info(order.toRawJson());
+    locator.get<Logger>().i(order.toRawJson());
 
     PostOrderResponseModel res = await _api.postOrder(order: order);
-    locator.get<Logger>().warning(res.toRawJson());
+    locator.get<Logger>().w(res.toRawJson());
 
     return Future.value(res);
   }

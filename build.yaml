@@ -4,3 +4,5 @@ targets:
             include: ["i18n/**", "lib/**"]
         builders:
             rosetta:
+            # functional_widget:
+               

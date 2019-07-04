@@ -10,21 +10,42 @@ import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:get_it/get_it.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
 
+class SimpleLogPrinter extends LogPrinter {
+  final String className;
+  SimpleLogPrinter(this.className);
+
+  @override
+  void log(Level level, message, error, StackTrace stackTrace) {
+    var color = PrettyPrinter.levelColors[level];
+    var emoji = PrettyPrinter.levelEmojis[level];
+    println(color('$emoji $className - $message'));
+  }
+}
+
 setupLog() {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
-  Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
+  Logger.level = Level.verbose;
+}
+
+Logger getLogger(String className) {
+  return Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
 }
 
 setupLocator() async {
   locator.registerSingleton(TimerManager());
-  locator.registerSingleton(Logger("BBB"));
+  locator.registerSingleton(getLogger("BBB"));
   locator.registerSingleton(BBBAPIProvider());
   locator.registerSingleton(FaucetAPIProvider());
   locator.registerSingleton(MarketManager(api: locator<BBBAPIProvider>()));

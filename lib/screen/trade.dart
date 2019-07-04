@@ -10,7 +10,7 @@ import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'dropdown.dart';
 
@@ -56,7 +56,9 @@ class _TradePageState extends State<TradePage> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  setDropdownMenuHeight();
+                },
               )
             ],
             centerTitle: true,
@@ -70,17 +72,17 @@ class _TradePageState extends State<TradePage> {
                       style: model.orderForm.isUp
                           ? StyleFactory.buyUpTitle
                           : StyleFactory.buyDownTitle),
-                  SizedBox(
-                    width: 7,
-                  ),
-                  GestureDetector(
-                    child: Image.asset(R.resAssetsIconsIcDropdown),
-                    onTap: () {
-                      setDropdownMenuHeight();
-                    },
-                  )
-                ],
-                mainAxisSize: MainAxisSize.min,
+                SizedBox(
+                  width: 7,
+                ),
+                GestureDetector(
+                  child: Image.asset(R.resAssetsIconsIcDropdown),
+                  onTap: () {
+                    Navigator.pushNamed(context, RoutePaths.Login);
+                  },
+                )
+              ],
+              mainAxisSize: MainAxisSize.min,
               );
             }),
             backgroundColor: Colors.white,
@@ -182,9 +184,7 @@ class _TradePageState extends State<TradePage> {
                                                   try {
                                                     await model.postOrder();
                                                   } catch (e) {
-                                                    locator
-                                                        .get<Logger>()
-                                                        .severe(e);
+                                                locator.get<Logger>().e(e);
                                                   }
                                                 }
                                               });
@@ -196,7 +196,7 @@ class _TradePageState extends State<TradePage> {
                                               try {
                                                 await model.postOrder();
                                               } catch (e) {
-                                                locator.get<Logger>().severe(e);
+                                                locator.get<Logger>().e(e);
                                               }
                                             })),
                               ),

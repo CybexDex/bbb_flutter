@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bbb_flutter/helper/common_utils.dart';
+import 'package:bbb_flutter/interceptors.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
@@ -22,11 +23,11 @@ class BBBAPIProvider extends BBBAPI {
     dio.options.baseUrl = "https://nxapitest.cybex.io/v1";
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
-    dio.interceptors.add(LogInterceptor(
-        responseBody: false,
-        requestHeader: false,
-        request: false,
-        responseHeader: false));
+    // dio.interceptors.add(ILogInterceptor(
+    //     responseBody: true,
+    //     requestHeader: false,
+    //     request: true,
+    //     responseHeader: false));
   }
 
   @override

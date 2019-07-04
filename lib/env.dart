@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:logging/logging.dart';
+import 'package:logger/logger.dart';
 
 BuildMode buildMode = (() {
   if (const bool.fromEnvironment('dart.vm.product')) {
@@ -20,7 +20,7 @@ Future<void> reportError(dynamic error, dynamic stackTrace) async {
   // Print the exception to the console.
   if (buildMode == BuildMode.debug) {
     // Print the full stacktrace in debug mode.
-    locator.get<Logger>().shout("Caught error:", error, stackTrace);
+    locator.get<Logger>().d("Caught error:", error, stackTrace);
     return;
   } else {
     // Send the Exception and Stacktrace to Sentry in Production mode.
