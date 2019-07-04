@@ -72,17 +72,17 @@ class _TradePageState extends State<TradePage> {
                       style: model.orderForm.isUp
                           ? StyleFactory.buyUpTitle
                           : StyleFactory.buyDownTitle),
-                SizedBox(
-                  width: 7,
-                ),
-                GestureDetector(
-                  child: Image.asset(R.resAssetsIconsIcDropdown),
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutePaths.Login);
-                  },
-                )
-              ],
-              mainAxisSize: MainAxisSize.min,
+                  SizedBox(
+                    width: 7,
+                  ),
+                  GestureDetector(
+                    child: Image.asset(R.resAssetsIconsIcDropdown),
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutePaths.Login);
+                    },
+                  )
+                ],
+                mainAxisSize: MainAxisSize.min,
               );
             }),
             backgroundColor: Colors.white,
@@ -184,7 +184,7 @@ class _TradePageState extends State<TradePage> {
                                                   try {
                                                     await model.postOrder();
                                                   } catch (e) {
-                                                locator.get<Logger>().e(e);
+                                                    locator.get<Logger>().e(e);
                                                   }
                                                 }
                                               });

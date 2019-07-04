@@ -9,6 +9,7 @@ class AmendOrderRequestModel {
   String cutLossPx;
   String execNowPx;
   int expiration;
+  int amendCreationTime;
 
   AmendOrderRequestModel(
       {this.transactionType,
@@ -18,7 +19,8 @@ class AmendOrderRequestModel {
       this.takeProfitPx,
       this.cutLossPx,
       this.execNowPx,
-      this.expiration});
+      this.expiration,
+      this.amendCreationTime});
 
   AmendOrderRequestModel.fromJson(Map<String, dynamic> json) {
     transactionType = json['transactionType'];
@@ -29,6 +31,7 @@ class AmendOrderRequestModel {
     cutLossPx = json['cutLossPx'];
     execNowPx = json['execNowPx'];
     expiration = json['expiration'];
+    amendCreationTime = json['amendCreationTime'];
   }
 
   String toStreamString() {
@@ -39,6 +42,7 @@ class AmendOrderRequestModel {
     buff.write(execNowPx);
     buff.write(expiration);
     buff.write(seller);
+    buff.write(amendCreationTime);
 
     return buff.toString();
   }
@@ -55,6 +59,8 @@ class AmendOrderRequestModel {
     data['cutLossPx'] = this.cutLossPx;
     data['execNowPx'] = this.execNowPx;
     data['expiration'] = this.expiration;
+    data['amendCreationTime'] = this.amendCreationTime;
+
     return data;
   }
 }

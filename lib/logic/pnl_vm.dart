@@ -38,7 +38,7 @@ class PnlViewModel extends BaseModel {
 
   Future amend(OrderResponseModel order, bool execNow) async {
     final ticker = _mtm.lastTicker.value;
-
+    int epochTime = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     final contract = currentContract(order);
 
     final model = AmendOrderRequestModel();
@@ -55,8 +55,9 @@ class PnlViewModel extends BaseModel {
             .toStringAsFixed(6);
     model.seller = suffixId(_um.user.account.id);
     model.refBuyOrderTxId = order.buyOrderTxId;
-    model.execNowPx = execNow ? "0" : ticker.value.toString();
-    model.expiration = 0;
+    model.execNowPx = ticker.value.toString();
+    model.expiration = execNow ? epochTime : 0;
+    model.amendCreationTime = epochTime;
 
     final sig =
         await CybexFlutterPlugin.signMessageOperation(model.toStreamString());
