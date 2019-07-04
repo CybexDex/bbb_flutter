@@ -1,5 +1,7 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
@@ -51,7 +53,31 @@ class OrderInfo extends StatelessWidget {
                       child: Align(
                     alignment: Alignment.centerRight,
                     child: WidgetFactory.smallButton(
-                        data: I18n.of(context).closeOut, onPressed: () {}),
+                        data: I18n.of(context).closeOut,
+                        onPressed: () async {
+                          if (locator.get<UserManager>().user.isLocked) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return DialogFactory.sellOrderDialog(
+                                    context,
+                                    title: "平仓",
+                                    contentText: "当前平仓预计收益",
+                                    value:
+                                        "${(_model.pnl * _model.qtyContract).toStringAsFixed(2)} USDT",
+                                  );
+                                }).then((value) async {
+                              if (value) {
+                                await callAmend();
+                                Provider.of<OrderViewModel>(context)
+                                    .getOrders();
+                              }
+                            });
+                          } else {
+                            await callAmend();
+                            Provider.of<OrderViewModel>(context).getOrders();
+                          }
+                        }),
                   )),
                 ],
               ),
@@ -257,5 +283,14 @@ class OrderInfo extends StatelessWidget {
       ).drive(Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)),
       child: child,
     );
+  }
+
+  callAmend() {
+    PnlViewModel pnlViewModel = PnlViewModel(
+        api: locator.get(),
+        um: locator.get(),
+        mtm: locator.get(),
+        refm: locator.get());
+    pnlViewModel.amend(_model, true);
   }
 }

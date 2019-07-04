@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -55,27 +56,33 @@ class _TradePageState extends State<TradePage> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  setDropdownMenuHeight();
-                },
+                onTap: () {},
               )
             ],
             centerTitle: true,
-            title: Row(
-              children: <Widget>[
-                Text("买涨", style: StyleFactory.title),
-                SizedBox(
-                  width: 7,
-                ),
-                GestureDetector(
-                  child: Image.asset(R.resAssetsIconsIcDropdown),
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutePaths.Login);
-                  },
-                )
-              ],
-              mainAxisSize: MainAxisSize.min,
-            ),
+            title: Consumer<TradeViewModel>(builder: (context, model, child) {
+              return Row(
+                children: <Widget>[
+                  Text(
+                      model.orderForm.isUp
+                          ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel}"
+                          : "${I18n.of(context).buyDown}-${model.contract.strikeLevel}",
+                      style: model.orderForm.isUp
+                          ? StyleFactory.buyUpTitle
+                          : StyleFactory.buyDownTitle),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  GestureDetector(
+                    child: Image.asset(R.resAssetsIconsIcDropdown),
+                    onTap: () {
+                      setDropdownMenuHeight();
+                    },
+                  )
+                ],
+                mainAxisSize: MainAxisSize.min,
+              );
+            }),
             backgroundColor: Colors.white,
             brightness: Brightness.light,
             elevation: 0,
@@ -157,16 +164,30 @@ class _TradePageState extends State<TradePage> {
                                 child: BuyOrSellBottom(
                                     totalAmount:
                                         model.orderForm.totalAmount.amount,
-                                    button: params.isUp
+                                    button: model.orderForm.isUp
                                         ? WidgetFactory.button(
                                             data: I18n.of(context).buyUp,
                                             color: Palette.redOrange,
                                             onPressed: () async {
-                                              try {
-                                                await model.postOrder();
-                                              } catch (e) {
-                                                locator.get<Logger>().severe(e);
-                                              }
+                                              model.saveOrder();
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (context) {
+                                                    return DialogFactory
+                                                        .confirmDialog(context,
+                                                            model: model);
+                                                  }).then((value) async {
+                                                if (value) {
+                                                  try {
+                                                    await model.postOrder();
+                                                  } catch (e) {
+                                                    locator
+                                                        .get<Logger>()
+                                                        .severe(e);
+                                                  }
+                                                }
+                                              });
                                             })
                                         : WidgetFactory.button(
                                             data: I18n.of(context).buyDown,
@@ -184,8 +205,11 @@ class _TradePageState extends State<TradePage> {
                         )),
                       )),
                   Dropdown(
-                      menuHeight: showDropdownMenuHeight,
-                      tradeViewModel: model),
+                    menuHeight: showDropdownMenuHeight,
+                    function: () {
+                      setDropdownMenuHeight();
+                    },
+                  ),
                 ],
               );
             },

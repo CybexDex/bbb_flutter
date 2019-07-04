@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/istep.dart';
@@ -110,7 +111,20 @@ class PnlForm extends StatelessWidget {
                           data: I18n.of(context).confirm,
                           color: Palette.redOrange,
                           onPressed: () async {
-                            await model.amend(_order, true);
+                            if (locator.get<UserManager>().user.isLocked) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return DialogFactory.sellOrderDialog(
+                                        context);
+                                  }).then((value) async {
+                                if (value) {
+                                  await model.amend(_order, false);
+                                }
+                              });
+                            } else {
+                              await model.amend(_order, false);
+                            }
                           }),
                     )
                   ],

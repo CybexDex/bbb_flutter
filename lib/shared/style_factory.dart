@@ -134,4 +134,16 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
+
+  static var buyUpTitle = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.titleFontSize);
+
+  static var buyDownTitle = TextStyle(
+      color: Palette.shamrockGreen,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.titleFontSize);
 }

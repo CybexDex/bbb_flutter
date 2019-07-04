@@ -24,6 +24,11 @@ class TradeViewModel extends BaseModel {
   bool isSatisfied;
   Contract get contract =>
       orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
+  var ticker;
+  var saveContract;
+  PostOrderRequestModel order;
+  Order buyOrder;
+  Commission commission;
 
   BBBAPIProvider _api;
   MarketManager _mtm;
@@ -155,27 +160,17 @@ class TradeViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postOrder() async {
-    var ticker = _mtm.lastTicker.value;
-    var contract =
-        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
-
-    final refData = _refm.lastData;
-
-    PostOrderRequestModel order = PostOrderRequestModel();
-    Order buyOrder = getBuyOrder(refData, contract);
-    Commission commission = getCommission(refData, contract);
-
     order.buyOrder = buyOrder;
     order.commission = commission;
 
     order.underlyingSpotPx = ticker.value.toString();
-    order.contractId = contract.contractId;
+    order.contractId = saveContract.contractId;
     order.expiration = 0;
     order.takeProfitPx = OrderCalculate.takeProfitPx(orderForm.takeProfit,
-            ticker.value, contract.strikeLevel, orderForm.isUp)
+            ticker.value, saveContract.strikeLevel, orderForm.isUp)
         .toStringAsFixed(6);
     order.cutLossPx = OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
-            contract.strikeLevel, orderForm.isUp)
+            saveContract.strikeLevel, orderForm.isUp)
         .toStringAsFixed(6);
 
     order.buyOrder =
@@ -190,6 +185,18 @@ class TradeViewModel extends BaseModel {
     locator.get<Logger>().warning(res.toRawJson());
 
     return Future.value(res);
+  }
+
+  void saveOrder() {
+    ticker = _mtm.lastTicker.value;
+    saveContract =
+        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
+
+    final refData = _refm.lastData;
+
+    order = PostOrderRequestModel();
+    buyOrder = getBuyOrder(refData, contract);
+    commission = getCommission(refData, contract);
   }
 
   Order getBuyOrder(RefContractResponseModel refData, Contract contract) {

@@ -24,9 +24,8 @@ class UserManager extends BaseModel {
       : _pref = pref,
         _api = api;
 
-/**
- *    //AssetName.CYB
- */
+  ///AssetName.CYB
+
   Position fetchPositionFrom(String name) {
     return user.balances.positions.where((position) {
       return position.assetName == name;
@@ -149,3 +148,5 @@ class UserManager extends BaseModel {
     notifyListeners();
   }
 }
+
+enum errorMessageState { Null, True, False }

@@ -14,6 +14,7 @@ import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 class PnlViewModel extends BaseModel {
   double cutLoss;
   double takeProfit;
+  bool shouldShowErrorMessage = false;
 
   BBBAPIProvider _api;
   UserManager _um;
@@ -43,18 +44,18 @@ class PnlViewModel extends BaseModel {
     final model = AmendOrderRequestModel();
     model.transactionType = "NxAmend";
     model.cutLossPx = execNow
-        ? order.cutLossPx
-        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx, contract.strikeLevel,
-                contract.conversionRate > 0)
+        ? order.cutLossPx.toStringAsFixed(6)
+        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
+                contract.strikeLevel, contract.conversionRate > 0)
             .toStringAsFixed(6);
     model.takeProfitPx = execNow
-        ? order.takeProfitPx
+        ? order.takeProfitPx.toStringAsFixed(6)
         : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
                 contract.strikeLevel, contract.conversionRate > 0)
             .toStringAsFixed(6);
     model.seller = suffixId(_um.user.account.id);
     model.refBuyOrderTxId = order.buyOrderTxId;
-    model.execNowPx = execNow ? 0 : ticker.value.toString();
+    model.execNowPx = execNow ? "0" : ticker.value.toString();
     model.expiration = 0;
 
     final sig =
@@ -92,6 +93,19 @@ class PnlViewModel extends BaseModel {
     if (cutLoss > 1) {
       cutLoss -= 1;
       setBusy(false);
+    }
+  }
+
+  Future<bool> checkPassword({String name, String password}) async {
+    var account = await _um.unlockWith(name: name, password: password);
+    if (account != null) {
+      shouldShowErrorMessage = false;
+      setBusy(false);
+      return true;
+    } else {
+      shouldShowErrorMessage = true;
+      setBusy(false);
+      return false;
     }
   }
 }

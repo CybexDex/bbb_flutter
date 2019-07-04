@@ -1,6 +1,4 @@
 class R {
-  /// ![](http://127.0.0.1:9528/res/assets/icons/.DS_Store)
-  static final String resAssetsIcons = 'res/assets/icons/.DS_Store';
   /// ![](http://127.0.0.1:9528/res/assets/icons/icMaskClose.png)
   static final String resAssetsIconsIcMaskClose = 'res/assets/icons/icMaskClose.png';
   /// ![](http://127.0.0.1:9528/res/assets/icons/icAdd.png)
