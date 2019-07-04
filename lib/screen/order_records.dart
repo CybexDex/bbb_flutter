@@ -1,8 +1,38 @@
+import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
+import 'package:bbb_flutter/widgets/order_record_item.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 
-class OrderRecordsWidget extends StatelessWidget {
+class OrderRecordsWidget extends StatefulWidget {
   const OrderRecordsWidget({Key key}) : super(key: key);
+
+  @override
+  _OrderRecordsWidgetState createState() => _OrderRecordsWidgetState();
+}
+
+class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
+  List<OrderResponseModel> data = [];
+  List<OrderResponseModel> upData = [];
+  List<OrderResponseModel> downData = [];
+
+  @override
+  void initState() {
+    final name = locator.get<UserManager>().user.name;
+    locator
+        .get<BBBAPIProvider>()
+        .getOrders(name, status: [OrderStatus.closed]).then((d) {
+      setState(() {
+        data = d;
+        upData = d.where((o) => o.contractId.contains("N")).toList();
+        downData = d.where((o) => !o.contractId.contains("N")).toList();
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +83,14 @@ class OrderRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return OrderRecordItem(
+                      model: data[index],
                     );
                   },
                 ),
@@ -70,16 +98,14 @@ class OrderRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: upData.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return OrderRecordItem(
+                      model: upData[index],
                     );
                   },
                 ),
@@ -87,16 +113,14 @@ class OrderRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: downData.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return OrderRecordItem(
+                      model: downData[index],
                     );
                   },
                 ),

@@ -146,4 +146,22 @@ class StyleFactory {
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.titleFontSize);
+
+  static var buyUpCellLabel = TextStyle(
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
+
+  static var buyDownCellLabel = TextStyle(
+      color: Palette.shamrockGreen,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
+
+  static var cellDescLabel = TextStyle(
+      color: Palette.descColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }

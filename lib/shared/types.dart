@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 
 enum BuildMode { release, debug, profile }
@@ -29,20 +30,20 @@ enum FundType {
   userDepositCybex,
   userWithdrawCybex
 }
-const Map<FundType, String> fundTypeMap = {
-  FundType.userDepositExtern:
-      "USER_DEPOSIT_EXTERN", //user deposits USDT from outside
+const Map<String, FundType> fundTypeMap = {
+  "USER_DEPOSIT_EXTERN":
+      FundType.userDepositExtern, //user deposits USDT from outside
 
-  FundType.userWithdrawExtern:
-      "USER_WITHDRAWAL_EXTERN", //user withdraws USDT to outside
+  "USER_WITHDRAWAL_EXTERN":
+      FundType.userWithdrawExtern, //user withdraws USDT to outside
 
-  FundType.adminAdjust: "ADMIN_ADJUST", // admin fixes balance issue
+  "ADMIN_ADJUST": FundType.adminAdjust, // admin fixes balance issue
 
-  FundType.userDepositCybex:
-      "USER_DEPOSIT_CYBEX", // user deposits USDT from its cybex wallet
+  "USER_DEPOSIT_CYBEX":
+      FundType.userDepositCybex, // user deposits USDT from its cybex wallet
 
-  FundType.userWithdrawCybex:
-      "USER_WITHDRAWAL_CYBEX", //user withdraws USDT to its cybex wallet
+  "USER_WITHDRAWAL_CYBEX":
+      FundType.userWithdrawCybex, //user withdraws USDT to its cybex wallet
 };
 
 enum FundStatus { inProgress, rejected, completed, error }
@@ -52,6 +53,16 @@ const Map<FundStatus, String> fundStatusMap = {
   FundStatus.completed: "COMPLETED",
   FundStatus.error: "ERROR",
 };
+
+ String fundStatusCN(String status) {
+  var map = {"IN_PROGRESS": I18n.of(globalKey.currentContext).fundStatusInProgress,
+  "REJECTED": I18n.of(globalKey.currentContext).fundStatusRejected,
+  "COMPLETED": I18n.of(globalKey.currentContext).fundStatusCompleted,
+  "ERROR": I18n.of(globalKey.currentContext).fundStatusError,
+  };
+
+  return map[status];
+ }
 
 /**
  * Route Types

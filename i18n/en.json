@@ -67,5 +67,9 @@
 	"account_log_in_error": "账号密码不正确",
 	"account_log_out": "退出登录",
 	"updated_date": "更新时间",
-	"address": "地址"
+	"address": "地址",
+	"fundStatus_inProgress": "正在上链",
+	"fundStatus_completed": "成功",
+	"fundStatus_rejected": "失败",
+	"fundStatus_error": "失败"
 }

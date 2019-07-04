@@ -14,13 +14,14 @@ import 'package:logger/logger.dart';
 
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
-
+final globalKey = GlobalKey();
 class SimpleLogPrinter extends LogPrinter {
   final String className;
   SimpleLogPrinter(this.className);
 
   @override
   void log(Level level, message, error, StackTrace stackTrace) {
+   
     var color = PrettyPrinter.levelColors[level];
     var emoji = PrettyPrinter.levelEmojis[level];
     println(color('$emoji $className - $message'));

@@ -175,6 +175,14 @@ class _$Keys {
   static final String updatedDate = 'updated_date';
 
   static final String address = 'address';
+
+  static final String fundStatusInProgress = 'fundStatus_inProgress';
+
+  static final String fundStatusCompleted = 'fundStatus_completed';
+
+  static final String fundStatusRejected = 'fundStatus_rejected';
+
+  static final String fundStatusError = 'fundStatus_error';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -275,4 +283,8 @@ abstract class _$I18nHelper {
   String get accountLogOut => _translate(_$Keys.accountLogOut);
   String get updatedDate => _translate(_$Keys.updatedDate);
   String get address => _translate(_$Keys.address);
+  String get fundStatusInProgress => _translate(_$Keys.fundStatusInProgress);
+  String get fundStatusCompleted => _translate(_$Keys.fundStatusCompleted);
+  String get fundStatusRejected => _translate(_$Keys.fundStatusRejected);
+  String get fundStatusError => _translate(_$Keys.fundStatusError);
 }

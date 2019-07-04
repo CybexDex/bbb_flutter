@@ -1,8 +1,46 @@
+import 'package:bbb_flutter/models/response/fund_record_model.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/widgets/fund_record_item.dart';
 
-class FundRecordsWidget extends StatelessWidget {
+class FundRecordsWidget extends StatefulWidget {
   const FundRecordsWidget({Key key}) : super(key: key);
+
+  @override
+  _FundRecordsWidgetState createState() => _FundRecordsWidgetState();
+}
+
+class _FundRecordsWidgetState extends State<FundRecordsWidget> {
+  List<FundRecordModel> data = [];
+  List<FundRecordModel> depositData = [];
+  List<FundRecordModel> withdrawalData = [];
+
+  @override
+  void initState() {
+    final name = locator.get<UserManager>().user.name;
+    locator
+        .get<BBBAPIProvider>()
+        .getFundRecords(
+            name: name,
+            start: DateTime.now().toUtc().subtract(Duration(days: 30)),
+            end: DateTime.now().toUtc())
+        .then((d) {
+      setState(() {
+        data = d;
+        depositData = d
+            .where((f) => fundTypeMap[f.type] == FundType.userDepositCybex)
+            .toList();
+        withdrawalData = d
+            .where((f) => fundTypeMap[f.type] == FundType.userWithdrawCybex)
+            .toList();
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +90,14 @@ class FundRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return FundRecordItem(
+                      model: data[index],
                     );
                   },
                 ),
@@ -69,16 +105,14 @@ class FundRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: depositData.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return FundRecordItem(
+                      model: depositData[index],
                     );
                   },
                 ),
@@ -86,16 +120,14 @@ class FundRecordsWidget extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
-                  separatorBuilder: (context, index) => index != 0
-                      ? Divider(
-                          color: Palette.separatorColor,
-                        )
-                      : Container(),
-                  itemCount: 100,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: Palette.separatorColor,
+                  ),
+                  itemCount: withdrawalData.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 76,
-                      child: Text("$index"),
+                    return FundRecordItem(
+                      model: withdrawalData[index],
                     );
                   },
                 ),
