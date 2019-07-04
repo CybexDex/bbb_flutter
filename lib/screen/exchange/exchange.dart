@@ -30,6 +30,8 @@ class ExchangePage extends StatelessWidget {
             drawer: UserDrawer(),
             appBar: exchangeAppBar(),
             body: SafeArea(
+              left: false,
+              right: false,
                 child: Container(
                     child: Column(
               mainAxisAlignment: MainAxisAlignment.end,

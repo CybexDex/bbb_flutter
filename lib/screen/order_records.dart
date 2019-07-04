@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
@@ -89,8 +90,14 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   ),
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return OrderRecordItem(
-                      model: data[index],
+                   return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RoutePaths.OrderRecordDetail);
+                      },
+                      child: OrderRecordItem(
+                        model: data[index],
+                      ),
                     );
                   },
                 ),
@@ -104,8 +111,14 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   ),
                   itemCount: upData.length,
                   itemBuilder: (context, index) {
-                    return OrderRecordItem(
-                      model: upData[index],
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RoutePaths.OrderRecordDetail);
+                      },
+                      child: OrderRecordItem(
+                        model: upData[index],
+                      ),
                     );
                   },
                 ),
@@ -119,8 +132,14 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   ),
                   itemCount: downData.length,
                   itemBuilder: (context, index) {
-                    return OrderRecordItem(
-                      model: downData[index],
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RoutePaths.OrderRecordDetail);
+                      },
+                      child: OrderRecordItem(
+                        model: downData[index],
+                      ),
                     );
                   },
                 ),

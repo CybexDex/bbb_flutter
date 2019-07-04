@@ -83,6 +83,9 @@ class MarketManager {
           (_priceController.value.last.time.minute - t.time.minute).abs();
       if (phase == 1) {
         _priceController.value.add(t);
+        if (_priceController.value.length >= 500) {
+          _priceController.value.removeRange(0, 200);
+        }
         _priceController.add(_priceController.value.toList());
       }
     }, onError: (error) {

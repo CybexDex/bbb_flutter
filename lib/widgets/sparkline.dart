@@ -491,6 +491,8 @@ class _TimeSharePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     /// draw fillPath and line
+    /// 
+    canvas.clipRect(Rect.fromLTWH(0, -size.height / 4, size.width, 3 * size.height / 2 ));
     Offset startPoint, endPoint;
     final Path path = Path();
 
