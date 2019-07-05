@@ -1,4 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
@@ -119,11 +121,11 @@ class PnlForm extends StatelessWidget {
                                         context);
                                   }).then((value) async {
                                 if (value) {
-                                  await model.amend(_order, false);
+                                  callAmend(context, model);
                                 }
                               });
                             } else {
-                              await model.amend(_order, false);
+                              callAmend(context, model);
                             }
                           }),
                     )
@@ -135,5 +137,21 @@ class PnlForm extends StatelessWidget {
         );
       },
     );
+  }
+
+  callAmend(BuildContext context, PnlViewModel model) async {
+    try {
+      showLoading(context);
+      await model.amend(_order, false);
+      Navigator.of(context).pop();
+      showToast(context, false, I18n.of(context).successToast);
+      Future.delayed(Duration(seconds: 2), () {
+        Provider.of<OrderViewModel>(context).getOrders();
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      });
+    } catch (error) {
+      Navigator.of(context).pop();
+      showToast(context, true, I18n.of(context).failToast);
+    }
   }
 }

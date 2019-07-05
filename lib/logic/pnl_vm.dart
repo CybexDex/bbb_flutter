@@ -6,6 +6,7 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:cybex_flutter_plugin/common.dart';
@@ -36,7 +37,8 @@ class PnlViewModel extends BaseModel {
     return _refm.getContractFromId(order.contractId);
   }
 
-  Future amend(OrderResponseModel order, bool execNow) async {
+  Future<PostOrderResponseModel> amend(
+      OrderResponseModel order, bool execNow) async {
     final ticker = _mtm.lastTicker.value;
     int epochTime = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     final contract = currentContract(order);
@@ -65,8 +67,11 @@ class PnlViewModel extends BaseModel {
     model.signature = sig.replaceAll("\"", "");
 
     print(model.toRawJson());
-    final result = await _api.amendOrder(order: model);
-    print(result.toRawJson());
+    try {
+      return _api.amendOrder(order: model);
+    } catch (error) {
+      return Future.error(error);
+    }
   }
 
   void increaseTakeProfit() {
@@ -98,12 +103,12 @@ class PnlViewModel extends BaseModel {
   }
 
   Future<bool> checkPassword({String name, String password}) async {
-    var account = await _um.unlockWith(name: name, password: password);
-    if (account != null) {
+    try {
+      await _um.unlockWith(name: name, password: password);
       shouldShowErrorMessage = false;
       setBusy(false);
       return true;
-    } else {
+    } catch (error) {
       shouldShowErrorMessage = true;
       setBusy(false);
       return false;

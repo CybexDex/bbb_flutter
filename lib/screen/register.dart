@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/models/response/register_response_model.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/material.dart';
@@ -84,25 +86,26 @@ class _RegisterState extends State<RegisterPage> {
     requestModel.account.name = _accountNameController.text;
     requestModel.cap.id = _capid;
     requestModel.cap.captcha = _pinCodeController.text;
-    // RegisterRequestResponse registerRequestResponse =
-    //     await Env.faucetAPI.register(registerRequestModel: requestModel);
-    // if (registerRequestResponse.error != null) {
-    //   setState(() {
-    //     _errorMessageVisibility = true;
-    //     _errorMessage = registerRequestResponse.error;
-    //   });
-    // } else if (registerRequestResponse.error != null &&
-    //     registerRequestResponse != null) {
-    //   InjectorWidget.of(context)
-    //       .userBloc
-    //       .loginWith(name: _accountNameController.text);
-    //   router.pop(context);
-    // } else {
-    //   setState(() {
-    //     _errorMessage = "Network status error";
-    //     _errorMessageVisibility = true;
-    //   });
-    // }
+    RegisterRequestResponse registerRequestResponse = await locator
+        .get<FaucetAPIProvider>()
+        .register(registerRequestModel: requestModel);
+    if (registerRequestResponse.error != null) {
+      setState(() {
+        _errorMessageVisibility = true;
+        _errorMessage = registerRequestResponse.error;
+      });
+    } else if (registerRequestResponse.error == null &&
+        registerRequestResponse != null) {
+      await locator.get<UserManager>().loginWith(
+          name: _accountNameController.text,
+          password: _passwordController.text);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _errorMessage = "Network status error";
+        _errorMessageVisibility = true;
+      });
+    }
   }
 
   @override
@@ -215,22 +218,23 @@ class _RegisterState extends State<RegisterPage> {
           (_isPasswordPassChecker || _passwordController.text.isEmpty)) {
         setState(() {
           _errorMessageVisibility = true;
-          _errorMessage = "账号不一样";
+          _errorMessage = "密码不一样";
         });
         _isPasswordConfirmChecker = false;
-      } else {
-        if (_passwordController.text.isNotEmpty) {
-          setState(() {
-            _isPasswordConfirmChecker = true;
-            _errorMessageVisibility = false;
-          });
-        }
       }
-      _setButtonState(_isAccountNamePassChecker &&
-          _isPasswordPassChecker &&
-          _isPasswordConfirmChecker &&
-          _pinCodeController.text.isNotEmpty);
+    } else {
+      if (_passwordController.text.isNotEmpty) {
+        setState(() {
+          _isPasswordConfirmChecker = true;
+          _errorMessageVisibility = false;
+        });
+      }
     }
+
+    _setButtonState(_isAccountNamePassChecker &&
+        _isPasswordPassChecker &&
+        _isPasswordConfirmChecker &&
+        _pinCodeController.text.isNotEmpty);
   }
 
   createFocusNode() {
@@ -240,22 +244,20 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   _processAccountCheck(String accountName) async {
-    // AccountResponseModel response =
-    //     await Env.apiClient.getAccount(name: accountName);
-    // if (response != null && accountName == response.name) {
-    //   setState(() {
-    //     _errorMessageVisibility = true;
-    //     _isAccountNamePassChecker = false;
-    //     _errorMessage =
-    //         I18n.of(context).registerErrorMessageAccountHasAlreadyExist;
-    //   });
-    // } else {
-    //   setState(() {
-    //     _errorMessageVisibility = false;
-    //     _isAccountNamePassChecker = true;
-    //     _errorMessage = "";
-    //   });
-    // }
+    if (await locator.get<UserManager>().checkAccount(name: accountName)) {
+      setState(() {
+        _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
+        _errorMessage =
+            I18n.of(context).registerErrorMessageAccountHasAlreadyExist;
+      });
+    } else {
+      setState(() {
+        _errorMessageVisibility = false;
+        _isAccountNamePassChecker = true;
+        _errorMessage = "";
+      });
+    }
   }
 
   _setButtonState(bool isEnabled) {
@@ -277,80 +279,61 @@ class _RegisterState extends State<RegisterPage> {
           brightness: Brightness.light,
           elevation: 0,
         ),
-        body: SafeArea(
-            child: Container(
-          margin: Dimen.pageMargin,
-          child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        decoration: DecorationFactory.cornerShadowDecoration,
-                        height: 333,
-                        margin: EdgeInsets.only(top: 20),
-                        child: Column(
-                          children: <Widget>[
-                            Padding(padding: EdgeInsets.only(top: 29)),
-                            Expanded(
-                                child: ListView(
-                                    padding:
-                                        EdgeInsets.only(left: 20, right: 20),
-                                    children: <Widget>[
-                                  Column(children: <Widget>[
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text("注册",
-                                            style: StyleFactory.title)),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Visibility(
-                                        visible: !_errorMessageVisibility,
-                                        child: Text(
-                                          "欢迎注册您的账户!",
-                                          style: StyleFactory.cellTitleStyle,
-                                        ),
-                                        replacement: Text(_errorMessage,
-                                            style:
-                                                StyleFactory.errorMessageText),
+        body: SingleChildScrollView(
+          child: SafeArea(
+              child: Container(
+            margin: Dimen.pageMargin,
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          width: double.infinity,
+                          decoration: DecorationFactory.cornerShadowDecoration,
+                          height: 333,
+                          margin: EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(padding: EdgeInsets.only(top: 29)),
+                              Expanded(
+                                  child: ListView(
+                                      padding:
+                                          EdgeInsets.only(left: 20, right: 20),
+                                      children: <Widget>[
+                                    Column(children: <Widget>[
+                                      Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("注册",
+                                              style: StyleFactory.title)),
+                                      SizedBox(
+                                        height: 10,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 22,
-                                    ),
-                                    TextFormField(
-                                      controller: _accountNameController,
-                                      decoration: InputDecoration(
-                                          hintText:
-                                              I18n.of(context).accountNameHint,
-                                          hintStyle: StyleFactory.hintStyle,
-                                          icon: Image.asset(
-                                              "res/assets/icons/icUser.png"),
-                                          border: InputBorder.none),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                                  color: Palette.separatorColor,
-                                                  width: 0.5))),
-                                    )
-                                  ]),
-                                  Column(
-                                    children: <Widget>[
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Visibility(
+                                          visible: !_errorMessageVisibility,
+                                          child: Text(
+                                            "欢迎注册您的账户!",
+                                            style: StyleFactory.cellTitleStyle,
+                                          ),
+                                          replacement: Text(_errorMessage,
+                                              style: StyleFactory
+                                                  .errorMessageText),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 22,
+                                      ),
                                       TextFormField(
-                                        controller: _passwordController,
+                                        controller: _accountNameController,
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
-                                                .passwordConfirm,
+                                                .accountNameHint,
                                             hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
-                                                "res/assets/icons/icPassword.png"),
+                                                "res/assets/icons/icUser.png"),
                                             border: InputBorder.none),
                                       ),
                                       Container(
@@ -361,119 +344,145 @@ class _RegisterState extends State<RegisterPage> {
                                                         Palette.separatorColor,
                                                     width: 0.5))),
                                       )
-                                    ],
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      TextFormField(
-                                        controller: _passwordConfirmController,
-                                        decoration: InputDecoration(
-                                            hintText: "请再次确认密码",
-                                            hintStyle: StyleFactory.hintStyle,
-                                            icon: Image.asset(
-                                                "res/assets/icons/icPassword.png"),
-                                            border: InputBorder.none),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color:
-                                                        Palette.separatorColor,
-                                                    width: 0.5))),
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Flexible(
-                                            child: TextFormField(
-                                              controller: _pinCodeController,
-                                              decoration: InputDecoration(
-                                                  hintText: "请输入验证码",
-                                                  hintStyle:
-                                                      StyleFactory.hintStyle,
-                                                  icon: Image.asset(
-                                                      "res/assets/icons/icCode.png"),
-                                                  border: InputBorder.none),
+                                    ]),
+                                    Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          controller: _passwordController,
+                                          decoration: InputDecoration(
+                                              hintText: I18n.of(context)
+                                                  .passwordConfirm,
+                                              hintStyle: StyleFactory.hintStyle,
+                                              icon: Image.asset(
+                                                  "res/assets/icons/icPassword.png"),
+                                              border: InputBorder.none),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Palette
+                                                          .separatorColor,
+                                                      width: 0.5))),
+                                        )
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          controller:
+                                              _passwordConfirmController,
+                                          decoration: InputDecoration(
+                                              hintText: "请再次确认密码",
+                                              hintStyle: StyleFactory.hintStyle,
+                                              icon: Image.asset(
+                                                  "res/assets/icons/icPassword.png"),
+                                              border: InputBorder.none),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Palette
+                                                          .separatorColor,
+                                                      width: 0.5))),
+                                        )
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Flexible(
+                                              child: TextFormField(
+                                                controller: _pinCodeController,
+                                                decoration: InputDecoration(
+                                                    hintText: "请输入验证码",
+                                                    hintStyle:
+                                                        StyleFactory.hintStyle,
+                                                    icon: Image.asset(
+                                                        "res/assets/icons/icCode.png"),
+                                                    border: InputBorder.none),
+                                              ),
                                             ),
-                                          ),
-                                          GestureDetector(
-                                            child: _widget,
-                                            onTap: () {
-                                              displaySvg();
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color:
-                                                        Palette.separatorColor,
-                                                    width: 0.5))),
-                                      )
-                                    ],
-                                  ),
-                                ]))
-                          ],
+                                            GestureDetector(
+                                              child: _widget,
+                                              onTap: () {
+                                                displaySvg();
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: Palette
+                                                          .separatorColor,
+                                                      width: 0.5))),
+                                        )
+                                      ],
+                                    ),
+                                  ]))
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                          alignment: Alignment.bottomCenter,
-                          margin: EdgeInsets.only(top: 325),
-                          child: ButtonTheme(
-                            minWidth: 200,
-                            child: WidgetFactory.button(
-                                onPressed: () {
-                                  _processRegister();
-                                },
-                                color: _isButtonEnabled
-                                    ? Palette.redOrange
-                                    : Palette.subTitleColor,
-                                data: "注册"),
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Image.asset("res/assets/icons/icWarn.png"),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "为了您的资金安全请妥善保存您的密码，该密码无法找回!",
-                        style: StyleFactory.subTitleStyle,
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 48,
-                  ),
-                  GestureDetector(
-                    child: RichText(
-                        text: new TextSpan(children: [
-                      new TextSpan(style: StyleFactory.hintStyle, text: "已注册？"),
-                      new TextSpan(style: StyleFactory.hyperText, text: "去登录")
-                    ])),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              )),
-        )));
+                        Container(
+                            alignment: Alignment.bottomCenter,
+                            margin: EdgeInsets.only(top: 325),
+                            child: ButtonTheme(
+                              minWidth: 200,
+                              child: WidgetFactory.button(
+                                  onPressed: () {
+                                    _processRegister();
+                                  },
+                                  color: _isButtonEnabled
+                                      ? Palette.redOrange
+                                      : Palette.subTitleColor,
+                                  data: "注册"),
+                            ))
+                      ],
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Image.asset("res/assets/icons/icWarn.png"),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "为了您的资金安全请妥善保存您的密码，该密码无法找回!",
+                          style: StyleFactory.subTitleStyle,
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 48,
+                    ),
+                    GestureDetector(
+                      child: RichText(
+                          text: new TextSpan(children: [
+                        new TextSpan(
+                            style: StyleFactory.hintStyle, text: "已注册？"),
+                        new TextSpan(style: StyleFactory.hyperText, text: "去登录")
+                      ])),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                )),
+          )),
+        ));
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    if (timer != null) {
+      timer.cancel();
+    }
     disposeController();
     super.dispose();
   }

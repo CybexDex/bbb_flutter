@@ -9,7 +9,7 @@ class FaucetAPIProvider extends FaucetAPI {
   Dio dio = Dio();
 
   FaucetAPIProvider() {
-    dio.options.baseUrl = "https://faucet.cybex.io";
+    dio.options.baseUrl = "http://uatfaucet.51nebula.com";
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
   }

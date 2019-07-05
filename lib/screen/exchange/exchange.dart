@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
@@ -55,17 +56,23 @@ class ExchangePage extends StatelessWidget {
                                 data: I18n.of(context).buyUp,
                                 color: Palette.redOrange,
                                 onPressed: () {
-                                  Navigator.pushNamed(context, RoutePaths.Trade,
-                                          arguments: RouteParamsOfTrade(
-                                              contract: locator
-                                                  .get<RefManager>()
-                                                  .currentUpContract,
-                                              isUp: true,
-                                              title: "ttes"))
-                                      .then((v) {
-                                    Provider.of<OrderViewModel>(context)
-                                        .getOrders();
-                                  });
+                                  if (locator.get<UserManager>().user.logined) {
+                                    Navigator.pushNamed(
+                                            context, RoutePaths.Trade,
+                                            arguments: RouteParamsOfTrade(
+                                                contract: locator
+                                                    .get<RefManager>()
+                                                    .currentUpContract,
+                                                isUp: true,
+                                                title: "ttes"))
+                                        .then((v) {
+                                      Provider.of<OrderViewModel>(context)
+                                          .getOrders();
+                                    });
+                                  } else {
+                                    Navigator.of(context)
+                                        .pushNamed(RoutePaths.Login);
+                                  }
                                 }),
                           )),
                       Container(
@@ -78,17 +85,23 @@ class ExchangePage extends StatelessWidget {
                                 data: I18n.of(context).buyDown,
                                 color: Palette.shamrockGreen,
                                 onPressed: () {
-                                  Navigator.pushNamed(context, RoutePaths.Trade,
-                                          arguments: RouteParamsOfTrade(
-                                              contract: locator
-                                                  .get<RefManager>()
-                                                  .currentDownContract,
-                                              isUp: false,
-                                              title: "ttes"))
-                                      .then((v) {
-                                    Provider.of<OrderViewModel>(context)
-                                        .getOrders();
-                                  });
+                                  if (locator.get<UserManager>().user.logined) {
+                                    Navigator.pushNamed(
+                                            context, RoutePaths.Trade,
+                                            arguments: RouteParamsOfTrade(
+                                                contract: locator
+                                                    .get<RefManager>()
+                                                    .currentDownContract,
+                                                isUp: false,
+                                                title: "ttes"))
+                                        .then((v) {
+                                      Provider.of<OrderViewModel>(context)
+                                          .getOrders();
+                                    });
+                                  } else {
+                                    Navigator.of(context)
+                                        .pushNamed(RoutePaths.Login);
+                                  }
                                 }),
                           )),
                     ],

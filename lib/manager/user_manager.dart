@@ -27,48 +27,64 @@ class UserManager extends BaseModel {
   ///AssetName.CYB
 
   Position fetchPositionFrom(String name) {
+    if (user.balances == null || user.balances.positions.length == 0) {
+      return null;
+    }
     return user.balances.positions.where((position) {
       return position.assetName == name;
     }).first;
   }
 
   Future<bool> loginWith({String name, String password}) async {
-    var account = await unlockWith(name: name, password: password);
+    AccountResponseModel account = await _api.getAccount(name: name);
     if (account != null) {
-      user.name = name;
-      user.account = account;
-      user.loginType = LoginType.cloud;
-      user.unlockType = UnlockType.cloud;
+      try {
+        await unlockWith(name: name, password: password, account: account);
+        user.name = name;
+        user.account = account;
+        user.loginType = LoginType.cloud;
+        user.unlockType = UnlockType.cloud;
 
-      _pref.saveUserName(name: name);
-      _pref.saveAccount(account: account);
-      notifyListeners();
+        _pref.saveUserName(name: name);
+        _pref.saveAccount(account: account);
+        notifyListeners();
 
-      return true;
+        return true;
+      } catch (error) {
+        return false;
+      }
     }
+
     return false;
   }
 
-  Future<AccountResponseModel> unlockWith(
-      {String name, String password}) async {
-    AccountResponseModel account = await _api.getAccount(name: name);
-    if (account != null) {
+  unlockWith(
+      {String name, String password, AccountResponseModel account}) async {
+    try {
       AccountKeysEntity keys =
           await generateAccountKeys(name: name, password: password);
       if (keys != null) {
-        var permission = generatePermission(account: account, keys: [keys]);
+        var permission =
+            generatePermission(account: account ?? user.account, keys: [keys]);
         if (permission.unlock) {
           CybexFlutterPlugin.resetDefaultPubKey(permission.defaultKey);
           keys.removePrivateKey();
           user.keys = keys;
           _pref.saveAccountKeys(keys: keys);
-
-          return account;
+        } else {
+          throw "error";
         }
+      } else {
+        throw "error";
       }
+    } catch (error) {
+      throw error.toString();
     }
+  }
 
-    return null;
+  Future<bool> checkAccount({String name}) async {
+    AccountResponseModel account = await _api.getAccount(name: name);
+    return account != null;
   }
 
   refreshAccount({String name}) async {
@@ -104,7 +120,6 @@ class UserManager extends BaseModel {
     if (keys != null) {
       return AccountKeysEntity.fromRawJson(keys);
     }
-
     return Future.error("generate keys failed");
   }
 
@@ -145,6 +160,7 @@ class UserManager extends BaseModel {
     user.name = null;
     user.keys = null;
     user.permission = null;
+    user.balances = null;
     notifyListeners();
   }
 }

@@ -79,6 +79,7 @@ flutter:
     - res/assets/icons/icFallGreen.png
     - res/assets/icons/icTime.png
     - res/assets/icons/icNotifyBack.png
+    - res/assets/icons/icSwitch.png
     - res/assets/icons/icAccount.png
     - res/assets/icons/icRiseRed18.png
     - res/assets/icons/icCode.png

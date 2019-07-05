@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -61,21 +62,18 @@ class OrderInfo extends StatelessWidget {
                                 builder: (context) {
                                   return DialogFactory.sellOrderDialog(
                                     context,
-                                    title: "平仓",
-                                    contentText: "当前平仓预计收益",
+                                    title: I18n.of(context).closeOut,
+                                    contentText: I18n.of(context).futureProfit,
                                     value:
                                         "${(_model.pnl * _model.qtyContract).toStringAsFixed(2)} USDT",
                                   );
                                 }).then((value) async {
                               if (value) {
-                                await callAmend();
-                                Provider.of<OrderViewModel>(context)
-                                    .getOrders();
+                                callAmend(context);
                               }
                             });
                           } else {
-                            await callAmend();
-                            Provider.of<OrderViewModel>(context).getOrders();
+                            callAmend(context);
                           }
                         }),
                   )),
@@ -267,7 +265,7 @@ class OrderInfo extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder: _buildMaterialDialogTransitions,
     ).then((v) {
-      Provider.of<OrderViewModel>(context).getOrders();
+//      Provider.of<OrderViewModel>(context).getOrders();
     });
   }
 
@@ -285,12 +283,25 @@ class OrderInfo extends StatelessWidget {
     );
   }
 
-  callAmend() {
+  callAmend(BuildContext context) async {
     PnlViewModel pnlViewModel = PnlViewModel(
         api: locator.get(),
         um: locator.get(),
         mtm: locator.get(),
         refm: locator.get());
-    pnlViewModel.amend(_model, true);
+    try {
+      showLoading(context);
+      await pnlViewModel.amend(_model, true);
+      Navigator.of(context).pop();
+      showToast(context, false,
+          I18n.of(context).closeOut + I18n.of(context).successToast);
+      Future.delayed(Duration(seconds: 2), () {
+        Provider.of<OrderViewModel>(context).getOrders();
+      });
+    } catch (error) {
+      Navigator.of(context).pop();
+      showToast(context, true,
+          I18n.of(context).closeOut + I18n.of(context).failToast);
+    }
   }
 }

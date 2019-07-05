@@ -39,10 +39,10 @@ class UserDrawer extends StatelessWidget {
                   SizedBox(height: 20),
                   Row(
                     children: <Widget>[
-                      SvgPicture.string(Jdenticon.toSvg(userMg.user.name),
+                      SvgPicture.string(Jdenticon.toSvg(userMg.user.name ?? ""),
                           fit: BoxFit.contain, height: 60, width: 60),
                       SizedBox(width: 20),
-                      Text(userMg.user.name, style: StyleFactory.title)
+                      Text(userMg.user.name ?? "--", style: StyleFactory.title)
                     ],
                   ),
                   Container(
@@ -66,95 +66,134 @@ class UserDrawer extends StatelessWidget {
                           Text(I18n.of(context).myAsset,
                               style: StyleFactory.cellTitleStyle),
                           SizedBox(height: 10),
-                          Text("${usdt.quantity.toStringAsFixed(4)} USDT",
+                          Text(
+                              usdt == null
+                                  ? "--"
+                                  : "${usdt.quantity.toStringAsFixed(4)} USDT",
                               style: StyleFactory.hugeTitleStyle)
                         ],
                       ))
                 ],
               ),
             ),
-            ListTile(
-              title: Text(
-                I18n.of(context).topUp,
-                style: StyleFactory.cellTitleStyle,
-              ),
-              trailing: GestureDetector(
-                child: Image.asset(R.resAssetsIconsIcTabArrow),
-                onTap: () {},
-              ),
-              onTap: () {
-                Navigator.of(context).pushNamed(RoutePaths.Deposit);
-              },
-            ),
-            Container(
-              height: 0.5,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              color: Palette.separatorColor,
-            ),
-            ListTile(
-              title: Text(
-                I18n.of(context).withdraw,
-                style: StyleFactory.cellTitleStyle,
-              ),
-              trailing: GestureDetector(
-                child: Image.asset(R.resAssetsIconsIcTabArrow),
-                onTap: () {},
-              ),
-              onTap: () {
-                // Update the state of the app
-                // ...
-              },
-            ),
-            Container(
-              height: 0.5,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              color: Palette.separatorColor,
-            ),
-            ListTile(
-              title: Text(
-                I18n.of(context).cashRecords,
-                style: StyleFactory.cellTitleStyle,
-              ),
-              trailing: GestureDetector(
-                child: Image.asset(R.resAssetsIconsIcTabArrow),
-                onTap: () {},
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, RoutePaths.FundRecords);
-              },
-            ),
-            Container(
-              height: 0.5,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              color: Palette.separatorColor,
-            ),
-            ListTile(
-              title: Text(
-                I18n.of(context).transactionRecords,
-                style: StyleFactory.cellTitleStyle,
-              ),
-              trailing: GestureDetector(
-                child: Image.asset(R.resAssetsIconsIcTabArrow),
-                onTap: () {},
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, RoutePaths.OrderRecords);
-              },
-            ),
-            Container(
-              height: 0.5,
-              margin: EdgeInsets.only(left: 20, right: 20),
-              color: Palette.separatorColor,
-            ),
+            userMg.user.name == null
+                ? Container()
+                : Container(
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          title: Text(
+                            I18n.of(context).topUp,
+                            style: StyleFactory.cellTitleStyle,
+                          ),
+                          trailing: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcTabArrow),
+                            onTap: () {},
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                          },
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
+                        ListTile(
+                          title: Text(
+                            I18n.of(context).withdraw,
+                            style: StyleFactory.cellTitleStyle,
+                          ),
+                          trailing: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcTabArrow),
+                            onTap: () {},
+                          ),
+                          onTap: () {
+                            // Update the state of the app
+                            // ...
+                            Navigator.pushNamed(context, RoutePaths.Withdraw);
+                          },
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
+                        ListTile(
+                          title: Text(
+                            I18n.of(context).cashRecords,
+                            style: StyleFactory.cellTitleStyle,
+                          ),
+                          trailing: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcTabArrow),
+                            onTap: () {},
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, RoutePaths.FundRecords);
+                          },
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
+                        ListTile(
+                          title: Text(
+                            I18n.of(context).transactionRecords,
+                            style: StyleFactory.cellTitleStyle,
+                          ),
+                          trailing: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcTabArrow),
+                            onTap: () {},
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, RoutePaths.OrderRecords);
+                          },
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
+                        ListTile(
+                          title: Text(
+                            I18n.of(context).transfer,
+                            style: StyleFactory.cellTitleStyle,
+                          ),
+                          trailing: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcTabArrow),
+                            onTap: () {},
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, RoutePaths.Transfer);
+                          },
+                        ),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
+                      ],
+                    ),
+                  ),
             Container(
               margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-              child: WidgetFactory.button(
-                  data: I18n.of(context).logout,
-                  color: Palette.redOrange,
-                  onPressed: () {
-                    userMg.logout();
-                    Navigator.pop(context);
-                  }),
+              child: userMg.user.name == null
+                  ? WidgetFactory.button(
+                      data: I18n.of(context).logIn,
+                      color: Palette.shamrockGreen,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(RoutePaths.Login);
+                      })
+                  : WidgetFactory.button(
+                      data: I18n.of(context).logout,
+                      color: Palette.redOrange,
+                      onPressed: () {
+                        userMg.logout();
+                        Navigator.pop(context);
+                      }),
             )
           ],
         );

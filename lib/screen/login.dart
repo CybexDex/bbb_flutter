@@ -67,6 +67,7 @@ class _LoginState extends State<LoginPage> {
                                       height: 15,
                                     ),
                                     TextField(
+                                      autocorrect: false,
                                       controller: _accountNameController,
                                       decoration: InputDecoration(
                                           hintText:
@@ -87,6 +88,7 @@ class _LoginState extends State<LoginPage> {
                                   Column(
                                     children: <Widget>[
                                       TextField(
+                                        obscureText: true,
                                         controller: _passwordController,
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
@@ -123,7 +125,8 @@ class _LoginState extends State<LoginPage> {
                                   if (await userLocator.loginWith(
                                       name: _accountNameController.text,
                                       password: _passwordController.text)) {
-                                    Navigator.pop(context);
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
                                   } else {
                                     setState(() {
                                       _errorMessageVisible = true;

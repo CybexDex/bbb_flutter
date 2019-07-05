@@ -1,7 +1,7 @@
 import 'package:bbb_flutter/base/base_widget.dart';
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
-import 'package:bbb_flutter/logic/unlock_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/palette.dart';
@@ -104,7 +104,7 @@ class DialogFactory {
         });
   }
 
-  static CupertinoAlertDialog successDialog(BuildContext context,
+  static CupertinoAlertDialog successDialogDetail(BuildContext context,
       {String value}) {
     return CupertinoAlertDialog(
       title: Column(
@@ -122,13 +122,25 @@ class DialogFactory {
     );
   }
 
+  static CupertinoAlertDialog successDialog(BuildContext context,
+      {String content}) {
+    return CupertinoAlertDialog(
+      title: Column(
+        children: <Widget>[
+          Image.asset(R.resAssetsIconsIcSuccess),
+          Text(content, style: StyleFactory.dialogButtonFontStyle)
+        ],
+      ),
+    );
+  }
+
   static CupertinoAlertDialog failDialog(BuildContext context,
       {String content}) {
     return CupertinoAlertDialog(
       title: Column(
         children: <Widget>[
-          Image.asset("res/assets/icons/icFail.png"),
-          Text("平仓失败", style: StyleFactory.dialogButtonFontStyle)
+          Image.asset(R.resAssetsIconsIcFail),
+          Text(content, style: StyleFactory.dialogButtonFontStyle)
         ],
       ),
     );
@@ -153,7 +165,7 @@ class DialogFactory {
               children: <Widget>[
                 Text("预估价格"),
                 Text(
-                    "${(model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount} USDT"),
+                    "${((model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount).toStringAsFixed(4)} USDT"),
               ],
             ),
             Row(
@@ -210,6 +222,8 @@ class DialogFactory {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }
                 });
+              } else {
+                Navigator.of(context, rootNavigator: true).pop(true);
               }
             })
       ],

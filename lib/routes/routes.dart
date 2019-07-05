@@ -6,6 +6,8 @@ import 'package:bbb_flutter/screen/order_record_detail.dart';
 import 'package:bbb_flutter/screen/order_records.dart';
 import 'package:bbb_flutter/screen/register.dart';
 import 'package:bbb_flutter/screen/trade.dart';
+import 'package:bbb_flutter/screen/transfer_page.dart';
+import 'package:bbb_flutter/screen/withdraw_page.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +21,8 @@ class RoutePaths {
   static const String Deposit = 'deposit';
   static const String FundRecords = "FundRecords";
   static const String OrderRecords = "OrderRecords";
+  static const String Transfer = "Transfer";
+  static const String Withdraw = "Withdraw";
   static const String OrderRecordDetail = "OrderRecordDetail";
 }
 
@@ -43,6 +47,10 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => FundRecordsWidget());
       case RoutePaths.OrderRecordDetail:
         return CupertinoPageRoute(builder: (_) => OrderRecordDetail());
+      case RoutePaths.Transfer:
+        return CupertinoPageRoute(builder: (_) => TransferPage());
+      case RoutePaths.Withdraw:
+        return CupertinoPageRoute(builder: (_) => WithdrawPage());
 
       case RoutePaths.Trade:
         return CupertinoPageRoute(

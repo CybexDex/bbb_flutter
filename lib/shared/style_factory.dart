@@ -22,6 +22,18 @@ class StyleFactory {
       fontStyle: FontStyle.normal,
       fontSize: Dimen.titleFontSize);
 
+  static var larSubtitle = TextStyle(
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.largeLabelFontSize);
+
+  static var transferStyleTitle = TextStyle(
+      color: Palette.descColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
+
   static var hugeTitleStyle = TextStyle(
           decoration: TextDecoration.none,
       color: Palette.titleColor,
@@ -125,7 +137,7 @@ class StyleFactory {
       color: Palette.redOrange,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.middleLabelFontSize);
+      fontSize: Dimen.smallLabelFontSize);
 
   static var buySellValueText = TextStyle(
           decoration: TextDecoration.none,

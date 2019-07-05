@@ -1,6 +1,8 @@
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -58,11 +60,18 @@ class DepositPage extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 Text(value.user.deposit.address),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  alignment: Alignment.bottomRight,
-                                  child: Text("点击复制",
-                                      style: StyleFactory.hyperText),
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    alignment: Alignment.bottomRight,
+                                    child: Text("点击复制",
+                                        style: StyleFactory.hyperText),
+                                  ),
+                                  onTap: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: value.user.deposit.address));
+                                    showToast(context, false, "复制成功");
+                                  },
                                 )
                               ],
                             )),

@@ -33,6 +33,8 @@ class R {
   static final String resAssetsIconsIcTime = 'res/assets/icons/icTime.png';
   /// ![](http://127.0.0.1:9528/res/assets/icons/icNotifyBack.png)
   static final String resAssetsIconsIcNotifyBack = 'res/assets/icons/icNotifyBack.png';
+  /// ![](http://127.0.0.1:9528/res/assets/icons/icSwitch.png)
+  static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
   /// ![](http://127.0.0.1:9528/res/assets/icons/icAccount.png)
   static final String resAssetsIconsIcAccount = 'res/assets/icons/icAccount.png';
   /// ![](http://127.0.0.1:9528/res/assets/icons/icRiseRed18.png)

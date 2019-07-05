@@ -30,6 +30,10 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
+  static final String assetCat = 'asset_cat';
+
+  static final String transfer = 'transfer';
+
   static final String cashRecords = 'cash_records';
 
   static final String transactionRecords = 'transaction_records';
@@ -183,6 +187,10 @@ class _$Keys {
   static final String fundStatusRejected = 'fundStatus_rejected';
 
   static final String fundStatusError = 'fundStatus_error';
+
+  static final String successToast = 'success_toast';
+
+  static final String failToast = 'fail_toast';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -205,6 +213,8 @@ abstract class _$I18nHelper {
   String _translate(String key) => _translations[key];
 
   /// Simple getter methods
+  String get assetCat => _translate(_$Keys.assetCat);
+  String get transfer => _translate(_$Keys.transfer);
   String get cashRecords => _translate(_$Keys.cashRecords);
   String get transactionRecords => _translate(_$Keys.transactionRecords);
   String get logout => _translate(_$Keys.logout);
@@ -287,4 +297,6 @@ abstract class _$I18nHelper {
   String get fundStatusCompleted => _translate(_$Keys.fundStatusCompleted);
   String get fundStatusRejected => _translate(_$Keys.fundStatusRejected);
   String get fundStatusError => _translate(_$Keys.fundStatusError);
+  String get successToast => _translate(_$Keys.successToast);
+  String get failToast => _translate(_$Keys.failToast);
 }

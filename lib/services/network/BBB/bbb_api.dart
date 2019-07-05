@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -9,6 +10,7 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:cybex_flutter_plugin/commision.dart';
 
 abstract class BBBAPI {
   Future<RefContractResponseModel> getRefData();
@@ -26,4 +28,8 @@ abstract class BBBAPI {
   ///post
   Future<PostOrderResponseModel> postOrder({PostOrderRequestModel order});
   Future<PostOrderResponseModel> amendOrder({AmendOrderRequestModel order});
+  Future<PostOrderResponseModel> postWithdraw(
+      {PostWithdrawRequestModel withdraw});
+  Future<PostOrderResponseModel> postTransfer(
+      {PostWithdrawRequestModel transfer});
 }

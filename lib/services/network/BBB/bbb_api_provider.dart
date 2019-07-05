@@ -4,6 +4,7 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/interceptors.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -13,6 +14,7 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 
@@ -124,6 +126,23 @@ class BBBAPIProvider extends BBBAPI {
   Future<PostOrderResponseModel> postOrder(
       {PostOrderRequestModel order}) async {
     var response = await dio.post("/transaction", data: order.toJson());
+    var responseData = json.decode(response.data);
+    return Future.value(PostOrderResponseModel.fromJson(responseData));
+  }
+
+  @override
+  Future<PostOrderResponseModel> postWithdraw(
+      {PostWithdrawRequestModel withdraw}) async {
+    var response =
+        await dio.post("/transaction", data: withdraw.toWithdrawJson());
+    var responseData = json.decode(response.data);
+    return Future.value(PostOrderResponseModel.fromJson(responseData));
+  }
+
+  @override
+  Future<PostOrderResponseModel> postTransfer(
+      {PostWithdrawRequestModel transfer}) async {
+    var response = await dio.post("/transaction", data: transfer.toJson());
     var responseData = json.decode(response.data);
     return Future.value(PostOrderResponseModel.fromJson(responseData));
   }

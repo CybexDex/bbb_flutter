@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
@@ -56,29 +57,30 @@ class _TradePageState extends State<TradePage> {
                     ),
                   ),
                 ),
-                onTap: () {
-                  setDropdownMenuHeight();
-                },
+                onTap: () {},
               )
             ],
             centerTitle: true,
             title: Consumer<TradeViewModel>(builder: (context, model, child) {
               return Row(
                 children: <Widget>[
-                  Text(
-                      model.orderForm.isUp
-                          ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel}"
-                          : "${I18n.of(context).buyDown}-${model.contract.strikeLevel}",
-                      style: model.orderForm.isUp
-                          ? StyleFactory.buyUpTitle
-                          : StyleFactory.buyDownTitle),
+                  GestureDetector(
+                    onTap: () => setDropdownMenuHeight(),
+                    child: Text(
+                        model.orderForm.isUp
+                            ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel}"
+                            : "${I18n.of(context).buyDown}-${model.contract.strikeLevel}",
+                        style: model.orderForm.isUp
+                            ? StyleFactory.buyUpTitle
+                            : StyleFactory.buyDownTitle),
+                  ),
                   SizedBox(
                     width: 7,
                   ),
                   GestureDetector(
                     child: Image.asset(R.resAssetsIconsIcDropdown),
                     onTap: () {
-                      Navigator.pushNamed(context, RoutePaths.Login);
+                      setDropdownMenuHeight();
                     },
                   )
                 ],
@@ -181,11 +183,7 @@ class _TradePageState extends State<TradePage> {
                                                             model: model);
                                                   }).then((value) async {
                                                 if (value) {
-                                                  try {
-                                                    await model.postOrder();
-                                                  } catch (e) {
-                                                    locator.get<Logger>().e(e);
-                                                  }
+                                                  callPostOrder(context, model);
                                                 }
                                               });
                                             })
@@ -193,11 +191,19 @@ class _TradePageState extends State<TradePage> {
                                             data: I18n.of(context).buyDown,
                                             color: Palette.shamrockGreen,
                                             onPressed: () async {
-                                              try {
-                                                await model.postOrder();
-                                              } catch (e) {
-                                                locator.get<Logger>().e(e);
-                                              }
+                                              model.saveOrder();
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (context) {
+                                                    return DialogFactory
+                                                        .confirmDialog(context,
+                                                            model: model);
+                                                  }).then((value) async {
+                                                if (value) {
+                                                  callPostOrder(context, model);
+                                                }
+                                              });
                                             })),
                               ),
                             ],
@@ -215,5 +221,18 @@ class _TradePageState extends State<TradePage> {
             },
           )),
     );
+  }
+
+  callPostOrder(BuildContext context, TradeViewModel model) async {
+    showLoading(context);
+    try {
+      await model.postOrder();
+      Navigator.of(context).pop();
+      showToast(context, false, I18n.of(context).successToast);
+    } catch (e) {
+      Navigator.of(context).pop();
+      showToast(context, true, I18n.of(context).failToast);
+      locator.get<Logger>().e(e);
+    }
   }
 }
