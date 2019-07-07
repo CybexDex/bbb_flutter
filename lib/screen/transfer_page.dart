@@ -127,7 +127,13 @@ class _TransferState extends State<TransferPage> {
                             GestureDetector(
                               child: Text("全部划转",
                                   style: StyleFactory.errorMessageText),
-                              onTap: () {},
+                              onTap: () {
+                                setState(() {
+                                  _amountEditingController.text = model
+                                      .transferForm.balance.quantity
+                                      .toStringAsFixed(4);
+                                });
+                              },
                             )
                           ],
                         ),

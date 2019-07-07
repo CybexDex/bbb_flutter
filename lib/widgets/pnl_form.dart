@@ -9,8 +9,10 @@ import 'package:bbb_flutter/widgets/istep.dart';
 
 class PnlForm extends StatelessWidget {
   OrderResponseModel _order;
-  PnlForm({Key key, OrderResponseModel model})
+  Function _callback;
+  PnlForm({Key key, OrderResponseModel model, Function() callback})
       : _order = model,
+        _callback = callback,
         super(key: key);
 
   @override
@@ -139,15 +141,17 @@ class PnlForm extends StatelessWidget {
     );
   }
 
-  callAmend(BuildContext context, PnlViewModel model) async {
+  callAmend(
+    BuildContext context,
+    PnlViewModel model,
+  ) async {
     try {
       showLoading(context);
       await model.amend(_order, false);
       Navigator.of(context).pop();
       showToast(context, false, I18n.of(context).successToast);
       Future.delayed(Duration(seconds: 2), () {
-        Provider.of<OrderViewModel>(context).getOrders();
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        _callback();
       });
     } catch (error) {
       Navigator.of(context).pop();

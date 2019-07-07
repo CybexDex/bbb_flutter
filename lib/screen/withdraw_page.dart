@@ -117,7 +117,13 @@ class _WithdrawState extends State<WithdrawPage> {
                           GestureDetector(
                             child: Text("全部",
                                 style: StyleFactory.errorMessageText),
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                _amountController.text = model
+                                    .withdrawForm.balance.quantity
+                                    .toStringAsFixed(4);
+                              });
+                            },
                           )
                         ],
                       ),

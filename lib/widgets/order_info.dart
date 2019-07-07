@@ -249,14 +249,16 @@ class OrderInfo extends StatelessWidget {
   }
 
   openDialog(BuildContext context) {
+    Function callback = () {
+      Provider.of<OrderViewModel>(context).getOrders();
+      Navigator.of(context).pop();
+    };
     showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return Builder(builder: (BuildContext context) {
-          return PnlForm(
-            model: _model,
-          );
+          return PnlForm(model: _model, callback: callback);
         });
       },
       barrierDismissible: true,
@@ -265,7 +267,7 @@ class OrderInfo extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 150),
       transitionBuilder: _buildMaterialDialogTransitions,
     ).then((v) {
-//      Provider.of<OrderViewModel>(context).getOrders();
+//
     });
   }
 
