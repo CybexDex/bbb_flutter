@@ -62,7 +62,6 @@ flutter:
     - i18n/
     # assets begin
     # res/assets/icons/*
-    - res/assets/icons/.DS_Store
     - res/assets/icons/icMaskClose.png
     - res/assets/icons/icAdd.png
     - res/assets/icons/icReduce.png

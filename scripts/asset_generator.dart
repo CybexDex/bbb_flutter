@@ -29,8 +29,7 @@ void main() async {
             if (new File(file.path).statSync().type ==
                 FileSystemEntityType.file) {
               var path = file.path.replaceAll('\\', '/');
-              var varName =
-                  path.replaceAll('/', '_').replaceAll('.', '_').toLowerCase();
+              var varName = path.replaceAll('/', '_').replaceAll('.png', '');
               var pos = 0;
               String char;
               while (true) {
@@ -42,10 +41,12 @@ void main() async {
                 pos++;
               }
               varName = varName.replaceAll('_', '');
-              resource
-                  .add("/// ![](http://127.0.0.1:$preview_server_port/$path)");
-              resource.add("static final String $varName = '$path';");
-              newLines.add('    - $path');
+              if (!varName.contains(".")) {
+                resource.add(
+                    "/// ![](http://127.0.0.1:$preview_server_port/$path)");
+                resource.add("static final String $varName = '$path';");
+                newLines.add('    - $path');
+              }
             }
           }
         } else {
