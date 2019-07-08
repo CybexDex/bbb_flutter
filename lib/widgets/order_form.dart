@@ -31,7 +31,9 @@ class OrderFormWidget extends StatelessWidget {
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  "${usdt.quantity.toStringAsFixed(4)} USDT",
+                  usdt != null
+                      ? "${usdt.quantity.toStringAsFixed(4)} USDT"
+                      : "-- USDT",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],

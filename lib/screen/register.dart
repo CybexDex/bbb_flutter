@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
@@ -434,6 +435,7 @@ class _RegisterState extends State<RegisterPage> {
                               minWidth: 200,
                               child: WidgetFactory.button(
                                   onPressed: () {
+                                    showLoading(context);
                                     _processRegister();
                                   },
                                   color: _isButtonEnabled

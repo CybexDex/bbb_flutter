@@ -30,9 +30,10 @@ class UserManager extends BaseModel {
     if (user.balances == null || user.balances.positions.length == 0) {
       return null;
     }
-    return user.balances.positions.where((position) {
+    List<Position> positions = user.balances.positions.where((position) {
       return position.assetName == name;
-    }).first;
+    }).toList();
+    return positions.isEmpty ? null : positions.first;
   }
 
   Future<bool> loginWith({String name, String password}) async {
