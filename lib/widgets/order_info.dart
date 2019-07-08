@@ -204,7 +204,7 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      DateFormat("yyyy.MM.dd HH:mm").format(_model.expiration),
+                      DateFormat("yyyy.MM.dd HH:mm").format(_model.expiration.toLocal()),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],

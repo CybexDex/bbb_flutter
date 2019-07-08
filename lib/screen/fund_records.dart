@@ -29,12 +29,16 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
             end: DateTime.now().toUtc())
         .then((d) {
       setState(() {
-        data = d;
+        data = d
+            .where((f) =>
+                fundTypeMap[f.type] == FundType.userDepositExtern ||
+                fundTypeMap[f.type] == FundType.userWithdrawExtern)
+            .toList();
         depositData = d
-            .where((f) => fundTypeMap[f.type] == FundType.userDepositCybex)
+            .where((f) => fundTypeMap[f.type] == FundType.userDepositExtern)
             .toList();
         withdrawalData = d
-            .where((f) => fundTypeMap[f.type] == FundType.userWithdrawCybex)
+            .where((f) => fundTypeMap[f.type] == FundType.userWithdrawExtern)
             .toList();
       });
     });

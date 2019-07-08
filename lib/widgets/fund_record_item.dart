@@ -13,7 +13,7 @@ class FundRecordItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDeposit = fundTypeMap[_model.type] == FundType.userDepositCybex;
+    bool isDeposit = fundTypeMap[_model.type] == FundType.userDepositExtern;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -58,7 +58,7 @@ class FundRecordItem extends StatelessWidget {
               children: <Widget>[
                 Text(
                   DateFormat("${I18n.of(context).updatedDate}: MM.dd HH:mm:ss")
-                      .format(_model.lastUpdateTime),
+                      .format(_model.lastUpdateTime.toLocal()),
                   style: StyleFactory.cellDescLabel,
                 ),
                 Text(

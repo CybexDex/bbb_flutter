@@ -6,14 +6,15 @@ import 'package:flutter/material.dart';
 class OrderRecordDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Future<int>().catchError(onError)
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text(I18n.of(context).transactionRecords,
-              style: StyleFactory.title),
+          title:
+              Text(I18n.of(context).tradingDetail, style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
@@ -28,10 +29,10 @@ class OrderRecordDetail extends StatelessWidget {
 class OrderRecordDetailHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return  Container(
       height: 106,
-      padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
-      decoration: new BoxDecoration(
+      padding:  EdgeInsets.fromLTRB(20, 0, 20, 0),
+      decoration:  BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -40,14 +41,14 @@ class OrderRecordDetailHeader extends StatelessWidget {
                 blurRadius: 12.0)
           ],
           borderRadius: BorderRadius.circular(4.0)),
-      child: new Column(
+      child:  Column(
         children: <Widget>[
-          new Container(
+           Container(
             height: 53,
-            child: new Row(
+            child:  Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Text("买涨",
+                 Text(I18n.of(context).buyUp,
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w600,
@@ -56,17 +57,17 @@ class OrderRecordDetailHeader extends StatelessWidget {
               ],
             ),
           ),
-          new Container(
-            child: new Row(
+           Container(
+            child:  Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Text("+2.1000",
+                 Text("+2.1000",
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
                         fontSize: 24.0)),
-                new Text("   USDT",
+                 Text("   USDT",
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,
@@ -83,34 +84,34 @@ class OrderRecordDetailHeader extends StatelessWidget {
 
 class OrderRecordDetailInfo extends StatelessWidget {
   final titles = [
-    "建仓价格",
-    "平仓价格",
-    "投资总额",
-    "手续费",
-    "杠杆",
-    "止盈",
-    "止损",
-    "建仓时间",
-    "平仓时间",
-    "平仓类型"
+    I18n.of(globalKey.currentContext).openPositionPrice,
+    I18n.of(globalKey.currentContext).settlementPrice,
+    I18n.of(globalKey.currentContext).investAmount,
+    I18n.of(globalKey.currentContext).fee,
+    I18n.of(globalKey.currentContext).leverage,
+    I18n.of(globalKey.currentContext).takeProfit,
+    I18n.of(globalKey.currentContext).cutLoss,
+    I18n.of(globalKey.currentContext).openPositionTime,
+    I18n.of(globalKey.currentContext).settlementTime,
+    I18n.of(globalKey.currentContext).settlementType
   ];
   @override
   Widget build(BuildContext context) {
     _itemBuilder(title, index) {
       if (index == 0) {
-        return new OrderRecordDetailHeader();
+        return  OrderRecordDetailHeader();
       }
-      return new ListTile(
+      return  ListTile(
         contentPadding: EdgeInsets.zero,
-        title: new Text(
+        title:  Text(
           title,
-          style: new TextStyle(
+          style:  TextStyle(
               color: Color(0xff666666),
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               fontSize: 14.0),
         ),
-        trailing: new Text("text",
+        trailing:  Text("text",
             style: TextStyle(
                 color: Color(0xff333333),
                 fontWeight: FontWeight.w400,
@@ -119,7 +120,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
       );
     }
 
-    return new ListView.separated(
+    return  ListView.separated(
       itemBuilder: (BuildContext build, int position) {
         return _itemBuilder(this.titles[position], position);
       },

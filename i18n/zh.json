@@ -74,8 +74,13 @@
 	"fundStatus_completed": "成功",
 	"fundStatus_rejected": "失败",
 	"fundStatus_error": "失败",
-
-
+	"trading_detail": "交易详情",
+	"open_position_price": "建仓价格",
+	"settlement_price": "平仓价格",
 	"success_toast": "成功",
-	"fail_toast": "失败"
+	"fail_toast": "失败",
+    "leverage": "杠杆",
+	"settlement_time": "平仓时间",
+	"open_position_time": "建仓时间",
+	"settlement_type": "平仓类型"
 }

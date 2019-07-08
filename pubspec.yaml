@@ -60,8 +60,9 @@ flutter:
 
     assets:
     - i18n/
-    # assets-generator-begin
+    # assets begin
     # res/assets/icons/*
+    - res/assets/icons/.DS_Store
     - res/assets/icons/icMaskClose.png
     - res/assets/icons/icAdd.png
     - res/assets/icons/icReduce.png
@@ -89,4 +90,4 @@ flutter:
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icTabWithdraw.png
-    # assets-generator-end
+    # assets end

@@ -188,9 +188,23 @@ class _$Keys {
 
   static final String fundStatusError = 'fundStatus_error';
 
+  static final String tradingDetail = 'trading_detail';
+
+  static final String openPositionPrice = 'open_position_price';
+
+  static final String settlementPrice = 'settlement_price';
+
   static final String successToast = 'success_toast';
 
   static final String failToast = 'fail_toast';
+
+  static final String leverage = 'leverage';
+
+  static final String settlementTime = 'settlement_time';
+
+  static final String openPositionTime = 'open_position_time';
+
+  static final String settlementType = 'settlement_type';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -297,6 +311,13 @@ abstract class _$I18nHelper {
   String get fundStatusCompleted => _translate(_$Keys.fundStatusCompleted);
   String get fundStatusRejected => _translate(_$Keys.fundStatusRejected);
   String get fundStatusError => _translate(_$Keys.fundStatusError);
+  String get tradingDetail => _translate(_$Keys.tradingDetail);
+  String get openPositionPrice => _translate(_$Keys.openPositionPrice);
+  String get settlementPrice => _translate(_$Keys.settlementPrice);
   String get successToast => _translate(_$Keys.successToast);
   String get failToast => _translate(_$Keys.failToast);
+  String get leverage => _translate(_$Keys.leverage);
+  String get settlementTime => _translate(_$Keys.settlementTime);
+  String get openPositionTime => _translate(_$Keys.openPositionTime);
+  String get settlementType => _translate(_$Keys.settlementType);
 }

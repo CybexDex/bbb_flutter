@@ -360,7 +360,8 @@ class _CartesianPainter extends CustomPainter {
 
       horizontalTextPainters.add(TextPainter(
           text: TextSpan(
-              text: DateFormat('HH:mm').format(time), style: labelStyle),
+              text: DateFormat('HH:mm').format(time.toLocal()),
+              style: labelStyle),
           textDirection: TextDirection.ltr));
 
       horizontalTextPainters[i].layout();
@@ -491,8 +492,9 @@ class _TimeSharePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     /// draw fillPath and line
-    /// 
-    canvas.clipRect(Rect.fromLTWH(0, -size.height / 4, size.width, 3 * size.height / 2 ));
+    ///
+    canvas.clipRect(
+        Rect.fromLTWH(0, -size.height / 4, size.width, 3 * size.height / 2));
     Offset startPoint, endPoint;
     final Path path = Path();
 
