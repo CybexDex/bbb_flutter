@@ -41,6 +41,7 @@ class _TradePageState extends State<TradePage> {
         return vm;
       },
       child: Scaffold(
+          resizeToAvoidBottomPadding: false,
           appBar: AppBar(
             iconTheme: IconThemeData(
               color: Palette.backButtonColor, //change your color here

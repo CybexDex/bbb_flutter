@@ -27,15 +27,18 @@ class MarketManager {
   String _assetName;
 
   loadAllData(String assetName) async {
-    _assetName = assetName;
+    _assetName = assetName ?? _assetName;
+    if (isAllEmpty(_assetName)) {
+      return;
+    }
     int now = getNowEpochSeconds();
     await loadMarketHistory(
         startTime: (now - 300 * 60).toString(),
         endTime: now.toString(),
-        asset: assetName);
+        asset: _assetName);
     initCommunication();
     send(jsonEncode(WebSocketRequestEntity(
-            type: "subscribe", topic: "FAIRPRICE.$assetName"))
+            type: "subscribe", topic: "FAIRPRICE.$_assetName"))
         .toString());
   }
 
@@ -89,8 +92,13 @@ class MarketManager {
         _priceController.add(_priceController.value.toList());
       }
     }, onError: (error) {
+      cancelAndRemoveData();
       loadAllData(_assetName);
     });
+  }
+
+  cancelAndRemoveData() {
+    reset();
   }
 
   reset() {

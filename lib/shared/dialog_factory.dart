@@ -9,6 +9,7 @@ import 'package:bbb_flutter/shared/style_factory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class DialogFactory {
   static CupertinoAlertDialog logoutConfirmDialog(BuildContext context,
@@ -84,7 +85,7 @@ class DialogFactory {
             actions: <Widget>[
               CupertinoDialogAction(
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
+                  Navigator.of(context, rootNavigator: true).pop(false);
                 },
                 child: Text("取消", style: StyleFactory.dialogButtonFontStyle),
               ),
@@ -205,7 +206,7 @@ class DialogFactory {
       actions: <Widget>[
         CupertinoDialogAction(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context, rootNavigator: true).pop(false);
           },
           child: Text("取消", style: StyleFactory.dialogButtonFontStyle),
         ),
@@ -216,7 +217,9 @@ class DialogFactory {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      return DialogFactory.sellOrderDialog(context);
+                      return KeyboardAvoider(
+                        child: DialogFactory.sellOrderDialog(context),
+                      );
                     }).then((value) {
                   if (value) {
                     Navigator.of(context, rootNavigator: true).pop(true);

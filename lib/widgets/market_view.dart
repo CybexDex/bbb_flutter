@@ -8,18 +8,54 @@ import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:logger/logger.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 
-class MarketView extends StatelessWidget {
+class MarketView extends StatefulWidget {
   final double width;
   final bool isTrade;
   const MarketView({Key key, this.width, this.isTrade}) : super(key: key);
+
+  @override
+  _MarketViewState createState() => _MarketViewState();
+}
+
+class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
+  var initModel = MarketViewModel();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        locator.get<MarketManager>().cancelAndRemoveData();
+        break;
+      case AppLifecycleState.suspending:
+        break;
+      case AppLifecycleState.resumed:
+        locator.get<MarketManager>().loadAllData(null);
+        initModel.seedToCurrent();
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
 
   @override
   Widget build(BuildContext context) {
     OrderViewModel order;
     TradeViewModel trade;
 
-    if (isTrade) {
+    if (widget.isTrade) {
       trade = Provider.of<TradeViewModel>(context);
     } else {
       order = Provider.of<OrderViewModel>(context);
@@ -35,18 +71,27 @@ class MarketView extends StatelessWidget {
           klines.removeLast();
           klines.add(last);
         } else {
-          klines.add(last);
+          if (last != null) {
+            klines.add(last);
+          }
         }
         // locator.get<Logger>().finest(last.value);
 
         return BaseWidget<MarketViewModel>(
-          model: MarketViewModel(),
+          model: initModel,
           onModelReady: (model) {
             model.seedToCurrent();
           },
           builder: (context, model, child) {
             if (order != null) {
-              model.supplyDataWithTrade(data, order.getCurrentOrder());
+              final orderModel = order.getCurrentOrder();
+              if (orderModel != null) {
+                final contract = locator
+                    .get<RefManager>()
+                    .getContractFromId(orderModel.contractId);
+
+                model.supplyDataWithTrade(data, order, contract);
+              }
             }
 
             if (trade != null) {
@@ -92,7 +137,7 @@ class MarketView extends StatelessWidget {
                     timeLineGap: Duration(seconds: 300),
                     lineWidth: 2,
                     gridLineWidth: 0.5,
-                    width: width,
+                    width: widget.width,
                     fillGradient: LinearGradient(colors: [
                       Palette.darkSkyBlue.withAlpha(100),
                       Palette.darkSkyBlue.withAlpha(0)

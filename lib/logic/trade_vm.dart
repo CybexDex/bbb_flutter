@@ -88,6 +88,10 @@ class TradeViewModel extends BaseModel {
 
   updateAmountAndFee() {
     var ticker = _mtm.lastTicker.value;
+    if (ticker == null) {
+      return;
+    }
+
     var amount =
         (ticker.value - contract.strikeLevel) * contract.conversionRate;
 
