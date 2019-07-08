@@ -118,6 +118,8 @@ class _$Keys {
 
   static final String passwordConfirmHint = 'password_confirm_hint';
 
+  static final String passwordError = 'password_error';
+
   static final String pinCode = 'pin_code';
 
   static final String pinCodeHint = 'pin_code_hint';
@@ -144,6 +146,8 @@ class _$Keys {
       'dialog_log_out_confirm_button';
 
   static final String confirm = 'confirm';
+
+  static final String dialogCheckPassword = 'dialog_check_password';
 
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
@@ -271,6 +275,7 @@ abstract class _$I18nHelper {
   String get passwordHint => _translate(_$Keys.passwordHint);
   String get passwordConfirm => _translate(_$Keys.passwordConfirm);
   String get passwordConfirmHint => _translate(_$Keys.passwordConfirmHint);
+  String get passwordError => _translate(_$Keys.passwordError);
   String get pinCode => _translate(_$Keys.pinCode);
   String get pinCodeHint => _translate(_$Keys.pinCodeHint);
   String get getPinCode => _translate(_$Keys.getPinCode);
@@ -285,6 +290,7 @@ abstract class _$I18nHelper {
   String get dialogLogOutConfirmButton =>
       _translate(_$Keys.dialogLogOutConfirmButton);
   String get confirm => _translate(_$Keys.confirm);
+  String get dialogCheckPassword => _translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       _translate(_$Keys.registerErrorMessageContainLowercase);
   String get registerErrorMessageStartOnlyLetter =>

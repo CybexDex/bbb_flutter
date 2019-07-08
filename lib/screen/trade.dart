@@ -175,13 +175,18 @@ class _TradePageState extends State<TradePage> {
                                             color: Palette.redOrange,
                                             onPressed: () async {
                                               model.saveOrder();
+                                              TextEditingController
+                                                  passwordEditor =
+                                                  TextEditingController();
                                               showDialog(
                                                   context: context,
                                                   barrierDismissible: true,
                                                   builder: (context) {
                                                     return DialogFactory
                                                         .confirmDialog(context,
-                                                            model: model);
+                                                            model: model,
+                                                            controller:
+                                                                passwordEditor);
                                                   }).then((value) async {
                                                 if (value) {
                                                   callPostOrder(context, model);

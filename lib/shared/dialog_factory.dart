@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
+import 'package:logger/logger.dart';
 
 class DialogFactory {
   static CupertinoAlertDialog logoutConfirmDialog(BuildContext context,
@@ -42,8 +43,10 @@ class DialogFactory {
       String errorText,
       String cancel,
       String confirm,
-      VoidCallback onConfirmPressed}) {
-    TextEditingController _textEditorController = TextEditingController();
+      VoidCallback onConfirmPressed,
+      TextEditingController controller}) {
+    TextEditingController _textEditorController = controller;
+    locator.get<Logger>().i("sdfsdf");
     return BaseWidget<PnlViewModel>(
         model: PnlViewModel(
             api: locator.get(),
@@ -52,7 +55,7 @@ class DialogFactory {
             refm: locator.get()),
         builder: (context, model, child) {
           return CupertinoAlertDialog(
-            title: Text("验证密码"),
+            title: Text(I18n.of(context).dialogCheckPassword),
             content: Column(
               children: <Widget>[
                 contentText != null ? Text(contentText) : Container(),
@@ -63,20 +66,20 @@ class DialogFactory {
                     borderRadius: BorderRadius.circular(4.0),
                     child: TextField(
                       controller: _textEditorController,
-                      keyboardType: TextInputType.text,
                       obscureText: true,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(
                               top: 9, bottom: 9, left: 10, right: 16),
-                          hintText: "请输入密码",
+                          hintText: I18n.of(context).passwordHint,
                           labelText: null,
                           fillColor: Palette.subTitleColor.withOpacity(0.1),
                           filled: true,
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
                                   style: BorderStyle.none, width: 0)),
-                          errorText:
-                              model.shouldShowErrorMessage ? "密码错误" : ""),
+                          errorText: model.shouldShowErrorMessage
+                              ? I18n.of(context).passwordError
+                              : ""),
                     ),
                   ),
                 ),
@@ -87,7 +90,8 @@ class DialogFactory {
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop(false);
                 },
-                child: Text("取消", style: StyleFactory.dialogButtonFontStyle),
+                child: Text(I18n.of(context).dialogCancelButton,
+                    style: StyleFactory.dialogButtonFontStyle),
               ),
               CupertinoDialogAction(
                 onPressed: () async {
@@ -98,7 +102,8 @@ class DialogFactory {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }
                 },
-                child: Text("确认", style: StyleFactory.dialogButtonFontStyle),
+                child: Text(I18n.of(context).confirm,
+                    style: StyleFactory.dialogButtonFontStyle),
               )
             ],
           );
@@ -111,7 +116,8 @@ class DialogFactory {
       title: Column(
         children: <Widget>[
           Image.asset("res/assets/icons/icSuccess.png"),
-          Text("平仓成功", style: StyleFactory.dialogButtonFontStyle)
+          Text(I18n.of(context).closeOut,
+              style: StyleFactory.dialogButtonFontStyle)
         ],
       ),
       content: Column(
@@ -147,15 +153,8 @@ class DialogFactory {
     );
   }
 
-  static Dialog customDialogTest() {
-    return Dialog(
-      child: Container(
-        child: Text("test"),
-      ),
-    );
-  }
-
-  static Widget confirmDialog(BuildContext context, {TradeViewModel model}) {
+  static Widget confirmDialog(BuildContext context,
+      {TradeViewModel model, TextEditingController controller}) {
     return CupertinoAlertDialog(
       title: Text("买入确认"),
       content: Container(
@@ -208,17 +207,21 @@ class DialogFactory {
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop(false);
           },
-          child: Text("取消", style: StyleFactory.dialogButtonFontStyle),
+          child: Text(I18n.of(context).dialogCancelButton,
+              style: StyleFactory.dialogButtonFontStyle),
         ),
         CupertinoDialogAction(
-            child: Text("确认", style: StyleFactory.dialogButtonFontStyle),
+            child: Text(I18n.of(context).confirm,
+                style: StyleFactory.dialogButtonFontStyle),
             onPressed: () {
               if (locator.get<UserManager>().user.isLocked) {
                 showDialog(
                     context: context,
                     builder: (context) {
                       return KeyboardAvoider(
-                        child: DialogFactory.sellOrderDialog(context),
+                        child: DialogFactory.sellOrderDialog(context,
+                            controller: controller),
+                        autoScroll: true,
                       );
                     }).then((value) {
                   if (value) {

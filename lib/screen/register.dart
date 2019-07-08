@@ -75,15 +75,10 @@ class _RegisterState extends State<RegisterPage> {
     String keys = await CybexFlutterPlugin.getUserKeyWith(
         _accountNameController.text, _passwordController.text);
     var jsonKeys = json.decode(keys);
-    if (Platform.isAndroid) {
-      requestModel.account.activeKey = jsonKeys["active"];
-      requestModel.account.ownerKey = jsonKeys["owner"];
-      requestModel.account.memoKey = jsonKeys["memo"];
-    } else {
-      requestModel.account.activeKey = jsonKeys["active-key"]["public_key"];
-      requestModel.account.ownerKey = jsonKeys["owner-key"]["public_key"];
-      requestModel.account.memoKey = jsonKeys["memo-key"]["public_key"];
-    }
+    requestModel.account.activeKey = jsonKeys["active-key"]["public_key"];
+    requestModel.account.ownerKey = jsonKeys["owner-key"]["public_key"];
+    requestModel.account.memoKey = jsonKeys["memo-key"]["public_key"];
+
     requestModel.account.name = _accountNameController.text;
     requestModel.cap.id = _capid;
     requestModel.cap.captcha = _pinCodeController.text;
