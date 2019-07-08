@@ -173,7 +173,7 @@ class OrderFormWidget extends StatelessWidget {
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  "${refreshContract.dailyInterest} USDT${I18n.of(context).perDay}",
+                  "${(refreshContract.dailyInterest * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],

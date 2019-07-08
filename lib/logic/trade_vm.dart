@@ -92,18 +92,19 @@ class TradeViewModel extends BaseModel {
       return;
     }
 
+    double extra = 0.1;
+
     var amount =
-        (ticker.value - contract.strikeLevel) * contract.conversionRate;
+        (ticker.value - contract.strikeLevel) * contract.conversionRate + extra;
 
     double commiDouble = orderForm.investAmount *
         ticker.value *
         contract.conversionRate.abs() *
         contract.commissionRate;
 
-    double extra = 0.1;
 
     orderForm.fee = Asset(amount: commiDouble, symbol: contract.quoteAsset);
-    double totalAmount = orderForm.investAmount * amount + extra;
+    double totalAmount = orderForm.investAmount * amount;
 
     orderForm.totalAmount =
         Asset(amount: totalAmount + commiDouble, symbol: contract.quoteAsset);

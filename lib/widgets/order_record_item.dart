@@ -46,7 +46,8 @@ class OrderRecordItem extends StatelessWidget {
             ),
           ),
           Text(
-            DateFormat("MM.dd HH:mm:ss").format(_model.createTime.toLocal()),
+            DateFormat("MM.dd HH:mm:ss")
+                .format(DateTime.parse(_model.createTime).toLocal()),
             style: StyleFactory.cellDescLabel,
           )
         ],

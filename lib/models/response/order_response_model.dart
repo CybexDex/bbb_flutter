@@ -1,8 +1,5 @@
-// To parse this JSON data, do
-//
-//     final orderResponseModel = orderResponseModelFromJson(jsonString);
-
-import 'dart:convert';
+import 'dart:convert' show json;
+import 'package:bbb_flutter/helper/utils.dart';
 
 class OrderResponseModel {
   String accountName;
@@ -15,7 +12,7 @@ class OrderResponseModel {
   double cutLossPx;
   double takeProfitPx;
   double forceClosePx;
-  DateTime expiration;
+  String expiration;
   double qtyContract;
   double commission;
   double accruedInterest;
@@ -27,8 +24,8 @@ class OrderResponseModel {
   double soldNotional;
   String closeReason;
   String settleTime;
-  DateTime createTime;
-  DateTime lastUpdateTime;
+  String createTime;
+  String lastUpdateTime;
   String details;
 
   OrderResponseModel({
@@ -59,65 +56,93 @@ class OrderResponseModel {
     this.details,
   });
 
-  factory OrderResponseModel.fromRawJson(String str) =>
-      OrderResponseModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory OrderResponseModel.fromJson(Map<String, dynamic> json) =>
-      new OrderResponseModel(
-        accountName: json["accountName"],
-        status: json["status"],
-        buyOrderTxId: json["buyOrderTxId"],
-        contractId: json["contractId"],
-        latestContractPx: json["latestContractPx"].toDouble(),
-        pnl: json["pnl"].toDouble(),
-        underlyingSpotPx: json["underlyingSpotPx"].toDouble(),
-        cutLossPx: json["cutLossPx"].toDouble(),
-        takeProfitPx: json["takeProfitPx"].toDouble(),
-        forceClosePx: json["forceClosePx"].toDouble(),
-        expiration: DateTime.parse(json["expiration"]),
-        qtyContract: json["qtyContract"].toDouble(),
-        commission: json["commission"].toDouble(),
-        accruedInterest: json["accruedInterest"].toDouble(),
-        boughtPx: json["boughtPx"].toDouble(),
-        boughtContractPx: json["boughtContractPx"].toDouble(),
-        boughtNotional: json["boughtNotional"].toDouble(),
-        soldPx: json["soldPx"].toDouble(),
-        soldContractPx: json["soldContractPx"].toDouble(),
-        soldNotional: json["soldNotional"].toDouble(),
-        closeReason: json["closeReason"],
-        settleTime: json["settleTime"],
-        createTime: DateTime.parse(json["createTime"]),
-        lastUpdateTime: DateTime.parse(json["lastUpdateTime"]),
-        details: json["details"],
-      );
+  factory OrderResponseModel.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : OrderResponseModel(
+          accountName: convertValueByType(jsonRes['accountName'], String,
+              stack: "Test-accountName"),
+          status: convertValueByType(jsonRes['status'], String,
+              stack: "Test-status"),
+          buyOrderTxId: convertValueByType(jsonRes['buyOrderTxId'], String,
+              stack: "Test-buyOrderTxId"),
+          contractId: convertValueByType(jsonRes['contractId'], String,
+              stack: "Test-contractId"),
+          latestContractPx: convertValueByType(
+              jsonRes['latestContractPx'], double,
+              stack: "Test-latestContractPx"),
+          pnl: convertValueByType(jsonRes['pnl'], double, stack: "Test-pnl"),
+          underlyingSpotPx: convertValueByType(
+              jsonRes['underlyingSpotPx'], double,
+              stack: "Test-underlyingSpotPx"),
+          cutLossPx: convertValueByType(jsonRes['cutLossPx'], double,
+              stack: "Test-cutLossPx"),
+          takeProfitPx: convertValueByType(jsonRes['takeProfitPx'], double,
+              stack: "Test-takeProfitPx"),
+          forceClosePx: convertValueByType(jsonRes['forceClosePx'], double,
+              stack: "Test-forceClosePx"),
+          expiration: convertValueByType(jsonRes['expiration'], String,
+              stack: "Test-expiration"),
+          qtyContract: convertValueByType(jsonRes['qtyContract'], double,
+              stack: "Test-qtyContract"),
+          commission: convertValueByType(jsonRes['commission'], double,
+              stack: "Test-commission"),
+          accruedInterest: convertValueByType(
+              jsonRes['accruedInterest'], double,
+              stack: "Test-accruedInterest"),
+          boughtPx: convertValueByType(jsonRes['boughtPx'], double,
+              stack: "Test-boughtPx"),
+          boughtContractPx: convertValueByType(
+              jsonRes['boughtContractPx'], double,
+              stack: "Test-boughtContractPx"),
+          boughtNotional: convertValueByType(jsonRes['boughtNotional'], double,
+              stack: "Test-boughtNotional"),
+          soldPx: convertValueByType(jsonRes['soldPx'], double,
+              stack: "Test-soldPx"),
+          soldContractPx: convertValueByType(jsonRes['soldContractPx'], double,
+              stack: "Test-soldContractPx"),
+          soldNotional: convertValueByType(jsonRes['soldNotional'], double,
+              stack: "Test-soldNotional"),
+          closeReason: convertValueByType(jsonRes['closeReason'], String,
+              stack: "Test-closeReason"),
+          settleTime: convertValueByType(jsonRes['settleTime'], String,
+              stack: "Test-settleTime"),
+          createTime: convertValueByType(jsonRes['createTime'], String,
+              stack: "Test-createTime"),
+          lastUpdateTime: convertValueByType(jsonRes['lastUpdateTime'], String,
+              stack: "Test-lastUpdateTime"),
+          details: convertValueByType(jsonRes['details'], String,
+              stack: "Test-details"),
+        );
 
   Map<String, dynamic> toJson() => {
-        "accountName": accountName,
-        "status": status,
-        "buyOrderTxId": buyOrderTxId,
-        "contractId": contractId,
-        "latestContractPx": latestContractPx,
-        "pnl": pnl,
-        "underlyingSpotPx": underlyingSpotPx,
-        "cutLossPx": cutLossPx,
-        "takeProfitPx": takeProfitPx,
-        "forceClosePx": forceClosePx,
-        "expiration": expiration.toIso8601String(),
-        "qtyContract": qtyContract,
-        "commission": commission,
-        "accruedInterest": accruedInterest,
-        "boughtPx": boughtPx,
-        "boughtContractPx": boughtContractPx,
-        "boughtNotional": boughtNotional,
-        "soldPx": soldPx,
-        "soldContractPx": soldContractPx,
-        "soldNotional": soldNotional,
-        "closeReason": closeReason,
-        "settleTime": settleTime,
-        "createTime": createTime.toIso8601String(),
-        "lastUpdateTime": lastUpdateTime.toIso8601String(),
-        "details": details,
+        'accountName': accountName,
+        'status': status,
+        'buyOrderTxId': buyOrderTxId,
+        'contractId': contractId,
+        'latestContractPx': latestContractPx,
+        'pnl': pnl,
+        'underlyingSpotPx': underlyingSpotPx,
+        'cutLossPx': cutLossPx,
+        'takeProfitPx': takeProfitPx,
+        'forceClosePx': forceClosePx,
+        'expiration': expiration,
+        'qtyContract': qtyContract,
+        'commission': commission,
+        'accruedInterest': accruedInterest,
+        'boughtPx': boughtPx,
+        'boughtContractPx': boughtContractPx,
+        'boughtNotional': boughtNotional,
+        'soldPx': soldPx,
+        'soldContractPx': soldContractPx,
+        'soldNotional': soldNotional,
+        'closeReason': closeReason,
+        'settleTime': settleTime,
+        'createTime': createTime,
+        'lastUpdateTime': lastUpdateTime,
+        'details': details,
       };
+  @override
+  String toString() {
+    return json.encode(this);
+  }
 }
