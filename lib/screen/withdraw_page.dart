@@ -65,7 +65,10 @@ class _WithdrawState extends State<WithdrawPage> {
                         I18n.of(context).balanceAvailable,
                         style: StyleFactory.larSubtitle,
                       ),
-                      Text("${model.withdrawForm.balance.quantity} USDT",
+                      Text(
+                          model.withdrawForm.balance != null
+                              ? "${model.withdrawForm.balance.quantity} USDT"
+                              : "-- USDT",
                           style: StyleFactory.larSubtitle),
                     ],
                   ),

@@ -107,8 +107,9 @@ class _TransferState extends State<TransferPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("数量"),
-                        Text(
-                            "可划转数量: ${model.transferForm.balance.quantity} ${model.transferForm.balance.assetName}"),
+                        Text(model.transferForm.balance != null
+                            ? "可划转数量: ${model.transferForm.balance.quantity} ${model.transferForm.balance.assetName}"
+                            : "可划转数量: --"),
                       ],
                     ),
                     Column(
