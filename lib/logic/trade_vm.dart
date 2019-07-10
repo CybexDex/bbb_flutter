@@ -102,12 +102,21 @@ class TradeViewModel extends BaseModel {
         contract.conversionRate.abs() *
         contract.commissionRate;
 
-
     orderForm.fee = Asset(amount: commiDouble, symbol: contract.quoteAsset);
     double totalAmount = orderForm.investAmount * amount;
 
     orderForm.totalAmount =
         Asset(amount: totalAmount + commiDouble, symbol: contract.quoteAsset);
+    if (orderForm.investAmount > contract.availableInventory ||
+        _um.fetchPositionFrom(AssetName.NXUSDT) == null ||
+        orderForm.totalAmount.amount >
+            _um.fetchPositionFrom(AssetName.NXUSDT).quantity ||
+        orderForm.investAmount > contract.maxOrderQty ||
+        orderForm.totalAmount.amount <= double.minPositive) {
+      isSatisfied = false;
+    } else {
+      isSatisfied = true;
+    }
     setBusy(false);
   }
 

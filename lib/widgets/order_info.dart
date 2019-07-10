@@ -10,6 +10,7 @@ import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class OrderInfo extends StatelessWidget {
   final OrderResponseModel _model;
@@ -38,7 +39,7 @@ class OrderInfo extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 20,
+              flex: 18,
               child: Row(
                 children: <Widget>[
                   Padding(
@@ -56,37 +57,33 @@ class OrderInfo extends StatelessWidget {
                     child: WidgetFactory.smallButton(
                         data: I18n.of(context).closeOut,
                         onPressed: () async {
-                          if (locator.get<UserManager>().user.isLocked) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return DialogFactory.sellOrderDialog(
+                          TextEditingController controller =
+                              TextEditingController();
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return DialogFactory.closeOutConfirmDialog(
                                     context,
-                                    title: I18n.of(context).closeOut,
-                                    contentText: I18n.of(context).futureProfit,
-                                    value:
-                                        "${(_model.pnl * _model.qtyContract).toStringAsFixed(2)} USDT",
-                                  );
-                                }).then((value) async {
-                              if (value) {
-                                callAmend(context);
-                              }
-                            });
-                          } else {
-                            callAmend(context);
-                          }
+                                    value: (_model.pnl * _model.qtyContract)
+                                        .toStringAsFixed(2),
+                                    controller: controller);
+                              }).then((value) async {
+                            if (value) {
+                              callAmend(context);
+                            }
+                          });
                         }),
                   )),
                 ],
               ),
             ),
             Expanded(
-                flex: 15,
+                flex: 12,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 )),
             Expanded(
-                flex: 16,
+                flex: 18,
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -94,45 +91,59 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      (_model.pnl * _model.qtyContract).toStringAsFixed(2) +
-                          " USDT",
+                      (_model.pnl).toStringAsFixed(2) + " USDT",
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )),
             Expanded(
-                flex: 15,
+                flex: 12,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 )),
             Expanded(
-                flex: 16,
+                flex: 18,
                 child: Row(
                   children: <Widget>[
                     Text(
-                      I18n.of(context).actLevel,
+                      I18n.of(context).openPositionPrice,
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      OrderCalculate.calculateRealLeverage(
-                              currentPx: ticker.last.value,
-                              strikeLevel:
-                                  currentContract.strikeLevel.toDouble(),
-                              isUp: currentContract.conversionRate > 0)
-                          .toStringAsFixed(2),
+                      _model.boughtPx.toStringAsFixed(4),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )),
             Expanded(
-                flex: 15,
+                flex: 12,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 )),
             Expanded(
-                flex: 16,
+                flex: 18,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).forcePrice,
+                      style: StyleFactory.subTitleStyle,
+                    ),
+                    Text(
+                      _model.forceClosePx.toStringAsFixed(4),
+                      style: StyleFactory.smallCellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 12,
+                child: SizedBox(
+                  height: 8,
+                )),
+            Expanded(
+                flex: 18,
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -152,9 +163,9 @@ class OrderInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )),
             Expanded(
-                flex: 15,
+                flex: 12,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 )),
             Expanded(
                 flex: 20,
@@ -191,21 +202,20 @@ class OrderInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )),
             Expanded(
-                flex: 15,
+                flex: 12,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 )),
             Expanded(
-                flex: 16,
+                flex: 18,
                 child: Row(
                   children: <Widget>[
                     Text(
-                      I18n.of(context).forceExpiration,
+                      I18n.of(context).accruedInterest,
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      DateFormat("yyyy.MM.dd HH:mm")
-                          .format(DateTime.parse(_model.expiration).toLocal()),
+                      _model.accruedInterest.toStringAsFixed(4),
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -214,7 +224,7 @@ class OrderInfo extends StatelessWidget {
             Expanded(
                 flex: 15,
                 child: SizedBox(
-                  height: 10,
+                  height: 8,
                 ))
           ],
         ),

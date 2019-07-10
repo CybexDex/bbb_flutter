@@ -429,10 +429,12 @@ class _RegisterState extends State<RegisterPage> {
                             child: ButtonTheme(
                               minWidth: 200,
                               child: WidgetFactory.button(
-                                  onPressed: () {
-                                    showLoading(context);
-                                    _processRegister();
-                                  },
+                                  onPressed: _isButtonEnabled
+                                      ? () async {
+                                          showLoading(context);
+                                          await _processRegister();
+                                        }
+                                      : () {},
                                   color: _isButtonEnabled
                                       ? Palette.redOrange
                                       : Palette.subTitleColor,

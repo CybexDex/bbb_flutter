@@ -36,7 +36,7 @@ class DialogFactory {
     );
   }
 
-  static Widget sellOrderDialog(BuildContext context,
+  static Widget unlockDialog(BuildContext context,
       {String title,
       String contentText,
       String value,
@@ -46,7 +46,6 @@ class DialogFactory {
       VoidCallback onConfirmPressed,
       TextEditingController controller}) {
     TextEditingController _textEditorController = controller;
-    locator.get<Logger>().i("sdfsdf");
     return BaseWidget<PnlViewModel>(
         model: PnlViewModel(
             api: locator.get(),
@@ -219,7 +218,51 @@ class DialogFactory {
                     context: context,
                     builder: (context) {
                       return KeyboardAvoider(
-                        child: DialogFactory.sellOrderDialog(context,
+                        child: DialogFactory.unlockDialog(context,
+                            controller: controller),
+                        autoScroll: true,
+                      );
+                    }).then((value) {
+                  if (value) {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                  }
+                });
+              } else {
+                Navigator.of(context, rootNavigator: true).pop(true);
+              }
+            })
+      ],
+    );
+  }
+
+  static Widget closeOutConfirmDialog(BuildContext context,
+      {String value, TextEditingController controller}) {
+    return CupertinoAlertDialog(
+      title: Text(I18n.of(context).closeOut),
+      content: Column(
+        children: <Widget>[
+          Text(I18n.of(context).dialogSellContent),
+          Text(value + "USDT"),
+        ],
+      ),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop(false);
+          },
+          child: Text(I18n.of(context).dialogCancelButton,
+              style: StyleFactory.dialogButtonFontStyle),
+        ),
+        CupertinoDialogAction(
+            child: Text(I18n.of(context).confirm,
+                style: StyleFactory.dialogButtonFontStyle),
+            onPressed: () {
+              if (locator.get<UserManager>().user.isLocked) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return KeyboardAvoider(
+                        child: DialogFactory.unlockDialog(context,
                             controller: controller),
                         autoScroll: true,
                       );

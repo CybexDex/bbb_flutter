@@ -115,12 +115,14 @@ class PnlForm extends StatelessWidget {
                           data: I18n.of(context).confirm,
                           color: Palette.redOrange,
                           onPressed: () async {
+                            TextEditingController controller =
+                                TextEditingController();
                             if (locator.get<UserManager>().user.isLocked) {
                               showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return DialogFactory.sellOrderDialog(
-                                        context);
+                                    return DialogFactory.unlockDialog(context,
+                                        controller: controller);
                                   }).then((value) async {
                                 if (value) {
                                   callAmend(context, model);

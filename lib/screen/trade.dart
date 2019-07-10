@@ -58,7 +58,9 @@ class _TradePageState extends State<TradePage> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                },
               )
             ],
             centerTitle: true,
@@ -172,45 +174,64 @@ class _TradePageState extends State<TradePage> {
                                     button: model.orderForm.isUp
                                         ? WidgetFactory.button(
                                             data: I18n.of(context).buyUp,
-                                            color: Palette.redOrange,
-                                            onPressed: () async {
-                                              model.saveOrder();
-                                              TextEditingController
-                                                  passwordEditor =
-                                                  TextEditingController();
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: true,
-                                                  builder: (context) {
-                                                    return DialogFactory
-                                                        .confirmDialog(context,
-                                                            model: model,
-                                                            controller:
-                                                                passwordEditor);
-                                                  }).then((value) async {
-                                                if (value) {
-                                                  callPostOrder(context, model);
-                                                }
-                                              });
-                                            })
+                                            color: model.isSatisfied
+                                                ? Palette.redOrange
+                                                : Palette.subTitleColor,
+                                            onPressed: model.isSatisfied
+                                                ? () async {
+                                                    model.saveOrder();
+                                                    TextEditingController
+                                                        passwordEditor =
+                                                        TextEditingController();
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            true,
+                                                        builder: (context) {
+                                                          return DialogFactory
+                                                              .confirmDialog(
+                                                                  context,
+                                                                  model: model,
+                                                                  controller:
+                                                                      passwordEditor);
+                                                        }).then((value) async {
+                                                      if (value) {
+                                                        callPostOrder(
+                                                            context, model);
+                                                      }
+                                                    });
+                                                  }
+                                                : () {})
                                         : WidgetFactory.button(
                                             data: I18n.of(context).buyDown,
-                                            color: Palette.shamrockGreen,
-                                            onPressed: () async {
-                                              model.saveOrder();
-                                              showDialog(
-                                                  context: context,
-                                                  barrierDismissible: true,
-                                                  builder: (context) {
-                                                    return DialogFactory
-                                                        .confirmDialog(context,
-                                                            model: model);
-                                                  }).then((value) async {
-                                                if (value) {
-                                                  callPostOrder(context, model);
-                                                }
-                                              });
-                                            })),
+                                            color: model.isSatisfied
+                                                ? Palette.shamrockGreen
+                                                : Palette.subTitleColor,
+                                            onPressed: model.isSatisfied
+                                                ? () async {
+                                                    model.saveOrder();
+                                                    TextEditingController
+                                                        passwordEditor =
+                                                        TextEditingController();
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            true,
+                                                        builder: (context) {
+                                                          return DialogFactory
+                                                              .confirmDialog(
+                                                                  context,
+                                                                  model: model,
+                                                                  controller:
+                                                                      passwordEditor);
+                                                        }).then((value) async {
+                                                      if (value) {
+                                                        callPostOrder(
+                                                            context, model);
+                                                      }
+                                                    });
+                                                  }
+                                                : () {})),
                               ),
                             ],
                           ),

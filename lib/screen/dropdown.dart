@@ -75,7 +75,9 @@ class Dropdown extends StatelessWidget {
                     contents: <Widget>[
                       Container(
                         child: ListView.builder(
-                            itemCount: model.getUpContracts().length,
+                            itemCount: model.getUpContracts().where((element) {
+                              return element.status == "ACTIVE";
+                            }).length,
                             itemExtent: 50,
                             itemBuilder: (context, index) {
                               return GestureDetector(
@@ -110,7 +112,10 @@ class Dropdown extends StatelessWidget {
                       ),
                       Container(
                         child: ListView.builder(
-                            itemCount: model.getDownContracts().length,
+                            itemCount:
+                                model.getDownContracts().where((element) {
+                              return element.status == "ACTIVE";
+                            }).length,
                             itemExtent: 50,
                             itemBuilder: (context, index) {
                               return GestureDetector(

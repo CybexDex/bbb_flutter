@@ -88,14 +88,37 @@ class OrderFormWidget extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Image.asset("res/assets/icons/icWarn.png"),
+                        model.orderForm.totalAmount.amount > double.minPositive
+                            ? Image.asset(R.resAssetsIconsIcWarn)
+                            : Container(),
                         SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          "剩余份数不足，余额不足，单笔购买上限${refreshContract.maxOrderQty}",
-                          style: StyleFactory.smallButtonTitleStyle,
-                        ),
+                        Builder(
+                          builder: (context) {
+                            if (model.orderForm.investAmount >
+                                refreshContract.availableInventory) {
+                              return Text(
+                                "剩余份数不足",
+                                style: StyleFactory.smallButtonTitleStyle,
+                              );
+                            } else if (usdt == null ||
+                                model.orderForm.totalAmount.amount >
+                                    usdt.quantity) {
+                              return Text(
+                                "余额不足",
+                                style: StyleFactory.smallButtonTitleStyle,
+                              );
+                            } else if (model.orderForm.investAmount >
+                                refreshContract.maxOrderQty) {
+                              return Text(
+                                "单笔购买上限${refreshContract.maxOrderQty}",
+                                style: StyleFactory.smallButtonTitleStyle,
+                              );
+                            }
+                            return Container();
+                          },
+                        )
                       ],
                     ),
                     SizedBox(
@@ -173,7 +196,7 @@ class OrderFormWidget extends StatelessWidget {
                   style: StyleFactory.subTitleStyle,
                 ),
                 Text(
-                  "${(refreshContract.dailyInterest * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
+                  "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
                   style: StyleFactory.smallCellTitleStyle,
                 )
               ],

@@ -209,6 +209,8 @@ class _$Keys {
   static final String openPositionTime = 'open_position_time';
 
   static final String settlementType = 'settlement_type';
+
+  static final String accruedInterest = 'accruedInterest';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -326,4 +328,5 @@ abstract class _$I18nHelper {
   String get settlementTime => _translate(_$Keys.settlementTime);
   String get openPositionTime => _translate(_$Keys.openPositionTime);
   String get settlementType => _translate(_$Keys.settlementType);
+  String get accruedInterest => _translate(_$Keys.accruedInterest);
 }

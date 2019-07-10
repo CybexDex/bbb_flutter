@@ -86,5 +86,7 @@
     "leverage": "杠杆",
 	"settlement_time": "平仓时间",
 	"open_position_time": "建仓时间",
-	"settlement_type": "平仓类型"
+	"settlement_type": "平仓类型",
+	"accruedInterest": "累计利息"
+
 }

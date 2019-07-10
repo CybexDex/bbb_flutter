@@ -184,12 +184,15 @@ class _TransferState extends State<TransferPage> {
                                         _amountEditingController.text),
                                     symbol:
                                         model.transferForm.balance.assetName);
+                                TextEditingController controller =
+                                    TextEditingController();
                                 if (locator.get<UserManager>().user.isLocked) {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return DialogFactory.sellOrderDialog(
-                                            context);
+                                        return DialogFactory.unlockDialog(
+                                            context,
+                                            controller: controller);
                                       }).then((value) async {
                                     if (value) {
                                       callPostWithdraw(model);

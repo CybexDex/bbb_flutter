@@ -15,8 +15,26 @@ class _LoginState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _errorMessageVisible = false;
   bool _loadingVisibility = false;
+  bool _enableButton = false;
   String _errorMessage = "";
   var userLocator = locator<UserManager>();
+
+  @override
+  void initState() {
+    _passwordController.addListener(() {
+      if (_passwordController.text.length > 0) {
+        setState(() {
+          _enableButton = true;
+        });
+      } else {
+        setState(() {
+          _enableButton = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,27 +138,32 @@ class _LoginState extends State<LoginPage> {
                             child: ButtonTheme(
                               minWidth: 200,
                               child: WidgetFactory.button(
-                                  onPressed: () async {
-                                    setState(() {
-                                      _loadingVisibility = true;
-                                    });
-                                    if (await userLocator.loginWith(
-                                        name: _accountNameController.text,
-                                        password: _passwordController.text)) {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                    } else {
-                                      setState(() {
-                                        _errorMessageVisible = true;
-                                        _errorMessage =
-                                            I18n.of(context).accountLogInError;
-                                      });
-                                    }
-                                    setState(() {
-                                      _loadingVisibility = false;
-                                    });
-                                  },
-                                  color: Palette.redOrange,
+                                  onPressed: _enableButton
+                                      ? () async {
+                                          setState(() {
+                                            _loadingVisibility = true;
+                                          });
+                                          if (await userLocator.loginWith(
+                                              name: _accountNameController.text,
+                                              password:
+                                                  _passwordController.text)) {
+                                            Navigator.of(context).popUntil(
+                                                (route) => route.isFirst);
+                                          } else {
+                                            setState(() {
+                                              _errorMessageVisible = true;
+                                              _errorMessage = I18n.of(context)
+                                                  .accountLogInError;
+                                            });
+                                          }
+                                          setState(() {
+                                            _loadingVisibility = false;
+                                          });
+                                        }
+                                      : () {},
+                                  color: _enableButton
+                                      ? Palette.redOrange
+                                      : Palette.subTitleColor,
                                   data: I18n.of(context).logIn),
                             ))
                       ],
