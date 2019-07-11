@@ -24,7 +24,12 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
     final name = locator.get<UserManager>().user.name;
     locator
         .get<BBBAPIProvider>()
-        .getOrders(name, status: [OrderStatus.closed]).then((d) {
+        .getOrders(name,
+            status: [OrderStatus.closed],
+            startTime:
+                (DateTime.now().subtract(Duration(days: 90))).toIso8601String(),
+            endTime: DateTime.now().toIso8601String())
+        .then((d) {
       setState(() {
         data = d;
         upData = d.where((o) => o.contractId.contains("N")).toList();
@@ -85,15 +90,17 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
+                        height: 1,
+                        color: Palette.separatorColor,
+                      ),
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                   return InkWell(
+                    return InkWell(
                       onTap: () {
                         Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail);
+                            context, RoutePaths.OrderRecordDetail,
+                            arguments: RouteParamsOfTransactionRecords(
+                                orderResponseModel: data[index]));
                       },
                       child: OrderRecordItem(
                         model: data[index],
@@ -106,9 +113,9 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
+                        height: 1,
+                        color: Palette.separatorColor,
+                      ),
                   itemCount: upData.length,
                   itemBuilder: (context, index) {
                     return InkWell(
@@ -127,9 +134,9 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
+                        height: 1,
+                        color: Palette.separatorColor,
+                      ),
                   itemCount: downData.length,
                   itemBuilder: (context, index) {
                     return InkWell(

@@ -211,6 +211,12 @@ class _$Keys {
   static final String settlementType = 'settlement_type';
 
   static final String accruedInterest = 'accruedInterest';
+
+  static final String takeProfitCloseOut = 'take_profit_close_out';
+
+  static final String cutLossCloseOut = 'cut_loss_close_out';
+
+  static final String userCloseOut = 'user_close_out';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -329,4 +335,7 @@ abstract class _$I18nHelper {
   String get openPositionTime => _translate(_$Keys.openPositionTime);
   String get settlementType => _translate(_$Keys.settlementType);
   String get accruedInterest => _translate(_$Keys.accruedInterest);
+  String get takeProfitCloseOut => _translate(_$Keys.takeProfitCloseOut);
+  String get cutLossCloseOut => _translate(_$Keys.cutLossCloseOut);
+  String get userCloseOut => _translate(_$Keys.userCloseOut);
 }

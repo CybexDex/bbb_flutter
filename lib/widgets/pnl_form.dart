@@ -151,10 +151,8 @@ class PnlForm extends StatelessWidget {
       showLoading(context);
       await model.amend(_order, false);
       Navigator.of(context).pop();
-      showToast(context, false, I18n.of(context).successToast);
-      Future.delayed(Duration(seconds: 2), () {
-        _callback();
-      });
+      showToast(context, false, I18n.of(context).successToast,
+          callback: _callback);
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);

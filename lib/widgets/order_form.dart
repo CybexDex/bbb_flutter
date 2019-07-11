@@ -17,8 +17,7 @@ class OrderFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<TradeViewModel, UserManager, RefContractResponseModel>(
         builder: (context, model, userModel, refData, child) {
-      Contract refreshContract =
-          refData.contract.where((c) => c == _contract).last;
+      Contract refreshContract = model.contract;
       Position usdt = userModel.fetchPositionFrom(AssetName.NXUSDT);
 
       return Container(
@@ -83,14 +82,13 @@ class OrderFormWidget extends StatelessWidget {
               height: 10,
             ),
             Offstage(
-                offstage: model.isSatisfied,
+                offstage: model.isSatisfied ||
+                    model.orderForm.totalAmount.amount <= double.minPositive,
                 child: Column(
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        model.orderForm.totalAmount.amount > double.minPositive
-                            ? Image.asset(R.resAssetsIconsIcWarn)
-                            : Container(),
+                        Image.asset(R.resAssetsIconsIcWarn),
                         SizedBox(
                           width: 5,
                         ),

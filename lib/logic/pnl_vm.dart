@@ -11,6 +11,9 @@ import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:cybex_flutter_plugin/common.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
+import 'package:logger/logger.dart';
+
+import '../setup.dart';
 
 class PnlViewModel extends BaseModel {
   double cutLoss;
@@ -68,7 +71,9 @@ class PnlViewModel extends BaseModel {
 
     print(model.toRawJson());
     try {
-      return _api.amendOrder(order: model);
+      PostOrderResponseModel res = await _api.amendOrder(order: model);
+      locator.get<Logger>().w(res.toRawJson());
+      return res;
     } catch (error) {
       return Future.error(error);
     }

@@ -33,8 +33,14 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<RefContractResponseModel> getRefData() async {
-    var response = await dio.get('/refData');
+  Future<RefContractResponseModel> getRefData(
+      {List<ContractStatus> status}) async {
+    var params = Map<String, dynamic>();
+    if (!isAllEmpty(status)) {
+      final statusValue = status.map((s) => contractStatusMap[s]).join(",");
+      params["contractStatus"] = statusValue;
+    }
+    var response = await dio.get('/refData', queryParameters: params);
     var responseData = json.decode(response.data);
     return Future.value(RefContractResponseModel.fromJson(responseData));
   }
@@ -48,12 +54,19 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<OrderResponseModel>> getOrders(String name,
-      {List<OrderStatus> status}) async {
-    var params = {"accountName": name};
+      {List<OrderStatus> status, String startTime, String endTime}) async {
+    var params = {
+      "accountName": name,
+    };
 
     if (!isAllEmpty(status)) {
       final statusValue = status.map((s) => orderStatusMap[s]).join(",");
       params["status"] = statusValue;
+    }
+
+    if (startTime != null && endTime != null) {
+      params["startTime"] = startTime;
+      params["endTime"] = endTime;
     }
 
     var response = await dio.get('/order', queryParameters: params);

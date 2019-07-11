@@ -1,17 +1,20 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-void showToast(BuildContext context, bool isFaild, String content) {
+void showToast(BuildContext context, bool isFaild, String content,
+    {Function callback}) {
   showDialog(
       context: context,
       builder: (context) {
         Future.delayed(Duration(seconds: 3), () {
-          Navigator.pop(context);
+          Navigator.of(context).pop();
         });
         return isFaild
             ? DialogFactory.failDialog(context, content: content)
             : DialogFactory.successDialog(context, content: content);
-      });
+      }).then((value) {
+    callback();
+  });
 }
 
 showLoading(BuildContext context) {

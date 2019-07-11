@@ -66,7 +66,9 @@ setupLocator() async {
       um: locator<UserManager>()));
 
   locator.registerFactory(() => OrderViewModel(
-      api: locator<BBBAPIProvider>(), um: locator<UserManager>()));
+      api: locator<BBBAPIProvider>(),
+      um: locator<UserManager>(),
+      rm: locator<RefManager>()));
 }
 
 setupProviders() {

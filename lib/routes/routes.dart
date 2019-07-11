@@ -46,7 +46,8 @@ class Routes {
       case RoutePaths.FundRecords:
         return CupertinoPageRoute(builder: (_) => FundRecordsWidget());
       case RoutePaths.OrderRecordDetail:
-        return CupertinoPageRoute(builder: (_) => OrderRecordDetail());
+        return CupertinoPageRoute(
+            builder: (_) => OrderRecordDetail(), settings: settings);
       case RoutePaths.Transfer:
         return CupertinoPageRoute(builder: (_) => TransferPage());
       case RoutePaths.Withdraw:

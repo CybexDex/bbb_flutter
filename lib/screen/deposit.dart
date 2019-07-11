@@ -1,19 +1,45 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class DepositPage extends StatelessWidget {
-  const DepositPage({Key key}) : super(key: key);
+  DepositPage({Key key}) : super(key: key);
+
+  GlobalKey _globalKey = GlobalKey();
+
+  Future<Uint8List> _capturePng() async {
+    try {
+      print('inside');
+      RenderRepaintBoundary boundary =
+          _globalKey.currentContext.findRenderObject();
+      ui.Image image = await boundary.toImage();
+      ByteData byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = byteData.buffer.asUint8List();
+      var bs64 = base64Encode(pngBytes);
+      print(pngBytes);
+      print(bs64);
+      return pngBytes;
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var _bloc = locator<UserManager>();
     _bloc.getDepositAddress(name: _bloc.user.name, asset: "USDT");
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -40,12 +66,18 @@ class DepositPage extends StatelessWidget {
                     margin: EdgeInsets.only(top: 40),
                     child: Column(
                       children: <Widget>[
-                        QrImage(
-                          data: value.user.deposit.address,
-                          size: 155,
+                        RepaintBoundary(
+                          key: _globalKey,
+                          child: QrImage(
+                            data: value.user.deposit.address,
+                            size: 155,
+                          ),
                         ),
                         SizedBox(height: 20),
-                        Text("保存二维码", style: StyleFactory.hyperText),
+                        GestureDetector(
+                          child: Text("保存二维码", style: StyleFactory.hyperText),
+                          onTap: _capturePng,
+                        ),
                         SizedBox(height: 20),
                         Container(
                             decoration: BoxDecoration(

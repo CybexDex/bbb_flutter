@@ -33,6 +33,9 @@ class OrderInfo extends StatelessWidget {
         _model.underlyingSpotPx,
         currentContract.strikeLevel,
         currentContract.conversionRate > 0);
+    double invest = OrderCalculate.calculateInvest(
+        orderQtyContract: _model.qtyContract,
+        orderBoughtContractPx: _model.boughtContractPx);
 
     return Consumer<List<TickerData>>(builder: (context, ticker, child) {
       return Container(
@@ -64,8 +67,7 @@ class OrderInfo extends StatelessWidget {
                               builder: (context) {
                                 return DialogFactory.closeOutConfirmDialog(
                                     context,
-                                    value: (_model.pnl * _model.qtyContract)
-                                        .toStringAsFixed(2),
+                                    value: (_model.pnl).toStringAsFixed(2),
                                     controller: controller);
                               }).then((value) async {
                             if (value) {
@@ -91,7 +93,11 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      (_model.pnl).toStringAsFixed(2) + " USDT",
+                      (_model.pnl).toStringAsFixed(2) +
+                          " USDT" +
+                          "(" +
+                          (100 * (_model.pnl / invest)).toStringAsFixed(0) +
+                          "%)",
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -151,12 +157,7 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.subTitleStyle,
                     ),
                     Text(
-                      OrderCalculate.calculateInvest(
-                                  orderQtyContract: _model.qtyContract,
-                                  orderBoughtContractPx:
-                                      _model.boughtContractPx)
-                              .toStringAsFixed(2) +
-                          " USDT",
+                      invest.toStringAsFixed(2) + " USDT",
                       style: StyleFactory.smallCellTitleStyle,
                     )
                   ],
@@ -261,7 +262,7 @@ class OrderInfo extends StatelessWidget {
 
   openDialog(BuildContext context) {
     Function callback = () {
-      Provider.of<OrderViewModel>(context).getOrders();
+//      Provider.of<OrderViewModel>(context).getOrders();
       Navigator.of(context).pop();
     };
     showGeneralDialog(
@@ -308,9 +309,9 @@ class OrderInfo extends StatelessWidget {
       Navigator.of(context).pop();
       showToast(context, false,
           I18n.of(context).closeOut + I18n.of(context).successToast);
-      Future.delayed(Duration(seconds: 2), () {
-        Provider.of<OrderViewModel>(context).getOrders();
-      });
+//      Future.delayed(Duration(seconds: 2), () {
+//        Provider.of<OrderViewModel>(context).getOrders();
+//      });
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true,

@@ -31,107 +31,115 @@ class ExchangePage extends StatelessWidget {
             drawer: UserDrawer(),
             appBar: exchangeAppBar(),
             body: SafeArea(
-              left: false,
-              right: false,
+                left: false,
+                right: false,
                 child: Container(
                     child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Expanded(
-                    child: Container(
-                  padding: Dimen.pageMargin,
-                  child: MarketView(
-                    isTrade: false,
-                    width: ScreenUtil.screenWidthDp - 40,
-                  ),
-                )),
-                Container(
-                  margin: EdgeInsets.all(20),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          flex: 1,
-                          child: Builder(
-                            builder: (context) => WidgetFactory.button(
-                                data: I18n.of(context).buyUp,
-                                color: Palette.redOrange,
-                                onPressed: () {
-                                  if (locator.get<UserManager>().user.logined) {
-                                    Navigator.pushNamed(
-                                            context, RoutePaths.Trade,
-                                            arguments: RouteParamsOfTrade(
-                                                contract: locator
-                                                    .get<RefManager>()
-                                                    .currentUpContract,
-                                                isUp: true,
-                                                title: "ttes"))
-                                        .then((v) {
-                                      Provider.of<OrderViewModel>(context)
-                                          .getOrders();
-                                    });
-                                  } else {
-                                    Navigator.of(context)
-                                        .pushNamed(RoutePaths.Login);
-                                  }
-                                }),
-                          )),
-                      Container(
-                        width: 20,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                        child: Container(
+                      padding: Dimen.pageMargin,
+                      child: MarketView(
+                        isTrade: false,
+                        width: ScreenUtil.screenWidthDp - 40,
                       ),
-                      Expanded(
-                          flex: 1,
-                          child: Builder(
-                            builder: (context) => WidgetFactory.button(
-                                data: I18n.of(context).buyDown,
-                                color: Palette.shamrockGreen,
-                                onPressed: () {
-                                  if (locator.get<UserManager>().user.logined) {
-                                    Navigator.pushNamed(
-                                            context, RoutePaths.Trade,
-                                            arguments: RouteParamsOfTrade(
-                                                contract: locator
-                                                    .get<RefManager>()
-                                                    .currentDownContract,
-                                                isUp: false,
-                                                title: "ttes"))
-                                        .then((v) {
-                                      Provider.of<OrderViewModel>(context)
-                                          .getOrders();
-                                    });
-                                  } else {
-                                    Navigator.of(context)
-                                        .pushNamed(RoutePaths.Login);
-                                  }
-                                }),
-                          )),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(bottom: 10, left: 20),
-                  child: Align(
-                    child: Text(
-                      I18n.of(context).myOrdersStock,
-                      style: StyleFactory.title,
+                    )),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              flex: 1,
+                              child: Builder(
+                                builder: (context) => WidgetFactory.button(
+                                    data: I18n.of(context).buyUp,
+                                    color: Palette.redOrange,
+                                    onPressed: () {
+                                      if (locator
+                                          .get<UserManager>()
+                                          .user
+                                          .logined) {
+                                        Navigator.pushNamed(
+                                                context, RoutePaths.Trade,
+                                                arguments: RouteParamsOfTrade(
+                                                    contract: locator
+                                                        .get<RefManager>()
+                                                        .currentUpContract,
+                                                    isUp: true,
+                                                    title: "ttes"))
+                                            .then((v) {
+                                          Provider.of<OrderViewModel>(context)
+                                              .getOrders();
+                                        });
+                                      } else {
+                                        Navigator.of(context)
+                                            .pushNamed(RoutePaths.Login);
+                                      }
+                                    }),
+                              )),
+                          Container(
+                            width: 20,
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Builder(
+                                builder: (context) => WidgetFactory.button(
+                                    data: I18n.of(context).buyDown,
+                                    color: Palette.shamrockGreen,
+                                    onPressed: () {
+                                      if (locator
+                                          .get<UserManager>()
+                                          .user
+                                          .logined) {
+                                        Navigator.pushNamed(
+                                                context, RoutePaths.Trade,
+                                                arguments: RouteParamsOfTrade(
+                                                    contract: locator
+                                                        .get<RefManager>()
+                                                        .currentDownContract,
+                                                    isUp: false,
+                                                    title: "ttes"))
+                                            .then((v) {
+                                          Provider.of<OrderViewModel>(context)
+                                              .getOrders();
+                                        });
+                                      } else {
+                                        Navigator.of(context)
+                                            .pushNamed(RoutePaths.Login);
+                                      }
+                                    }),
+                              )),
+                        ],
+                      ),
                     ),
-                    alignment: Alignment.bottomLeft,
-                  ),
-                ),
-                Consumer4<UserManager, OrderViewModel, RefContractResponseModel,
-                    TickerData>(
-                  builder: (context, userMg, data, _, __, child) {
-                    if (!userMg.user.logined ||
-                        data.orders.isEmpty ||
-                        locator.get<RefManager>().currentUpContract == null ||
-                        locator.get<MarketManager>().lastTicker.value == null) {
-                      return child;
-                    }
-                    return _stockWidget(context, data);
-                  },
-                  child: _emptyStockWidget(),
-                ),
-              ],
-            )))));
+                    Container(
+                      padding: EdgeInsets.only(bottom: 10, left: 20),
+                      child: Align(
+                        child: Text(
+                          I18n.of(context).myOrdersStock,
+                          style: StyleFactory.title,
+                        ),
+                        alignment: Alignment.bottomLeft,
+                      ),
+                    ),
+                    Consumer4<UserManager, OrderViewModel,
+                        RefContractResponseModel, TickerData>(
+                      builder: (context, userMg, data, ref, __, child) {
+                        if (!userMg.user.logined ||
+                            data.orders.isEmpty ||
+                            locator.get<RefManager>().currentUpContract ==
+                                null ||
+                            locator.get<MarketManager>().lastTicker.value ==
+                                null) {
+                          return child;
+                        }
+                        return _stockWidget(context, data);
+                      },
+                      child: _emptyStockWidget(),
+                    ),
+                  ],
+                )))));
   }
 
   Widget _emptyStockWidget() {

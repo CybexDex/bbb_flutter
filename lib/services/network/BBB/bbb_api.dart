@@ -13,10 +13,10 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 
 abstract class BBBAPI {
-  Future<RefContractResponseModel> getRefData();
+  Future<RefContractResponseModel> getRefData({List<ContractStatus> status});
   Future<PositionsResponseModel> getPositions({String name});
   Future<List<OrderResponseModel>> getOrders(String name,
-      {List<OrderStatus> status});
+      {List<OrderStatus> status, String startTime, String endTime});
   Future<AccountResponseModel> getAccount({String name});
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
       {String startTime, String endTime, String asset});

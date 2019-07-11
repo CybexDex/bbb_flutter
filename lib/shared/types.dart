@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
@@ -21,6 +22,12 @@ const Map<OrderStatus, String> orderStatusMap = {
   OrderStatus.open: "OPEN",
   OrderStatus.closed: "CLOSED",
   OrderStatus.rejected: "REJECTED",
+};
+
+enum ContractStatus { active, knocked_out }
+const Map<ContractStatus, String> contractStatusMap = {
+  ContractStatus.active: "ACTIVE",
+  ContractStatus.knocked_out: "KNOCKED_OUT",
 };
 
 enum FundType {
@@ -54,15 +61,26 @@ const Map<FundStatus, String> fundStatusMap = {
   FundStatus.error: "ERROR",
 };
 
- String fundStatusCN(String status) {
-  var map = {"IN_PROGRESS": I18n.of(globalKey.currentContext).fundStatusInProgress,
-  "REJECTED": I18n.of(globalKey.currentContext).fundStatusRejected,
-  "COMPLETED": I18n.of(globalKey.currentContext).fundStatusCompleted,
-  "ERROR": I18n.of(globalKey.currentContext).fundStatusError,
+String fundStatusCN(String status) {
+  var map = {
+    "IN_PROGRESS": I18n.of(globalKey.currentContext).fundStatusInProgress,
+    "REJECTED": I18n.of(globalKey.currentContext).fundStatusRejected,
+    "COMPLETED": I18n.of(globalKey.currentContext).fundStatusCompleted,
+    "ERROR": I18n.of(globalKey.currentContext).fundStatusError,
   };
 
   return map[status];
- }
+}
+
+String closeResonCN(String status) {
+  var map = {
+    "USER_CLOSE_TIME_OVER": I18n.of(globalKey.currentContext).userCloseOut,
+    "CUT_LOSS": I18n.of(globalKey.currentContext).cutLossCloseOut,
+    "TAKE_PROFIT": I18n.of(globalKey.currentContext).takeProfitCloseOut,
+  };
+
+  return map[status];
+}
 
 /**
  * Route Types
@@ -74,4 +92,10 @@ class RouteParamsOfTrade {
 
   RouteParamsOfTrade(
       {@required this.contract, @required this.isUp, @required this.title});
+}
+
+class RouteParamsOfTransactionRecords {
+  final OrderResponseModel orderResponseModel;
+
+  RouteParamsOfTransactionRecords({@required this.orderResponseModel});
 }
