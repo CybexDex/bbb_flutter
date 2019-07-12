@@ -25,6 +25,7 @@ main() async {
   FlipperClient flipperClient = FlipperClient.getDefault();
 
   var databaseDriver = SqfliteDriver('bbb.db'); 
+  flipperClient.addPlugin(new FlipperNetworkPlugin());
   flipperClient.addPlugin(new FlipperDatabaseBrowserPlugin(databaseDriver));
   flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
   flipperClient.start();

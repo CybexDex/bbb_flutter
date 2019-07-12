@@ -53,7 +53,6 @@ dependencies:
     rx_widgets: ^2.2.0+1
 
     flutter_flipperkit: ^0.0.18
-    flipperkit_dio_interceptor: ^0.0.2
     flipperkit_sqflite_driver: ^0.0.1
 
 dev_dependencies:
