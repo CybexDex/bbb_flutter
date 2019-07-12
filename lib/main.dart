@@ -10,6 +10,7 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flipperkit_sqflite_driver/flipperkit_sqflite_driver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
@@ -18,8 +19,16 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'manager/ref_manager.dart';
 import 'models/request/web_socket_request_entity.dart';
 import 'manager/timer_manager.dart';
+import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 main() async {
+  FlipperClient flipperClient = FlipperClient.getDefault();
+
+  var databaseDriver = SqfliteDriver('bbb.db'); 
+  flipperClient.addPlugin(new FlipperDatabaseBrowserPlugin(databaseDriver));
+  flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
+  flipperClient.start();
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

@@ -17,6 +17,7 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
+import 'package:flipperkit_dio_interceptor/flipperkit_dio_interceptor.dart';
 
 class BBBAPIProvider extends BBBAPI {
   Dio dio = Dio();
@@ -25,6 +26,8 @@ class BBBAPIProvider extends BBBAPI {
     dio.options.baseUrl = "https://nxapitest.cybex.io/v1";
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
+    dio.interceptors.add(FlipperKitDioInterceptor());
+
     // dio.interceptors.add(ILogInterceptor(
     //     responseBody: true,
     //     requestHeader: false,
