@@ -26,17 +26,11 @@ class PnlForm extends StatelessWidget {
       onModelReady: (model) {
         final contract = model.currentContract(_order);
 
-        model.takeProfit = OrderCalculate.getTakeProfit(
-            _order.takeProfitPx,
-            _order.underlyingSpotPx,
-            contract.strikeLevel,
-            contract.conversionRate > 0);
+        model.takeProfit = OrderCalculate.getTakeProfit(_order.takeProfitPx,
+            _order.boughtPx, contract.strikeLevel, contract.conversionRate > 0);
 
-        model.cutLoss = OrderCalculate.getCutLoss(
-            _order.cutLossPx,
-            _order.underlyingSpotPx,
-            contract.strikeLevel,
-            contract.conversionRate > 0);
+        model.cutLoss = OrderCalculate.getCutLoss(_order.cutLossPx,
+            _order.boughtPx, contract.strikeLevel, contract.conversionRate > 0);
       },
       builder: (context, model, child) {
         return Align(

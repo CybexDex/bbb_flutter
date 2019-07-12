@@ -25,12 +25,12 @@ class OrderInfo extends StatelessWidget {
         getCorrespondContract(orderResponse: _model, refContract: refData);
     double takeprofit = OrderCalculate.getTakeProfit(
         _model.takeProfitPx,
-        _model.underlyingSpotPx,
+        _model.boughtPx,
         currentContract.strikeLevel,
         currentContract.conversionRate > 0);
     double cutLoss = OrderCalculate.getCutLoss(
         _model.cutLossPx,
-        _model.underlyingSpotPx,
+        _model.boughtPx,
         currentContract.strikeLevel,
         currentContract.conversionRate > 0);
     double invest = OrderCalculate.calculateInvest(

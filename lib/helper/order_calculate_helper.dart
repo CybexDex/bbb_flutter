@@ -39,16 +39,12 @@ class OrderCalculate {
     }
   }
 
-  static double getTakeProfit(double takeProfitPx, double underlayingPx,
-      double strikeLevel, bool isUp) {
+  static double getTakeProfit(
+      double takeProfitPx, double boughtPx, double strikeLevel, bool isUp) {
     if (isUp) {
-      return (takeProfitPx - underlayingPx) *
-          100 /
-          (underlayingPx - strikeLevel);
+      return (takeProfitPx - boughtPx) * 100 / (boughtPx - strikeLevel);
     } else {
-      return (underlayingPx - takeProfitPx) *
-          100 /
-          (strikeLevel - underlayingPx);
+      return (boughtPx - takeProfitPx) * 100 / (strikeLevel - boughtPx);
     }
   }
 
@@ -62,11 +58,11 @@ class OrderCalculate {
   }
 
   static double getCutLoss(
-      double cutLossPx, double underlayingPx, double strikeLevel, bool isUp) {
+      double cutLossPx, double boughtPx, double strikeLevel, bool isUp) {
     if (isUp) {
-      return (underlayingPx - cutLossPx) * 100 / (underlayingPx - strikeLevel);
+      return (boughtPx - cutLossPx) * 100 / (boughtPx - strikeLevel);
     } else {
-      return (cutLossPx - underlayingPx) * 100 / (strikeLevel - underlayingPx);
+      return (cutLossPx - boughtPx) * 100 / (strikeLevel - boughtPx);
     }
   }
 }

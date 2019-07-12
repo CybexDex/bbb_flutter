@@ -146,16 +146,10 @@ class OrderRecordDetailInfo extends StatelessWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    double takeprofit = OrderCalculate.getTakeProfit(
-        _model.takeProfitPx,
-        _model.underlyingSpotPx,
-        _contract.strikeLevel,
-        _contract.conversionRate > 0);
-    double cutLoss = OrderCalculate.getCutLoss(
-        _model.cutLossPx,
-        _model.underlyingSpotPx,
-        _contract.strikeLevel,
-        _contract.conversionRate > 0);
+    double takeprofit = OrderCalculate.getTakeProfit(_model.takeProfitPx,
+        _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
+    double cutLoss = OrderCalculate.getCutLoss(_model.cutLossPx,
+        _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
     _itemBuilder(title, index) {
       if (index == 0) {
         return OrderRecordDetailHeader(model: _model, contract: _contract);

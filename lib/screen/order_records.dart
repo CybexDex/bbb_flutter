@@ -26,9 +26,10 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
         .get<BBBAPIProvider>()
         .getOrders(name,
             status: [OrderStatus.closed],
-            startTime:
-                (DateTime.now().subtract(Duration(days: 90))).toIso8601String(),
-            endTime: DateTime.now().toIso8601String())
+            startTime: (DateTime.now().subtract(Duration(days: 90)))
+                .toUtc()
+                .toIso8601String(),
+            endTime: DateTime.now().toUtc().toIso8601String())
         .then((d) {
       setState(() {
         data = d;
