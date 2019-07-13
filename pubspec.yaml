@@ -84,6 +84,7 @@ flutter:
     - res/assets/icons/icSwitch.png
     - res/assets/icons/icAccount.png
     - res/assets/icons/icRiseRed18.png
+    - res/assets/icons/icRevise.png
     - res/assets/icons/icCode.png
     - res/assets/icons/icUser.png
     - res/assets/icons/icHand.png

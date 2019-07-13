@@ -122,7 +122,9 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                     return InkWell(
                       onTap: () {
                         Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail);
+                            context, RoutePaths.OrderRecordDetail,
+                            arguments: RouteParamsOfTransactionRecords(
+                                orderResponseModel: upData[index]));
                       },
                       child: OrderRecordItem(
                         model: upData[index],
@@ -143,7 +145,9 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                     return InkWell(
                       onTap: () {
                         Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail);
+                            context, RoutePaths.OrderRecordDetail,
+                            arguments: RouteParamsOfTransactionRecords(
+                                orderResponseModel: downData[index]));
                       },
                       child: OrderRecordItem(
                         model: downData[index],

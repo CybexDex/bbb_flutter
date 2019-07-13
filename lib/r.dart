@@ -39,6 +39,8 @@ class R {
   static final String resAssetsIconsIcAccount = 'res/assets/icons/icAccount.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icRiseRed18.png)
   static final String resAssetsIconsIcRiseRed18 = 'res/assets/icons/icRiseRed18.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/icRevise.png)
+  static final String resAssetsIconsIcRevise = 'res/assets/icons/icRevise.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icCode.png)
   static final String resAssetsIconsIcCode = 'res/assets/icons/icCode.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icUser.png)

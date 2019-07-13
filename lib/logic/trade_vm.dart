@@ -139,28 +139,28 @@ class TradeViewModel extends BaseModel {
 
   void increaseTakeProfit() {
     if (orderForm.takeProfit < 100) {
-      orderForm.takeProfit += 1;
+      orderForm.takeProfit += 5;
       setBusy(false);
     }
   }
 
   void decreaseTakeProfit() {
     if (orderForm.takeProfit > 1) {
-      orderForm.takeProfit -= 1;
+      orderForm.takeProfit -= 5;
       setBusy(false);
     }
   }
 
   void increaseCutLoss() {
     if (orderForm.cutoff < 100) {
-      orderForm.cutoff += 1;
+      orderForm.cutoff += 5;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
     if (orderForm.cutoff > 1) {
-      orderForm.cutoff -= 1;
+      orderForm.cutoff -= 5;
       setBusy(false);
     }
   }

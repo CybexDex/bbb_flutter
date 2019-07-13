@@ -200,9 +200,6 @@ class OrderFormWidget extends StatelessWidget {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            SizedBox(
-              height: 10,
-            ),
           ],
         ),
       );

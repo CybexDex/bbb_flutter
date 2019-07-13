@@ -7,13 +7,22 @@ import 'dimen.dart';
 
 class WidgetFactory {
 //  static buttonTopBottomPadding = Padding();
-  static Padding buttonTopBottomPadding(Widget child) => Padding(
-      padding: EdgeInsets.only(
-          top: Dimen.buttonTopPadding, bottom: Dimen.buttonTopPadding),
-      child: child);
+  static Padding buttonTopBottomPadding(Widget child,
+          {double topPadding, double bottomPadding}) =>
+      Padding(
+          padding: EdgeInsets.only(
+              top: topPadding != null ? topPadding : Dimen.buttonTopPadding,
+              bottom: bottomPadding != null
+                  ? bottomPadding
+                  : Dimen.buttonTopPadding),
+          child: child);
 
   static RaisedButton button(
-      {String data, Color color, @required VoidCallback onPressed}) {
+      {String data,
+      Color color,
+      @required VoidCallback onPressed,
+      double topPadding,
+      double bottomPadding}) {
     return RaisedButton(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimen.corner)),
@@ -21,7 +30,9 @@ class WidgetFactory {
         color: color,
         textColor: Colors.white,
         child: WidgetFactory.buttonTopBottomPadding(
-            Text(data, style: StyleFactory.buttonTitleStyle)));
+            Text(data, style: StyleFactory.buttonTitleStyle),
+            topPadding: topPadding,
+            bottomPadding: bottomPadding));
   }
 
   static Widget smallButton({String data, @required VoidCallback onPressed}) {

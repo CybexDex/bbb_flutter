@@ -52,13 +52,161 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     _model.contractId,
-                    style: StyleFactory.smallCellTitleStyle,
+                    style: StyleFactory.cellTitleStyle,
                   ),
                   Expanded(
                       child: Align(
-                    alignment: Alignment.centerRight,
-                    child: WidgetFactory.smallButton(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            DateFormat("yyyy/MM/dd HH:mm:ss").format(
+                                DateTime.parse(_model.createTime).toLocal()),
+                            style: StyleFactory.transferStyleTitle,
+                          ))),
+                ],
+              ),
+            ),
+            Expanded(flex: 5, child: SizedBox()),
+            Divider(color: Palette.separatorColor),
+            Expanded(
+                flex: 18,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).openPositionPrice,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    Text(
+                      I18n.of(context).invest,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    Text(I18n.of(context).accruedInterest,
+                        style: StyleFactory.cellDescLabel)
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(flex: 1, child: SizedBox()),
+            Expanded(
+                flex: 18,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      _model.boughtPx.toStringAsFixed(4),
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                    Text(
+                      invest.toStringAsFixed(2) + " USDT",
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                    Text(
+                      _model.accruedInterest.toStringAsFixed(4),
+                      style: StyleFactory.cellTitleStyle,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 5,
+                child: SizedBox(
+                  height: 8,
+                )),
+            Expanded(
+                flex: 18,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).forcePrice,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    Text(
+                      "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 1,
+                child: SizedBox(
+                  height: 2,
+                )),
+            Expanded(
+                flex: 18,
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      _model.forceClosePx.toStringAsFixed(4),
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                    Expanded(
+                        child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Text(
+                              "${takeprofit.toStringAsFixed(0)}% / ${cutLoss.toStringAsFixed(0)}%",
+                              style: StyleFactory.cellTitleStyle,
+                            ),
+                          ),
+                          GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcRevise),
+                            onTap: () {
+                              openDialog(context);
+                            },
+                          )
+                        ],
+                      ),
+                    ))
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                )),
+            Expanded(
+                flex: 5,
+                child: SizedBox(
+                  height: 1,
+                )),
+            Divider(color: Palette.separatorColor),
+            Expanded(
+                flex: 45,
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          I18n.of(context).futureProfit,
+                          style: StyleFactory.cellDescLabel,
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              (_model.pnl).toStringAsFixed(2) +
+                                  "(" +
+                                  (100 * (_model.pnl / invest))
+                                      .toStringAsFixed(0) +
+                                  "%)",
+                              style: _model.pnl > 0
+                                  ? StyleFactory.buyUpOrderInfo
+                                  : StyleFactory.buyDownOrderInfo,
+                            ),
+                            Text(
+                              " USDT",
+                              style: StyleFactory.cellTitleStyle,
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    WidgetFactory.button(
                         data: I18n.of(context).closeOut,
+                        color: Palette.redOrange,
+                        topPadding: 5,
+                        bottomPadding: 5,
                         onPressed: () async {
                           TextEditingController controller =
                               TextEditingController();
@@ -75,155 +223,12 @@ class OrderInfo extends StatelessWidget {
                             }
                           });
                         }),
-                  )),
-                ],
-              ),
-            ),
-            Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 18,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      I18n.of(context).futureProfit,
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Text(
-                      (_model.pnl).toStringAsFixed(2) +
-                          " USDT" +
-                          "(" +
-                          (100 * (_model.pnl / invest)).toStringAsFixed(0) +
-                          "%)",
-                      style: StyleFactory.smallCellTitleStyle,
-                    )
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 )),
             Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 18,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      I18n.of(context).openPositionPrice,
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Text(
-                      _model.boughtPx.toStringAsFixed(4),
-                      style: StyleFactory.smallCellTitleStyle,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 18,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      I18n.of(context).forcePrice,
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Text(
-                      _model.forceClosePx.toStringAsFixed(4),
-                      style: StyleFactory.smallCellTitleStyle,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 18,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      I18n.of(context).invest,
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Text(
-                      invest.toStringAsFixed(2) + " USDT",
-                      style: StyleFactory.smallCellTitleStyle,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 20,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Expanded(
-                        child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              "${takeprofit.toStringAsFixed(0)}% / ${cutLoss.toStringAsFixed(0)}%",
-                              style: StyleFactory.smallCellTitleStyle,
-                            ),
-                          ),
-                          WidgetFactory.smallButton(
-                              data: I18n.of(context).amend,
-                              onPressed: () {
-                                openDialog(
-                                  context,
-                                );
-                              }),
-                        ],
-                      ),
-                    )),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 12,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 18,
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      I18n.of(context).accruedInterest,
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                    Text(
-                      _model.accruedInterest.toStringAsFixed(4),
-                      style: StyleFactory.smallCellTitleStyle,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 15,
+                flex: 5,
                 child: SizedBox(
                   height: 8,
                 ))
@@ -237,7 +242,7 @@ class OrderInfo extends StatelessWidget {
       {OrderResponseModel orderResponse, Contract refContract}) {
     if (refContract.contractId == orderResponse.contractId) {
       if (refContract.conversionRate > 0) {
-        return Image.asset(R.resAssetsIconsIcUpRed14);
+        return Image.asset(R.resAssetsIconsIcUpRed14, width: 14, height: 14);
       } else {
         return Image.asset(R.resAssetsIconsIcDownGreen14);
       }
@@ -262,7 +267,6 @@ class OrderInfo extends StatelessWidget {
 
   openDialog(BuildContext context) {
     Function callback = () {
-//      Provider.of<OrderViewModel>(context).getOrders();
       Navigator.of(context).pop();
     };
     showGeneralDialog(

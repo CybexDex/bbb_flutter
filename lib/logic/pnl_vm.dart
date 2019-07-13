@@ -81,28 +81,28 @@ class PnlViewModel extends BaseModel {
 
   void increaseTakeProfit() {
     if (takeProfit < 100) {
-      takeProfit += 1;
+      takeProfit += 5;
       setBusy(false);
     }
   }
 
   void decreaseTakeProfit() {
     if (takeProfit > 1) {
-      takeProfit -= 1;
+      takeProfit -= 5;
       setBusy(false);
     }
   }
 
   void increaseCutLoss() {
     if (cutLoss < 100) {
-      cutLoss += 1;
+      cutLoss += 5;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
     if (cutLoss > 1) {
-      cutLoss -= 1;
+      cutLoss -= 5;
       setBusy(false);
     }
   }

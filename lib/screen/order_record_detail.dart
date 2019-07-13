@@ -103,17 +103,29 @@ class OrderRecordDetailHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(_model.pnl.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w600,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 24.0)),
+                    style: _model.pnl > 0
+                        ? TextStyle(
+                            color: Palette.redOrange,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                            fontSize: Dimen.hugLabelFontSize)
+                        : TextStyle(
+                            color: Palette.shamrockGreen,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                            fontSize: Dimen.hugLabelFontSize)),
                 Text("   USDT",
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0))
+                    style: _model.pnl > 0
+                        ? TextStyle(
+                            color: Palette.redOrange,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: Dimen.middleLabelFontSize)
+                        : TextStyle(
+                            color: Palette.shamrockGreen,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontSize: Dimen.middleLabelFontSize))
               ],
             ),
           )
@@ -128,7 +140,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
     0,
     I18n.of(globalKey.currentContext).openPositionPrice,
     I18n.of(globalKey.currentContext).settlementPrice,
-    I18n.of(globalKey.currentContext).investAmount,
+    I18n.of(globalKey.currentContext).investPay,
     I18n.of(globalKey.currentContext).fee,
     I18n.of(globalKey.currentContext).accruedInterest,
     I18n.of(globalKey.currentContext).takeProfit,
@@ -150,6 +162,9 @@ class OrderRecordDetailInfo extends StatelessWidget {
         _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
     double cutLoss = OrderCalculate.getCutLoss(_model.cutLossPx,
         _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
+    double invest = OrderCalculate.calculateInvest(
+        orderQtyContract: _model.qtyContract,
+        orderBoughtContractPx: _model.boughtContractPx);
     _itemBuilder(title, index) {
       if (index == 0) {
         return OrderRecordDetailHeader(model: _model, contract: _contract);
@@ -181,7 +196,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 3:
-                return Text(_model.qtyContract.toString(),
+                return Text(invest.toString(),
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,

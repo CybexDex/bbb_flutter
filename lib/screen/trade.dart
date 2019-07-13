@@ -165,6 +165,7 @@ class _TradePageState extends State<TradePage> {
                                 child:
                                     OrderFormWidget(contract: params.contract),
                               ),
+                              Divider(color: Palette.separatorColor),
                               Container(
                                 margin: EdgeInsets.only(bottom: 0),
                                 height: 60,
@@ -173,6 +174,8 @@ class _TradePageState extends State<TradePage> {
                                         model.orderForm.totalAmount.amount,
                                     button: model.orderForm.isUp
                                         ? WidgetFactory.button(
+                                            topPadding: 8,
+                                            bottomPadding: 8,
                                             data: I18n.of(context).buyUp,
                                             color: model.isSatisfied
                                                 ? Palette.redOrange
@@ -203,6 +206,8 @@ class _TradePageState extends State<TradePage> {
                                                   }
                                                 : () {})
                                         : WidgetFactory.button(
+                                            topPadding: 8,
+                                            bottomPadding: 8,
                                             data: I18n.of(context).buyDown,
                                             color: model.isSatisfied
                                                 ? Palette.shamrockGreen
