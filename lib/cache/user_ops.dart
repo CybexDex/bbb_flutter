@@ -7,7 +7,7 @@ UserEntity loadUserFromCache(SharedPref pref) {
       account: pref.getAccount(),
       name: pref.getUserName(),
       lockTimeType: LockTimeType.high,
-      loginType: LoginType.none,
+      loginType: pref.getLoginType(),
       permission: null,
       unlockType: UnlockType.cloud);
 }

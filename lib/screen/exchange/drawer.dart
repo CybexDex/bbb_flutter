@@ -27,14 +27,28 @@ class UserDrawer extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
               child: Column(
                 children: <Widget>[
-                  Align(
-                    child: GestureDetector(
-                      child: Image.asset(R.resAssetsIconsIcNotifyBack),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    alignment: Alignment.topLeft,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Align(
+                        child: GestureDetector(
+                          child: Image.asset(R.resAssetsIconsIcNotifyBack),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        alignment: Alignment.topLeft,
+                      ),
+                      Align(
+                        child: GestureDetector(
+                          child: Text(
+                            I18n.of(context).clickToTry,
+                            style: StyleFactory.buyUpCellLabel,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                      )
+                    ],
                   ),
                   SizedBox(height: 20),
                   Row(

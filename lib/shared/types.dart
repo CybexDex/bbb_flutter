@@ -15,7 +15,13 @@ const Map<LockTimeType, int> UnlockTimes = {
   LockTimeType.high: 3600,
 };
 
-enum LoginType { none, cloud, key }
+enum LoginType { none, cloud, key, test }
+const Map<LoginType, String> loginTypeStatusMap = {
+  LoginType.none: "NONE",
+  LoginType.cloud: "CLOUD",
+  LoginType.key: "KEY",
+  LoginType.test: "TEST",
+};
 
 enum OrderStatus { open, closed, rejected }
 const Map<OrderStatus, String> orderStatusMap = {
@@ -82,9 +88,7 @@ String closeResonCN(String status) {
   return map[status];
 }
 
-/**
- * Route Types
- */
+///Route Types
 class RouteParamsOfTrade {
   final Contract contract;
   final bool isUp;

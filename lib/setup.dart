@@ -45,14 +45,14 @@ Logger getLogger(String className) {
 }
 
 setupLocator() async {
+  var pref = await SharedPref.create();
+  locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
   locator.registerSingleton(BBBAPIProvider());
   locator.registerSingleton(FaucetAPIProvider());
   locator.registerSingleton(MarketManager(api: locator<BBBAPIProvider>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPIProvider>()));
-  var pref = await SharedPref.create();
-  locator.registerSingleton(pref);
 
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPIProvider>(),

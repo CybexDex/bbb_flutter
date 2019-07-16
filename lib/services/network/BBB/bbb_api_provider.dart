@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/interceptors.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
@@ -12,6 +13,7 @@ import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
@@ -22,7 +24,11 @@ class BBBAPIProvider extends BBBAPI {
   Dio dio = Dio();
 
   BBBAPIProvider() {
+//    _pref = sharedPref;
     dio.options.baseUrl = "https://nxapitest.cybex.io/v1";
+//    dio.options.baseUrl = _pref.getTestNet()
+//        ? "https://nxtestnet.cybex.io/v1"
+
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
     // dio.interceptors.add(ILogInterceptor(
@@ -31,6 +37,13 @@ class BBBAPIProvider extends BBBAPI {
     //     request: true,
     //     responseHeader: false));
   }
+
+//  setTestNet({bool isTestNet}) {
+//    _pref.saveTestNet(isTestNet: isTestNet);
+//    dio.options.baseUrl = _pref.getTestNet()
+//        ? "https://nxtestnet.cybex.io/v1"
+//        : "https://nxapitest.cybex.io/v1";
+//  }
 
   @override
   Future<RefContractResponseModel> getRefData(
@@ -168,5 +181,11 @@ class BBBAPIProvider extends BBBAPI {
     return Future.value(responseData["result"] == null
         ? null
         : AccountResponseModel.fromJson(responseData["result"]));
+  }
+
+  @override
+  Future<TestAccountResponseModel> getTestAccount() async {
+    var response = await dio.get("/testAccount");
+    return Future.value(TestAccountResponseModel.fromJson(response.data));
   }
 }

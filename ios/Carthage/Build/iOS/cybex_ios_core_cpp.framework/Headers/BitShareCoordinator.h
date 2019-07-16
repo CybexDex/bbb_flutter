@@ -81,7 +81,8 @@ NS_ASSUME_NONNULL_BEGIN
                         fee_id:(int)fee_id fee_amount:(int64_t)fee_amount;
 
 + (void)resetDefaultPublicKey:(NSString *)str;//每次登录设置默认签名的公钥  默认为active-key
-  
++ (void)setDefaultPrivateKey:(NSString *)str;
+
 + (void)cancelUserKey;
   
   

@@ -9,6 +9,7 @@ import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
+import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 
@@ -24,6 +25,7 @@ abstract class BBBAPI {
 
   Future<List<FundRecordModel>> getFundRecords(
       {String name, DateTime start, DateTime end});
+  Future<TestAccountResponseModel> getTestAccount();
 
   ///post
   Future<PostOrderResponseModel> postOrder({PostOrderRequestModel order});

@@ -217,6 +217,8 @@ class _$Keys {
   static final String cutLossCloseOut = 'cut_loss_close_out';
 
   static final String userCloseOut = 'user_close_out';
+
+  static final String clickToTry = 'click_to_try';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -338,4 +340,5 @@ abstract class _$I18nHelper {
   String get takeProfitCloseOut => _translate(_$Keys.takeProfitCloseOut);
   String get cutLossCloseOut => _translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => _translate(_$Keys.userCloseOut);
+  String get clickToTry => _translate(_$Keys.clickToTry);
 }

@@ -9,6 +9,7 @@ import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
+import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -48,6 +49,7 @@ class UserManager extends BaseModel {
 
         _pref.saveUserName(name: name);
         _pref.saveAccount(account: account);
+        _pref.saveLoginType(loginType: LoginType.cloud);
         notifyListeners();
 
         return true;
@@ -57,6 +59,33 @@ class UserManager extends BaseModel {
     }
 
     return false;
+  }
+
+  Future<bool> loginWithPrivateKey() async {
+    TestAccountResponseModel testAccount = await _api.getTestAccount();
+    if (testAccount != null) {
+      try {
+        await unlockWithPrivKey(testAccount: testAccount);
+        user.testAccountResponseModel = testAccount;
+        user.loginType = LoginType.test;
+        _pref.saveLoginType(loginType: LoginType.test);
+        _pref.saveTestAccount(testAccount: testAccount);
+        notifyListeners();
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
+  unlockWithPrivKey({TestAccountResponseModel testAccount}) async {
+    try {
+      CybexFlutterPlugin.setDefaultPrivKey(testAccount.privateKey);
+    } catch (error) {
+      throw error.toString();
+    }
   }
 
   unlockWith(
@@ -156,6 +185,8 @@ class UserManager extends BaseModel {
     _pref.removeAccount();
     _pref.removeAccountKeys();
     _pref.removeUserName();
+    _pref.removeLoginType();
+    _pref.removeTestAccount();
 
     user.account = null;
     user.name = null;

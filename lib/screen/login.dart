@@ -1,5 +1,8 @@
+import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/BBB/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -18,7 +21,7 @@ class _LoginState extends State<LoginPage> {
   bool _enableButton = false;
   String _errorMessage = "";
   var userLocator = locator<UserManager>();
-
+  var aaa = locator<BBBAPIProvider>();
   @override
   void initState() {
     _passwordController.addListener(() {
@@ -169,7 +172,32 @@ class _LoginState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 60,
+                      height: 40,
+                    ),
+                    GestureDetector(
+                      child: Container(
+                          alignment: Alignment.center,
+                          width: 200,
+                          margin: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Palette.redOrange),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.0) //
+                                    ),
+                          ),
+                          child: Text(
+                            I18n.of(context).clickToTry,
+                            style: StyleFactory.buyUpOrderInfo,
+                          )),
+                      onTap: () {
+                        userLocator.loginWithPrivateKey();
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+                      },
+                    ),
+                    SizedBox(
+                      height: 40,
                     ),
                     GestureDetector(
                       child: Text(

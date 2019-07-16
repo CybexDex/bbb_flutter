@@ -461,6 +461,26 @@ class _RegisterState extends State<RegisterPage> {
                       height: 48,
                     ),
                     GestureDetector(
+                      child: Container(
+                          alignment: Alignment.center,
+                          width: 200,
+                          margin: EdgeInsets.only(top: 20),
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Palette.redOrange),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(4.0) //
+                                    ),
+                          ),
+                          child: Text(
+                            I18n.of(context).clickToTry,
+                            style: StyleFactory.buyUpOrderInfo,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    GestureDetector(
                       child: RichText(
                           text: new TextSpan(children: [
                         new TextSpan(
