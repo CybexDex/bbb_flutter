@@ -1,7 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -9,10 +8,8 @@ import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_form.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:logger/logger.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 import 'dropdown.dart';
 
 class TradePage extends StatefulWidget {

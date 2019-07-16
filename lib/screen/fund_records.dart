@@ -2,7 +2,7 @@ import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/widgets/fund_record_item.dart';
 
@@ -22,7 +22,7 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
   void initState() {
     final name = locator.get<UserManager>().user.name;
     locator
-        .get<BBBAPIProvider>()
+        .get<BBBAPI>()
         .getFundRecords(
             name: name,
             start: DateTime.now().toUtc().subtract(Duration(days: 30)),

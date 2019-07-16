@@ -10,8 +10,7 @@ import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
-import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
@@ -19,9 +18,9 @@ class UserManager extends BaseModel {
   UserEntity user;
 
   final SharedPref _pref;
-  final BBBAPIProvider _api;
+  final BBBAPI _api;
 
-  UserManager({SharedPref pref, BBBAPIProvider api, this.user})
+  UserManager({SharedPref pref, BBBAPI api, this.user})
       : _pref = pref,
         _api = api;
 

@@ -11,7 +11,6 @@ import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
-import 'package:cybex_flutter_plugin/commision.dart';
 
 abstract class BBBAPI {
   Future<RefContractResponseModel> getRefData({List<ContractStatus> status});

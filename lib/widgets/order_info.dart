@@ -2,15 +2,12 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class OrderInfo extends StatelessWidget {
   final OrderResponseModel _model;

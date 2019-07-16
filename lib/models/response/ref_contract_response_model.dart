@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:quiver/core.dart';
-
 class RefContractResponseModel {
   String chainId;
   String refBlockId;

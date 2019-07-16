@@ -5,7 +5,7 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
 import 'package:bbb_flutter/widgets/order_record_item.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 
 class OrderRecordsWidget extends StatefulWidget {
   const OrderRecordsWidget({Key key}) : super(key: key);
@@ -23,7 +23,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
   void initState() {
     final name = locator.get<UserManager>().user.name;
     locator
-        .get<BBBAPIProvider>()
+        .get<BBBAPI>()
         .getOrders(name,
             status: [OrderStatus.closed],
             startTime: (DateTime.now().subtract(Duration(days: 90)))

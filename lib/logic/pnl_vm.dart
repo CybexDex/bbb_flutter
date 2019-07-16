@@ -8,8 +8,7 @@ import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
-import 'package:cybex_flutter_plugin/common.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:logger/logger.dart';
 
@@ -20,13 +19,13 @@ class PnlViewModel extends BaseModel {
   double takeProfit;
   bool shouldShowErrorMessage = false;
 
-  BBBAPIProvider _api;
+  BBBAPI _api;
   UserManager _um;
   MarketManager _mtm;
   RefManager _refm;
 
   PnlViewModel(
-      {BBBAPIProvider api,
+      {BBBAPI api,
       UserManager um,
       MarketManager mtm,
       RefManager refm}) {

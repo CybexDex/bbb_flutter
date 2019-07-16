@@ -3,17 +3,14 @@ import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
-import 'package:bbb_flutter/helper/order_calculate_helper.dart';
-import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/form/transfer_form_model.dart';
-import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
@@ -26,12 +23,12 @@ class TransferViewModel extends BaseModel {
   PostWithdrawRequestModel withdrawRequestModel;
   Commission commission;
 
-  BBBAPIProvider _api;
+  BBBAPI _api;
   RefManager _refm;
   UserManager _um;
 
   TransferViewModel(
-      {@required BBBAPIProvider api,
+      {@required BBBAPI api,
       @required RefManager refm,
       @required UserManager um,
       this.transferForm}) {

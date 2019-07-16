@@ -5,7 +5,7 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
@@ -20,9 +20,9 @@ class MarketManager {
       BehaviorSubject<List<TickerData>>();
   IOWebSocketChannel _channel;
 
-  BBBAPIProvider _api;
+  BBBAPI _api;
 
-  MarketManager({BBBAPIProvider api}) : _api = api;
+  MarketManager({BBBAPI api}) : _api = api;
 
   String _assetName;
 

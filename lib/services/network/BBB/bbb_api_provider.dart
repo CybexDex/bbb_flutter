@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
-import 'package:bbb_flutter/interceptors.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
@@ -14,9 +12,8 @@ import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
-import 'package:bbb_flutter/services/network/BBB/bbb_api.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
-import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 

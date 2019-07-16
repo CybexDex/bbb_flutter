@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
@@ -8,8 +7,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/models/response/register_response_model.dart';
-import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
+import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -56,7 +54,7 @@ class _RegisterState extends State<RegisterPage> {
 
   getSvg() {
     Future<FaucetCaptchaResponseModel> response =
-        FaucetAPIProvider().getCaptcha();
+        locator<FaucetAPI>().getCaptcha();
     response.then((FaucetCaptchaResponseModel model) {
       String rawSvg = model.data;
       _capid = model.id;
@@ -83,7 +81,7 @@ class _RegisterState extends State<RegisterPage> {
     requestModel.cap.id = _capid;
     requestModel.cap.captcha = _pinCodeController.text;
     RegisterRequestResponse registerRequestResponse = await locator
-        .get<FaucetAPIProvider>()
+        .get<FaucetAPI>()
         .register(registerRequestModel: requestModel);
     if (registerRequestResponse.error != null) {
       setState(() {

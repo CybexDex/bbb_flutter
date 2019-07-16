@@ -1,13 +1,10 @@
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/exchange/drawer.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_appbar.dart';
-import 'package:bbb_flutter/services/network/BBB/bbb_api_provider.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';

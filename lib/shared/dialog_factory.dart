@@ -1,5 +1,4 @@
 import 'package:bbb_flutter/base/base_widget.dart';
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
-import 'package:logger/logger.dart';
 
 class DialogFactory {
   static CupertinoAlertDialog logoutConfirmDialog(BuildContext context,

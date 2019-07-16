@@ -8,7 +8,6 @@ import 'package:bbb_flutter/screen/register.dart';
 import 'package:bbb_flutter/screen/trade.dart';
 import 'package:bbb_flutter/screen/transfer_page.dart';
 import 'package:bbb_flutter/screen/withdraw_page.dart';
-import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

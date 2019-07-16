@@ -1,5 +1,5 @@
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -42,9 +42,9 @@ class RefManager {
   BehaviorSubject<RefContractResponseModel> _refdataController =
       BehaviorSubject<RefContractResponseModel>();
 
-  BBBAPIProvider _api;
+  BBBAPI _api;
 
-  RefManager({BBBAPIProvider api}) : _api = api;
+  RefManager({BBBAPI api}) : _api = api;
 
   Contract getContractFromId(String id) {
     return lastData?.contract

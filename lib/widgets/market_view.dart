@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/logic/market_vm.dart';
@@ -7,7 +6,6 @@ import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
-import 'package:logger/logger.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 
 class MarketView extends StatefulWidget {

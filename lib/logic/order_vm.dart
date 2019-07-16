@@ -5,20 +5,20 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 
 class OrderViewModel extends BaseModel {
   List<OrderResponseModel> orders = [];
 
   int index = 0;
-  BBBAPIProvider _api;
+  BBBAPI _api;
   UserManager _um;
 
   Function _getOrdersCallback;
   StreamSubscription _refSub;
 
-  OrderViewModel({BBBAPIProvider api, UserManager um, RefManager rm}) {
+  OrderViewModel({BBBAPI api, UserManager um, RefManager rm}) {
     _api = api;
     _um = um;
 

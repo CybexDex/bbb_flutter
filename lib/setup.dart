@@ -11,7 +11,8 @@ import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'services/network/faucet/faucet_api.dart';
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
 final globalKey = GlobalKey();
@@ -49,24 +50,24 @@ setupLocator() async {
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
-  locator.registerSingleton(BBBAPIProvider());
-  locator.registerSingleton(FaucetAPIProvider());
-  locator.registerSingleton(MarketManager(api: locator<BBBAPIProvider>()));
-  locator.registerSingleton(RefManager(api: locator<BBBAPIProvider>()));
+  locator.registerSingleton<BBBAPI>(BBBAPIProvider());
+  locator.registerSingleton<FaucetAPI>(FaucetAPIProvider());
+  locator.registerSingleton(MarketManager(api: locator<BBBAPI>()));
+  locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
 
   locator.registerLazySingleton(() => UserManager(
-      api: locator<BBBAPIProvider>(),
+      api: locator<BBBAPI>(),
       pref: locator<SharedPref>(),
       user: loadUserFromCache(locator<SharedPref>())));
 
   locator.registerFactory(() => TradeViewModel(
-      api: locator<BBBAPIProvider>(),
+      api: locator<BBBAPI>(),
       mtm: locator<MarketManager>(),
       refm: locator<RefManager>(),
       um: locator<UserManager>()));
 
   locator.registerFactory(() => OrderViewModel(
-      api: locator<BBBAPIProvider>(),
+      api: locator<BBBAPI>(),
       um: locator<UserManager>(),
       rm: locator<RefManager>()));
 }

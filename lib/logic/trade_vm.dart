@@ -11,7 +11,7 @@ import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
@@ -30,7 +30,7 @@ class TradeViewModel extends BaseModel {
   Order buyOrder;
   Commission commission;
 
-  BBBAPIProvider _api;
+  BBBAPI _api;
   MarketManager _mtm;
   RefManager _refm;
   UserManager _um;
@@ -39,7 +39,7 @@ class TradeViewModel extends BaseModel {
   StreamSubscription _lastTickerSub;
 
   TradeViewModel(
-      {@required BBBAPIProvider api,
+      {@required BBBAPI api,
       @required MarketManager mtm,
       @required RefManager refm,
       @required UserManager um,
