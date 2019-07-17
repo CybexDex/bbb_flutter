@@ -60,6 +60,21 @@ target 'Runner' do
     File.symlink(p[:path], symlink)
     pod p[:name], :path => File.join(symlink, 'ios')
   }
+
+  $static_framework = ['FlipperKit', 'Flipper', 'Flipper-Folly',
+  'CocoaAsyncSocket', 'ComponentKit', 'DoubleConversion',
+  'glog', 'Flipper-PeerTalk', 'Flipper-RSocket', 'Yoga', 'YogaKit',
+  'CocoaLibEvent','openssl-ios-bitcode', 'boost-for-react-native']
+
+  pre_install do |installer|
+    Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+    installer.pod_targets.each do |pod|
+      if $static_framework.include?(pod.name)
+        pod.instance_variable_set(:@host_requires_frameworks, false)
+        puts pod
+      end
+    end
+  end
 end
 
 post_install do |installer|
