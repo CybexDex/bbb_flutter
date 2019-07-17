@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/account_util.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
@@ -13,6 +14,9 @@ import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
+
+import '../setup.dart';
+import 'market_manager.dart';
 
 class UserManager extends BaseModel {
   UserEntity user;
@@ -61,14 +65,22 @@ class UserManager extends BaseModel {
   }
 
   Future<bool> loginWithPrivateKey() async {
-    TestAccountResponseModel testAccount = await _api.getTestAccount();
+    await locator.get<BBBAPI>().setTestNet(isTestNet: true);
+
+    TestAccountResponseModel testAccount =
+        _pref.getTestAccount() ?? await _api.getTestAccount();
     if (testAccount != null) {
       try {
         await unlockWithPrivKey(testAccount: testAccount);
         user.testAccountResponseModel = testAccount;
         user.loginType = LoginType.test;
+        user.name = testAccount.accountName;
         _pref.saveLoginType(loginType: LoginType.test);
         _pref.saveTestAccount(testAccount: testAccount);
+        _pref.saveUserName(name: user.name);
+        fetchBalances(name: user.name);
+        locator.get<MarketManager>().cancelAndRemoveData();
+        locator.get<MarketManager>().loadAllData("BXBT");
         notifyListeners();
         return true;
       } catch (error) {
@@ -81,7 +93,7 @@ class UserManager extends BaseModel {
 
   unlockWithPrivKey({TestAccountResponseModel testAccount}) async {
     try {
-      CybexFlutterPlugin.setDefaultPrivKey(testAccount.privateKey);
+      await CybexFlutterPlugin.setDefaultPrivKey(testAccount.privateKey);
     } catch (error) {
       throw error.toString();
     }
@@ -185,13 +197,31 @@ class UserManager extends BaseModel {
     _pref.removeAccountKeys();
     _pref.removeUserName();
     _pref.removeLoginType();
-    _pref.removeTestAccount();
 
     user.account = null;
     user.name = null;
     user.keys = null;
     user.permission = null;
     user.balances = null;
+    notifyListeners();
+  }
+
+  logoutTestAccount() async {
+    user.testAccountResponseModel = null;
+    if (user.account != null) {
+      user.loginType = LoginType.cloud;
+      _pref.saveLoginType(loginType: LoginType.cloud);
+      user.name = user.account.name;
+      _pref.saveUserName(name: user.account.name);
+      fetchBalances(name: user.name);
+    } else {
+      _pref.saveLoginType(loginType: LoginType.none);
+      user.name = null;
+      _pref.removeUserName();
+    }
+    await locator<BBBAPI>().setTestNet(isTestNet: false);
+    locator.get<MarketManager>().cancelAndRemoveData();
+    locator.get<MarketManager>().loadAllData(null);
     notifyListeners();
   }
 }

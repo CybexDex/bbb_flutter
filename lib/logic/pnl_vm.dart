@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -25,10 +26,7 @@ class PnlViewModel extends BaseModel {
   RefManager _refm;
 
   PnlViewModel(
-      {BBBAPI api,
-      UserManager um,
-      MarketManager mtm,
-      RefManager refm}) {
+      {BBBAPI api, UserManager um, MarketManager mtm, RefManager refm}) {
     _api = api;
     _um = um;
     _mtm = mtm;
@@ -41,6 +39,10 @@ class PnlViewModel extends BaseModel {
 
   Future<PostOrderResponseModel> amend(
       OrderResponseModel order, bool execNow) async {
+    if (_um.user.testAccountResponseModel != null) {
+      CybexFlutterPlugin.setDefaultPrivKey(
+          _um.user.testAccountResponseModel.privateKey);
+    }
     final ticker = _mtm.lastTicker.value;
     int epochTime = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
     final contract = currentContract(order);
@@ -57,7 +59,9 @@ class PnlViewModel extends BaseModel {
         : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
                 contract.strikeLevel, contract.conversionRate > 0)
             .toStringAsFixed(6);
-    model.seller = suffixId(_um.user.account.id);
+    model.seller = suffixId(locator.get<SharedPref>().getTestNet()
+        ? _um.user.testAccountResponseModel.accountId
+        : _um.user.account.id);
     model.refBuyOrderTxId = order.buyOrderTxId;
     model.execNowPx = ticker.value.toString();
     model.expiration = execNow ? epochTime : 0;

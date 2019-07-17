@@ -37,9 +37,11 @@ class OrderViewModel extends BaseModel {
   getOrders() async {
     if (_um.user.logined) {
 //      setBusy(true);
-      orders = await _api
-          .getOrders(_um.user.account.name, status: [OrderStatus.open]);
+      orders = await _api.getOrders(_um.user.name, status: [OrderStatus.open]);
       orders = orders.take(10).toList();
+      setBusy(false);
+    } else {
+      orders = [];
       setBusy(false);
     }
   }

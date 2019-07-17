@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
@@ -45,7 +47,7 @@ class SharedPref {
   TestAccountResponseModel getTestAccount() {
     final value = _prefs.getString('bbb.testAccount');
     if (value != null) {
-      return TestAccountResponseModel.fromJson(value);
+      return TestAccountResponseModel.fromJson(json.decode(value));
     }
     return null;
   }

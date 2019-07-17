@@ -13,7 +13,9 @@ void showToast(BuildContext context, bool isFaild, String content,
             ? DialogFactory.failDialog(context, content: content)
             : DialogFactory.successDialog(context, content: content);
       }).then((value) {
-    callback();
+    if (callback != null) {
+      callback();
+    }
   });
 }
 

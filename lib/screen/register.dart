@@ -87,17 +87,26 @@ class _RegisterState extends State<RegisterPage> {
       setState(() {
         _errorMessageVisibility = true;
         _errorMessage = registerRequestResponse.error;
+        Navigator.of(context).pop();
       });
     } else if (registerRequestResponse.error == null &&
         registerRequestResponse != null) {
-      await locator.get<UserManager>().loginWith(
+      if (await locator.get<UserManager>().loginWith(
           name: _accountNameController.text,
-          password: _passwordController.text);
-      Navigator.of(context).popUntil((route) => route.isFirst);
+          password: _passwordController.text)) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        setState(() {
+          _errorMessage = "Network status error";
+          _errorMessageVisibility = true;
+          Navigator.of(context).pop();
+        });
+      }
     } else {
       setState(() {
         _errorMessage = "Network status error";
         _errorMessageVisibility = true;
+        Navigator.of(context).pop();
       });
     }
   }
@@ -474,6 +483,11 @@ class _RegisterState extends State<RegisterPage> {
                             I18n.of(context).clickToTry,
                             style: StyleFactory.buyUpOrderInfo,
                           )),
+                      onTap: () {
+                        locator.get<UserManager>().loginWithPrivateKey();
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+                      },
                     ),
                     SizedBox(
                       height: 40,

@@ -9,5 +9,7 @@ UserEntity loadUserFromCache(SharedPref pref) {
       lockTimeType: LockTimeType.high,
       loginType: pref.getLoginType(),
       permission: null,
-      unlockType: UnlockType.cloud);
+      unlockType: UnlockType.cloud,
+      testAccountResponseModel:
+          pref.getTestNet() ? pref.getTestAccount() : null);
 }

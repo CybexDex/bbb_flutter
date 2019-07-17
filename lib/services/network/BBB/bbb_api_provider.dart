@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
@@ -19,13 +20,13 @@ import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 
 class BBBAPIProvider extends BBBAPI {
   Dio dio = Dio();
+  SharedPref _pref;
 
-  BBBAPIProvider() {
-//    _pref = sharedPref;
-    dio.options.baseUrl = "https://nxapitest.cybex.io/v1";
-//    dio.options.baseUrl = _pref.getTestNet()
-//        ? "https://nxtestnet.cybex.io/v1"
-
+  BBBAPIProvider({SharedPref sharedPref}) {
+    _pref = sharedPref;
+    dio.options.baseUrl = _pref.getTestNet()
+        ? "https://nxtestnet.cybex.io/v1"
+        : "https://nxapitest.cybex.io/v1";
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
     // dio.interceptors.add(ILogInterceptor(
@@ -35,12 +36,13 @@ class BBBAPIProvider extends BBBAPI {
     //     responseHeader: false));
   }
 
-//  setTestNet({bool isTestNet}) {
-//    _pref.saveTestNet(isTestNet: isTestNet);
-//    dio.options.baseUrl = _pref.getTestNet()
-//        ? "https://nxtestnet.cybex.io/v1"
-//        : "https://nxapitest.cybex.io/v1";
-//  }
+  @override
+  setTestNet({bool isTestNet}) async {
+    await _pref.saveTestNet(isTestNet: isTestNet);
+    dio.options.baseUrl = _pref.getTestNet()
+        ? "https://nxtestnet.cybex.io/v1"
+        : "https://nxapitest.cybex.io/v1";
+  }
 
   @override
   Future<RefContractResponseModel> getRefData(
@@ -51,15 +53,13 @@ class BBBAPIProvider extends BBBAPI {
       params["contractStatus"] = statusValue;
     }
     var response = await dio.get('/refData', queryParameters: params);
-    var responseData = json.decode(response.data);
-    return Future.value(RefContractResponseModel.fromJson(responseData));
+    return Future.value(RefContractResponseModel.fromJson(response.data));
   }
 
   @override
   Future<PositionsResponseModel> getPositions({String name}) async {
     var response = await dio.get('/position?accountName=$name');
-    var responseData = json.decode(response.data);
-    return Future.value(PositionsResponseModel.fromJson(responseData));
+    return Future.value(PositionsResponseModel.fromJson(response.data));
   }
 
   @override
@@ -81,7 +81,7 @@ class BBBAPIProvider extends BBBAPI {
     }
 
     var response = await dio.get('/order', queryParameters: params);
-    var responseData = json.decode(response.data) as List;
+    var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);
     }
@@ -99,7 +99,7 @@ class BBBAPIProvider extends BBBAPI {
       "startTime": start.toIso8601String(),
       "endTime": end.toIso8601String()
     });
-    var responseData = json.decode(response.data) as List;
+    var responseData = response.data as List;
     List<FundRecordModel> model = responseData.map((data) {
       return FundRecordModel.fromJson(data);
     }).toList();
@@ -111,7 +111,7 @@ class BBBAPIProvider extends BBBAPI {
       {String startTime, String endTime, String asset}) async {
     var response = await dio.get(
         '/klines?assetName=$asset&interval=1m&startTime=$startTime&endTime=$endTime&limit=300');
-    var responseData = json.decode(response.data) as List;
+    var responseData = response.data as List;
     List<MarketHistoryResponseModel> model = responseData.map((data) {
       var model = MarketHistoryResponseModel();
       model.xts = data[0] * 1000000;
@@ -133,25 +133,22 @@ class BBBAPIProvider extends BBBAPI {
   Future<DepositResponseModel> getDeposit({String name, String asset}) async {
     var response = await dio.get('/depositAddress',
         queryParameters: {"accountName": name, "asset": asset});
-    var responseData = json.decode(response.data);
-    return Future.value(DepositResponseModel.fromJson(responseData));
+    return Future.value(DepositResponseModel.fromJson(response.data));
   }
 
   @override
   Future<PostOrderResponseModel> amendOrder(
       {AmendOrderRequestModel order}) async {
     var response = await dio.post("/transaction", data: order.toJson());
-    var responseData = json.decode(response.data);
 
-    return Future.value(PostOrderResponseModel.fromJson(responseData));
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
   Future<PostOrderResponseModel> postOrder(
       {PostOrderRequestModel order}) async {
     var response = await dio.post("/transaction", data: order.toJson());
-    var responseData = json.decode(response.data);
-    return Future.value(PostOrderResponseModel.fromJson(responseData));
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
@@ -159,25 +156,22 @@ class BBBAPIProvider extends BBBAPI {
       {PostWithdrawRequestModel withdraw}) async {
     var response =
         await dio.post("/transaction", data: withdraw.toWithdrawJson());
-    var responseData = json.decode(response.data);
-    return Future.value(PostOrderResponseModel.fromJson(responseData));
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
   Future<PostOrderResponseModel> postTransfer(
       {PostWithdrawRequestModel transfer}) async {
     var response = await dio.post("/transaction", data: transfer.toJson());
-    var responseData = json.decode(response.data);
-    return Future.value(PostOrderResponseModel.fromJson(responseData));
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
   Future<AccountResponseModel> getAccount({String name}) async {
     var response = await dio.get("/account?accountName=$name");
-    var responseData = json.decode(response.data);
-    return Future.value(responseData["result"] == null
+    return Future.value(response.data["result"] == null
         ? null
-        : AccountResponseModel.fromJson(responseData["result"]));
+        : AccountResponseModel.fromJson(response.data["result"]));
   }
 
   @override

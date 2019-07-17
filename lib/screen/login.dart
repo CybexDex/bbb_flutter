@@ -1,8 +1,10 @@
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -18,7 +20,6 @@ class _LoginState extends State<LoginPage> {
   bool _enableButton = false;
   String _errorMessage = "";
   var userLocator = locator<UserManager>();
-  var aaa = locator<BBBAPI>();
   @override
   void initState() {
     _passwordController.addListener(() {
@@ -187,7 +188,7 @@ class _LoginState extends State<LoginPage> {
                             I18n.of(context).clickToTry,
                             style: StyleFactory.buyUpOrderInfo,
                           )),
-                      onTap: () {
+                      onTap: () async {
                         userLocator.loginWithPrivateKey();
                         Navigator.of(context)
                             .popUntil((route) => route.isFirst);

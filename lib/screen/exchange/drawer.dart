@@ -41,10 +41,17 @@ class UserDrawer extends StatelessWidget {
                       ),
                       Align(
                         child: GestureDetector(
-                          child: Text(
-                            I18n.of(context).clickToTry,
-                            style: StyleFactory.buyUpCellLabel,
+                          child: Offstage(
+                            offstage:
+                                userMg.user.testAccountResponseModel != null,
+                            child: Text(
+                              I18n.of(context).clickToTry,
+                              style: StyleFactory.buyUpCellLabel,
+                            ),
                           ),
+                          onTap: () {
+                            userMg.loginWithPrivateKey();
+                          },
                         ),
                         alignment: Alignment.center,
                       )
@@ -56,7 +63,13 @@ class UserDrawer extends StatelessWidget {
                       SvgPicture.string(Jdenticon.toSvg(userMg.user.name ?? ""),
                           fit: BoxFit.contain, height: 60, width: 60),
                       SizedBox(width: 20),
-                      Text(userMg.user.name ?? "--", style: StyleFactory.title)
+                      Flexible(
+                        child: Text(
+                          userMg.user.name ?? "--",
+                          style: StyleFactory.title,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
                     ],
                   ),
                   Container(
@@ -95,63 +108,80 @@ class UserDrawer extends StatelessWidget {
                 : Container(
                     child: Column(
                       children: <Widget>[
-                        ListTile(
-                          title: Text(
-                            I18n.of(context).topUp,
-                            style: StyleFactory.cellTitleStyle,
-                          ),
-                          trailing: GestureDetector(
-                            child: Image.asset(R.resAssetsIconsIcTabArrow),
-                            onTap: () {},
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                          },
-                        ),
-                        Container(
-                          height: 0.5,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          color: Palette.separatorColor,
-                        ),
-                        ListTile(
-                          title: Text(
-                            I18n.of(context).withdraw,
-                            style: StyleFactory.cellTitleStyle,
-                          ),
-                          trailing: GestureDetector(
-                            child: Image.asset(R.resAssetsIconsIcTabArrow),
-                            onTap: () {},
-                          ),
-                          onTap: () {
-                            // Update the state of the app
-                            // ...
-                            Navigator.pushNamed(context, RoutePaths.Withdraw);
-                          },
-                        ),
-                        Container(
-                          height: 0.5,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          color: Palette.separatorColor,
-                        ),
-                        ListTile(
-                          title: Text(
-                            I18n.of(context).cashRecords,
-                            style: StyleFactory.cellTitleStyle,
-                          ),
-                          trailing: GestureDetector(
-                            child: Image.asset(R.resAssetsIconsIcTabArrow),
-                            onTap: () {},
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, RoutePaths.FundRecords);
-                          },
-                        ),
-                        Container(
-                          height: 0.5,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          color: Palette.separatorColor,
-                        ),
+                        userMg.user.testAccountResponseModel == null
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).topUp,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(RoutePaths.Deposit);
+                                },
+                              )
+                            : Container(),
+                        userMg.user.testAccountResponseModel == null
+                            ? Container(
+                                height: 0.5,
+                                margin: EdgeInsets.only(left: 20, right: 20),
+                                color: Palette.separatorColor,
+                              )
+                            : Container(),
+                        userMg.user.testAccountResponseModel == null
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).withdraw,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  // Update the state of the app
+                                  // ...
+                                  Navigator.pushNamed(
+                                      context, RoutePaths.Withdraw);
+                                },
+                              )
+                            : Container(),
+                        userMg.user.testAccountResponseModel == null
+                            ? Container(
+                                height: 0.5,
+                                margin: EdgeInsets.only(left: 20, right: 20),
+                                color: Palette.separatorColor,
+                              )
+                            : Container(),
+                        userMg.user.testAccountResponseModel == null
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).cashRecords,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, RoutePaths.FundRecords);
+                                },
+                              )
+                            : Container(),
+                        userMg.user.testAccountResponseModel == null
+                            ? Container(
+                                height: 0.5,
+                                margin: EdgeInsets.only(left: 20, right: 20),
+                                color: Palette.separatorColor,
+                              )
+                            : Container(),
                         ListTile(
                           title: Text(
                             I18n.of(context).transactionRecords,
@@ -171,19 +201,23 @@ class UserDrawer extends StatelessWidget {
                           margin: EdgeInsets.only(left: 20, right: 20),
                           color: Palette.separatorColor,
                         ),
-                        ListTile(
-                          title: Text(
-                            I18n.of(context).transfer,
-                            style: StyleFactory.cellTitleStyle,
-                          ),
-                          trailing: GestureDetector(
-                            child: Image.asset(R.resAssetsIconsIcTabArrow),
-                            onTap: () {},
-                          ),
-                          onTap: () {
-                            Navigator.pushNamed(context, RoutePaths.Transfer);
-                          },
-                        ),
+                        userMg.user.testAccountResponseModel == null
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).transfer,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, RoutePaths.Transfer);
+                                },
+                              )
+                            : Container(),
                         Container(
                           height: 0.5,
                           margin: EdgeInsets.only(left: 20, right: 20),
@@ -202,10 +236,16 @@ class UserDrawer extends StatelessWidget {
                         Navigator.of(context).pushNamed(RoutePaths.Login);
                       })
                   : WidgetFactory.button(
-                      data: I18n.of(context).logout,
+                      data: userMg.user.testAccountResponseModel != null
+                          ? I18n.of(context).clickToQuit
+                          : I18n.of(context).logout,
                       color: Palette.redOrange,
                       onPressed: () {
-                        userMg.logout();
+                        if (userMg.user.testAccountResponseModel != null) {
+                          userMg.logoutTestAccount();
+                        } else {
+                          userMg.logout();
+                        }
                         Navigator.pop(context);
                       }),
             )

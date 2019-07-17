@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -110,7 +111,9 @@ class TransferViewModel extends BaseModel {
 
     comm.txExpiration = expir + 5 * 60;
     comm.fee = AssetDef.CYB_TRANSFER;
-    comm.from = suffixId(_um.user.account.id);
+    comm.from = suffixId(locator.get<SharedPref>().getTestNet()
+        ? _um.user.testAccountResponseModel.accountId
+        : _um.user.account.id);
     comm.to = suffixId(refData.accountKeysEntityOperator.accountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),

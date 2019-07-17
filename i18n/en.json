@@ -92,6 +92,7 @@
 	"cut_loss_close_out": "止损平仓",
 	"user_close_out": "自主平仓",
 
-	"click_to_try": "点击试玩"
+	"click_to_try": "点击试玩",
+	"click_to_quit": "退出试玩"
 
 }

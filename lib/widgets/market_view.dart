@@ -1,4 +1,3 @@
-
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
@@ -89,6 +88,8 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                     .getContractFromId(orderModel.contractId);
 
                 model.supplyDataWithTrade(data, order, contract);
+              } else {
+                model.supplyDataWithTrade(data, order, null);
               }
             }
 

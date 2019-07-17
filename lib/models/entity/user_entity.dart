@@ -33,10 +33,11 @@ class UserEntity {
       this.testAccountResponseModel});
 
   bool get logined {
-    return name != null && name.isNotEmpty;
+    return (name != null && name.isNotEmpty) ||
+        testAccountResponseModel != null;
   }
 
   bool get isLocked {
-    return keys == null && unlockType == UnlockType.cloud;
+    return keys == null && loginType == LoginType.cloud;
   }
 }

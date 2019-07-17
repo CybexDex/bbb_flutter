@@ -13,6 +13,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'services/network/faucet/faucet_api.dart';
+
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
 final globalKey = GlobalKey();
@@ -50,7 +51,8 @@ setupLocator() async {
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
-  locator.registerSingleton<BBBAPI>(BBBAPIProvider());
+  locator.registerSingleton<BBBAPI>(
+      BBBAPIProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<FaucetAPI>(FaucetAPIProvider());
   locator.registerSingleton(MarketManager(api: locator<BBBAPI>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));

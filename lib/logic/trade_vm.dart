@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -189,6 +190,10 @@ class TradeViewModel extends BaseModel {
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
+    if (_um.user.testAccountResponseModel != null) {
+      await CybexFlutterPlugin.setDefaultPrivKey(
+          _um.user.testAccountResponseModel.privateKey);
+    }
 
     order.commission = await CybexFlutterPlugin.transferOperation(commission);
 
@@ -241,7 +246,9 @@ class TradeViewModel extends BaseModel {
     order.refBlockPrefix = refData.refBlockPrefix;
     order.refBlockId = refData.refBlockId;
     order.fee = AssetDef.CYB;
-    order.seller = suffixId(_um.user.account.id);
+    order.seller = suffixId(locator.get<SharedPref>().getTestNet()
+        ? _um.user.testAccountResponseModel.accountId
+        : _um.user.account.id);
     order.amountToSell = buyAmount;
     order.minToReceive = AmountToSell(
         amount: form.investAmount, assetId: suffixId(baseAsset.assetId));
@@ -270,7 +277,9 @@ class TradeViewModel extends BaseModel {
 
     comm.txExpiration = expir + 5 * 60;
     comm.fee = AssetDef.CYB;
-    comm.from = suffixId(_um.user.account.id);
+    comm.from = suffixId(locator.get<SharedPref>().getTestNet()
+        ? _um.user.testAccountResponseModel.accountId
+        : _um.user.account.id);
     comm.to = suffixId(refData.accountKeysEntityOperator.accountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),

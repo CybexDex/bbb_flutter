@@ -5,6 +5,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
+import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -226,6 +227,14 @@ class DialogFactory {
                   }
                 });
               } else {
+                if (locator.get<UserManager>().user.testAccountResponseModel !=
+                    null) {
+                  CybexFlutterPlugin.setDefaultPrivKey(locator
+                      .get<UserManager>()
+                      .user
+                      .testAccountResponseModel
+                      .privateKey);
+                }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }
             })
@@ -270,6 +279,14 @@ class DialogFactory {
                   }
                 });
               } else {
+                if (locator.get<UserManager>().user.testAccountResponseModel !=
+                    null) {
+                  CybexFlutterPlugin.setDefaultPrivKey(locator
+                      .get<UserManager>()
+                      .user
+                      .testAccountResponseModel
+                      .privateKey);
+                }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }
             })
