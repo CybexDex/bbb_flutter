@@ -41,6 +41,7 @@ class ExchangePage extends StatelessWidget {
                       child: MarketView(
                         isTrade: false,
                         width: ScreenUtil.screenWidthDp - 40,
+                        mtm: locator.get(),
                       ),
                     )),
                     Container(

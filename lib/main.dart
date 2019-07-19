@@ -60,7 +60,9 @@ main() async {
         .fetchBalances(name: locator.get<UserManager>().user.name);
   }
   await locator.get<RefManager>().firstLoadData();
-  locator.get<MarketManager>().loadAllData("BXBT");
+  locator
+      .get<MarketManager>()
+      .loadAllData("BXBT", marketDuration: MarketDuration.oneMin);
 }
 
 class MyApp extends StatelessWidget {

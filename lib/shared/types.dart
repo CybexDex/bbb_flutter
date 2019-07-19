@@ -15,6 +15,20 @@ const Map<LockTimeType, int> UnlockTimes = {
   LockTimeType.high: 3600,
 };
 
+enum MarketDuration { oneMin, fiveMin, oneHour, oneDay }
+const Map<MarketDuration, String> marketDurationMap = {
+  MarketDuration.oneMin: "1m",
+  MarketDuration.fiveMin: "5m",
+  MarketDuration.oneHour: '1h',
+  MarketDuration.oneDay: "1d",
+};
+const Map<MarketDuration, int> marketDurationSecondMap = {
+  MarketDuration.oneMin: 60,
+  MarketDuration.fiveMin: 300,
+  MarketDuration.oneHour: 3600,
+  MarketDuration.oneDay: 86400,
+};
+
 enum LoginType { none, cloud, key, test }
 const Map<LoginType, String> loginTypeStatusMap = {
   LoginType.none: "NONE",

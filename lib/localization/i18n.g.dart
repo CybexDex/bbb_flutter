@@ -221,6 +221,14 @@ class _$Keys {
   static final String clickToTry = 'click_to_try';
 
   static final String clickToQuit = 'click_to_quit';
+
+  static final String oneMin = 'one_min';
+
+  static final String fiveMin = 'five_min';
+
+  static final String oneDay = 'one_day';
+
+  static final String oneHour = 'one_hour';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -344,4 +352,8 @@ abstract class _$I18nHelper {
   String get userCloseOut => _translate(_$Keys.userCloseOut);
   String get clickToTry => _translate(_$Keys.clickToTry);
   String get clickToQuit => _translate(_$Keys.clickToQuit);
+  String get oneMin => _translate(_$Keys.oneMin);
+  String get fiveMin => _translate(_$Keys.fiveMin);
+  String get oneDay => _translate(_$Keys.oneDay);
+  String get oneHour => _translate(_$Keys.oneHour);
 }

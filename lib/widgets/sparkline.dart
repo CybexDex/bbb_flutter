@@ -64,6 +64,7 @@ class Sparkline extends StatelessWidget {
     this.gridLineAmount = 6,
     this.gridLineWidth = 0.5,
     this.repaint,
+    this.dateFormat,
     this.labelStyle = const TextStyle(
         color: Color(0xffcccccc),
         fontSize: 10.0,
@@ -105,6 +106,8 @@ class Sparkline extends StatelessWidget {
 
   final Color gridLineColor;
   final TextStyle labelStyle;
+
+  String dateFormat;
 
   final int gridLineAmount;
 
@@ -175,6 +178,7 @@ class Sparkline extends StatelessWidget {
             child: CustomPaint(
           size: Size.infinite,
           painter: _CartesianPainter(
+              dateFormat: dateFormat,
               startTime: startTime,
               startLineOfTime: startLineOfTime,
               endTime: endTime,
@@ -302,6 +306,7 @@ class _CartesianPainter extends CustomPainter {
   final double marginSpace;
 
   final double timeAreaHeight;
+  String dateFormat;
 
   List<TextPainter> verticalTextPainters = [];
   List<TextPainter> horizontalTextPainters = [];
@@ -312,6 +317,7 @@ class _CartesianPainter extends CustomPainter {
       startLineOfTime,
       @required this.minValue,
       @required this.maxValue,
+      this.dateFormat,
       this.timeLineGap = const Duration(minutes: 5),
       this.gridLineColor = const Color(0xffeaeaea),
       this.labelStyle = const TextStyle(
@@ -356,10 +362,9 @@ class _CartesianPainter extends CustomPainter {
         d <= Duration(seconds: totalSeconds);
         d += timeLineGap) {
       time = startLineOfTime.add(d);
-
       horizontalTextPainters.add(TextPainter(
           text: TextSpan(
-              text: DateFormat('HH:mm').format(time.toLocal()),
+              text: DateFormat(dateFormat).format(time.toLocal()),
               style: labelStyle),
           textDirection: TextDirection.ltr));
 

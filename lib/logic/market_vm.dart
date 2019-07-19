@@ -2,24 +2,35 @@ import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
+import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 
 class MarketViewModel extends BaseModel {
   SuppleData suppleData;
+  String dateFormat = "HH:mm";
 
   DateTime startTime;
   DateTime endTime;
 
   Offset lastOffset;
-
+  MarketDuration marketDuration = MarketDuration.oneMin;
+  MarketManager _mtm;
+  MarketManager get mtm => _mtm;
   bool moving = false;
 
+  MarketViewModel({@required MarketManager mtm}) {
+    _mtm = mtm;
+  }
+
   seedToCurrent() {
-    startTime = DateTime.now().subtract(Duration(minutes: 15));
-    endTime = DateTime.now().add(Duration(minutes: 15));
+    startTime = DateTime.now().subtract(
+        Duration(seconds: 15 * marketDurationSecondMap[marketDuration]));
+    endTime = DateTime.now()
+        .add(Duration(seconds: 15 * marketDurationSecondMap[marketDuration]));
     setBusy(false);
   }
 
@@ -28,6 +39,24 @@ class MarketViewModel extends BaseModel {
     endTime = end;
     moving = true;
     setBusy(false);
+  }
+
+  changeDuration(MarketDuration marketDuration) {
+    _mtm.cleanData();
+    _mtm.cancelAndRemoveData();
+    _mtm.loadAllData("BXBT", marketDuration: marketDuration);
+    this.marketDuration = marketDuration;
+    seedToCurrent();
+    setDateFormat(marketDuration);
+    setBusy(false);
+  }
+
+  setDateFormat(MarketDuration marketDuration) {
+    if (marketDuration == MarketDuration.oneDay) {
+      dateFormat = "MM-dd";
+    } else {
+      dateFormat = "HH:mm";
+    }
   }
 
   supplyDataWithTrade(
@@ -63,7 +92,7 @@ class MarketViewModel extends BaseModel {
 
   supplyDataWithOrder(
       List<TickerData> data, OrderForm order, double strikeLevel) {
-    if (order != null) {
+    if (order != null && !isAllEmpty(data)) {
       var current = data.last.value;
       suppleData = SuppleData(
           alwaysShow: true,

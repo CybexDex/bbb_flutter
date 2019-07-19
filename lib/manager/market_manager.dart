@@ -6,6 +6,7 @@ import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
@@ -25,32 +26,37 @@ class MarketManager {
   MarketManager({BBBAPI api}) : _api = api;
 
   String _assetName;
+  MarketDuration _marketDuration = MarketDuration.oneMin;
 
-  loadAllData(String assetName) async {
+  loadAllData(String assetName, {MarketDuration marketDuration}) async {
     _assetName = assetName ?? _assetName;
+    _marketDuration = marketDuration ?? _marketDuration;
     if (isAllEmpty(_assetName)) {
       return;
     }
     int now = getNowEpochSeconds();
     await loadMarketHistory(
-        startTime: (now - 300 * 60).toString(),
+        startTime:
+            (now - 300 * marketDurationSecondMap[_marketDuration]).toString(),
         endTime: now.toString(),
-        asset: _assetName);
+        asset: _assetName,
+        marketDuration: _marketDuration);
     initCommunication();
     send(jsonEncode(WebSocketRequestEntity(
             type: "subscribe", topic: "FAIRPRICE.$_assetName"))
         .toString());
   }
 
-// startTime: DateTime.now()
-//             .subtract(Duration(days: 30))
-//             .toUtc()
-//             .toIso8601String(),
-//         endTime: DateTime.now().toUtc().toIso8601String(),
-//         asset: "BXBT"
-  loadMarketHistory({String startTime, String endTime, String asset}) async {
+  loadMarketHistory(
+      {String startTime,
+      String endTime,
+      String asset,
+      MarketDuration marketDuration}) async {
     List<MarketHistoryResponseModel> _list = await _api.getMarketHistory(
-        startTime: startTime, endTime: endTime, asset: asset);
+        startTime: startTime,
+        endTime: endTime,
+        asset: asset,
+        duration: marketDuration);
     List<TickerData> data = _list.map((marketHistoryResponseModel) {
       var tickerData = TickerData(marketHistoryResponseModel.px,
           DateTime.fromMicrosecondsSinceEpoch(marketHistoryResponseModel.xts));
@@ -99,6 +105,12 @@ class MarketManager {
 
   cancelAndRemoveData() {
     reset();
+  }
+
+  cleanData() {
+    if (!isAllEmpty(_priceController.value)) {
+      _priceController.value.clear();
+    }
   }
 
   reset() {

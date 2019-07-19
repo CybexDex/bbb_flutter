@@ -1,6 +1,8 @@
+import 'package:bbb_flutter/base/mixin.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -19,12 +21,18 @@ class TradePage extends StatefulWidget {
   _TradePageState createState() => _TradePageState();
 }
 
-class _TradePageState extends State<TradePage> {
+class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   double showDropdownMenuHeight = 0;
+  MarketManager mtm = MarketManager(api: locator.get());
 
   void setDropdownMenuHeight() {
     showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;
     setState(() {});
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    mtm.loadAllData("BXBT");
   }
 
   @override
@@ -152,11 +160,20 @@ class _TradePageState extends State<TradePage> {
                                 ),
                               ),
                               Expanded(
+                                  child: MultiProvider(
+                                providers: [
+                                  StreamProvider(
+                                      builder: (context) => mtm.prices),
+                                  StreamProvider(
+                                      builder: (context) =>
+                                          mtm.lastTicker.stream)
+                                ],
                                 child: MarketView(
                                   isTrade: true,
                                   width: ScreenUtil.screenWidthDp - 40,
+                                  mtm: mtm,
                                 ),
-                              ),
+                              )),
                               Container(
                                 margin: EdgeInsets.only(bottom: 30, top: 20),
                                 child:

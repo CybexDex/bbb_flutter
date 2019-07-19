@@ -21,7 +21,10 @@ abstract class BBBAPI {
       {List<OrderStatus> status, String startTime, String endTime});
   Future<AccountResponseModel> getAccount({String name});
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
-      {String startTime, String endTime, String asset});
+      {String startTime,
+      String endTime,
+      String asset,
+      MarketDuration duration});
   Future<DepositResponseModel> getDeposit({String name, String asset});
 
   Future<List<FundRecordModel>> getFundRecords(
