@@ -14,6 +14,7 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
@@ -24,24 +25,33 @@ class BBBAPIProvider extends BBBAPI {
 
   BBBAPIProvider({SharedPref sharedPref}) {
     _pref = sharedPref;
-    dio.options.baseUrl = _pref.getTestNet()
-        ? "https://nxtestnet.cybex.io/v1"
-        : "https://nxapitest.cybex.io/v1";
+    _dispatchNode();
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
-    // dio.interceptors.add(ILogInterceptor(
-    //     responseBody: true,
-    //     requestHeader: false,
-    //     request: true,
-    //     responseHeader: false));
   }
 
   @override
   setTestNet({bool isTestNet}) async {
     await _pref.saveTestNet(isTestNet: isTestNet);
-    dio.options.baseUrl = _pref.getTestNet()
-        ? "https://nxtestnet.cybex.io/v1"
-        : "https://nxapitest.cybex.io/v1";
+    _dispatchNode();
+  }
+
+  @override
+  setEnvMode({EnvType envType}) async {
+    await _pref.saveEnvType(envType: envType);
+    _dispatchNode();
+  }
+
+  _dispatchNode() {
+    if (_pref.getEnvType() == EnvType.Pro) {
+      dio.options.baseUrl = _pref.getTestNet()
+          ? NetworkConnection.PRO_TESTNET
+          : NetworkConnection.PRO_STANDARD;
+    } else if (_pref.getEnvType() == EnvType.Uat) {
+      dio.options.baseUrl = _pref.getTestNet()
+          ? NetworkConnection.UAT_TESTNET
+          : NetworkConnection.UAT_STANDARD;
+    }
   }
 
   @override
@@ -65,7 +75,6 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<List<OrderResponseModel>> getOrders(String name,
       {List<OrderStatus> status, String startTime, String endTime}) async {
-    print(endTime != null ? endTime : "s");
     var params = {
       "accountName": name,
     };

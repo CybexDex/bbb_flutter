@@ -229,6 +229,12 @@ class _$Keys {
   static final String oneDay = 'one_day';
 
   static final String oneHour = 'one_hour';
+
+  static final String changeEnv = 'change_env';
+
+  static final String chooseEnv = 'choose_env';
+
+  static final String chooseEnvDetail = 'choose_env_detail';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -356,4 +362,7 @@ abstract class _$I18nHelper {
   String get fiveMin => _translate(_$Keys.fiveMin);
   String get oneDay => _translate(_$Keys.oneDay);
   String get oneHour => _translate(_$Keys.oneHour);
+  String get changeEnv => _translate(_$Keys.changeEnv);
+  String get chooseEnv => _translate(_$Keys.chooseEnv);
+  String get chooseEnvDetail => _translate(_$Keys.chooseEnvDetail);
 }

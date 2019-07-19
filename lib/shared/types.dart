@@ -7,6 +7,10 @@ enum BuildMode { release, debug, profile }
 
 enum UnlockType { none, cloud, key }
 
+enum EnvType { Pro, Uat }
+
+const Map<EnvType, String> envMap = {EnvType.Pro: "pro", EnvType.Uat: "uat"};
+
 enum LockTimeType { lower, middle, high }
 
 const Map<LockTimeType, int> UnlockTimes = {

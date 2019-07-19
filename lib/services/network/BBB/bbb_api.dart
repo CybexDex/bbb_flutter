@@ -15,6 +15,7 @@ import 'package:bbb_flutter/shared/types.dart';
 
 abstract class BBBAPI {
   setTestNet({bool isTestNet});
+  setEnvMode({EnvType envType});
   Future<RefContractResponseModel> getRefData({List<ContractStatus> status});
   Future<PositionsResponseModel> getPositions({String name});
   Future<List<OrderResponseModel>> getOrders(String name,

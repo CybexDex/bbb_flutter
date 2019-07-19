@@ -224,6 +224,13 @@ class UserManager extends BaseModel {
     locator.get<MarketManager>().loadAllData(null);
     notifyListeners();
   }
+
+  reload() async {
+    fetchBalances(name: user.name);
+    locator.get<MarketManager>().cancelAndRemoveData();
+    locator.get<MarketManager>().loadAllData(null);
+    notifyListeners();
+  }
 }
 
 enum errorMessageState { Null, True, False }

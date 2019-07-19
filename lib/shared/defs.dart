@@ -12,3 +12,10 @@ class AssetName {
 }
 
 const EmptyString = [null, ""];
+
+class NetworkConnection {
+  static const PRO_STANDARD = "https://nxapi.cybex.io/v1";
+  static const PRO_TESTNET = "https://nxtestnet.cybex.io/v1";
+  static const UAT_STANDARD = "https://nxapiuat.cybex.io/v1";
+  static const UAT_TESTNET = "https://nxtestnetuat.cybex.io/v1";
+}

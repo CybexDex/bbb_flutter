@@ -1,10 +1,16 @@
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
+
+import '../../env.dart';
 
 class UserDrawer extends StatelessWidget {
   const UserDrawer({Key key}) : super(key: key);
@@ -223,6 +229,75 @@ class UserDrawer extends StatelessWidget {
                           margin: EdgeInsets.only(left: 20, right: 20),
                           color: Palette.separatorColor,
                         ),
+                        BuildMode.debug == buildMode
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).changeEnv,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  showCupertinoModalPopup(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CupertinoActionSheet(
+                                          title:
+                                              Text(I18n.of(context).chooseEnv),
+                                          message: Text(
+                                              I18n.of(context).chooseEnvDetail),
+                                          actions: <Widget>[
+                                            CupertinoActionSheetAction(
+                                              child: Text("PRO"),
+                                              onPressed: () async {
+                                                await locator
+                                                    .get<BBBAPI>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Pro);
+                                                userMg.reload();
+                                                Navigator.of(context).pop();
+                                              },
+                                              isDestructiveAction: locator
+                                                      .get<SharedPref>()
+                                                      .getEnvType() ==
+                                                  EnvType.Pro,
+                                            ),
+                                            CupertinoActionSheetAction(
+                                              child: Text("UAT"),
+                                              onPressed: () async {
+                                                await locator
+                                                    .get<BBBAPI>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Uat);
+                                                userMg.reload();
+                                                Navigator.of(context).pop();
+                                              },
+                                              isDestructiveAction: locator
+                                                      .get<SharedPref>()
+                                                      .getEnvType() ==
+                                                  EnvType.Uat,
+                                            )
+                                          ],
+                                          cancelButton:
+                                              CupertinoActionSheetAction(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(I18n.of(context)
+                                                      .dialogCancelButton)),
+                                        );
+                                      });
+                                },
+                              )
+                            : Container(),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
                       ],
                     ),
                   ),
@@ -248,7 +323,7 @@ class UserDrawer extends StatelessWidget {
                         }
                         Navigator.pop(context);
                       }),
-            )
+            ),
           ],
         );
       }),

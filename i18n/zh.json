@@ -100,5 +100,11 @@
 	"one_min" : "1分钟",
 	"five_min" : "5分钟",
 	"one_day" : "1天",
-	"one_hour": "1小时"
+	"one_hour": "1小时",
+
+	"change_env": "切换环境",
+	"choose_env": "选择环境",
+	"choose_env_detail": "请选择环境配置"
+
+
 }

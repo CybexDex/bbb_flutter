@@ -107,4 +107,20 @@ class SharedPref {
   removeTestNet() async {
     await _prefs.remove('bbb.testNet');
   }
+
+  EnvType getEnvType() {
+    var value = _prefs.getString('bbb.envType');
+    if (value != null) {
+      return EnvType.values.firstWhere((e) => e.toString() == value);
+    }
+    return EnvType.Uat;
+  }
+
+  saveEnvType({EnvType envType}) async {
+    await _prefs.setString('bbb.envType', envType.toString());
+  }
+
+  removeEnvType() async {
+    await _prefs.remove('bbb.envType');
+  }
 }
