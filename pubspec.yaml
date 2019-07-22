@@ -51,7 +51,7 @@ dependencies:
     keyboard_avoider: ^0.1.2
     rx_command: ^4.3.1+1
     rx_widgets: ^2.2.0+1
-    flutter_flipperkit: ^0.0.18
+#    flutter_flipperkit: ^0.0.18
 dev_dependencies:
     flutter_test:
         sdk: flutter
@@ -66,7 +66,10 @@ flutter:
     - i18n/
     # assets begin
     # res/assets/icons/*
+    - res/assets/icons/icTop2.png
+    - res/assets/icons/icTop3.png
     - res/assets/icons/icMaskClose.png
+    - res/assets/icons/icTop1.png
     - res/assets/icons/icAdd.png
     - res/assets/icons/icReduce.png
     - res/assets/icons/icFail.png
@@ -91,7 +94,9 @@ flutter:
     - res/assets/icons/icUser.png
     - res/assets/icons/icHand.png
     - res/assets/icons/icUsdt.png
+    - res/assets/icons/imgBanner.png
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icTabWithdraw.png
+    - res/assets/icons/ic_title_line.svg
     # assets end

@@ -1,6 +1,12 @@
 class R {
+  /// ![](http://127.0.0.1:2227/res/assets/icons/icTop2.png)
+  static final String resAssetsIconsIcTop2 = 'res/assets/icons/icTop2.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/icTop3.png)
+  static final String resAssetsIconsIcTop3 = 'res/assets/icons/icTop3.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icMaskClose.png)
   static final String resAssetsIconsIcMaskClose = 'res/assets/icons/icMaskClose.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/icTop1.png)
+  static final String resAssetsIconsIcTop1 = 'res/assets/icons/icTop1.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icAdd.png)
   static final String resAssetsIconsIcAdd = 'res/assets/icons/icAdd.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icReduce.png)
@@ -49,6 +55,8 @@ class R {
   static final String resAssetsIconsIcHand = 'res/assets/icons/icHand.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icUsdt.png)
   static final String resAssetsIconsIcUsdt = 'res/assets/icons/icUsdt.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/imgBanner.png)
+  static final String resAssetsIconsImgBanner = 'res/assets/icons/imgBanner.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/mask.png)
   static final String resAssetsIconsMask = 'res/assets/icons/mask.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTabArrow.png)

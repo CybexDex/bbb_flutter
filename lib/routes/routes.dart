@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
+import 'package:bbb_flutter/screen/invite_page.dart';
 import 'package:bbb_flutter/screen/login.dart';
 import 'package:bbb_flutter/screen/order_record_detail.dart';
 import 'package:bbb_flutter/screen/order_records.dart';
@@ -23,6 +24,7 @@ class RoutePaths {
   static const String Transfer = "Transfer";
   static const String Withdraw = "Withdraw";
   static const String OrderRecordDetail = "OrderRecordDetail";
+  static const String Invite = "Invite";
 }
 
 class Routes {
@@ -51,6 +53,8 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => TransferPage());
       case RoutePaths.Withdraw:
         return CupertinoPageRoute(builder: (_) => WithdrawPage());
+      case RoutePaths.Invite:
+        return CupertinoPageRoute(builder: (_) => InvitePage());
 
       case RoutePaths.Trade:
         return CupertinoPageRoute(

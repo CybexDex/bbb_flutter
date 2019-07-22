@@ -218,6 +218,28 @@ class _$Keys {
 
   static final String userCloseOut = 'user_close_out';
 
+  static final String inviteFriend = 'invite_friend';
+
+  static final String inviteTopRank = 'invite_top_rank';
+
+  static final String inviteReward = 'invite_reward';
+
+  static final String inviteRecommendSuc = 'invite_recommend_suc';
+
+  static final String inviteMyPinCode = 'invite_my_pin_code';
+
+  static final String inviteMyRecommender = 'invite_my_recommender';
+
+  static final String inviteThreeStepOne = 'invite_three_step_one';
+
+  static final String inviteThreeStepTwo = 'invite_three_step_two';
+
+  static final String inviteThreeStepThree = 'invite_three_step_three';
+
+  static final String inviteGainReward = 'invite_gain_reward';
+
+  static final String inviteRecommendation = 'invite_recommendation';
+
   static final String clickToTry = 'click_to_try';
 
   static final String clickToQuit = 'click_to_quit';
@@ -356,6 +378,17 @@ abstract class _$I18nHelper {
   String get takeProfitCloseOut => _translate(_$Keys.takeProfitCloseOut);
   String get cutLossCloseOut => _translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => _translate(_$Keys.userCloseOut);
+  String get inviteFriend => _translate(_$Keys.inviteFriend);
+  String get inviteTopRank => _translate(_$Keys.inviteTopRank);
+  String get inviteReward => _translate(_$Keys.inviteReward);
+  String get inviteRecommendSuc => _translate(_$Keys.inviteRecommendSuc);
+  String get inviteMyPinCode => _translate(_$Keys.inviteMyPinCode);
+  String get inviteMyRecommender => _translate(_$Keys.inviteMyRecommender);
+  String get inviteThreeStepOne => _translate(_$Keys.inviteThreeStepOne);
+  String get inviteThreeStepTwo => _translate(_$Keys.inviteThreeStepTwo);
+  String get inviteThreeStepThree => _translate(_$Keys.inviteThreeStepThree);
+  String get inviteGainReward => _translate(_$Keys.inviteGainReward);
+  String get inviteRecommendation => _translate(_$Keys.inviteRecommendation);
   String get clickToTry => _translate(_$Keys.clickToTry);
   String get clickToQuit => _translate(_$Keys.clickToQuit);
   String get oneMin => _translate(_$Keys.oneMin);

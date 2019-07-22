@@ -8,6 +8,9 @@ class Palette {
   static const orangeish = const Color(0xffff8b3d);
   static const separatorColor = const Color(0xffdddddd);
   static const veryLightPinkTwo = const Color(0xffeaeaea);
+  static const inviteAddButtonColor = const Color(0xfff5ca20);
+  static const inviteAddButtonColorTwo = const Color(0xfff29208);
+  static const inviteStepRoundColor = const Color(0xfffccc3b);
 
   static const buttonPrimaryColor = const Color(0xffffffff);
   static const pagePrimaryColor = const Color(0xffffffff);
@@ -21,4 +24,6 @@ class Palette {
 
   static const dropDownIndicatorColor = const Color(0xfffef8f7);
   static const veryLightPink = const Color(0xfffeeae5);
+  static const inviteBackgroundColor = const Color(0xfffef1ef);
+  static const inviteDivisionHeaderColor = const Color(0xfffff3d3);
 }

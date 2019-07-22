@@ -110,6 +110,12 @@ class StyleFactory {
       fontStyle: FontStyle.normal,
       fontSize: Dimen.middleLabelFontSize);
 
+  static var dialogContentTitleStyle = TextStyle(
+      color: Palette.subTitleColor,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.middleLabelFontSize);
+
   static var dialogButtonFontStyle = TextStyle(
       decoration: TextDecoration.none,
       color: Palette.titleColor,
@@ -214,4 +220,11 @@ class StyleFactory {
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.largeLabelFontSize);
+
+  static var inviteAmountStyle = TextStyle(
+      decoration: TextDecoration.none,
+      color: Palette.redOrange,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.inviteAmountFontSize);
 }

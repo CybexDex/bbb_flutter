@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,5 +60,36 @@ class WidgetFactory {
       height: height,
       decoration: DecorationFactory.pageTopDecoration,
     );
+  }
+
+  static Widget invitePeopleButton() {
+    return Container(
+        alignment: Alignment.center,
+        width: 60,
+        height: 20,
+        decoration: DecorationFactory.addPeopleButtonDecoration,
+        child: Text("去添加",
+            style: TextStyle(
+                color: Palette.buttonPrimaryColor,
+                fontWeight: FontWeight.w400,
+                fontStyle: FontStyle.normal,
+                fontSize: Dimen.smallLabelFontSize),
+            textAlign: TextAlign.center));
+  }
+
+  static Widget inviteStepsPills() {
+    return Container(
+        alignment: Alignment.center,
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+            color: Palette.inviteStepRoundColor,
+            borderRadius: BorderRadius.circular(25)),
+        child: Text("3",
+            style: TextStyle(
+                color: Palette.buttonPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.normal,
+                fontSize: Dimen.largeLabelFontSize)));
   }
 }

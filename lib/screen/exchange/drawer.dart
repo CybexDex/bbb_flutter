@@ -229,6 +229,28 @@ class UserDrawer extends StatelessWidget {
                           margin: EdgeInsets.only(left: 20, right: 20),
                           color: Palette.separatorColor,
                         ),
+                        userMg.user.testAccountResponseModel == null
+                            ? ListTile(
+                                title: Text(
+                                  I18n.of(context).inviteFriend,
+                                  style: StyleFactory.cellTitleStyle,
+                                ),
+                                trailing: GestureDetector(
+                                  child:
+                                      Image.asset(R.resAssetsIconsIcTabArrow),
+                                  onTap: () {},
+                                ),
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, RoutePaths.Invite);
+                                },
+                              )
+                            : Container(),
+                        Container(
+                          height: 0.5,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          color: Palette.separatorColor,
+                        ),
                         BuildMode.debug == buildMode
                             ? ListTile(
                                 title: Text(
