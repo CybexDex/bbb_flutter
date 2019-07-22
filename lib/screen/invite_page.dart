@@ -263,37 +263,71 @@ class _InviteState extends State<InvitePage> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Column(
+                      Stack(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 32),
+                            child: Divider(
+                              height: 0,
+                              color: Palette.inviteAddButtonColor,
+                              endIndent: 50,
+                              indent: 50,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 25, right: 25, top: 20, bottom: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                WidgetFactory.inviteStepsPills(),
-                                Text(
-                                  I18n.of(context).inviteThreeStepOne,
-                                  style: StyleFactory.subTitleStyle,
-                                )
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 70,
+                                  child: Column(
+                                    children: <Widget>[
+                                      WidgetFactory.inviteStepsPills(),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        I18n.of(context).inviteThreeStepOne,
+                                        style: StyleFactory.subTitleStyle,
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 80,
+                                  child: Column(
+                                    children: <Widget>[
+                                      WidgetFactory.inviteStepsPills(),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        I18n.of(context).inviteThreeStepTwo,
+                                        style: StyleFactory.subTitleStyle,
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 45,
+                                  child: Column(
+                                    children: <Widget>[
+                                      WidgetFactory.inviteStepsPills(),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        I18n.of(context).inviteThreeStepThree,
+                                        style: StyleFactory.subTitleStyle,
+                                        textAlign: TextAlign.center,
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                            Column(
-                              children: <Widget>[
-                                WidgetFactory.inviteStepsPills(),
-                                Text(I18n.of(context).inviteThreeStepTwo,
-                                    style: StyleFactory.subTitleStyle)
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                WidgetFactory.inviteStepsPills(),
-                                Text(I18n.of(context).inviteThreeStepThree,
-                                    style: StyleFactory.subTitleStyle)
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -315,7 +349,7 @@ class _InviteState extends State<InvitePage> {
                             Padding(
                               padding: EdgeInsets.only(left: 8, right: 8),
                               child: Text(
-                                "排名Top3",
+                                I18n.of(context).inviteRecommendation,
                                 style: StyleFactory.buyUpOrderInfo,
                               ),
                             ),
@@ -324,58 +358,28 @@ class _InviteState extends State<InvitePage> {
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 30, bottom: 20),
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset(R.resAssetsIconsIcTop2),
-                                Text(
-                                  "t223***sd",
-                                  style: StyleFactory.dialogContentTitleStyle,
+                      Container(
+                        height: 350,
+                        margin: EdgeInsets.only(top: 20, bottom: 20),
+                        child: ListView.separated(
+                            separatorBuilder: (context, index) {
+                              return Container(height: 10);
+                            },
+                            itemCount: 20,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Text("t123***sd",
+                                        style: StyleFactory.dialogContentStyle),
+                                    Text("2019-05-22 12:34",
+                                        style: StyleFactory.dialogContentStyle)
+                                  ],
                                 ),
-                                Text(
-                                  "111.2USDT",
-                                  style: StyleFactory.dialogContentStyle,
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 20, bottom: 30),
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset(R.resAssetsIconsIcTop1),
-                                Text(
-                                  "t223***sd",
-                                  style: StyleFactory.dialogContentTitleStyle,
-                                ),
-                                Text(
-                                  "111.2USDT",
-                                  style: StyleFactory.dialogContentStyle,
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 30, bottom: 20),
-                            child: Column(
-                              children: <Widget>[
-                                Image.asset(R.resAssetsIconsIcTop3),
-                                Text(
-                                  "t223***sd",
-                                  style: StyleFactory.dialogContentTitleStyle,
-                                ),
-                                Text(
-                                  "111.2USDT",
-                                  style: StyleFactory.dialogContentStyle,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                              );
+                            }),
                       )
                     ],
                   ),
