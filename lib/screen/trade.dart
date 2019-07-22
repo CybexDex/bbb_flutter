@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -52,21 +53,23 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
               color: Palette.backButtonColor, //change your color here
             ),
             actions: <Widget>[
-              GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Center(
-                    child: Text(
-                      I18n.of(context).topUp,
-                      style: StyleFactory.navButtonTitleStyle,
-                      textScaleFactor: 1,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                },
-              )
+              locator.get<UserManager>().user.loginType == LoginType.test
+                  ? Container()
+                  : GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Center(
+                          child: Text(
+                            I18n.of(context).topUp,
+                            style: StyleFactory.navButtonTitleStyle,
+                            textScaleFactor: 1,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                      },
+                    )
             ],
             centerTitle: true,
             title: Consumer<TradeViewModel>(builder: (context, model, child) {
