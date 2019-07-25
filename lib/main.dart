@@ -12,14 +12,15 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'logic/invite_vm.dart';
 import 'manager/ref_manager.dart';
-//import 'package:flutter_flipperkit/flutter_flipperkit.dart';
+import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 main() async {
-//  FlipperClient flipperClient = FlipperClient.getDefault();
-//  flipperClient.addPlugin(new FlipperNetworkPlugin());
-//  flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
-//  flipperClient.start();
+  FlipperClient flipperClient = FlipperClient.getDefault();
+  flipperClient.addPlugin(new FlipperNetworkPlugin());
+  flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
+  flipperClient.start();
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

@@ -203,7 +203,7 @@ class TradeViewModel extends BaseModel {
     PostOrderResponseModel res = await _api.postOrder(order: order);
     locator.get<Logger>().w(res.toRawJson());
 
-    return Future.value(res);
+    return res;
   }
 
   void saveOrder() {

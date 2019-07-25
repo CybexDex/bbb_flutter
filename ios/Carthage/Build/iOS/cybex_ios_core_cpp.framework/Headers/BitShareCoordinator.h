@@ -91,6 +91,8 @@ NS_ASSUME_NONNULL_BEGIN
   
 + (NSString *)getMemo:(NSString *)memo;
 + (NSString *)sign:(NSString *)str;
++ (NSString *)signFromHex:(NSString *)str;
+
 + (NSString *)signMessage:(NSString *)username message:(NSString *)message;
 
 

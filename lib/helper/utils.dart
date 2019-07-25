@@ -1,8 +1,7 @@
-import 'package:bbb_flutter/shared/ui_common.dart';
+import 'dart:typed_data';
 
 dynamic convertValueByType(value, Type type, {String stack: ""}) {
   if (value == null) {
-    debugPrint("$stack : value is null");
     if (type == String) {
       return "";
     } else if (type == int) {
@@ -19,7 +18,6 @@ dynamic convertValueByType(value, Type type, {String stack: ""}) {
     return value;
   }
   var valueS = value.toString();
-  debugPrint("$stack : ${value.runtimeType} is not $type type");
   if (type == String) {
     return valueS;
   } else if (type == int) {
@@ -39,8 +37,14 @@ dynamic convertValueByType(value, Type type, {String stack: ""}) {
 void tryCatch(Function f) {
   try {
     f?.call();
-  } catch (e, stack) {
-    debugPrint("$e");
-    debugPrint("$stack");
+  } catch (e, stack) {}
+}
+
+String formatBytesAsHexString(Uint8List bytes) {
+  var result = new StringBuffer();
+  for (var i = 0; i < bytes.lengthInBytes; i++) {
+    var part = bytes[i];
+    result.write('${part < 16 ? '0' : ''}${part.toRadixString(16)}');
   }
+  return result.toString();
 }

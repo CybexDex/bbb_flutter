@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/istep.dart';
 
@@ -142,10 +143,15 @@ class PnlForm extends StatelessWidget {
   ) async {
     try {
       showLoading(context);
-      await model.amend(_order, false);
+      PostOrderResponseModel postOrderResponseModel =
+          await model.amend(_order, false);
       Navigator.of(context).pop();
-      showToast(context, false, I18n.of(context).successToast,
-          callback: _callback);
+      if (postOrderResponseModel.status == "Failed") {
+        showToast(context, true, postOrderResponseModel.reason);
+      } else {
+        showToast(context, false, I18n.of(context).successToast,
+            callback: _callback);
+      }
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);

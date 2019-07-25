@@ -108,6 +108,82 @@ class DialogFactory {
         });
   }
 
+  static Widget addRefererDialog(BuildContext context,
+      {String title,
+      String contentText,
+      String value,
+      String errorText,
+      String cancel,
+      String confirm,
+      VoidCallback onConfirmPressed,
+      TextEditingController controller,
+      TextEditingController controllerForPassword}) {
+    TextEditingController _textEditorController = controller;
+    return CupertinoAlertDialog(
+      title: Text(I18n.of(context).inviteAddReferer),
+      content: Column(
+        children: <Widget>[
+          contentText != null ? Text(contentText) : Container(),
+          value != null ? Text(value) : Container(),
+          Container(
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(4.0),
+              child: TextField(
+                controller: _textEditorController,
+                decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
+                    hintText: I18n.of(context).inviteInputPinCode,
+                    labelText: null,
+                    fillColor: Palette.subTitleColor.withOpacity(0.1),
+                    filled: true,
+                    border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(style: BorderStyle.none, width: 0)),
+                    errorText: ""),
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop([false]);
+          },
+          child: Text(I18n.of(context).dialogCancelButton,
+              style: StyleFactory.dialogButtonFontStyle),
+        ),
+        CupertinoDialogAction(
+          onPressed: () {
+            if (locator.get<UserManager>().user.isLocked) {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return KeyboardAvoider(
+                      child: DialogFactory.unlockDialog(context,
+                          controller: controllerForPassword),
+                      autoScroll: true,
+                    );
+                  }).then((value) {
+                if (value) {
+                  Navigator.of(context, rootNavigator: true)
+                      .pop([true, _textEditorController.text]);
+                }
+              });
+            } else {
+              Navigator.of(context, rootNavigator: true)
+                  .pop([true, _textEditorController.text]);
+            }
+          },
+          child: Text(I18n.of(context).confirm,
+              style: StyleFactory.dialogButtonFontStyle),
+        )
+      ],
+    );
+  }
+
   static CupertinoAlertDialog successDialogDetail(BuildContext context,
       {String value}) {
     return CupertinoAlertDialog(

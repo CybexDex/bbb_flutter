@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
@@ -306,13 +307,15 @@ class OrderInfo extends StatelessWidget {
         refm: locator.get());
     try {
       showLoading(context);
-      await pnlViewModel.amend(_model, true);
+      PostOrderResponseModel postOrderResponseModel =
+          await pnlViewModel.amend(_model, true);
       Navigator.of(context).pop();
-      showToast(context, false,
-          I18n.of(context).closeOut + I18n.of(context).successToast);
-//      Future.delayed(Duration(seconds: 2), () {
-//        Provider.of<OrderViewModel>(context).getOrders();
-//      });
+      if (postOrderResponseModel.status == "Failed") {
+        showToast(context, true, postOrderResponseModel.reason);
+      } else {
+        showToast(context, false,
+            I18n.of(context).closeOut + I18n.of(context).successToast);
+      }
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true,

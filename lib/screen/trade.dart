@@ -4,6 +4,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -275,9 +276,13 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   callPostOrder(BuildContext context, TradeViewModel model) async {
     showLoading(context);
     try {
-      await model.postOrder();
+      PostOrderResponseModel postOrderResponseModel = await model.postOrder();
       Navigator.of(context).pop();
-      showToast(context, false, I18n.of(context).successToast);
+      if (postOrderResponseModel.status == "Failed") {
+        showToast(context, true, postOrderResponseModel.reason);
+      } else {
+        showToast(context, false, I18n.of(context).successToast);
+      }
     } catch (e) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);

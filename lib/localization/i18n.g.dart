@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String assetCat = 'asset_cat';
+  static final String logIn = 'log_in';
 
   static final String transfer = 'transfer';
 
@@ -104,7 +104,7 @@ class _$Keys {
 
   static final String balanceAvailable = 'balance_available';
 
-  static final String logIn = 'log_in';
+  static final String assetCat = 'asset_cat';
 
   static final String accountName = 'account_name';
 
@@ -186,7 +186,7 @@ class _$Keys {
 
   static final String fundStatusInProgress = 'fundStatus_inProgress';
 
-  static final String fundStatusCompleted = 'fundStatus_completed';
+  static final String chooseEnvDetail = 'choose_env_detail';
 
   static final String fundStatusRejected = 'fundStatus_rejected';
 
@@ -240,6 +240,10 @@ class _$Keys {
 
   static final String inviteRecommendation = 'invite_recommendation';
 
+  static final String inviteAddReferer = 'invite_add_referer';
+
+  static final String inviteInputPinCode = 'invite_input_pin_code';
+
   static final String clickToTry = 'click_to_try';
 
   static final String clickToQuit = 'click_to_quit';
@@ -256,7 +260,7 @@ class _$Keys {
 
   static final String chooseEnv = 'choose_env';
 
-  static final String chooseEnvDetail = 'choose_env_detail';
+  static final String fundStatusCompleted = 'fundStatus_completed';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -277,125 +281,128 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-
-  /// Simple getter methods
-  String get assetCat => _translate(_$Keys.assetCat);
-  String get transfer => _translate(_$Keys.transfer);
-  String get cashRecords => _translate(_$Keys.cashRecords);
-  String get transactionRecords => _translate(_$Keys.transactionRecords);
-  String get logout => _translate(_$Keys.logout);
-  String get myAsset => _translate(_$Keys.myAsset);
-  String get withdraw => _translate(_$Keys.withdraw);
-  String get all => _translate(_$Keys.all);
-  String get buyUp => _translate(_$Keys.buyUp);
-  String get buyDown => _translate(_$Keys.buyDown);
-  String get topUp => _translate(_$Keys.topUp);
-  String get amend => _translate(_$Keys.amend);
-  String get closeOut => _translate(_$Keys.closeOut);
-  String get orderEmpty => _translate(_$Keys.orderEmpty);
-  String get myOrdersStock => _translate(_$Keys.myOrdersStock);
-  String get nextRoundStart => _translate(_$Keys.nextRoundStart);
-  String get roundEnd => _translate(_$Keys.roundEnd);
-  String get futureProfit => _translate(_$Keys.futureProfit);
-  String get takeProfit => _translate(_$Keys.takeProfit);
-  String get cutLoss => _translate(_$Keys.cutLoss);
-  String get actLevel => _translate(_$Keys.actLevel);
-  String get invest => _translate(_$Keys.invest);
-  String get investPay => _translate(_$Keys.investPay);
-  String get interestRate => _translate(_$Keys.interestRate);
-  String get perDay => _translate(_$Keys.perDay);
-  String get forceExpiration => _translate(_$Keys.forceExpiration);
-  String get forcePrice => _translate(_$Keys.forcePrice);
-  String get perPrice => _translate(_$Keys.perPrice);
-  String get restAmount => _translate(_$Keys.restAmount);
-  String get rest => _translate(_$Keys.rest);
-  String get investAmount => _translate(_$Keys.investAmount);
-  String get gain => _translate(_$Keys.gain);
-  String get loss => _translate(_$Keys.loss);
-  String get containFee => _translate(_$Keys.containFee);
-  String get fee => _translate(_$Keys.fee);
-  String get balance => _translate(_$Keys.balance);
-  String get balanceAvailable => _translate(_$Keys.balanceAvailable);
-  String get logIn => _translate(_$Keys.logIn);
-  String get accountName => _translate(_$Keys.accountName);
-  String get accountNameHint => _translate(_$Keys.accountNameHint);
-  String get password => _translate(_$Keys.password);
-  String get passwordHint => _translate(_$Keys.passwordHint);
-  String get passwordConfirm => _translate(_$Keys.passwordConfirm);
-  String get passwordConfirmHint => _translate(_$Keys.passwordConfirmHint);
-  String get passwordError => _translate(_$Keys.passwordError);
-  String get pinCode => _translate(_$Keys.pinCode);
-  String get pinCodeHint => _translate(_$Keys.pinCodeHint);
-  String get getPinCode => _translate(_$Keys.getPinCode);
-  String get register => _translate(_$Keys.register);
-  String get createNewAccount => _translate(_$Keys.createNewAccount);
-  String get alreadyRegister => _translate(_$Keys.alreadyRegister);
-  String get dialogCancelButton => _translate(_$Keys.dialogCancelButton);
-  String get dialogSellTitle => _translate(_$Keys.dialogSellTitle);
-  String get dialogSellContent => _translate(_$Keys.dialogSellContent);
-  String get dialogLogOutTitle => _translate(_$Keys.dialogLogOutTitle);
-  String get dialogLogOutContent => _translate(_$Keys.dialogLogOutContent);
+  String get logIn => this._translate(_$Keys.logIn);
+  String get transfer => this._translate(_$Keys.transfer);
+  String get cashRecords => this._translate(_$Keys.cashRecords);
+  String get transactionRecords => this._translate(_$Keys.transactionRecords);
+  String get logout => this._translate(_$Keys.logout);
+  String get myAsset => this._translate(_$Keys.myAsset);
+  String get withdraw => this._translate(_$Keys.withdraw);
+  String get all => this._translate(_$Keys.all);
+  String get buyUp => this._translate(_$Keys.buyUp);
+  String get buyDown => this._translate(_$Keys.buyDown);
+  String get topUp => this._translate(_$Keys.topUp);
+  String get amend => this._translate(_$Keys.amend);
+  String get closeOut => this._translate(_$Keys.closeOut);
+  String get orderEmpty => this._translate(_$Keys.orderEmpty);
+  String get myOrdersStock => this._translate(_$Keys.myOrdersStock);
+  String get nextRoundStart => this._translate(_$Keys.nextRoundStart);
+  String get roundEnd => this._translate(_$Keys.roundEnd);
+  String get futureProfit => this._translate(_$Keys.futureProfit);
+  String get takeProfit => this._translate(_$Keys.takeProfit);
+  String get cutLoss => this._translate(_$Keys.cutLoss);
+  String get actLevel => this._translate(_$Keys.actLevel);
+  String get invest => this._translate(_$Keys.invest);
+  String get investPay => this._translate(_$Keys.investPay);
+  String get interestRate => this._translate(_$Keys.interestRate);
+  String get perDay => this._translate(_$Keys.perDay);
+  String get forceExpiration => this._translate(_$Keys.forceExpiration);
+  String get forcePrice => this._translate(_$Keys.forcePrice);
+  String get perPrice => this._translate(_$Keys.perPrice);
+  String get restAmount => this._translate(_$Keys.restAmount);
+  String get rest => this._translate(_$Keys.rest);
+  String get investAmount => this._translate(_$Keys.investAmount);
+  String get gain => this._translate(_$Keys.gain);
+  String get loss => this._translate(_$Keys.loss);
+  String get containFee => this._translate(_$Keys.containFee);
+  String get fee => this._translate(_$Keys.fee);
+  String get balance => this._translate(_$Keys.balance);
+  String get balanceAvailable => this._translate(_$Keys.balanceAvailable);
+  String get assetCat => this._translate(_$Keys.assetCat);
+  String get accountName => this._translate(_$Keys.accountName);
+  String get accountNameHint => this._translate(_$Keys.accountNameHint);
+  String get password => this._translate(_$Keys.password);
+  String get passwordHint => this._translate(_$Keys.passwordHint);
+  String get passwordConfirm => this._translate(_$Keys.passwordConfirm);
+  String get passwordConfirmHint => this._translate(_$Keys.passwordConfirmHint);
+  String get passwordError => this._translate(_$Keys.passwordError);
+  String get pinCode => this._translate(_$Keys.pinCode);
+  String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
+  String get getPinCode => this._translate(_$Keys.getPinCode);
+  String get register => this._translate(_$Keys.register);
+  String get createNewAccount => this._translate(_$Keys.createNewAccount);
+  String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
+  String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
+  String get dialogSellTitle => this._translate(_$Keys.dialogSellTitle);
+  String get dialogSellContent => this._translate(_$Keys.dialogSellContent);
+  String get dialogLogOutTitle => this._translate(_$Keys.dialogLogOutTitle);
+  String get dialogLogOutContent => this._translate(_$Keys.dialogLogOutContent);
   String get dialogLogOutConfirmButton =>
-      _translate(_$Keys.dialogLogOutConfirmButton);
-  String get confirm => _translate(_$Keys.confirm);
-  String get dialogCheckPassword => _translate(_$Keys.dialogCheckPassword);
+      this._translate(_$Keys.dialogLogOutConfirmButton);
+  String get confirm => this._translate(_$Keys.confirm);
+  String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
-      _translate(_$Keys.registerErrorMessageContainLowercase);
+      this._translate(_$Keys.registerErrorMessageContainLowercase);
   String get registerErrorMessageStartOnlyLetter =>
-      _translate(_$Keys.registerErrorMessageStartOnlyLetter);
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get registerErrorMessageShortNameLength =>
-      _translate(_$Keys.registerErrorMessageShortNameLength);
+      this._translate(_$Keys.registerErrorMessageShortNameLength);
   String get registerErrorMessageShouldNotContainContinuesDash =>
-      _translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
+      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
   String get registerErrorMessageDashEnd =>
-      _translate(_$Keys.registerErrorMessageDashEnd);
+      this._translate(_$Keys.registerErrorMessageDashEnd);
   String get registerErrorMessageOnlyContainLetter =>
-      _translate(_$Keys.registerErrorMessageOnlyContainLetter);
+      this._translate(_$Keys.registerErrorMessageOnlyContainLetter);
   String get registerErrorMessageAccountHasAlreadyExist =>
-      _translate(_$Keys.registerErrorMessageAccountHasAlreadyExist);
+      this._translate(_$Keys.registerErrorMessageAccountHasAlreadyExist);
   String get registerErrorMessagePasswordChecker =>
-      _translate(_$Keys.registerErrorMessagePasswordChecker);
+      this._translate(_$Keys.registerErrorMessagePasswordChecker);
   String get registerErrorMessagePasswordConfirm =>
-      _translate(_$Keys.registerErrorMessagePasswordConfirm);
-  String get accountLogInError => _translate(_$Keys.accountLogInError);
-  String get accountLogOut => _translate(_$Keys.accountLogOut);
-  String get updatedDate => _translate(_$Keys.updatedDate);
-  String get address => _translate(_$Keys.address);
-  String get fundStatusInProgress => _translate(_$Keys.fundStatusInProgress);
-  String get fundStatusCompleted => _translate(_$Keys.fundStatusCompleted);
-  String get fundStatusRejected => _translate(_$Keys.fundStatusRejected);
-  String get fundStatusError => _translate(_$Keys.fundStatusError);
-  String get tradingDetail => _translate(_$Keys.tradingDetail);
-  String get openPositionPrice => _translate(_$Keys.openPositionPrice);
-  String get settlementPrice => _translate(_$Keys.settlementPrice);
-  String get successToast => _translate(_$Keys.successToast);
-  String get failToast => _translate(_$Keys.failToast);
-  String get leverage => _translate(_$Keys.leverage);
-  String get settlementTime => _translate(_$Keys.settlementTime);
-  String get openPositionTime => _translate(_$Keys.openPositionTime);
-  String get settlementType => _translate(_$Keys.settlementType);
-  String get accruedInterest => _translate(_$Keys.accruedInterest);
-  String get takeProfitCloseOut => _translate(_$Keys.takeProfitCloseOut);
-  String get cutLossCloseOut => _translate(_$Keys.cutLossCloseOut);
-  String get userCloseOut => _translate(_$Keys.userCloseOut);
-  String get inviteFriend => _translate(_$Keys.inviteFriend);
-  String get inviteTopRank => _translate(_$Keys.inviteTopRank);
-  String get inviteReward => _translate(_$Keys.inviteReward);
-  String get inviteRecommendSuc => _translate(_$Keys.inviteRecommendSuc);
-  String get inviteMyPinCode => _translate(_$Keys.inviteMyPinCode);
-  String get inviteMyRecommender => _translate(_$Keys.inviteMyRecommender);
-  String get inviteThreeStepOne => _translate(_$Keys.inviteThreeStepOne);
-  String get inviteThreeStepTwo => _translate(_$Keys.inviteThreeStepTwo);
-  String get inviteThreeStepThree => _translate(_$Keys.inviteThreeStepThree);
-  String get inviteGainReward => _translate(_$Keys.inviteGainReward);
-  String get inviteRecommendation => _translate(_$Keys.inviteRecommendation);
-  String get clickToTry => _translate(_$Keys.clickToTry);
-  String get clickToQuit => _translate(_$Keys.clickToQuit);
-  String get oneMin => _translate(_$Keys.oneMin);
-  String get fiveMin => _translate(_$Keys.fiveMin);
-  String get oneDay => _translate(_$Keys.oneDay);
-  String get oneHour => _translate(_$Keys.oneHour);
-  String get changeEnv => _translate(_$Keys.changeEnv);
-  String get chooseEnv => _translate(_$Keys.chooseEnv);
-  String get chooseEnvDetail => _translate(_$Keys.chooseEnvDetail);
+      this._translate(_$Keys.registerErrorMessagePasswordConfirm);
+  String get accountLogInError => this._translate(_$Keys.accountLogInError);
+  String get accountLogOut => this._translate(_$Keys.accountLogOut);
+  String get updatedDate => this._translate(_$Keys.updatedDate);
+  String get address => this._translate(_$Keys.address);
+  String get fundStatusInProgress =>
+      this._translate(_$Keys.fundStatusInProgress);
+  String get chooseEnvDetail => this._translate(_$Keys.chooseEnvDetail);
+  String get fundStatusRejected => this._translate(_$Keys.fundStatusRejected);
+  String get fundStatusError => this._translate(_$Keys.fundStatusError);
+  String get tradingDetail => this._translate(_$Keys.tradingDetail);
+  String get openPositionPrice => this._translate(_$Keys.openPositionPrice);
+  String get settlementPrice => this._translate(_$Keys.settlementPrice);
+  String get successToast => this._translate(_$Keys.successToast);
+  String get failToast => this._translate(_$Keys.failToast);
+  String get leverage => this._translate(_$Keys.leverage);
+  String get settlementTime => this._translate(_$Keys.settlementTime);
+  String get openPositionTime => this._translate(_$Keys.openPositionTime);
+  String get settlementType => this._translate(_$Keys.settlementType);
+  String get accruedInterest => this._translate(_$Keys.accruedInterest);
+  String get takeProfitCloseOut => this._translate(_$Keys.takeProfitCloseOut);
+  String get cutLossCloseOut => this._translate(_$Keys.cutLossCloseOut);
+  String get userCloseOut => this._translate(_$Keys.userCloseOut);
+  String get inviteFriend => this._translate(_$Keys.inviteFriend);
+  String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
+  String get inviteReward => this._translate(_$Keys.inviteReward);
+  String get inviteRecommendSuc => this._translate(_$Keys.inviteRecommendSuc);
+  String get inviteMyPinCode => this._translate(_$Keys.inviteMyPinCode);
+  String get inviteMyRecommender => this._translate(_$Keys.inviteMyRecommender);
+  String get inviteThreeStepOne => this._translate(_$Keys.inviteThreeStepOne);
+  String get inviteThreeStepTwo => this._translate(_$Keys.inviteThreeStepTwo);
+  String get inviteThreeStepThree =>
+      this._translate(_$Keys.inviteThreeStepThree);
+  String get inviteGainReward => this._translate(_$Keys.inviteGainReward);
+  String get inviteRecommendation =>
+      this._translate(_$Keys.inviteRecommendation);
+  String get inviteAddReferer => this._translate(_$Keys.inviteAddReferer);
+  String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
+  String get clickToTry => this._translate(_$Keys.clickToTry);
+  String get clickToQuit => this._translate(_$Keys.clickToQuit);
+  String get oneMin => this._translate(_$Keys.oneMin);
+  String get fiveMin => this._translate(_$Keys.fiveMin);
+  String get oneDay => this._translate(_$Keys.oneDay);
+  String get oneHour => this._translate(_$Keys.oneHour);
+  String get changeEnv => this._translate(_$Keys.changeEnv);
+  String get chooseEnv => this._translate(_$Keys.chooseEnv);
+  String get fundStatusCompleted => this._translate(_$Keys.fundStatusCompleted);
 }

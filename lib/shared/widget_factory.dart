@@ -62,19 +62,22 @@ class WidgetFactory {
     );
   }
 
-  static Widget invitePeopleButton() {
-    return Container(
-        alignment: Alignment.center,
-        width: 60,
-        height: 20,
-        decoration: DecorationFactory.addPeopleButtonDecoration,
-        child: Text("去添加",
-            style: TextStyle(
-                color: Palette.buttonPrimaryColor,
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                fontSize: Dimen.smallLabelFontSize),
-            textAlign: TextAlign.center));
+  static Widget invitePeopleButton({@required VoidCallback onPressed}) {
+    return GestureDetector(
+      child: Container(
+          alignment: Alignment.center,
+          width: 60,
+          height: 20,
+          decoration: DecorationFactory.addPeopleButtonDecoration,
+          child: Text("去添加",
+              style: TextStyle(
+                  color: Palette.buttonPrimaryColor,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  fontSize: Dimen.smallLabelFontSize),
+              textAlign: TextAlign.center)),
+      onTap: onPressed,
+    );
   }
 
   static Widget inviteStepsPills() {

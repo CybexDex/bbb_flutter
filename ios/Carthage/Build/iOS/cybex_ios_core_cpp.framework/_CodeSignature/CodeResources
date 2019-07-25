@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BitShareCoordinator.h</key>
 		<data>
-		xVcn7tiLygQZinnxvBNUv61g9kQ=
+		5Apj1nCT7vtM6g7Jl++BXjGsESs=
 		</data>
 		<key>Headers/NXSig.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		VFB67izt3tcbGimUge2TQs4C99M=
+		e6jbvTWX4rOwDupIHEpvlZxqM1A=
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -30,7 +30,7 @@
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		uHQ8n4YmjFBzN2U/iKKNQX0yoPk=
+		5u2cg259CBOR2agSAq08twSfntc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -439,11 +439,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xVcn7tiLygQZinnxvBNUv61g9kQ=
+			5Apj1nCT7vtM6g7Jl++BXjGsESs=
 			</data>
 			<key>hash2</key>
 			<data>
-			Y9v0gcjzrRut/RPLuW9oM/da+0n+wTz39FVlxZzfcl8=
+			lLXHGeB610XVpHvLiruV3auUcsPqPDdBLqHkbWllXWk=
 			</data>
 		</dict>
 		<key>Headers/NXSig.h</key>
@@ -494,11 +494,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			uHQ8n4YmjFBzN2U/iKKNQX0yoPk=
+			5u2cg259CBOR2agSAq08twSfntc=
 			</data>
 			<key>hash2</key>
 			<data>
-			rZ+cHnw1mpaHKM+N0GivhKhLVvtWu3TU7jjsP6/nwBE=
+			ALahJ5YilGdlZFR4Y1Jyv3sSlaRHiF49+GYDd2XAzf0=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
