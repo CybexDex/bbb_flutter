@@ -63,17 +63,31 @@ class OrderFormWidget extends StatelessWidget {
                   I18n.of(context).investAmount,
                   style: StyleFactory.subTitleStyle,
                 ),
-                SizedBox(
-                  width: 76,
-                  child: IStep(
-                    text: model.orderForm.investAmount.toString(),
-                    minusOnTap: () {
-                      model.decreaseInvest();
-                    },
-                    plusOnTap: () {
-                      model.increaseInvest();
-                    },
-                  ),
+                Row(
+                  children: <Widget>[
+                    SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: Palette.redOrange,
+                          inactiveTrackColor: Palette.subTitleColor,
+                          thumbColor: Palette.redOrange,
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 4),
+                        ),
+                        child: SizedBox(
+                            child: Slider(
+                          min: 0,
+                          max: 100,
+                          onChanged: (value) {
+                            model.changeInvest(amount: value.toInt());
+                            print(value);
+                          },
+                          value: model.orderForm.investAmount.toDouble(),
+                        ))),
+                    Text(
+                      "${model.orderForm.investAmount} 份",
+                      style: StyleFactory.subTitleStyle,
+                    )
+                  ],
                 )
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -200,6 +214,20 @@ class OrderFormWidget extends StatelessWidget {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
+           SizedBox(height: 10),
+           Row(
+             children: <Widget>[
+               Text(
+                 "${I18n.of(context).actLevel}",
+                 style: StyleFactory.subTitleStyle,
+               ),
+               Text(
+                 "${model.actLevel.toStringAsFixed(4)}",
+                 style: StyleFactory.smallCellTitleStyle,
+               )
+             ],
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           ),
           ],
         ),
       );

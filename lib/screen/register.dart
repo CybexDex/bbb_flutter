@@ -241,9 +241,9 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   createFocusNode() {
-    var _accountNameFocusNode = FocusNode();
-    var _passwordFocusNode = FocusNode();
-    var _passwordConfirmFocusNode = FocusNode();
+    // var _accountNameFocusNode = FocusNode();
+    // var _passwordFocusNode = FocusNode();
+    // var _passwordConfirmFocusNode = FocusNode();
   }
 
   _processAccountCheck(String accountName) async {

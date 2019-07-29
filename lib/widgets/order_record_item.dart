@@ -4,7 +4,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
 
 class OrderRecordItem extends StatelessWidget {
-  OrderResponseModel _model;
+  final OrderResponseModel _model;
   OrderRecordItem({OrderResponseModel model, Key key})
       : _model = model,
         super(key: key);

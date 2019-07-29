@@ -95,8 +95,8 @@ class WithdrawViewModel extends BaseModel {
 
   Commission getCommission(RefContractResponseModel refData) {
     WithdrawForm form = withdrawForm;
-    AvailableAsset quoteAsset =
-        AvailableAsset(assetId: "1.3.723", precision: 6, assetName: "NXC.USDT");
+    AvailableAsset quoteAsset = AvailableAsset(
+        assetId: "1.3.803", precision: 6, assetName: AssetName.NXUSDT);
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
     Commission comm = Commission();

@@ -12,7 +12,6 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'logic/invite_vm.dart';
 import 'manager/ref_manager.dart';
 import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 

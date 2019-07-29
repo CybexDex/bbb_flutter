@@ -8,8 +8,8 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/istep.dart';
 
 class PnlForm extends StatelessWidget {
-  OrderResponseModel _order;
-  Function _callback;
+  final OrderResponseModel _order;
+  final Function _callback;
   PnlForm({Key key, OrderResponseModel model, Function() callback})
       : _order = model,
         _callback = callback,

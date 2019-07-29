@@ -21,18 +21,20 @@ class _InviteState extends State<InvitePage> {
       onModelReady: (model) => model.getRefer(),
       builder: (context, model, child) {
         return Scaffold(
-            appBar: AppBar(
-              iconTheme: IconThemeData(
-                color: Palette.backButtonColor, //change your color here
-              ),
-              centerTitle: true,
-              title: Text(I18n.of(context).inviteFriend,
-                  style: StyleFactory.title),
-              backgroundColor: Colors.white,
-              brightness: Brightness.light,
-              elevation: 0,
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Palette.backButtonColor, //change your color here
             ),
-            body: CustomScrollView(
+            centerTitle: true,
+            title:
+                Text(I18n.of(context).inviteFriend, style: StyleFactory.title),
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            elevation: 0,
+          ),
+          body: Container(
+            color: Palette.inviteBackgroundColor,
+            child: CustomScrollView(
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate([
@@ -425,8 +427,8 @@ class _InviteState extends State<InvitePage> {
                             Container(
                               decoration: DecorationFactory
                                   .invitationContainerShadowDecoration,
-                              margin:
-                                  EdgeInsets.only(top: 20, left: 20, right: 20),
+                              margin: EdgeInsets.only(
+                                  top: 20, left: 20, right: 20, bottom: 20),
                               child: Column(
                                 children: <Widget>[
                                   Container(
@@ -477,9 +479,8 @@ class _InviteState extends State<InvitePage> {
                                                       .format(DateTime
                                                           .fromMillisecondsSinceEpoch(
                                                               model
-                                                                  .referralList[
-                                                                      index]
-                                                                  .ts)),
+                                                                  .referralList[index].ts * 1000
+                                                                  )),
                                                   style: StyleFactory
                                                       .dialogContentStyle)
                                             ],
@@ -496,7 +497,9 @@ class _InviteState extends State<InvitePage> {
                   ]),
                 ),
               ],
-            ));
+            ),
+          ),
+        );
       },
     );
   }

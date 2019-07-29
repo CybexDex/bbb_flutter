@@ -7,7 +7,7 @@ class AssetDef {
 
 class AssetName {
   static const CYB = "CYB";
-  static const NXUSDT = "NXC.USDT";
+  static const NXUSDT = "NXCO.USDT";
   static const USDT = "USDT";
 }
 

@@ -99,7 +99,7 @@ class TransferViewModel extends BaseModel {
     TransferForm form = transferForm;
     AvailableAsset quoteAsset = transferForm.fromBBBToCybex
         ? AvailableAsset(
-            assetId: "1.3.723", precision: 6, assetName: "NXC.USDT")
+            assetId: "1.3.803", precision: 6, assetName: AssetName.NXUSDT)
         : AvailableAsset(assetId: "1.3.27", precision: 6, assetName: "USDT");
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 

@@ -30,6 +30,7 @@ class TradeViewModel extends BaseModel {
   PostOrderRequestModel order;
   Order buyOrder;
   Commission commission;
+  double actLevel;
 
   BBBAPI _api;
   MarketManager _mtm;
@@ -92,6 +93,9 @@ class TradeViewModel extends BaseModel {
     if (ticker == null) {
       return;
     }
+    actLevel = orderForm.isUp
+        ? (ticker.value / (ticker.value - _refm.currentUpContract.strikeLevel))
+        : (ticker.value / (_refm.currentDownContract.strikeLevel - ticker.value));
 
     double extra = 0.1;
 
@@ -119,6 +123,11 @@ class TradeViewModel extends BaseModel {
       isSatisfied = true;
     }
     setBusy(false);
+  }
+
+  void changeInvest({int amount}) {
+    orderForm.investAmount = amount;
+    updateAmountAndFee();
   }
 
   void increaseInvest() {

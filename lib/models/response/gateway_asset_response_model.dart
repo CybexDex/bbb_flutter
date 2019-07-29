@@ -1,10 +1,10 @@
 import 'dart:convert' show json;
 
 class GatewayAssetResponseModel {
-  int ID;
-  String CreatedAt;
-  String UpdatedAt;
-  Object DeletedAt;
+  int id;
+  String createdAt;
+  String updatedAt;
+  Object deletedAt;
   String name;
   String blockchain;
   String cybname;
@@ -24,10 +24,10 @@ class GatewayAssetResponseModel {
   Object info;
 
   GatewayAssetResponseModel({
-    this.ID,
-    this.CreatedAt,
-    this.UpdatedAt,
-    this.DeletedAt,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
     this.name,
     this.blockchain,
     this.cybname,
@@ -50,10 +50,10 @@ class GatewayAssetResponseModel {
   factory GatewayAssetResponseModel.fromJson(jsonRes) => jsonRes == null
       ? null
       : GatewayAssetResponseModel(
-          ID: jsonRes['ID'],
-          CreatedAt: jsonRes['CreatedAt'],
-          UpdatedAt: jsonRes['UpdatedAt'],
-          DeletedAt: jsonRes['DeletedAt'],
+          id: jsonRes['ID'],
+          createdAt: jsonRes['CreatedAt'],
+          updatedAt: jsonRes['UpdatedAt'],
+          deletedAt: jsonRes['DeletedAt'],
           name: jsonRes['name'],
           blockchain: jsonRes['blockchain'],
           cybname: jsonRes['cybname'],
@@ -74,10 +74,10 @@ class GatewayAssetResponseModel {
         );
 
   Map<String, dynamic> toJson() => {
-        'ID': ID,
-        'CreatedAt': CreatedAt,
-        'UpdatedAt': UpdatedAt,
-        'DeletedAt': DeletedAt,
+        'ID': id,
+        'CreatedAt': createdAt,
+        'UpdatedAt': updatedAt,
+        'DeletedAt': deletedAt,
         'name': name,
         'blockchain': blockchain,
         'cybname': cybname,
