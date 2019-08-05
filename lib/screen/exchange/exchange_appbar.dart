@@ -53,7 +53,13 @@ AppBar exchangeAppBar() {
       child: Image.asset(R.resAssetsIconsIcPerson),
     ),
     centerTitle: true,
-    title: Text(".BXBT", style: StyleFactory.title),
+    title: Consumer<UserManager>(
+      builder: (context, bloc, child) {
+        return bloc.user.loginType == LoginType.test
+            ? Text("试玩 .BXBT", style: StyleFactory.title)
+            : Text(".BXBT", style: StyleFactory.title);
+      },
+    ),
     backgroundColor: Colors.white,
     brightness: Brightness.light,
     elevation: 0,

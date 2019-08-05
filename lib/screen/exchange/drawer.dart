@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
@@ -340,10 +341,15 @@ class UserDrawer extends StatelessWidget {
                       onPressed: () {
                         if (userMg.user.testAccountResponseModel != null) {
                           userMg.logoutTestAccount();
+                          showToast(
+                              context, false, I18n.of(context).changeFromTryEnv,
+                              callback: () {
+                            Navigator.pop(context);
+                          });
                         } else {
                           userMg.logout();
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
                       }),
             ),
           ],

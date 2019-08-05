@@ -154,7 +154,6 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                 ),
                 Flexible(
                   child: Container(
-                      decoration: DecorationFactory.cornerShadowDecoration,
                       height: double.infinity,
                       margin: EdgeInsets.only(top: 1, left: 0, right: 0),
                       child: GestureDetector(
@@ -198,13 +197,13 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                               seconds: 5 *
                                   marketDurationSecondMap[
                                       model.marketDuration]),
-                          lineWidth: 2,
+                          lineWidth: 1,
                           gridLineWidth: 0.5,
                           width: widget.width,
                           fillGradient: LinearGradient(
                               colors: [
-                                Palette.darkSkyBlue.withAlpha(100),
-                                Palette.darkSkyBlue.withAlpha(0)
+                                Palette.lineGradintColorStart,
+                                Palette.lineGradientColorEnd
                               ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter),

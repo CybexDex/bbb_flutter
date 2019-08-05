@@ -5,6 +5,8 @@ class R {
   static final String resAssetsIconsIcTop3 = 'res/assets/icons/icTop3.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icMaskClose.png)
   static final String resAssetsIconsIcMaskClose = 'res/assets/icons/icMaskClose.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_add_2.svg)
+  static final String resAssetsIconsIcAdd2 = 'res/assets/icons/ic_add_2.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop1.png)
   static final String resAssetsIconsIcTop1 = 'res/assets/icons/icTop1.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icAdd.png)
@@ -37,10 +39,14 @@ class R {
   static final String resAssetsIconsIcFallGreen = 'res/assets/icons/icFallGreen.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTime.png)
   static final String resAssetsIconsIcTime = 'res/assets/icons/icTime.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_title_line.svg)
+  static final String resAssetsIconsIcTitleLine = 'res/assets/icons/ic_title_line.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icNotifyBack.png)
   static final String resAssetsIconsIcNotifyBack = 'res/assets/icons/icNotifyBack.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icSwitch.png)
   static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_reduce_2.svg)
+  static final String resAssetsIconsIcReduce2 = 'res/assets/icons/ic_reduce_2.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icAccount.png)
   static final String resAssetsIconsIcAccount = 'res/assets/icons/icAccount.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icRiseRed18.png)

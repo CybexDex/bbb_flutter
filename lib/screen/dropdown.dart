@@ -22,11 +22,20 @@ class Dropdown extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(left: 20, top: 15, right: 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("类型"),
-                    Text("强制平仓价格"),
-                    Text("剩余可买"),
+                    SizedBox(
+                      width: 85,
+                      child: Text("类型"),
+                    ),
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("强制平仓价格"),
+                        Text(I18n.of(context).actLevel),
+                        Text("剩余可买"),
+                      ],
+                    )),
                   ],
                 ),
               ),
@@ -100,6 +109,12 @@ class Dropdown extends StatelessWidget {
                                           .getUpContracts()[index]
                                           .strikeLevel
                                           .toString()),
+                                      Text((model.currentTicker.value /
+                                              (model.currentTicker.value -
+                                                  model
+                                                      .getUpContracts()[index]
+                                                      .strikeLevel))
+                                          .toStringAsFixed(4)),
                                       Text(model
                                           .getUpContracts()[index]
                                           .availableInventory
@@ -141,6 +156,12 @@ class Dropdown extends StatelessWidget {
                                           .getDownContracts()[index]
                                           .strikeLevel
                                           .toString()),
+                                      Text((model.currentTicker.value /
+                                              (model
+                                                      .getDownContracts()[index]
+                                                      .strikeLevel -
+                                                  model.currentTicker.value))
+                                          .toStringAsFixed(4)),
                                       Text(model
                                           .getDownContracts()[index]
                                           .availableInventory

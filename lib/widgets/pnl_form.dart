@@ -62,9 +62,10 @@ class PnlForm extends StatelessWidget {
                           style: StyleFactory.subTitleStyle,
                         ),
                         SizedBox(
-                          width: 76,
+                          width: 150,
                           child: IStep(
-                              text: "${model.takeProfit.toStringAsFixed(0)}%",
+                              text:
+                                  "${model.takeProfit.round().toStringAsFixed(0)}%",
                               plusOnTap: () {
                                 model.increaseTakeProfit();
                               },
@@ -85,9 +86,11 @@ class PnlForm extends StatelessWidget {
                           style: StyleFactory.subTitleStyle,
                         ),
                         SizedBox(
-                          width: 76,
+                          width: 150,
                           child: IStep(
-                            text: "${model.cutLoss.toStringAsFixed(0)}%",
+                            text: model.cutLoss.round() == 0
+                                ? "不设置"
+                                : "${model.cutLoss.round().toStringAsFixed(0)}%",
                             plusOnTap: () {
                               model.increaseCutLoss();
                             },

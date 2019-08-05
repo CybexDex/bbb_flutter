@@ -15,7 +15,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 class DepositPage extends StatelessWidget {
   DepositPage({Key key}) : super(key: key);
 
-  GlobalKey _globalKey = GlobalKey();
+  final GlobalKey _globalKey = GlobalKey();
 
   Future<Uint8List> _capturePng() async {
     try {

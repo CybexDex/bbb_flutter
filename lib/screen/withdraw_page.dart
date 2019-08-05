@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/withdraw_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class WithdrawPage extends StatefulWidget {
@@ -27,7 +28,10 @@ class _WithdrawState extends State<WithdrawPage> {
   Widget build(BuildContext context) {
     return BaseWidget<WithdrawViewModel>(
       model: withdrawViewModel = WithdrawViewModel(
-          api: locator.get(), refm: locator.get(), um: locator.get()),
+          api: locator.get(),
+          refm: locator.get(),
+          um: locator.get(),
+          gatewayApi: locator.get()),
       onModelReady: (model) {
         model.initForm();
         _amountController.addListener(() {
@@ -112,7 +116,8 @@ class _WithdrawState extends State<WithdrawPage> {
                               controller: _amountController,
                               focusNode: _amountFocusNode,
                               decoration: InputDecoration(
-                                  hintText: "请输入最小提现数量",
+                                  hintText:
+                                      "请输入最小提现数量 ${model.gatewayAssetResponseModel.minWithdraw}",
                                   hintStyle: StyleFactory.hintStyle,
                                   border: InputBorder.none),
                             ),
@@ -142,13 +147,26 @@ class _WithdrawState extends State<WithdrawPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  Visibility(
-                    visible: false,
+                  Offstage(
+                    offstage: model.isHide ||
+                        model.withdrawForm.totalAmount.amount == 0,
                     child: Row(
                       children: <Widget>[
                         Image.asset(R.resAssetsIconsIcWarn),
-                        Text("CYBEX账户余额不足/BBB账户余额不足",
-                            style: StyleFactory.errorMessageText)
+                        Builder(
+                          builder: (context) {
+                            if (model.withdrawForm.totalAmount.amount >
+                                model.withdrawForm.balance.quantity) {
+                              return Text("余额不足",
+                                  style: StyleFactory.errorMessageText);
+                            } else if (model.withdrawForm.totalAmount.amount <
+                                model.gatewayAssetResponseModel.minWithdraw) {
+                              return Text("最小提现额",
+                                  style: StyleFactory.errorMessageText);
+                            }
+                            return Container();
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -159,7 +177,8 @@ class _WithdrawState extends State<WithdrawPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("提现手续费", style: StyleFactory.transferStyleTitle),
-                      Text("0.0001 CYB",
+                      Text(
+                          "${model.gatewayAssetResponseModel.withdrawFee} USDT",
                           style: StyleFactory.transferStyleTitle),
                     ],
                   ),
@@ -194,28 +213,33 @@ class _WithdrawState extends State<WithdrawPage> {
                     height: 44,
                     child: WidgetFactory.button(
                         data: "提现",
-                        color: Palette.redOrange,
-                        onPressed: () async {
-                          model.withdrawForm.address =
-                              _addressEditController.text;
-                          TextEditingController controller =
-                              TextEditingController();
+                        color: model.isHide
+                            ? Palette.redOrange
+                            : Palette.subTitleColor,
+                        onPressed: model.isHide
+                            ? () async {
+                                model.withdrawForm.address =
+                                    _addressEditController.text;
+                                TextEditingController controller =
+                                    TextEditingController();
 
-                          if (locator.get<UserManager>().user.isLocked) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return DialogFactory.unlockDialog(context,
-                                      controller: controller);
-                                }).then((value) async {
-                              if (value) {
-                                callPostWithdraw(model);
+                                if (locator.get<UserManager>().user.isLocked) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return DialogFactory.unlockDialog(
+                                            context,
+                                            controller: controller);
+                                      }).then((value) async {
+                                    if (value) {
+                                      callPostWithdraw(model);
+                                    }
+                                  });
+                                } else {
+                                  callPostWithdraw(model);
+                                }
                               }
-                            });
-                          } else {
-                            callPostWithdraw(model);
-                          }
-                        }),
+                            : () {}),
                   )
                 ],
               ),
@@ -225,12 +249,15 @@ class _WithdrawState extends State<WithdrawPage> {
   }
 
   callPostWithdraw(WithdrawViewModel model) async {
+    showLoading(context);
     try {
-      showLoading(context);
-      await model.postWithdraw();
+      PostOrderResponseModel responseModel = await model.postWithdraw();
       Navigator.of(context).pop();
-      showToast(context, false, I18n.of(context).successToast);
-      model.getCurrentBalance();
+      if (responseModel.status == "Failed") {
+        showToast(context, true, responseModel.reason);
+      } else {
+        showToast(context, false, I18n.of(context).successToast);
+      }
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);

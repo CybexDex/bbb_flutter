@@ -26,11 +26,12 @@ class TradeViewModel extends BaseModel {
   Contract get contract =>
       orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
   var ticker;
+  var currentTicker;
   var saveContract;
   PostOrderRequestModel order;
   Order buyOrder;
   Commission commission;
-  double actLevel;
+  double actLevel = 0;
 
   BBBAPI _api;
   MarketManager _mtm;
@@ -93,9 +94,11 @@ class TradeViewModel extends BaseModel {
     if (ticker == null) {
       return;
     }
+    currentTicker = ticker;
     actLevel = orderForm.isUp
         ? (ticker.value / (ticker.value - _refm.currentUpContract.strikeLevel))
-        : (ticker.value / (_refm.currentDownContract.strikeLevel - ticker.value));
+        : (ticker.value /
+            (_refm.currentDownContract.strikeLevel - ticker.value));
 
     double extra = 0.1;
 
@@ -148,28 +151,26 @@ class TradeViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-    if (orderForm.takeProfit < 100) {
-      orderForm.takeProfit += 5;
-      setBusy(false);
-    }
+    orderForm.takeProfit += 5;
+    setBusy(false);
   }
 
   void decreaseTakeProfit() {
-    if (orderForm.takeProfit > 1) {
+    if (orderForm.takeProfit.round() >= 5) {
       orderForm.takeProfit -= 5;
       setBusy(false);
     }
   }
 
   void increaseCutLoss() {
-    if (orderForm.cutoff < 100) {
+    if (orderForm.cutoff.round() < 100) {
       orderForm.cutoff += 5;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
-    if (orderForm.cutoff > 1) {
+    if (orderForm.cutoff.round() >= 5) {
       orderForm.cutoff -= 5;
       setBusy(false);
     }
@@ -192,10 +193,10 @@ class TradeViewModel extends BaseModel {
     order.expiration = 0;
     order.takeProfitPx = OrderCalculate.takeProfitPx(orderForm.takeProfit,
             ticker.value, saveContract.strikeLevel, orderForm.isUp)
-        .toStringAsFixed(6);
+        .toStringAsFixed(4);
     order.cutLossPx = OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
             saveContract.strikeLevel, orderForm.isUp)
-        .toStringAsFixed(6);
+        .toStringAsFixed(4);
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);

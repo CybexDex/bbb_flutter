@@ -8,7 +8,7 @@ class GatewayAPIProvider extends GatewayApi {
   Dio dio = Dio();
 
   GatewayAPIProvider() {
-    dio.options.baseUrl = "http://47.75.125.66:8182";
+    dio.options.baseUrl = "http://47.75.164.159:8182";
     dio.options.connectTimeout = 5000; //5s
     dio.options.receiveTimeout = 3000;
   }

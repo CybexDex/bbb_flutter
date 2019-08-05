@@ -4,12 +4,13 @@ import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 import 'istep.dart';
 
 class OrderFormWidget extends StatelessWidget {
   final Contract _contract;
-  const OrderFormWidget({Key key, Contract contract})
+  OrderFormWidget({Key key, Contract contract})
       : _contract = contract,
         super(key: key);
 
@@ -25,67 +26,82 @@ class OrderFormWidget extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(
-                  I18n.of(context).balanceAvailable,
-                  style: StyleFactory.subTitleStyle,
-                ),
-                Text(
-                  usdt != null
-                      ? "${usdt.quantity.toStringAsFixed(4)} USDT"
-                      : "-- USDT",
-                  style: StyleFactory.smallCellTitleStyle,
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  I18n.of(context).forcePrice,
-                  style: StyleFactory.subTitleStyle,
-                ),
-                Text(
-                  "${refreshContract.strikeLevel.toStringAsFixed(0)} USDT",
-                  style: StyleFactory.smallCellTitleStyle,
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  I18n.of(context).investAmount,
-                  style: StyleFactory.subTitleStyle,
-                ),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Palette.redOrange,
-                          inactiveTrackColor: Palette.subTitleColor,
-                          thumbColor: Palette.redOrange,
-                          thumbShape:
-                              RoundSliderThumbShape(enabledThumbRadius: 4),
-                        ),
-                        child: SizedBox(
-                            child: Slider(
-                          min: 0,
-                          max: 100,
-                          onChanged: (value) {
-                            model.changeInvest(amount: value.toInt());
-                            print(value);
-                          },
-                          value: model.orderForm.investAmount.toDouble(),
-                        ))),
                     Text(
-                      "${model.orderForm.investAmount} 份",
-                      style: StyleFactory.subTitleStyle,
+                      I18n.of(context).balanceAvailable,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      usdt != null
+                          ? "${usdt.quantity.toStringAsFixed(4)} USDT"
+                          : "-- USDT",
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).forcePrice,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      "${refreshContract.strikeLevel.toStringAsFixed(0)} USDT",
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).actLevel}",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      "${model.actLevel.toStringAsFixed(4)}",
+                      style: StyleFactory.cellTitleStyle,
+                    )
+                  ],
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            SizedBox(height: 15),
+            Row(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).fee}",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      "${model.orderForm.fee.amount.toStringAsFixed(4)} USDT",
+                      style: StyleFactory.cellTitleStyle,
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).interestRate}",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
+                      style: StyleFactory.cellTitleStyle,
                     )
                   ],
                 )
@@ -93,13 +109,165 @@ class OrderFormWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
             SizedBox(
+              height: 20,
+            ),
+            Divider(height: 0.5, color: Palette.separatorColor),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).takeProfit,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: 160,
+                      child: IStep(
+                          text:
+                              "${model.orderForm.takeProfit.round().toStringAsFixed(0)}%",
+                          plusOnTap: () {
+                            model.increaseTakeProfit();
+                          },
+                          minusOnTap: () {
+                            model.decreaseTakeProfit();
+                          }),
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).cutLoss,
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: 160,
+                      child: IStep(
+                        text: model.orderForm.cutoff.round() == 0
+                            ? "不设置"
+                            : "${model.orderForm.cutoff.round().toStringAsFixed(0)}%",
+                        plusOnTap: () {
+                          model.increaseCutLoss();
+                        },
+                        minusOnTap: () {
+                          model.decreaseCutLoss();
+                        },
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(
               height: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  I18n.of(context).investAmount,
+                  style: StyleFactory.cellDescLabel,
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 160,
+                      child: Container(
+                        height: 36,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Palette.separatorColor, width: 0.5),
+                            borderRadius: BorderRadius.circular(2)),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 7,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) {
+                                    print(value);
+                                    model.changeInvest(
+                                        amount: value.isEmpty
+                                            ? 0
+                                            : int.parse(value));
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        EdgeInsets.only(top: 4, bottom: 4),
+                                    border: InputBorder.none,
+                                    hintText: I18n.of(context).investmentHint,
+                                    hintStyle: StyleFactory.addReduceStyle,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                                flex: 3,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    VerticalDivider(
+                                      color: Palette.separatorColor,
+                                      indent: 6,
+                                      endIndent: 6,
+                                      width: 0.5,
+                                    ),
+                                    Text("份",
+                                        style:
+                                            StyleFactory.investmentAmountStyle),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                    // SliderTheme(
+                    //     data: SliderTheme.of(context).copyWith(
+                    //       activeTrackColor: Palette.redOrange,
+                    //       inactiveTrackColor: Palette.subTitleColor,
+                    //       thumbColor: Palette.redOrange,
+                    //       thumbShape:
+                    //           RoundSliderThumbShape(enabledThumbRadius: 4),
+                    //     ),
+                    //     child: SizedBox(
+                    //         child: Slider(
+                    //       min: 0,
+                    //       max: 100,
+                    //       onChanged: (value) {
+                    //         model.changeInvest(amount: value.toInt());
+                    //         print(value);
+                    //       },
+                    //       value: model.orderForm.investAmount.toDouble(),
+                    //     ))),
+                    // Text(
+                    //   "${model.orderForm.investAmount} 份",
+                    //   style: StyleFactory.subTitleStyle,
+                    // )
+                  ],
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
             Offstage(
                 offstage: model.isSatisfied ||
                     model.orderForm.totalAmount.amount <= double.minPositive,
                 child: Column(
                   children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: <Widget>[
                         Image.asset(R.resAssetsIconsIcWarn),
@@ -138,96 +306,6 @@ class OrderFormWidget extends StatelessWidget {
                     )
                   ],
                 )),
-            Row(
-              children: <Widget>[
-                Text(
-                  I18n.of(context).takeProfit,
-                  style: StyleFactory.subTitleStyle,
-                ),
-                SizedBox(
-                  width: 76,
-                  child: IStep(
-                      text: "${model.orderForm.takeProfit.toStringAsFixed(0)}%",
-                      plusOnTap: () {
-                        model.increaseTakeProfit();
-                      },
-                      minusOnTap: () {
-                        model.decreaseTakeProfit();
-                      }),
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  I18n.of(context).cutLoss,
-                  style: StyleFactory.subTitleStyle,
-                ),
-                SizedBox(
-                  width: 76,
-                  child: IStep(
-                    text: "${model.orderForm.cutoff.toStringAsFixed(0)}%",
-                    plusOnTap: () {
-                      model.increaseCutLoss();
-                    },
-                    minusOnTap: () {
-                      model.decreaseCutLoss();
-                    },
-                  ),
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  "${I18n.of(context).fee}",
-                  style: StyleFactory.subTitleStyle,
-                ),
-                Text(
-                  "${model.orderForm.fee.amount.toStringAsFixed(4)} USDT",
-                  style: StyleFactory.smallCellTitleStyle,
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: <Widget>[
-                Text(
-                  "${I18n.of(context).interestRate}",
-                  style: StyleFactory.subTitleStyle,
-                ),
-                Text(
-                  "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
-                  style: StyleFactory.smallCellTitleStyle,
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-           SizedBox(height: 10),
-           Row(
-             children: <Widget>[
-               Text(
-                 "${I18n.of(context).actLevel}",
-                 style: StyleFactory.subTitleStyle,
-               ),
-               Text(
-                 "${model.actLevel.toStringAsFixed(4)}",
-                 style: StyleFactory.smallCellTitleStyle,
-               )
-             ],
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           ),
           ],
         ),
       );

@@ -9,9 +9,11 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/form/withdraw_form_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
+import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
@@ -22,20 +24,25 @@ import 'package:logger/logger.dart';
 class WithdrawViewModel extends BaseModel {
   WithdrawForm withdrawForm;
   PostWithdrawRequestModel withdrawRequestModel;
+  GatewayAssetResponseModel gatewayAssetResponseModel;
   Commission commission;
+  bool isHide = true;
 
   BBBAPI _api;
   RefManager _refm;
   UserManager _um;
+  GatewayApi _gatewayApi;
 
   WithdrawViewModel(
       {@required BBBAPI api,
       @required RefManager refm,
       @required UserManager um,
+      @required GatewayApi gatewayApi,
       this.withdrawForm}) {
     _api = api;
     _refm = refm;
     _um = um;
+    _gatewayApi = gatewayApi;
   }
 
   initForm() {
@@ -43,8 +50,10 @@ class WithdrawViewModel extends BaseModel {
         totalAmount: Asset(amount: 0, symbol: "USDT"),
         balance: _um.fetchPositionFrom(AssetName.NXUSDT),
         address: "");
+    gatewayAssetResponseModel = GatewayAssetResponseModel(minWithdraw: 0);
 
     getCurrentBalance();
+    getAsset();
   }
 
   void fetchBalances() {
@@ -54,12 +63,30 @@ class WithdrawViewModel extends BaseModel {
   void getCurrentBalance() async {
     await _um.fetchBalances(name: _um.user.name);
     fetchBalances();
+    setButtonAvailable();
+    setBusy(false);
+  }
+
+  void getAsset() async {
+    gatewayAssetResponseModel = await _gatewayApi.getAsset(asset: "USDT");
+    setButtonAvailable();
     setBusy(false);
   }
 
   void setTotalAmount(Asset amount) {
     withdrawForm.totalAmount = amount;
+    setButtonAvailable();
     setBusy(false);
+  }
+
+  void setButtonAvailable() {
+    if ((withdrawForm.totalAmount.amount <= withdrawForm.balance.quantity &&
+        withdrawForm.totalAmount.amount >=
+            gatewayAssetResponseModel.minWithdraw)) {
+      isHide = true;
+    } else {
+      isHide = false;
+    }
   }
 
   Future<PostOrderResponseModel> postWithdraw() async {

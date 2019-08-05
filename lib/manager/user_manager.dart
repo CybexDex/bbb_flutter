@@ -215,6 +215,7 @@ class UserManager extends BaseModel {
       fetchBalances(name: user.name);
     } else {
       _pref.saveLoginType(loginType: LoginType.none);
+      user.loginType = LoginType.none;
       user.name = null;
       _pref.removeUserName();
     }

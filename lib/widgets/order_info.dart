@@ -144,7 +144,7 @@ class OrderInfo extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
-                              "${takeprofit.toStringAsFixed(0)}% / ${cutLoss.toStringAsFixed(0)}%",
+                              "${takeprofit.round().toStringAsFixed(0)}% / ${cutLoss.round().toStringAsFixed(0)}%",
                               style: StyleFactory.cellTitleStyle,
                             ),
                           ),

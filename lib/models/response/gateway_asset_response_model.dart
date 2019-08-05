@@ -1,5 +1,7 @@
 import 'dart:convert' show json;
 
+import 'package:bbb_flutter/helper/utils.dart';
+
 class GatewayAssetResponseModel {
   int id;
   String createdAt;
@@ -15,7 +17,7 @@ class GatewayAssetResponseModel {
   bool depositSwitch;
   bool withdrawSwitch;
   String minDeposit;
-  String minWithdraw;
+  double minWithdraw;
   String withdrawFee;
   String depositFee;
   String precision;
@@ -64,7 +66,7 @@ class GatewayAssetResponseModel {
           depositSwitch: jsonRes['depositSwitch'],
           withdrawSwitch: jsonRes['withdrawSwitch'],
           minDeposit: jsonRes['minDeposit'],
-          minWithdraw: jsonRes['minWithdraw'],
+          minWithdraw: convertValueByType(jsonRes['minWithdraw'], double),
           withdrawFee: jsonRes['withdrawFee'],
           depositFee: jsonRes['depositFee'],
           precision: jsonRes['precision'],

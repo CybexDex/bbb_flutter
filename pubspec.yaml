@@ -69,6 +69,7 @@ flutter:
     - res/assets/icons/icTop2.png
     - res/assets/icons/icTop3.png
     - res/assets/icons/icMaskClose.png
+    - res/assets/icons/ic_add_2.svg
     - res/assets/icons/icTop1.png
     - res/assets/icons/icAdd.png
     - res/assets/icons/icReduce.png
@@ -85,8 +86,10 @@ flutter:
     - res/assets/icons/icTabDeposit.png
     - res/assets/icons/icFallGreen.png
     - res/assets/icons/icTime.png
+    - res/assets/icons/ic_title_line.svg
     - res/assets/icons/icNotifyBack.png
     - res/assets/icons/icSwitch.png
+    - res/assets/icons/ic_reduce_2.svg
     - res/assets/icons/icAccount.png
     - res/assets/icons/icRiseRed18.png
     - res/assets/icons/icRevise.png
@@ -98,5 +101,4 @@ flutter:
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icTabWithdraw.png
-    - res/assets/icons/ic_title_line.svg
     # assets end

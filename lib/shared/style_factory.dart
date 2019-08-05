@@ -69,6 +69,13 @@ class StyleFactory {
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
 
+  static var addReduceStyle = TextStyle(
+      decoration: TextDecoration.none,
+      color: Palette.hintTitleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
+
   static var subTitleStyle = TextStyle(
       decoration: TextDecoration.none,
       color: Palette.subTitleColor,
@@ -227,4 +234,11 @@ class StyleFactory {
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.inviteAmountFontSize);
+
+  static var investmentAmountStyle = TextStyle(
+      decoration: TextDecoration.none,
+      color: Palette.investmentAmountColor,
+      fontWeight: FontWeight.w600,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }

@@ -50,15 +50,15 @@ class PnlViewModel extends BaseModel {
     final model = AmendOrderRequestModel();
     model.transactionType = "NxAmend";
     model.cutLossPx = execNow
-        ? order.cutLossPx.toStringAsFixed(6)
+        ? order.cutLossPx.toStringAsFixed(4)
         : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
                 contract.strikeLevel, contract.conversionRate > 0)
-            .toStringAsFixed(6);
+            .toStringAsFixed(4);
     model.takeProfitPx = execNow
-        ? order.takeProfitPx.toStringAsFixed(6)
+        ? order.takeProfitPx.toStringAsFixed(4)
         : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
                 contract.strikeLevel, contract.conversionRate > 0)
-            .toStringAsFixed(6);
+            .toStringAsFixed(4);
     model.seller = suffixId(locator.get<SharedPref>().getTestNet()
         ? _um.user.testAccountResponseModel.accountId
         : _um.user.account.id);
@@ -83,28 +83,26 @@ class PnlViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-    if (takeProfit < 100) {
       takeProfit += 5;
       setBusy(false);
-    }
   }
 
   void decreaseTakeProfit() {
-    if (takeProfit > 1) {
+    if (takeProfit.round() >= 5) {
       takeProfit -= 5;
       setBusy(false);
     }
   }
 
   void increaseCutLoss() {
-    if (cutLoss < 100) {
+    if (cutLoss.round() < 100) {
       cutLoss += 5;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
-    if (cutLoss > 1) {
+    if (cutLoss.round() >= 5) {
       cutLoss -= 5;
       setBusy(false);
     }

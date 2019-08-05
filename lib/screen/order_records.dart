@@ -4,6 +4,7 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
+import 'package:bbb_flutter/widgets/empty_records.dart';
 import 'package:bbb_flutter/widgets/order_record_item.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 
@@ -89,72 +90,78 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                        height: 1,
-                        color: Palette.separatorColor,
+                child: data.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutePaths.OrderRecordDetail,
+                                  arguments: RouteParamsOfTransactionRecords(
+                                      orderResponseModel: data[index]));
+                            },
+                            child: OrderRecordItem(
+                              model: data[index],
+                            ),
+                          );
+                        },
                       ),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail,
-                            arguments: RouteParamsOfTransactionRecords(
-                                orderResponseModel: data[index]));
-                      },
-                      child: OrderRecordItem(
-                        model: data[index],
-                      ),
-                    );
-                  },
-                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                        height: 1,
-                        color: Palette.separatorColor,
+                child: upData.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: upData.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutePaths.OrderRecordDetail,
+                                  arguments: RouteParamsOfTransactionRecords(
+                                      orderResponseModel: upData[index]));
+                            },
+                            child: OrderRecordItem(
+                              model: upData[index],
+                            ),
+                          );
+                        },
                       ),
-                  itemCount: upData.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail,
-                            arguments: RouteParamsOfTransactionRecords(
-                                orderResponseModel: upData[index]));
-                      },
-                      child: OrderRecordItem(
-                        model: upData[index],
-                      ),
-                    );
-                  },
-                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                        height: 1,
-                        color: Palette.separatorColor,
+                child: downData.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: downData.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutePaths.OrderRecordDetail,
+                                  arguments: RouteParamsOfTransactionRecords(
+                                      orderResponseModel: downData[index]));
+                            },
+                            child: OrderRecordItem(
+                              model: downData[index],
+                            ),
+                          );
+                        },
                       ),
-                  itemCount: downData.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail,
-                            arguments: RouteParamsOfTransactionRecords(
-                                orderResponseModel: downData[index]));
-                      },
-                      child: OrderRecordItem(
-                        model: downData[index],
-                      ),
-                    );
-                  },
-                ),
               ),
             ],
           ),

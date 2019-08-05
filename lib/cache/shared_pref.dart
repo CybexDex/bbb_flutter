@@ -113,7 +113,7 @@ class SharedPref {
     if (value != null) {
       return EnvType.values.firstWhere((e) => e.toString() == value);
     }
-    return EnvType.Uat;
+    return EnvType.Pro;
   }
 
   saveEnvType({EnvType envType}) async {

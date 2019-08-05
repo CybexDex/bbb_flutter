@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Palette {
-  static const redOrange = const Color(0xfff83600);
-  static const shamrockGreen = const Color(0xff00c44b);
+  static const redOrange = const Color(0xffff5135);
+  static const shamrockGreen = const Color(0xff3cb879);
   static const sunYellow = const Color(0xfff9d423);
   static const darkSkyBlue = const Color(0xff2e95ec);
+  static const lineGradintColorStart = const Color(0x220d6efe);
+  static const lineGradientColorEnd = const Color(0x000d6efe);
   static const orangeish = const Color(0xffff8b3d);
   static const separatorColor = const Color(0xffdddddd);
   static const veryLightPinkTwo = const Color(0xffeaeaea);
@@ -26,4 +28,5 @@ class Palette {
   static const veryLightPink = const Color(0xfffeeae5);
   static const inviteBackgroundColor = const Color(0xfffef1ef);
   static const inviteDivisionHeaderColor = const Color(0xfffff3d3);
+  static const investmentAmountColor = const Color(0xffa4c3f4);
 }

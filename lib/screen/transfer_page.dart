@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/transfer_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
+import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class TransferPage extends StatefulWidget {
@@ -214,12 +215,15 @@ class _TransferState extends State<TransferPage> {
   }
 
   callPostWithdraw(TransferViewModel model) async {
+    showLoading(context);
     try {
-      showLoading(context);
-      await model.postTransfer();
+      PostOrderResponseModel responseModel = await model.postTransfer();
       Navigator.of(context).pop();
-      showToast(context, false, I18n.of(context).successToast);
-      model.getCurrentBalance();
+      if (responseModel.status == "Failed") {
+        showToast(context, true, responseModel.reason);
+      } else {
+        showToast(context, false, I18n.of(context).successToast);
+      }
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);

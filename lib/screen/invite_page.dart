@@ -93,7 +93,7 @@ class _InviteState extends State<InvitePage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 8, right: 8),
@@ -103,7 +103,7 @@ class _InviteState extends State<InvitePage> {
                                           ),
                                         ),
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                       ],
                                     ),
                                   ),
@@ -190,7 +190,7 @@ class _InviteState extends State<InvitePage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 8, right: 8),
@@ -200,7 +200,7 @@ class _InviteState extends State<InvitePage> {
                                           ),
                                         ),
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                       ],
                                     ),
                                   ),
@@ -329,7 +329,7 @@ class _InviteState extends State<InvitePage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 8, right: 8),
@@ -339,7 +339,7 @@ class _InviteState extends State<InvitePage> {
                                           ),
                                         ),
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                       ],
                                     ),
                                   ),
@@ -440,7 +440,7 @@ class _InviteState extends State<InvitePage> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 8, right: 8),
@@ -451,7 +451,7 @@ class _InviteState extends State<InvitePage> {
                                           ),
                                         ),
                                         SvgPicture.asset(
-                                            "res/assets/icons/ic_title_line.svg"),
+                                            R.resAssetsIconsIcTitleLine),
                                       ],
                                     ),
                                   ),
@@ -479,8 +479,10 @@ class _InviteState extends State<InvitePage> {
                                                       .format(DateTime
                                                           .fromMillisecondsSinceEpoch(
                                                               model
-                                                                  .referralList[index].ts * 1000
-                                                                  )),
+                                                                      .referralList[
+                                                                          index]
+                                                                      .ts *
+                                                                  1000)),
                                                   style: StyleFactory
                                                       .dialogContentStyle)
                                             ],

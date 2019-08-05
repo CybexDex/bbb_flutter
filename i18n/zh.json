@@ -3,6 +3,7 @@
 	"transfer": "资金划转",
 	"cash_records": "充提记录",
 	"transaction_records": "交易记录",
+	"record_empty": "暂无记录",
 	"logout": "退出登录",
 	"my_asset": "我的资产",
 	"withdraw": "提现",
@@ -50,7 +51,6 @@
 	"register": "注册",
 	"create_new_account": "创建新账户",
 	"already_register": "已注册，请登录",
-
 	"dialog_cancel_button": "取消",
 	"dialog_sell_title": "平仓",
 	"dialog_sell_content": "当前平仓预计收益:",
@@ -59,8 +59,6 @@
 	"dialog_log_out_confirm_button": "确认登出",
 	"confirm": "确认",
 	"dialog_check_password": "验证密码",
-
-
 	"register_error_message_contain_lowercase": "帐户名仅能包含小写字母、数字、横杠",
 	"register_error_message_start_only_letter": "帐户名需要以字母开头",
 	"register_error_message_short_name_length": "帐户名过短",
@@ -83,12 +81,11 @@
 	"settlement_price": "平仓价格",
 	"success_toast": "成功",
 	"fail_toast": "失败",
-    "leverage": "杠杆",
+	"leverage": "杠杆",
 	"settlement_time": "平仓时间",
 	"open_position_time": "建仓时间",
 	"settlement_type": "平仓类型",
 	"accruedInterest": "累计利息",
-
 	"take_profit_close_out": "止盈平仓",
 	"cut_loss_close_out": "止损平仓",
 	"user_close_out": "自主平仓",
@@ -105,20 +102,16 @@
 	"invite_recommendation": "我的推荐",
 	"invite_add_referer": "添加推荐人",
 	"invite_input_pin_code": "请输入推荐码",
-
-
 	"click_to_try": "点击试玩",
 	"click_to_quit": "退出试玩",
-
-
-	"one_min" : "1分钟",
-	"five_min" : "5分钟",
-	"one_day" : "1天",
+	"one_min": "1分钟",
+	"five_min": "5分钟",
+	"one_day": "1天",
 	"one_hour": "1小时",
-
 	"change_env": "切换环境",
 	"choose_env": "选择环境",
-	"choose_env_detail": "请选择环境配置"
-
-
+	"choose_env_detail": "请选择环境配置",
+	"investment_hint": "输入数量",
+	"change_to_try_env": "切换到试玩",
+	"change_from_try_env": "退出试玩"
 }

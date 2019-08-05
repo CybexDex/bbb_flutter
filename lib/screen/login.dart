@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -188,8 +189,12 @@ class _LoginState extends State<LoginPage> {
                           )),
                       onTap: () async {
                         userLocator.loginWithPrivateKey();
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
+                        showToast(
+                            context, false, I18n.of(context).changeToTryEnv,
+                            callback: () {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        });
                       },
                     ),
                     SizedBox(

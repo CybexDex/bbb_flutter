@@ -29,7 +29,10 @@ void main() async {
             if (new File(file.path).statSync().type ==
                 FileSystemEntityType.file) {
               var path = file.path.replaceAll('\\', '/');
-              var varName = path.replaceAll('/', '_').replaceAll('.png', '');
+              var varName = path
+                  .replaceAll('/', '_')
+                  .replaceAll('.png', '')
+                  .replaceAll('.svg', '');
               var pos = 0;
               String char;
               while (true) {

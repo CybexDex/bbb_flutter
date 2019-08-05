@@ -538,8 +538,8 @@ class _TimeSharePainter extends CustomPainter {
         double x2 = px - lX;
         double y2 = py - lY;
 
-        path.cubicTo(x1, y1, x2, y2, px, py);
-        // path.lineTo(x, y);
+        // path.cubicTo(x1, y1, x2, y2, px, py);
+        path.lineTo(x, y);
       }
 
       if (i == data.length - 1) {
@@ -693,12 +693,26 @@ class _HorizontalSupplePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final values = [
+      suppleData.cutOff,
+      suppleData.takeProfit,
+      suppleData.underOrder,
+      suppleData.current
+    ];
+
+    final colors = [
+      Color.fromARGB(255, 60, 184, 121),
+      Color.fromARGB(255, 255, 81, 53),
+      Color.fromARGB(255, 255, 139, 61),
+      Color.fromARGB(255, 63, 140, 254),
+    ];
+
     if (textPainters.isEmpty) {
-      prepareTextPainter();
+      prepareTextPainter(colors, values);
     }
 
     var gridPaint = Paint()
-      ..strokeWidth = 1
+      ..strokeWidth = 0.5
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
     var fillTextPaint = Paint()
@@ -706,7 +720,7 @@ class _HorizontalSupplePainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.fill;
     var textBorderPaint = Paint()
-      ..strokeWidth = 1
+      ..strokeWidth = 0.5
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
@@ -718,20 +732,6 @@ class _HorizontalSupplePainter extends CustomPainter {
 
     var offset;
 
-    final values = [
-      suppleData.cutOff,
-      suppleData.takeProfit,
-      suppleData.underOrder,
-      suppleData.current
-    ];
-
-    final colors = [
-      Color.fromARGB(255, 0, 196, 75),
-      Color.fromARGB(255, 248, 54, 0),
-      Color.fromARGB(255, 255, 139, 61),
-      Color.fromARGB(255, 46, 149, 236),
-    ];
-
     values.asMap().forEach((index, value) {
       if (value != null) {
         var textWidth = textPainters[index].width + 20;
@@ -739,7 +739,7 @@ class _HorizontalSupplePainter extends CustomPainter {
 
         offset = value - minValue;
         gridPaint.color = colors[index];
-        fillTextPaint.color = colors[index].withAlpha(30);
+        fillTextPaint.color = Colors.white;
         textBorderPaint.color = colors[index];
 
         if (!suppleData.alwaysShow && (offset < 0 || offset > totalDist)) {
@@ -761,53 +761,66 @@ class _HorizontalSupplePainter extends CustomPainter {
           dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
         }
 
-        canvas.drawLine(
-            Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
+        if (value == suppleData.current) {
+          canvas.drawLine(
+              Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
+        } else {
+          canvas.drawPath(
+            dashPath(
+              Path()
+                ..moveTo(0, dy)
+                ..lineTo(size.width - textWidth * 2, dy),
+              dashArray: CircularIntervalList<double>(<double>[5, 5]),
+            ),
+            gridPaint,
+          );
+        }
+
         canvas.drawRRect(
             RRect.fromRectAndRadius(
-                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                    textWidth, textHeight),
+                Rect.fromLTWH(
+                    value == suppleData.current
+                        ? size.width - textWidth
+                        : size.width - textWidth * 2,
+                    dy - textHeight / 2,
+                    textWidth,
+                    textHeight),
                 Radius.circular(2)),
             fillTextPaint);
         canvas.drawRRect(
             RRect.fromRectAndRadius(
-                Rect.fromLTWH(size.width - textWidth, dy - textHeight / 2,
-                    textWidth, textHeight),
+                Rect.fromLTWH(
+                    value == suppleData.current
+                        ? size.width - textWidth
+                        : size.width - 2 * textWidth,
+                    dy - textHeight / 2,
+                    textWidth,
+                    textHeight),
                 Radius.circular(2)),
             textBorderPaint);
-        textPainters[index].paint(canvas,
-            Offset(size.width - textWidth + 10, dy - textHeight / 2 + 4));
+        textPainters[index].paint(
+            canvas,
+            Offset(
+                index == 3
+                    ? size.width - textWidth + 10
+                    : size.width - 2 * textWidth + 10,
+                dy - textHeight / 2 + 4));
       }
     });
   }
 
-  prepareTextPainter() {
-    var labelStyle = const TextStyle(
-        color: Color(0xff666666),
-        fontSize: 11.0,
-        fontWeight: FontWeight.normal);
-
-    textPainters.add(TextPainter(
-        text: new TextSpan(
-            text: suppleData.cutOff?.toStringAsFixed(4), style: labelStyle),
-        textDirection: TextDirection.ltr)
-      ..layout());
-
-    textPainters.add(TextPainter(
-        text: new TextSpan(
-            text: suppleData.takeProfit?.toStringAsFixed(4), style: labelStyle),
-        textDirection: TextDirection.ltr)
-      ..layout());
-    textPainters.add(TextPainter(
-        text: new TextSpan(
-            text: suppleData.underOrder?.toStringAsFixed(4), style: labelStyle),
-        textDirection: TextDirection.ltr)
-      ..layout());
-    textPainters.add(TextPainter(
-        text: new TextSpan(
-            text: suppleData.current?.toStringAsFixed(4), style: labelStyle),
-        textDirection: TextDirection.ltr)
-      ..layout());
+  prepareTextPainter(List<Color> colors, List<double> values) {
+    for (int i = 0; i < values.length; i++) {
+      textPainters.add(TextPainter(
+          text: new TextSpan(
+              text: values[i]?.toStringAsFixed(4),
+              style: TextStyle(
+                  color: colors[i],
+                  fontSize: 11.0,
+                  fontWeight: FontWeight.normal)),
+          textDirection: TextDirection.ltr)
+        ..layout());
+    }
   }
 
   @override

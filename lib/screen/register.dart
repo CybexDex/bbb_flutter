@@ -485,8 +485,12 @@ class _RegisterState extends State<RegisterPage> {
                           )),
                       onTap: () {
                         locator.get<UserManager>().loginWithPrivateKey();
-                        Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
+                        showToast(
+                            context, false, I18n.of(context).changeToTryEnv,
+                            callback: () {
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                        });
                       },
                     ),
                     SizedBox(

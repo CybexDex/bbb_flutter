@@ -4,6 +4,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/widgets/empty_records.dart';
 import 'package:bbb_flutter/widgets/fund_record_item.dart';
 
 class FundRecordsWidget extends StatefulWidget {
@@ -93,48 +94,54 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return FundRecordItem(
-                      model: data[index],
-                    );
-                  },
-                ),
+                child: data.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return FundRecordItem(
+                            model: data[index],
+                          );
+                        },
+                      ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
-                  itemCount: depositData.length,
-                  itemBuilder: (context, index) {
-                    return FundRecordItem(
-                      model: depositData[index],
-                    );
-                  },
-                ),
+                child: depositData.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: depositData.length,
+                        itemBuilder: (context, index) {
+                          return FundRecordItem(
+                            model: depositData[index],
+                          );
+                        },
+                      ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1,
-                    color: Palette.separatorColor,
-                  ),
-                  itemCount: withdrawalData.length,
-                  itemBuilder: (context, index) {
-                    return FundRecordItem(
-                      model: withdrawalData[index],
-                    );
-                  },
-                ),
+                child: withdrawalData.length == 0
+                    ? EmptyRecords()
+                    : ListView.separated(
+                        separatorBuilder: (context, index) => Divider(
+                          height: 1,
+                          color: Palette.separatorColor,
+                        ),
+                        itemCount: withdrawalData.length,
+                        itemBuilder: (context, index) {
+                          return FundRecordItem(
+                            model: withdrawalData[index],
+                          );
+                        },
+                      ),
               ),
             ],
           ),

@@ -38,6 +38,8 @@ class _$Keys {
 
   static final String transactionRecords = 'transaction_records';
 
+  static final String recordEmpty = 'record_empty';
+
   static final String logout = 'logout';
 
   static final String myAsset = 'my_asset';
@@ -186,11 +188,11 @@ class _$Keys {
 
   static final String fundStatusInProgress = 'fundStatus_inProgress';
 
-  static final String chooseEnvDetail = 'choose_env_detail';
+  static final String fundStatusCompleted = 'fundStatus_completed';
 
   static final String fundStatusRejected = 'fundStatus_rejected';
 
-  static final String fundStatusError = 'fundStatus_error';
+  static final String changeFromTryEnv = 'change_from_try_env';
 
   static final String tradingDetail = 'trading_detail';
 
@@ -260,7 +262,13 @@ class _$Keys {
 
   static final String chooseEnv = 'choose_env';
 
-  static final String fundStatusCompleted = 'fundStatus_completed';
+  static final String chooseEnvDetail = 'choose_env_detail';
+
+  static final String investmentHint = 'investment_hint';
+
+  static final String changeToTryEnv = 'change_to_try_env';
+
+  static final String fundStatusError = 'fundStatus_error';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -285,6 +293,7 @@ abstract class _$I18nHelper {
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
+  String get recordEmpty => this._translate(_$Keys.recordEmpty);
   String get logout => this._translate(_$Keys.logout);
   String get myAsset => this._translate(_$Keys.myAsset);
   String get withdraw => this._translate(_$Keys.withdraw);
@@ -365,9 +374,9 @@ abstract class _$I18nHelper {
   String get address => this._translate(_$Keys.address);
   String get fundStatusInProgress =>
       this._translate(_$Keys.fundStatusInProgress);
-  String get chooseEnvDetail => this._translate(_$Keys.chooseEnvDetail);
+  String get fundStatusCompleted => this._translate(_$Keys.fundStatusCompleted);
   String get fundStatusRejected => this._translate(_$Keys.fundStatusRejected);
-  String get fundStatusError => this._translate(_$Keys.fundStatusError);
+  String get changeFromTryEnv => this._translate(_$Keys.changeFromTryEnv);
   String get tradingDetail => this._translate(_$Keys.tradingDetail);
   String get openPositionPrice => this._translate(_$Keys.openPositionPrice);
   String get settlementPrice => this._translate(_$Keys.settlementPrice);
@@ -404,5 +413,8 @@ abstract class _$I18nHelper {
   String get oneHour => this._translate(_$Keys.oneHour);
   String get changeEnv => this._translate(_$Keys.changeEnv);
   String get chooseEnv => this._translate(_$Keys.chooseEnv);
-  String get fundStatusCompleted => this._translate(_$Keys.fundStatusCompleted);
+  String get chooseEnvDetail => this._translate(_$Keys.chooseEnvDetail);
+  String get investmentHint => this._translate(_$Keys.investmentHint);
+  String get changeToTryEnv => this._translate(_$Keys.changeToTryEnv);
+  String get fundStatusError => this._translate(_$Keys.fundStatusError);
 }
