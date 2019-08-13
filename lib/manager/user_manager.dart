@@ -8,9 +8,11 @@ import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
+import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
@@ -19,6 +21,8 @@ import 'market_manager.dart';
 
 class UserManager extends BaseModel {
   UserEntity user;
+  bool withdrawAvailable = false;
+  bool depositAvailable = false;
 
   final SharedPref _pref;
   final BBBAPI _api;
@@ -149,6 +153,16 @@ class UserManager extends BaseModel {
         await _api.getDeposit(name: name, asset: asset);
     if (deposit != null) {
       user.deposit = deposit;
+      notifyListeners();
+    }
+  }
+
+  getGatewayInfo({String assetName}) async {
+    GatewayAssetResponseModel gatewayAssetResponseModel =
+        await locator.get<GatewayApi>().getAsset(asset: assetName);
+    if (gatewayAssetResponseModel != null) {
+      depositAvailable = gatewayAssetResponseModel.depositSwitch;
+      withdrawAvailable = gatewayAssetResponseModel.withdrawSwitch;
       notifyListeners();
     }
   }

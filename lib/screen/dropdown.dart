@@ -1,6 +1,6 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:vertical_tabs/vertical_tabs.dart';
+import 'package:bbb_flutter/widgets/vertical_tabs.dart';
 
 class Dropdown extends StatelessWidget {
   final double menuHeight;
@@ -43,6 +43,7 @@ class Dropdown extends StatelessWidget {
                 child: Container(
                   margin: EdgeInsets.only(top: 15),
                   child: VerticalTabs(
+                    selectedTabs: model.orderForm.isUp ? 0 : 1,
                     indicatorWidth: 0,
                     selectedTabBackgroundColor: Palette.veryLightPink,
                     unselectedTabBackgroundColor:

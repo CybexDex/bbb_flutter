@@ -19,3 +19,18 @@ class NetworkConnection {
   static const UAT_STANDARD = "https://nxapiuat.cybex.io/v1";
   static const UAT_TESTNET = "https://nxtestnetuat.cybex.io/v1";
 }
+
+class GatewayConnection {
+  static const PRO_GATEWAY = "https://prd-bbb.cybex.io";
+  static const UAT_GATEWAY = "https://uat-bbb.cybex.io";
+}
+
+class FaucetConnection {
+  static const PRO_FAUCET = "https://faucet.cybex.io";
+  static const UAT_FAUCET = "http://uatfaucet.51nebula.com";
+}
+
+class WebSocketConnection {
+  static const PRO_WEBSOCKET = "wss://nxmdp.cybex.io";
+  static const UAT_WEBSOCKET = "wss://nxmdptest.cybex.io";
+}

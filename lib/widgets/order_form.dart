@@ -1,26 +1,38 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
-
 import 'istep.dart';
 
-class OrderFormWidget extends StatelessWidget {
+class OrderFormWidget extends StatefulWidget {
   final Contract _contract;
+
   OrderFormWidget({Key key, Contract contract})
       : _contract = contract,
         super(key: key);
+
+  @override
+  _OrderFormWidgetState createState() => _OrderFormWidgetState();
+}
+
+class _OrderFormWidgetState extends State<OrderFormWidget> {
+  TextEditingController _amountController = TextEditingController();
+  TextEditingController _takeProfitController = TextEditingController();
+  TextEditingController _cutLossController = TextEditingController();
+
+  @override
+  void initState() {
+    _takeProfitController.text = "50";
+    _cutLossController.text = "50";
+    _amountController.text = "1";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer3<TradeViewModel, UserManager, RefContractResponseModel>(
         builder: (context, model, userModel, refData, child) {
       Contract refreshContract = model.contract;
-      Position usdt = userModel.fetchPositionFrom(AssetName.NXUSDT);
-
       return Container(
         child: Column(
           children: <Widget>[
@@ -35,8 +47,8 @@ class OrderFormWidget extends StatelessWidget {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      usdt != null
-                          ? "${usdt.quantity.toStringAsFixed(4)} USDT"
+                      model.usdtBalance != null
+                          ? "${model.usdtBalance.quantity.toStringAsFixed(4)} USDT"
                           : "-- USDT",
                       style: StyleFactory.cellTitleStyle,
                     ),
@@ -120,21 +132,48 @@ class OrderFormWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      I18n.of(context).takeProfit,
+                      I18n.of(context).takeProfit + "(%)",
                       style: StyleFactory.cellDescLabel,
                     ),
                     SizedBox(height: 5),
                     SizedBox(
                       width: 160,
                       child: IStep(
-                          text:
-                              "${model.orderForm.takeProfit.round().toStringAsFixed(0)}%",
-                          plusOnTap: () {
-                            model.increaseTakeProfit();
-                          },
-                          minusOnTap: () {
-                            model.decreaseTakeProfit();
-                          }),
+                        text: _takeProfitController,
+                        plusOnTap: () {
+                          model.increaseTakeProfit();
+                          if (model.orderForm.takeProfit.round() == 0) {
+                            _takeProfitController.text = "不设置";
+                          } else {
+                            _takeProfitController.text =
+                                model.orderForm.takeProfit.toStringAsFixed(0);
+                          }
+                        },
+                        minusOnTap: () {
+                          model.decreaseTakeProfit();
+                          if (model.orderForm.takeProfit.round() == 0) {
+                            _takeProfitController.text = "不设置";
+                          } else {
+                            _takeProfitController.text =
+                                model.orderForm.takeProfit.toStringAsFixed(0);
+                          }
+                        },
+                        onChange: (value) {
+                          if (value.isNotEmpty &&
+                                  double.tryParse(value) == null ||
+                              double.tryParse(value) < 0) {
+                            model.setTakeProfitInputCorrectness(false);
+                          } else {
+                            model.setTakeProfitInputCorrectness(true);
+                            model.changeTakeProfit(
+                                profit:
+                                    value.isEmpty ? 0 : double.parse(value));
+                            if (value == "0") {
+                              _takeProfitController.text = "不设置";
+                            }
+                          }
+                        },
+                      ),
                     )
                   ],
                 ),
@@ -142,21 +181,49 @@ class OrderFormWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      I18n.of(context).cutLoss,
+                      I18n.of(context).cutLoss + "(%)",
                       style: StyleFactory.cellDescLabel,
                     ),
                     SizedBox(height: 5),
                     SizedBox(
                       width: 160,
                       child: IStep(
-                        text: model.orderForm.cutoff.round() == 0
-                            ? "不设置"
-                            : "${model.orderForm.cutoff.round().toStringAsFixed(0)}%",
+                        text: _cutLossController,
+                        // text: model.orderForm.cutoff.round() == 0
+                        //     ? "不设置"
+                        //     : "${model.orderForm.cutoff.round().toStringAsFixed(0)}%",
                         plusOnTap: () {
                           model.increaseCutLoss();
+                          _cutLossController.text =
+                              model.orderForm.cutoff.toStringAsFixed(0);
                         },
                         minusOnTap: () {
                           model.decreaseCutLoss();
+                          if (model.orderForm.cutoff.round() == 0) {
+                            _cutLossController.text = "不设置";
+                          } else {
+                            _cutLossController.text =
+                                model.orderForm.cutoff.toStringAsFixed(0);
+                          }
+                        },
+                        onChange: (value) {
+                          if (value.isNotEmpty &&
+                                  double.tryParse(value) == null ||
+                              double.tryParse(value) < 0) {
+                            model.setCutLossInputCorectness(false);
+                          } else {
+                            model.setCutLossInputCorectness(true);
+                            if (int.parse(value) <= 100) {
+                              model.changeCutLoss(
+                                  cutLoss:
+                                      value.isEmpty ? 0 : double.parse(value));
+                            }
+                            if (value == "0") {
+                              _cutLossController.text = "不设置";
+                            } else if (int.parse(value) > 100) {
+                              _cutLossController.text = "100";
+                            }
+                          }
                         },
                       ),
                     )
@@ -181,56 +248,29 @@ class OrderFormWidget extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(
                       width: 160,
-                      child: Container(
-                        height: 36,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Palette.separatorColor, width: 0.5),
-                            borderRadius: BorderRadius.circular(2)),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 7,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 10),
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  onChanged: (value) {
-                                    print(value);
-                                    model.changeInvest(
-                                        amount: value.isEmpty
-                                            ? 0
-                                            : int.parse(value));
-                                  },
-                                  decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.only(top: 4, bottom: 4),
-                                    border: InputBorder.none,
-                                    hintText: I18n.of(context).investmentHint,
-                                    hintStyle: StyleFactory.addReduceStyle,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                                flex: 3,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    VerticalDivider(
-                                      color: Palette.separatorColor,
-                                      indent: 6,
-                                      endIndent: 6,
-                                      width: 0.5,
-                                    ),
-                                    Text("份",
-                                        style:
-                                            StyleFactory.investmentAmountStyle),
-                                  ],
-                                )),
-                          ],
-                        ),
+                      child: IStep(
+                        text: _amountController,
+                        plusOnTap: () {
+                          model.increaseInvest();
+                          _amountController.text =
+                              model.orderForm.investAmount.toStringAsFixed(0);
+                        },
+                        minusOnTap: () {
+                          model.decreaseInvest();
+
+                          _amountController.text =
+                              model.orderForm.investAmount.toStringAsFixed(0);
+                        },
+                        onChange: (value) {
+                          if (value.isNotEmpty && int.tryParse(value) == null ||
+                              int.tryParse(value) < 0) {
+                            model.setTotalAmountInputCorectness(false);
+                          } else {
+                            model.setTotalAmountInputCorectness(true);
+                            model.changeInvest(
+                                amount: value.isEmpty ? 0 : int.parse(value));
+                          }
+                        },
                       ),
                     )
                     // SliderTheme(
@@ -282,9 +322,9 @@ class OrderFormWidget extends StatelessWidget {
                                 "剩余份数不足",
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
-                            } else if (usdt == null ||
+                            } else if (model.usdtBalance == null ||
                                 model.orderForm.totalAmount.amount >
-                                    usdt.quantity) {
+                                    model.usdtBalance.quantity) {
                               return Text(
                                 "余额不足",
                                 style: StyleFactory.smallButtonTitleStyle,
@@ -295,6 +335,11 @@ class OrderFormWidget extends StatelessWidget {
                                 "单笔购买上限${refreshContract.maxOrderQty}",
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
+                            } else if (!model.isCutLossInputCorrect ||
+                                !model.isInvestAmountInputCorrect ||
+                                !model.isTakeProfitInputCorrect) {
+                              return Text("请输入正整数",
+                                  style: StyleFactory.smallButtonTitleStyle);
                             }
                             return Container();
                           },

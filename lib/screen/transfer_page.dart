@@ -109,7 +109,7 @@ class _TransferState extends State<TransferPage> {
                       children: <Widget>[
                         Text("数量"),
                         Text(model.transferForm.balance != null
-                            ? "可划转数量: ${model.transferForm.balance.quantity} ${model.transferForm.balance.assetName}"
+                            ? "可划转数量: ${model.transferForm.balance.quantity} USDT"
                             : "可划转数量: --"),
                       ],
                     ),

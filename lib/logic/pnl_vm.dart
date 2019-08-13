@@ -83,29 +83,39 @@ class PnlViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-      takeProfit += 5;
-      setBusy(false);
+    takeProfit += 1;
+    setBusy(false);
   }
 
   void decreaseTakeProfit() {
-    if (takeProfit.round() >= 5) {
-      takeProfit -= 5;
+    if (takeProfit.round() > 0) {
+      takeProfit -= 1;
       setBusy(false);
     }
   }
 
+  void changeTakeProfit({double profit}) {
+    this.takeProfit = profit;
+    setBusy(false);
+  }
+
   void increaseCutLoss() {
     if (cutLoss.round() < 100) {
-      cutLoss += 5;
+      cutLoss += 1;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
-    if (cutLoss.round() >= 5) {
-      cutLoss -= 5;
+    if (cutLoss.round() > 0) {
+      cutLoss -= 1;
       setBusy(false);
     }
+  }
+
+  void changeCutLoss({double cutLoss}) {
+    this.cutLoss = cutLoss;
+    setBusy(false);
   }
 
   Future<bool> checkPassword({String name, String password}) async {

@@ -3,6 +3,7 @@ import 'package:bbb_flutter/logic/invite_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
@@ -263,9 +264,28 @@ class _InviteState extends State<InvitePage> {
                                     children: <Widget>[
                                       Text(I18n.of(context).inviteMyPinCode,
                                           style: StyleFactory.subTitleStyle),
-                                      Text(
-                                        locator.get<UserManager>().user.name,
-                                        style: StyleFactory.subTitleStyle,
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            locator
+                                                .get<UserManager>()
+                                                .user
+                                                .name,
+                                            style: StyleFactory.subTitleStyle,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Clipboard.setData(ClipboardData(
+                                                  text: locator
+                                                      .get<UserManager>()
+                                                      .user
+                                                      .name));
+                                              showToast(context, false, "复制成功");
+                                            },
+                                            child: SvgPicture.asset(
+                                                R.resAssetsIconsContentCopy),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),

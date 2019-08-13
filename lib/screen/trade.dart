@@ -7,6 +7,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -99,191 +100,198 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
       builder: (context) {
         var vm = locator<TradeViewModel>();
         vm.initForm(params.isUp);
+        vm.fetchPostion(name: AssetName.NXUSDT);
         return vm;
       },
-      child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: appBar,
-          body: KeyboardScrollPage(
-            appbarHeight: appBar.preferredSize.height,
-            widget: Consumer<TradeViewModel>(
-              builder: (context, model, child) {
-                return Stack(
-                  children: <Widget>[
-                    Container(
-                        foregroundDecoration: showDropdownMenuHeight != 0
-                            ? BoxDecoration(
-                                color: Color(000000).withOpacity(0.4))
-                            : null,
-                        child: IgnorePointer(
-                          ignoring: showDropdownMenuHeight != 0,
-                          child: SafeArea(
-                              child: Container(
-                            margin: Dimen.pageMargin,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                                  child: Consumer2<TickerData,
-                                      RefContractResponseModel>(
-                                    builder:
-                                        (context, current, refdata, child) {
-                                      Contract refreshContract = model.contract;
-                                      double price =
-                                          OrderCalculate.calculatePrice(
-                                              current.value,
-                                              refreshContract.strikeLevel,
-                                              refreshContract.conversionRate);
-                                      return Row(
-                                        children: <Widget>[
-                                          RichText(
-                                              text: TextSpan(children: [
-                                            TextSpan(
-                                                style:
-                                                    StyleFactory.subTitleStyle,
-                                                text:
-                                                    "${I18n.of(context).perPrice}: "),
-                                            TextSpan(
-                                                style: StyleFactory
-                                                    .cellBoldTitleStyle,
-                                                text:
-                                                    "${price.toStringAsFixed(4)} USDT"),
-                                          ])),
-                                          RichText(
-                                              text: TextSpan(children: [
-                                            TextSpan(
-                                                style:
-                                                    StyleFactory.subTitleStyle,
-                                                text:
-                                                    "${I18n.of(context).rest}: "),
-                                            TextSpan(
-                                                style: StyleFactory
-                                                    .cellBoldTitleStyle,
-                                                text:
-                                                    "${refreshContract.availableInventory.toStringAsFixed(0)}"),
-                                          ]))
-                                        ],
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: MultiProvider(
-                                    providers: [
-                                      StreamProvider(
-                                          builder: (context) => mtm.prices),
-                                      StreamProvider(
-                                          builder: (context) =>
-                                              mtm.lastTicker.stream)
-                                    ],
-                                    child: MarketView(
-                                      isTrade: true,
-                                      width: ScreenUtil.screenWidthDp - 40,
-                                      mtm: mtm,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+        child: Scaffold(
+            resizeToAvoidBottomPadding: false,
+            appBar: appBar,
+            body: KeyboardScrollPage(
+              appbarHeight: appBar.preferredSize.height,
+              widget: Consumer<TradeViewModel>(
+                builder: (context, model, child) {
+                  return Stack(
+                    children: <Widget>[
+                      Container(
+                          foregroundDecoration: showDropdownMenuHeight != 0
+                              ? BoxDecoration(
+                                  color: Color(000000).withOpacity(0.4))
+                              : null,
+                          child: IgnorePointer(
+                            ignoring: showDropdownMenuHeight != 0,
+                            child: SafeArea(
+                                child: Container(
+                              margin: Dimen.pageMargin,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10),
+                                    child: Consumer2<TickerData,
+                                        RefContractResponseModel>(
+                                      builder:
+                                          (context, current, refdata, child) {
+                                        Contract refreshContract =
+                                            model.contract;
+                                        double price =
+                                            OrderCalculate.calculatePrice(
+                                                current.value,
+                                                refreshContract.strikeLevel,
+                                                refreshContract.conversionRate);
+                                        return Row(
+                                          children: <Widget>[
+                                            RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  style: StyleFactory
+                                                      .subTitleStyle,
+                                                  text:
+                                                      "${I18n.of(context).perPrice}: "),
+                                              TextSpan(
+                                                  style: StyleFactory
+                                                      .cellBoldTitleStyle,
+                                                  text:
+                                                      "${price.toStringAsFixed(4)} USDT"),
+                                            ])),
+                                            RichText(
+                                                text: TextSpan(children: [
+                                              TextSpan(
+                                                  style: StyleFactory
+                                                      .subTitleStyle,
+                                                  text:
+                                                      "${I18n.of(context).rest}: "),
+                                              TextSpan(
+                                                  style: StyleFactory
+                                                      .cellBoldTitleStyle,
+                                                  text:
+                                                      "${refreshContract.availableInventory.toStringAsFixed(0)}"),
+                                            ]))
+                                          ],
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                        );
+                                      },
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 15, top: 20),
-                                  child: OrderFormWidget(
-                                      contract: params.contract),
-                                ),
-                                Divider(color: Palette.separatorColor),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .padding
-                                          .bottom),
-                                  height: 60,
-                                  child: BuyOrSellBottom(
-                                      totalAmount:
-                                          model.orderForm.totalAmount.amount,
-                                      button: model.orderForm.isUp
-                                          ? WidgetFactory.button(
-                                              topPadding: 8,
-                                              bottomPadding: 8,
-                                              data: I18n.of(context).buyUp,
-                                              color: model.isSatisfied
-                                                  ? Palette.redOrange
-                                                  : Palette.subTitleColor,
-                                              onPressed: model.isSatisfied
-                                                  ? () async {
-                                                      model.saveOrder();
-                                                      TextEditingController
-                                                          passwordEditor =
-                                                          TextEditingController();
-                                                      showDialog(
-                                                          context: context,
-                                                          barrierDismissible:
-                                                              true,
-                                                          builder: (context) {
-                                                            return DialogFactory
-                                                                .confirmDialog(
-                                                                    context,
-                                                                    model:
-                                                                        model,
-                                                                    controller:
-                                                                        passwordEditor);
-                                                          }).then((value) async {
-                                                        if (value) {
-                                                          callPostOrder(
-                                                              context, model);
-                                                        }
-                                                      });
-                                                    }
-                                                  : () {})
-                                          : WidgetFactory.button(
-                                              topPadding: 8,
-                                              bottomPadding: 8,
-                                              data: I18n.of(context).buyDown,
-                                              color: model.isSatisfied
-                                                  ? Palette.shamrockGreen
-                                                  : Palette.subTitleColor,
-                                              onPressed: model.isSatisfied
-                                                  ? () async {
-                                                      model.saveOrder();
-                                                      TextEditingController
-                                                          passwordEditor =
-                                                          TextEditingController();
-                                                      showDialog(
-                                                          context: context,
-                                                          barrierDismissible:
-                                                              true,
-                                                          builder: (context) {
-                                                            return DialogFactory
-                                                                .confirmDialog(
-                                                                    context,
-                                                                    model:
-                                                                        model,
-                                                                    controller:
-                                                                        passwordEditor);
-                                                          }).then((value) async {
-                                                        if (value) {
-                                                          callPostOrder(
-                                                              context, model);
-                                                        }
-                                                      });
-                                                    }
-                                                  : () {})),
-                                ),
-                              ],
-                            ),
+                                  Expanded(
+                                    child: MultiProvider(
+                                      providers: [
+                                        StreamProvider(
+                                            builder: (context) => mtm.prices),
+                                        StreamProvider(
+                                            builder: (context) =>
+                                                mtm.lastTicker.stream)
+                                      ],
+                                      child: MarketView(
+                                        isTrade: true,
+                                        width: ScreenUtil.screenWidthDp - 40,
+                                        mtm: mtm,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(bottom: 15, top: 20),
+                                    child: OrderFormWidget(
+                                        contract: params.contract),
+                                  ),
+                                  Divider(color: Palette.separatorColor),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .padding
+                                            .bottom),
+                                    height: 60,
+                                    child: BuyOrSellBottom(
+                                        totalAmount:
+                                            model.orderForm.totalAmount.amount,
+                                        button: model.orderForm.isUp
+                                            ? WidgetFactory.button(
+                                                topPadding: 8,
+                                                bottomPadding: 8,
+                                                data: I18n.of(context).buyUp,
+                                                color: model.isSatisfied
+                                                    ? Palette.redOrange
+                                                    : Palette.subTitleColor,
+                                                onPressed: model.isSatisfied
+                                                    ? () async {
+                                                        model.saveOrder();
+                                                        TextEditingController
+                                                            passwordEditor =
+                                                            TextEditingController();
+                                                        showDialog(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                true,
+                                                            builder: (context) {
+                                                              return DialogFactory
+                                                                  .confirmDialog(
+                                                                      context,
+                                                                      model:
+                                                                          model,
+                                                                      controller:
+                                                                          passwordEditor);
+                                                            }).then((value) async {
+                                                          if (value) {
+                                                            callPostOrder(
+                                                                context, model);
+                                                          }
+                                                        });
+                                                      }
+                                                    : () {})
+                                            : WidgetFactory.button(
+                                                topPadding: 8,
+                                                bottomPadding: 8,
+                                                data: I18n.of(context).buyDown,
+                                                color: model.isSatisfied
+                                                    ? Palette.shamrockGreen
+                                                    : Palette.subTitleColor,
+                                                onPressed: model.isSatisfied
+                                                    ? () async {
+                                                        model.saveOrder();
+                                                        TextEditingController
+                                                            passwordEditor =
+                                                            TextEditingController();
+                                                        showDialog(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                true,
+                                                            builder: (context) {
+                                                              return DialogFactory
+                                                                  .confirmDialog(
+                                                                      context,
+                                                                      model:
+                                                                          model,
+                                                                      controller:
+                                                                          passwordEditor);
+                                                            }).then((value) async {
+                                                          if (value) {
+                                                            callPostOrder(
+                                                                context, model);
+                                                          }
+                                                        });
+                                                      }
+                                                    : () {})),
+                                  ),
+                                ],
+                              ),
+                            )),
                           )),
-                        )),
-                    Dropdown(
-                      menuHeight: showDropdownMenuHeight,
-                      function: () {
-                        setDropdownMenuHeight();
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-          )),
+                      Dropdown(
+                        menuHeight: showDropdownMenuHeight,
+                        function: () {
+                          setDropdownMenuHeight();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )),
+      ),
     );
   }
 
@@ -295,6 +303,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
       if (postOrderResponseModel.status == "Failed") {
         showToast(context, true, postOrderResponseModel.reason);
       } else {
+        await model.fetchPostion(name: AssetName.NXUSDT);
         showToast(context, false, I18n.of(context).successToast);
       }
     } catch (e) {

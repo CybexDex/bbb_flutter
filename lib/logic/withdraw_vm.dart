@@ -10,6 +10,7 @@ import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/form/withdraw_form_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
+import 'package:bbb_flutter/models/response/gateway_verifyaddress_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -22,17 +23,6 @@ import 'package:cybex_flutter_plugin/order.dart';
 import 'package:logger/logger.dart';
 
 class WithdrawViewModel extends BaseModel {
-  WithdrawForm withdrawForm;
-  PostWithdrawRequestModel withdrawRequestModel;
-  GatewayAssetResponseModel gatewayAssetResponseModel;
-  Commission commission;
-  bool isHide = true;
-
-  BBBAPI _api;
-  RefManager _refm;
-  UserManager _um;
-  GatewayApi _gatewayApi;
-
   WithdrawViewModel(
       {@required BBBAPI api,
       @required RefManager refm,
@@ -45,15 +35,27 @@ class WithdrawViewModel extends BaseModel {
     _gatewayApi = gatewayApi;
   }
 
+  Commission commission;
+  GatewayAssetResponseModel gatewayAssetResponseModel;
+  bool isHide = true;
+  VerifyAddressResponseModel verifyAddressResponseModel;
+  WithdrawForm withdrawForm;
+  PostWithdrawRequestModel withdrawRequestModel;
+
+  BBBAPI _api;
+  GatewayApi _gatewayApi;
+  RefManager _refm;
+  UserManager _um;
+
   initForm() {
     withdrawForm = WithdrawForm(
         totalAmount: Asset(amount: 0, symbol: "USDT"),
         balance: _um.fetchPositionFrom(AssetName.NXUSDT),
         address: "");
-    gatewayAssetResponseModel = GatewayAssetResponseModel(minWithdraw: 0);
-
-    getCurrentBalance();
+    gatewayAssetResponseModel = GatewayAssetResponseModel(
+        minWithdraw: 0, withdrawSwitch: false, withdrawFee: "0.0");
     getAsset();
+    getCurrentBalance();
   }
 
   void fetchBalances() {
@@ -73,6 +75,20 @@ class WithdrawViewModel extends BaseModel {
     setBusy(false);
   }
 
+  void verifyAddress({String address}) async {
+    try {
+      verifyAddressResponseModel = await _gatewayApi.verifyAddress(
+          asset: AssetName.USDT, address: address);
+      setButtonAvailable();
+    } catch (e) {
+      print("k");
+      verifyAddressResponseModel = VerifyAddressResponseModel();
+      verifyAddressResponseModel.valid = false;
+      setButtonAvailable();
+    }
+    setBusy(false);
+  }
+
   void setTotalAmount(Asset amount) {
     withdrawForm.totalAmount = amount;
     setButtonAvailable();
@@ -82,9 +98,14 @@ class WithdrawViewModel extends BaseModel {
   void setButtonAvailable() {
     if ((withdrawForm.totalAmount.amount <= withdrawForm.balance.quantity &&
         withdrawForm.totalAmount.amount >=
-            gatewayAssetResponseModel.minWithdraw)) {
+            gatewayAssetResponseModel.minWithdraw &&
+        gatewayAssetResponseModel.withdrawSwitch &&
+        (verifyAddressResponseModel.valid ||
+            verifyAddressResponseModel == null))) {
+      print("bbb");
       isHide = true;
     } else {
+      print("ccc");
       isHide = false;
     }
   }
@@ -122,8 +143,12 @@ class WithdrawViewModel extends BaseModel {
 
   Commission getCommission(RefContractResponseModel refData) {
     WithdrawForm form = withdrawForm;
-    AvailableAsset quoteAsset = AvailableAsset(
-        assetId: "1.3.803", precision: 6, assetName: AssetName.NXUSDT);
+    AvailableAsset quoteAsset = refData.availableAssets
+        .where((asset) {
+          return asset.assetName == AssetName.NXUSDT;
+        })
+        .toList()
+        .first;
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
     Commission comm = Commission();

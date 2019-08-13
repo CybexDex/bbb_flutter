@@ -88,6 +88,7 @@ flutter:
     - res/assets/icons/icTime.png
     - res/assets/icons/ic_title_line.svg
     - res/assets/icons/icNotifyBack.png
+    - res/assets/icons/content_copy.svg
     - res/assets/icons/icSwitch.png
     - res/assets/icons/ic_reduce_2.svg
     - res/assets/icons/icAccount.png
@@ -101,4 +102,5 @@ flutter:
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icTabWithdraw.png
+    - res/assets/icons/ic_try.svg
     # assets end

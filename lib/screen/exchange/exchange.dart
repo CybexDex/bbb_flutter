@@ -25,6 +25,7 @@ class ExchangePage extends StatelessWidget {
     return ChangeNotifierProvider(
         builder: (_) => locator.get<OrderViewModel>(),
         child: Scaffold(
+            resizeToAvoidBottomPadding: false,
             key: globalKey,
             drawer: UserDrawer(),
             appBar: exchangeAppBar(),

@@ -10,6 +10,7 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -23,6 +24,9 @@ import 'package:logger/logger.dart';
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
   bool isSatisfied;
+  bool isTakeProfitInputCorrect = true;
+  bool isCutLossInputCorrect = true;
+  bool isInvestAmountInputCorrect = true;
   Contract get contract =>
       orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
   var ticker;
@@ -32,6 +36,7 @@ class TradeViewModel extends BaseModel {
   Order buyOrder;
   Commission commission;
   double actLevel = 0;
+  Position usdtBalance;
 
   BBBAPI _api;
   MarketManager _mtm;
@@ -52,6 +57,7 @@ class TradeViewModel extends BaseModel {
     _refm = refm;
     _um = um;
     isSatisfied = true;
+    currentTicker = _mtm.lastTicker.value;
 
     _refSub = _refm.data.listen((onData) {
       updateAmountAndFee();
@@ -74,7 +80,7 @@ class TradeViewModel extends BaseModel {
         isUp: isup,
         cutoff: 50,
         takeProfit: 50,
-        investAmount: 0,
+        investAmount: 1,
         totalAmount: Asset(amount: 0, symbol: "USDT"),
         fee: Asset(amount: 0, symbol: "USDT"));
   }
@@ -85,6 +91,9 @@ class TradeViewModel extends BaseModel {
     } else {
       _refm.changeDownContractId(contractId);
     }
+    orderForm.investAmount = 1;
+    orderForm.takeProfit = 50;
+    orderForm.cutoff = 50;
     orderForm.isUp = isUp;
     updateAmountAndFee();
   }
@@ -120,7 +129,10 @@ class TradeViewModel extends BaseModel {
         orderForm.totalAmount.amount >
             _um.fetchPositionFrom(AssetName.NXUSDT).quantity ||
         orderForm.investAmount > contract.maxOrderQty ||
-        orderForm.totalAmount.amount <= double.minPositive) {
+        orderForm.totalAmount.amount <= double.minPositive ||
+        !isTakeProfitInputCorrect ||
+        !isCutLossInputCorrect ||
+        !isInvestAmountInputCorrect) {
       isSatisfied = false;
     } else {
       isSatisfied = true;
@@ -151,29 +163,40 @@ class TradeViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-    orderForm.takeProfit += 5;
+    orderForm.takeProfit += 1;
     setBusy(false);
   }
 
   void decreaseTakeProfit() {
-    if (orderForm.takeProfit.round() >= 5) {
-      orderForm.takeProfit -= 5;
+    if (orderForm.takeProfit.round() > 0) {
+      orderForm.takeProfit -= 1;
       setBusy(false);
     }
   }
 
+  void changeTakeProfit({double profit}) {
+    print(profit);
+    orderForm.takeProfit = profit;
+    setBusy(false);
+  }
+
   void increaseCutLoss() {
     if (orderForm.cutoff.round() < 100) {
-      orderForm.cutoff += 5;
+      orderForm.cutoff += 1;
       setBusy(false);
     }
   }
 
   void decreaseCutLoss() {
-    if (orderForm.cutoff.round() >= 5) {
-      orderForm.cutoff -= 5;
+    if (orderForm.cutoff.round() > 0) {
+      orderForm.cutoff -= 1;
       setBusy(false);
     }
+  }
+
+  void changeCutLoss({double cutLoss}) {
+    orderForm.cutoff = cutLoss;
+    setBusy(false);
   }
 
   List<Contract> getUpContracts() {
@@ -182,6 +205,27 @@ class TradeViewModel extends BaseModel {
 
   List<Contract> getDownContracts() {
     return _refm.downContract;
+  }
+
+  fetchPostion({String name}) async {
+    await _um.fetchBalances(name: _um.user.name);
+    usdtBalance = _um.fetchPositionFrom(name);
+    setBusy(false);
+  }
+
+  void setTakeProfitInputCorrectness(bool value) {
+    isTakeProfitInputCorrect = value;
+    updateAmountAndFee();
+  }
+
+  void setCutLossInputCorectness(bool value) {
+    isCutLossInputCorrect = value;
+    updateAmountAndFee();
+  }
+
+  void setTotalAmountInputCorectness(bool value) {
+    isInvestAmountInputCorrect = value;
+    updateAmountAndFee();
   }
 
   Future<PostOrderResponseModel> postOrder() async {

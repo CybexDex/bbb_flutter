@@ -18,9 +18,8 @@ class KeyboardScrollPage extends StatelessWidget {
       focusPadding: double.infinity,
       child: Container(
           height: ScreenUtil.screenHeightDp -
-              MediaQuery.of(context).padding.top -
-              MediaQuery.of(context).padding.bottom -
-              appbarHeight,
+              appbarHeight -
+              ScreenUtil.statusBarHeight,
           child: widget),
     );
   }

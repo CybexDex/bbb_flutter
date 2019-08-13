@@ -68,7 +68,7 @@ class MarketViewModel extends BaseModel {
           current: data.last.value,
           takeProfit: order.takeProfitPx,
           cutOff: order.cutLossPx,
-          underOrder: order.boughtPx);
+          underOrder: order.boughtPx + order.commission);
       if (contract.conversionRate > double.minPositive &&
           (data.last.value > order.takeProfitPx ||
               data.last.value < order.cutLossPx)) {

@@ -43,6 +43,8 @@ class R {
   static final String resAssetsIconsIcTitleLine = 'res/assets/icons/ic_title_line.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icNotifyBack.png)
   static final String resAssetsIconsIcNotifyBack = 'res/assets/icons/icNotifyBack.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/content_copy.svg)
+  static final String resAssetsIconsContentCopy = 'res/assets/icons/content_copy.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icSwitch.png)
   static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_reduce_2.svg)
@@ -69,4 +71,6 @@ class R {
   static final String resAssetsIconsIcTabArrow = 'res/assets/icons/icTabArrow.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTabWithdraw.png)
   static final String resAssetsIconsIcTabWithdraw = 'res/assets/icons/icTabWithdraw.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_try.svg)
+  static final String resAssetsIconsIcTry = 'res/assets/icons/ic_try.svg';
 }

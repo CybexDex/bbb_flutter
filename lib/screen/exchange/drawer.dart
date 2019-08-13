@@ -1,9 +1,12 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
+import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -18,13 +21,16 @@ class UserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (locator.get<UserManager>().user.testAccountResponseModel == null) {
+      locator.get<UserManager>().getGatewayInfo(assetName: AssetName.USDT);
+    }
+
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the Drawer if there isn't enough vertical
       // space to fit everything.
       child: Consumer<UserManager>(builder: (context, userMg, child) {
         Position usdt = userMg.fetchPositionFrom(AssetName.NXUSDT);
-
         return ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
@@ -49,13 +55,24 @@ class UserDrawer extends StatelessWidget {
                       Align(
                         child: GestureDetector(
                           child: Offstage(
-                            offstage:
-                                userMg.user.testAccountResponseModel != null,
-                            child: Text(
-                              I18n.of(context).clickToTry,
-                              style: StyleFactory.buyUpCellLabel,
-                            ),
-                          ),
+                              offstage:
+                                  userMg.user.testAccountResponseModel != null,
+                              child: Row(
+                                children: <Widget>[
+                                  SvgPicture.asset(R.resAssetsIconsIcTry),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  SizedBox(
+                                    height: 36,
+                                    width: 30,
+                                    child: Text(
+                                      I18n.of(context).clickToTry,
+                                      style: StyleFactory.clickToTryStyle,
+                                    ),
+                                  )
+                                ],
+                              )),
                           onTap: () {
                             userMg.loginWithPrivateKey();
                           },
@@ -121,15 +138,28 @@ class UserDrawer extends StatelessWidget {
                                   I18n.of(context).topUp,
                                   style: StyleFactory.cellTitleStyle,
                                 ),
-                                trailing: GestureDetector(
-                                  child:
-                                      Image.asset(R.resAssetsIconsIcTabArrow),
-                                  onTap: () {},
-                                ),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(RoutePaths.Deposit);
-                                },
+                                trailing: userMg.depositAvailable
+                                    ? Image.asset(R.resAssetsIconsIcTabArrow)
+                                    : SizedBox(
+                                        width: 60,
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
+                                              "(暂停)",
+                                              style:
+                                                  StyleFactory.cellTitleStyle,
+                                            ),
+                                            Image.asset(
+                                                R.resAssetsIconsIcTabArrow)
+                                          ],
+                                        ),
+                                      ),
+                                onTap: userMg.depositAvailable
+                                    ? () {
+                                        Navigator.of(context)
+                                            .pushNamed(RoutePaths.Deposit);
+                                      }
+                                    : () {},
                               )
                             : Container(),
                         userMg.user.testAccountResponseModel == null
@@ -145,17 +175,28 @@ class UserDrawer extends StatelessWidget {
                                   I18n.of(context).withdraw,
                                   style: StyleFactory.cellTitleStyle,
                                 ),
-                                trailing: GestureDetector(
-                                  child:
-                                      Image.asset(R.resAssetsIconsIcTabArrow),
-                                  onTap: () {},
-                                ),
-                                onTap: () {
-                                  // Update the state of the app
-                                  // ...
-                                  Navigator.pushNamed(
-                                      context, RoutePaths.Withdraw);
-                                },
+                                trailing: userMg.withdrawAvailable
+                                    ? Image.asset(R.resAssetsIconsIcTabArrow)
+                                    : SizedBox(
+                                        width: 60,
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text(
+                                              "(暂停)",
+                                              style:
+                                                  StyleFactory.cellTitleStyle,
+                                            ),
+                                            Image.asset(
+                                                R.resAssetsIconsIcTabArrow)
+                                          ],
+                                        ),
+                                      ),
+                                onTap: userMg.withdrawAvailable
+                                    ? () {
+                                        Navigator.pushNamed(
+                                            context, RoutePaths.Withdraw);
+                                      }
+                                    : () {},
                               )
                             : Container(),
                         userMg.user.testAccountResponseModel == null
@@ -280,6 +321,14 @@ class UserDrawer extends StatelessWidget {
                                                     .get<BBBAPI>()
                                                     .setEnvMode(
                                                         envType: EnvType.Pro);
+                                                await locator
+                                                    .get<GatewayApi>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Pro);
+                                                await locator
+                                                    .get<FaucetAPI>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Pro);
                                                 userMg.reload();
                                                 Navigator.of(context).pop();
                                               },
@@ -293,6 +342,14 @@ class UserDrawer extends StatelessWidget {
                                               onPressed: () async {
                                                 await locator
                                                     .get<BBBAPI>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Uat);
+                                                await locator
+                                                    .get<GatewayApi>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Uat);
+                                                await locator
+                                                    .get<FaucetAPI>()
                                                     .setEnvMode(
                                                         envType: EnvType.Uat);
                                                 userMg.reload();
@@ -356,5 +413,11 @@ class UserDrawer extends StatelessWidget {
         );
       }),
     );
+  }
+
+  Future<GatewayAssetResponseModel> getAsset({String asset}) async {
+    GatewayAssetResponseModel responseModel =
+        await locator.get<GatewayApi>().getAsset(asset: AssetName.USDT);
+    return responseModel;
   }
 }

@@ -92,7 +92,7 @@ class OrderInfo extends StatelessWidget {
                       style: StyleFactory.cellTitleStyle,
                     ),
                     Text(
-                      invest.toStringAsFixed(2) + " USDT",
+                      invest.toStringAsFixed(4) + " USDT",
                       style: StyleFactory.cellTitleStyle,
                     ),
                     Text(
@@ -183,10 +183,10 @@ class OrderInfo extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Text(
-                              (_model.pnl).toStringAsFixed(2) +
+                              (_model.pnl).toStringAsFixed(4) +
                                   "(" +
                                   (100 * (_model.pnl / invest))
-                                      .toStringAsFixed(0) +
+                                      .toStringAsFixed(1) +
                                   "%)",
                               style: _model.pnl > 0
                                   ? StyleFactory.buyUpOrderInfo
@@ -213,7 +213,7 @@ class OrderInfo extends StatelessWidget {
                               builder: (context) {
                                 return DialogFactory.closeOutConfirmDialog(
                                     context,
-                                    value: (_model.pnl).toStringAsFixed(2),
+                                    value: (_model.pnl).toStringAsFixed(4),
                                     controller: controller);
                               }).then((value) async {
                             if (value) {

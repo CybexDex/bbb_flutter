@@ -241,4 +241,11 @@ class StyleFactory {
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
+
+  static var clickToTryStyle = TextStyle(
+      decoration: TextDecoration.none,
+      color: Palette.clickToTryColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.smallLabelFontSize);
 }
