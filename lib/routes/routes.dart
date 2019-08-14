@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
+import 'package:bbb_flutter/screen/feedback.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
 import 'package:bbb_flutter/screen/invite_page.dart';
 import 'package:bbb_flutter/screen/login.dart';
@@ -25,6 +26,7 @@ class RoutePaths {
   static const String Withdraw = "Withdraw";
   static const String OrderRecordDetail = "OrderRecordDetail";
   static const String Invite = "Invite";
+  static const String Feedback = "feedback";
 }
 
 class Routes {
@@ -55,11 +57,11 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => WithdrawPage());
       case RoutePaths.Invite:
         return CupertinoPageRoute(builder: (_) => InvitePage());
-
       case RoutePaths.Trade:
         return CupertinoPageRoute(
             builder: (_) => TradePage(), settings: settings);
-
+      case RoutePaths.Feedback:
+        return CupertinoPageRoute(builder: (_) => FeedBackScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

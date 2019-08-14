@@ -56,6 +56,9 @@ class ExchangePage extends StatelessWidget {
                                     data: I18n.of(context).buyUp,
                                     color: Palette.redOrange,
                                     onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, RoutePaths.Feedback);
+                                      return;
                                       if (locator
                                           .get<UserManager>()
                                           .user
