@@ -38,7 +38,7 @@ class ExchangePage extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                         child: Container(
-                      padding: Dimen.pageMargin,
+                      //padding: Dimen.pageMargin,
                       child: MarketView(
                         isTrade: false,
                         width: ScreenUtil.screenWidthDp - 40,

@@ -50,7 +50,7 @@ num getRandomInt(num min, num max) {
 double profit = 12300;
 double loss = 8600;
 
-List<LineSeries<_ChartData, DateTime>> getLineSeries(data) {
+List<ChartSeries<_ChartData, DateTime>> getLineSeries(data) {
   DateTime today = new DateTime.now();
   List<_ChartData> chartDataLine = new List<_ChartData>();
   today = today.add(new Duration(seconds: 60 * 10));
@@ -72,10 +72,10 @@ List<LineSeries<_ChartData, DateTime>> getLineSeries(data) {
   }
   // var reversed = data.reversed.toList();
   double current = data[data.length-1].value;
-  DateTime last = data[data.length-1].time;
+  DateTime last = data[data.length-1].time.add(Duration(hours: 8));
   for (int i = 0; i < data.length; i++) {
     chartDataLine.add(
-        _ChartData(data[i].time, data[i].value)
+        _ChartData(data[i].time.add(Duration(hours: 8)), data[i].value)
     );
   }
 
@@ -94,17 +94,30 @@ List<LineSeries<_ChartData, DateTime>> getLineSeries(data) {
 //        _ChartData(chartDataLine[i * 10].x, chartDataLine[i * 10].y, order);
 //  }
 
-  var timeSequence = chartDataLine.reversed.toList()
-  return <LineSeries<_ChartData, DateTime>>[
+  var timeSequence = chartDataLine.reversed.toList();
+  final List<Color> color = <Color>[];
+  color.add(Colors.blue[50]);
+  color.add(Colors.blue[200]);
+  color.add(Colors.blue);
+
+  final List<double> stops = <double>[];
+  stops.add(0.0);
+  stops.add(0.5);
+  stops.add(1.0);
+
+  final LinearGradient gradientColors =
+  LinearGradient(colors: color, stops: stops);
+
+  return <ChartSeries<_ChartData, DateTime>>[
     LineSeries<_ChartData, DateTime>(
         name: 'Prices',
         enableTooltip: false,
-        animationDuration: 0,
         dataSource: timeSequence,
         xValueMapper: (_ChartData sales, _) => sales.x,
         yValueMapper: (_ChartData sales, _) => sales.y,
         color: Colors.blueAccent,
-        width: 1),
+//        gradient: gradientColors,
+        ),
     LineSeries<_ChartData, DateTime>(
         name: 'Current',
         enableTooltip: false,
@@ -112,7 +125,7 @@ List<LineSeries<_ChartData, DateTime>> getLineSeries(data) {
         dataSource: timeSequence,
         xValueMapper: (_ChartData sales, _) => sales.x,
         yValueMapper: (_ChartData sales, _) => current,
-        color: Colors.blue,
+        color: Colors.blueAccent,
         width: 1),
 //    LineSeries<_ChartData, DateTime>(
 //        name: 'Profit',

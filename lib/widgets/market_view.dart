@@ -105,6 +105,8 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                   data, trade.orderForm, trade.contract.strikeLevel);
             }
 
+            double tabHeight = 20;
+
             return Column(
               children: <Widget>[
                 Align(
@@ -117,19 +119,33 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                             labelStyle: StyleFactory.buySellExplainText,
                             indicatorWeight: 0.5,
                             indicatorSize: TabBarIndicatorSize.label,
-                            indicatorColor: Palette.subTitleColor,
+                            indicatorColor: Colors.redAccent,//Palette.subTitleColor,
                             unselectedLabelColor: Palette.descColor,
                             labelColor: Palette.subTitleColor,
                             tabs: [
-                              Tab(
-                                text: I18n.of(context).oneMin,
+                              Container(
+                                height: tabHeight,
+                                child: new Tab(
+                                  text: I18n.of(context).oneMin,
+                                ),
                               ),
-                              Tab(text: I18n.of(context).fiveMin),
-                              Tab(
-                                text: I18n.of(context).oneHour,
+                              Container(
+                                height: tabHeight,
+                                child: new Tab(
+                                  text: I18n.of(context).fiveMin,
+                                ),
                               ),
-                              Tab(
-                                text: I18n.of(context).oneDay,
+                              Container(
+                                height: tabHeight,
+                                child: new Tab(
+                                  text: I18n.of(context).oneHour,
+                                ),
+                              ),
+                              Container(
+                                height: tabHeight,
+                                child: new Tab(
+                                  text: I18n.of(context).oneDay,
+                                ),
                               ),
                             ],
                             onTap: (index) {
