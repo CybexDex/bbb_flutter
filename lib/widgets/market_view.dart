@@ -6,7 +6,9 @@ import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:bbb_flutter/widgets/sfchart.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
+
 
 class MarketView extends StatefulWidget {
   final double width;
@@ -155,64 +157,71 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                 Flexible(
                   child: Container(
                       height: double.infinity,
-                      margin: EdgeInsets.only(top: 1, left: 0, right: 0),
-                      child: GestureDetector(
-                        onPanStart: (details) {
-                          model.lastOffset = details.globalPosition;
-                        },
-                        onPanUpdate: (details) {
-                          double gap =
-                              details.globalPosition.dx - model.lastOffset.dx;
-
-                          double timeOffset = 30 *
-                              marketDurationSecondMap[model.marketDuration] *
-                              gap /
-                              ScreenUtil.screenWidthDp;
-                          model.lastOffset = details.globalPosition;
-
-                          var start = model.startTime
-                              .subtract(Duration(seconds: timeOffset.toInt()));
-                          var end = model.endTime
-                              .subtract(Duration(seconds: timeOffset.toInt()));
-                          if (end.compareTo(DateTime.now().add(Duration(
-                                  seconds: 15 *
-                                      marketDurationSecondMap[
-                                          model.marketDuration]))) >
-                              0) {
-                            return;
-                          }
-                          if (start.compareTo(data.first.time) <= 0) {
-                            return;
-                          }
-                          model.changeScope(start, end);
-                        },
-                        child: Sparkline(
-                          dateFormat: model.dateFormat,
-                          data: klines,
-                          suppleData: model.suppleData,
-                          startTime: model.startTime,
-                          endTime: model.endTime,
-                          lineColor: Palette.darkSkyBlue,
-                          timeLineGap: Duration(
-                              seconds: 5 *
-                                  marketDurationSecondMap[
-                                      model.marketDuration]),
-                          lineWidth: 1,
-                          gridLineWidth: 0.5,
-                          width: widget.width,
-                          fillGradient: LinearGradient(
-                              colors: [
-                                Palette.lineGradintColorStart,
-                                Palette.lineGradientColorEnd
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter),
-                          gridLineColor: Palette.veryLightPinkTwo,
-                          pointSize: 8.0,
-                          pointColor: Palette.darkSkyBlue,
-                          repaint: model,
-                        ),
-                      )),
+                      margin: EdgeInsets.all(0),
+                      child: PriceChart(
+                        data: klines,
+                      )
+                  )
+//                  Container(
+//                      height: double.infinity,
+//                      margin: EdgeInsets.only(top: 1, left: 0, right: 0),
+//                      child: GestureDetector(
+//                        onPanStart: (details) {
+//                          model.lastOffset = details.globalPosition;
+//                        },
+//                        onPanUpdate: (details) {
+//                          double gap =
+//                              details.globalPosition.dx - model.lastOffset.dx;
+//
+//                          double timeOffset = 30 *
+//                              marketDurationSecondMap[model.marketDuration] *
+//                              gap /
+//                              ScreenUtil.screenWidthDp;
+//                          model.lastOffset = details.globalPosition;
+//
+//                          var start = model.startTime
+//                              .subtract(Duration(seconds: timeOffset.toInt()));
+//                          var end = model.endTime
+//                              .subtract(Duration(seconds: timeOffset.toInt()));
+//                          if (end.compareTo(DateTime.now().add(Duration(
+//                                  seconds: 15 *
+//                                      marketDurationSecondMap[
+//                                          model.marketDuration]))) >
+//                              0) {
+//                            return;
+//                          }
+//                          if (start.compareTo(data.first.time) <= 0) {
+//                            return;
+//                          }
+//                          model.changeScope(start, end);
+//                        },
+//                        child: Sparkline(
+//                          dateFormat: model.dateFormat,
+//                          data: klines,
+//                          suppleData: model.suppleData,
+//                          startTime: model.startTime,
+//                          endTime: model.endTime,
+//                          lineColor: Palette.darkSkyBlue,
+//                          timeLineGap: Duration(
+//                              seconds: 5 *
+//                                  marketDurationSecondMap[
+//                                      model.marketDuration]),
+//                          lineWidth: 1,
+//                          gridLineWidth: 0.5,
+//                          width: widget.width,
+//                          fillGradient: LinearGradient(
+//                              colors: [
+//                                Palette.lineGradintColorStart,
+//                                Palette.lineGradientColorEnd
+//                              ],
+//                              begin: Alignment.topCenter,
+//                              end: Alignment.bottomCenter),
+//                          gridLineColor: Palette.veryLightPinkTwo,
+//                          pointSize: 8.0,
+//                          pointColor: Palette.darkSkyBlue,
+//                          repaint: model,
+//                        ),
+//                      )),
                 )
               ],
             );

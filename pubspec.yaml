@@ -11,7 +11,7 @@ dependencies:
         sdk: flutter
     cybex_flutter_plugin:
         git:
-            url: git@github.com:CybexDex/cybex_flutter_plugin.git
+            url: https://github.com/CybexDex/cybex_flutter_plugin
             ref: develop
     dio: ^2.1.0
     charts_flutter: ^0.6.0
