@@ -53,13 +53,13 @@ class PriceChart extends StatelessWidget {
               zoomMode: ZoomMode.x,
               enablePanning: zoom
           ),
-//          trackballBehavior: TrackballBehavior(
-//              enable: true,
-//              activationMode: ActivationMode.singleTap,
-//              lineType: TrackballLineType.vertical,
-//              tooltipSettings:
-//              InteractiveTooltip(format: '{point.y}')
-//          ),
+          trackballBehavior: TrackballBehavior(
+              enable: true,
+              activationMode: ActivationMode.singleTap,
+              lineType: TrackballLineType.vertical,
+              tooltipSettings:
+              InteractiveTooltip(format: '{point.y}')
+          ),
         );
   }
 }
