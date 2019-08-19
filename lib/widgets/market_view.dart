@@ -176,6 +176,9 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                       margin: EdgeInsets.all(0),
                       child: PriceChart(
                         data: klines,
+                        zoom: true,
+                        cutOff: model.suppleData==null?null:model.suppleData.cutOff,
+                        takeProfit: model.suppleData==null?null:model.suppleData.takeProfit,
                       )
                   )
 //                  Container(
