@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String accountNameHint = 'account_name_hint';
+  static final String password = 'password';
 
   static final String transfer = 'transfer';
 
@@ -110,9 +110,9 @@ class _$Keys {
 
   static final String accountName = 'account_name';
 
-  static final String assetCat = 'asset_cat';
+  static final String accountNameHint = 'account_name_hint';
 
-  static final String password = 'password';
+  static final String assetCat = 'asset_cat';
 
   static final String passwordHint = 'password_hint';
 
@@ -200,9 +200,9 @@ class _$Keys {
 
   static final String openPositionPrice = 'open_position_price';
 
-  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
+  static final String settlementPrice = 'settlement_price';
 
-  static final String successToast = 'success_toast';
+  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 
   static final String failToast = 'fail_toast';
 
@@ -252,6 +252,8 @@ class _$Keys {
 
   static final String clickToQuit = 'click_to_quit';
 
+  static final String share = 'share';
+
   static final String oneMin = 'one_min';
 
   static final String fiveMin = 'five_min';
@@ -286,7 +288,7 @@ class _$Keys {
   static final String orderFormBuyLimitationError =
       'order_form_buy_limitation_error';
 
-  static final String settlementPrice = 'settlement_price';
+  static final String successToast = 'success_toast';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -307,7 +309,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get accountNameHint => this._translate(_$Keys.accountNameHint);
+  String get password => this._translate(_$Keys.password);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -347,8 +349,8 @@ abstract class _$I18nHelper {
   String get balanceAvailable => this._translate(_$Keys.balanceAvailable);
   String get logIn => this._translate(_$Keys.logIn);
   String get accountName => this._translate(_$Keys.accountName);
+  String get accountNameHint => this._translate(_$Keys.accountNameHint);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get password => this._translate(_$Keys.password);
   String get passwordHint => this._translate(_$Keys.passwordHint);
   String get passwordConfirm => this._translate(_$Keys.passwordConfirm);
   String get passwordConfirmHint => this._translate(_$Keys.passwordConfirmHint);
@@ -398,9 +400,9 @@ abstract class _$I18nHelper {
   String get fundStatusError => this._translate(_$Keys.fundStatusError);
   String get tradingDetail => this._translate(_$Keys.tradingDetail);
   String get openPositionPrice => this._translate(_$Keys.openPositionPrice);
+  String get settlementPrice => this._translate(_$Keys.settlementPrice);
   String get stepWidgetNotSetHint =>
       this._translate(_$Keys.stepWidgetNotSetHint);
-  String get successToast => this._translate(_$Keys.successToast);
   String get failToast => this._translate(_$Keys.failToast);
   String get leverage => this._translate(_$Keys.leverage);
   String get settlementTime => this._translate(_$Keys.settlementTime);
@@ -427,6 +429,7 @@ abstract class _$I18nHelper {
   String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
   String get clickToTry => this._translate(_$Keys.clickToTry);
   String get clickToQuit => this._translate(_$Keys.clickToQuit);
+  String get share => this._translate(_$Keys.share);
   String get oneMin => this._translate(_$Keys.oneMin);
   String get fiveMin => this._translate(_$Keys.fiveMin);
   String get oneDay => this._translate(_$Keys.oneDay);
@@ -446,5 +449,5 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormInputPositiveNumberError);
   String get orderFormBuyLimitationError =>
       this._translate(_$Keys.orderFormBuyLimitationError);
-  String get settlementPrice => this._translate(_$Keys.settlementPrice);
+  String get successToast => this._translate(_$Keys.successToast);
 }

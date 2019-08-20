@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/invite_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,6 +25,23 @@ class _InviteState extends State<InvitePage> {
         print(model.referTopList);
         return Scaffold(
           appBar: AppBar(
+            actions: <Widget>[
+              GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Center(
+                    child: Text(
+                      I18n.of(context).share,
+                      style: StyleFactory.navButtonTitleStyle,
+                      textScaleFactor: 1,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(RoutePaths.Share);
+                },
+              )
+            ],
             iconTheme: IconThemeData(
               color: Palette.backButtonColor, //change your color here
             ),

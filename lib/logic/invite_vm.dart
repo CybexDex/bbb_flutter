@@ -90,7 +90,7 @@ class InviteViewModel extends BaseModel {
 
   Future<List<Top3>> getTopList() async {
     ReferTopListResponse referTopListResponse =
-        await _api.getTopList(accountName: "cy3017");
+        await _api.getTopList(accountName: _um.user.name);
     referTopList = referTopListResponse?.top3?.map((value) {
       value.amount = value.amount.floor() / pow(10, 6);
       return value;

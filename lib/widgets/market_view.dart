@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/helper/common_utils.dart';
+import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
@@ -175,8 +176,8 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                               .subtract(Duration(seconds: timeOffset.toInt()));
                           var end = model.endTime
                               .subtract(Duration(seconds: timeOffset.toInt()));
-                          if (end.compareTo(DateTime.now().add(Duration(
-                                  seconds: 15 *
+                          if (end.compareTo(getCorrectTime().add(Duration(
+                                  seconds: 10 *
                                       marketDurationSecondMap[
                                           model.marketDuration]))) >
                               0) {

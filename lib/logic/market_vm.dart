@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
@@ -27,10 +28,10 @@ class MarketViewModel extends BaseModel {
   }
 
   seedToCurrent() {
-    startTime = DateTime.now().subtract(
-        Duration(seconds: 15 * marketDurationSecondMap[marketDuration]));
-    endTime = DateTime.now()
-        .add(Duration(seconds: 15 * marketDurationSecondMap[marketDuration]));
+    startTime = getCorrectTime().subtract(
+        Duration(seconds: 20 * marketDurationSecondMap[marketDuration]));
+    endTime = getCorrectTime()
+        .add(Duration(seconds: 10 * marketDurationSecondMap[marketDuration]));
     setBusy(false);
   }
 

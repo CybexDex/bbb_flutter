@@ -23,6 +23,7 @@ class TransferViewModel extends BaseModel {
   TransferForm transferForm;
   PostWithdrawRequestModel withdrawRequestModel;
   Commission commission;
+  bool isButtonAvailable = false;
 
   BBBAPI _api;
   RefManager _refm;
@@ -41,7 +42,7 @@ class TransferViewModel extends BaseModel {
   initForm() {
     transferForm = TransferForm(
         fromBBBToCybex: true,
-        totalAmount: Asset(amount: 0, symbol: "USDT"),
+        totalAmount: Asset(amount: null, symbol: "USDT"),
         balance: _um.fetchPositionFrom(AssetName.NXUSDT));
     getCurrentBalance();
   }
@@ -56,11 +57,22 @@ class TransferViewModel extends BaseModel {
     transferForm.balance = transferForm.fromBBBToCybex
         ? _um.fetchPositionFrom(AssetName.NXUSDT)
         : _um.fetchPositionFrom(AssetName.USDT);
+    transferForm.totalAmount.symbol = transferForm?.balance?.assetName;
   }
 
   void getCurrentBalance() async {
     await _um.fetchBalances(name: _um.user.name);
     fetchBalances();
+    setBusy(false);
+  }
+
+  void setTotalAmount({double value}) {
+    transferForm.totalAmount.amount = value;
+    if (value == null || value > transferForm.balance.quantity) {
+      isButtonAvailable = false;
+    } else {
+      isButtonAvailable = true;
+    }
     setBusy(false);
   }
 
@@ -83,17 +95,6 @@ class TransferViewModel extends BaseModel {
 
     return Future.value(res);
   }
-
-//  void saveOrder() {
-//    ticker = _mtm.lastTicker.value;
-//    saveContract =
-//        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
-//
-//    final refData = _refm.lastData;
-//
-//    order = PostOrderRequestModel();
-//    commission = getCommission(refData, contract);
-//  }
 
   Commission getCommission(RefContractResponseModel refData) {
     TransferForm form = transferForm;

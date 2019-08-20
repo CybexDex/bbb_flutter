@@ -498,7 +498,7 @@ class _PercentageBarPainter extends CustomPainter {
 
     var downTextPainter = TextPainter(
         text: new TextSpan(
-            text: (100 - percentage).toStringAsFixed(0) + "%",
+            text: (100 - percentage.round()).toStringAsFixed(0) + "%",
             style: TextStyle(
                 color: Palette.shamrockGreen,
                 fontSize: 11.0,

@@ -7,6 +7,7 @@ import 'package:bbb_flutter/screen/login.dart';
 import 'package:bbb_flutter/screen/order_record_detail.dart';
 import 'package:bbb_flutter/screen/order_records.dart';
 import 'package:bbb_flutter/screen/register.dart';
+import 'package:bbb_flutter/screen/share_page.dart';
 import 'package:bbb_flutter/screen/trade.dart';
 import 'package:bbb_flutter/screen/transfer_page.dart';
 import 'package:bbb_flutter/screen/withdraw_page.dart';
@@ -27,6 +28,7 @@ class RoutePaths {
   static const String OrderRecordDetail = "OrderRecordDetail";
   static const String Invite = "Invite";
   static const String Feedback = "feedback";
+  static const String Share = "Share";
 }
 
 class Routes {
@@ -62,6 +64,8 @@ class Routes {
             builder: (_) => TradePage(), settings: settings);
       case RoutePaths.Feedback:
         return CupertinoPageRoute(builder: (_) => FeedBackScreen());
+      case RoutePaths.Share:
+        return CupertinoPageRoute(builder: (_) => SharePage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

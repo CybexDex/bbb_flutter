@@ -62,7 +62,6 @@ class _PnlFormState extends State<PnlForm> {
             model.pnlPercent = (100 *
                     ((widget._order.pnl + widget._order.commission) / invest))
                 .abs();
-            print(model.pnlPercent);
 
             _cutLossController.text = model.cutLoss == null
                 ? I18n.of(context).stepWidgetNotSetHint
@@ -247,7 +246,6 @@ class _PnlFormState extends State<PnlForm> {
                               onPressed: (model.isCutLossInputCorrect &&
                                       model.isTakeProfitInputCorrect)
                                   ? () async {
-                                      print("rr${model.pnlPercent}");
                                       if ((model.takeProfit != null &&
                                               model.pnlPercent >
                                                   model.takeProfit) ||

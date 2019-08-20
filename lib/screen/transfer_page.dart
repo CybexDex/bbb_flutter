@@ -1,7 +1,6 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/transfer_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
@@ -16,201 +15,222 @@ class _TransferState extends State<TransferPage> {
   TextEditingController _amountEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BaseWidget<TransferViewModel>(
-      model: TransferViewModel(
-          api: locator.get(), refm: locator.get(), um: locator.get()),
-      onModelReady: (model) {
-        model.initForm();
-      },
-      builder: (context, model, child) {
-        return Scaffold(
-            appBar: AppBar(
-              iconTheme: IconThemeData(
-                color: Palette.backButtonColor, //change your color here
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: BaseWidget<TransferViewModel>(
+        model: TransferViewModel(
+            api: locator.get(), refm: locator.get(), um: locator.get()),
+        onModelReady: (model) {
+          model.initForm();
+        },
+        builder: (context, model, child) {
+          return Scaffold(
+              appBar: AppBar(
+                iconTheme: IconThemeData(
+                  color: Palette.backButtonColor, //change your color here
+                ),
+                centerTitle: true,
+                title:
+                    Text(I18n.of(context).transfer, style: StyleFactory.title),
+                backgroundColor: Colors.white,
+                brightness: Brightness.light,
+                elevation: 0,
               ),
-              centerTitle: true,
-              title: Text(I18n.of(context).transfer, style: StyleFactory.title),
-              backgroundColor: Colors.white,
-              brightness: Brightness.light,
-              elevation: 0,
-            ),
-            body: SingleChildScrollView(
-              child: SafeArea(
-                  child: Container(
-                margin: EdgeInsets.only(right: 20, left: 20, top: 20),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          I18n.of(context).assetCat,
-                          style: StyleFactory.larSubtitle,
-                        ),
-                        Text("USDT", style: StyleFactory.larSubtitle),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Divider(color: Palette.separatorColor),
-                    Container(
-                      child: Row(
+              body: SingleChildScrollView(
+                child: SafeArea(
+                    child: Container(
+                  margin: EdgeInsets.only(right: 20, left: 20, top: 20),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text("从",
-                                        style: StyleFactory.transferStyleTitle),
-                                    SizedBox(width: 36),
-                                    Text(model.transferForm.fromBBBToCybex
-                                        ? "BBB账户"
-                                        : "CYBEX账户"),
-                                  ],
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Divider(
-                                  color: Palette.redOrange,
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("转至",
-                                        style: StyleFactory.transferStyleTitle),
-                                    SizedBox(width: 36),
-                                    Text(model.transferForm.fromBBBToCybex
-                                        ? "CYBEX账户"
-                                        : "BBB账户"),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          Text(
+                            I18n.of(context).assetCat,
+                            style: StyleFactory.larSubtitle,
                           ),
-                          GestureDetector(
-                            child: Image.asset(R.resAssetsIconsIcSwitch),
-                            onTap: () {
-                              model.switchAccountSide();
-                            },
-                          )
+                          Text("USDT", style: StyleFactory.larSubtitle),
                         ],
                       ),
-                    ),
-                    Divider(
-                      color: Palette.separatorColor,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("数量"),
-                        Text(model.transferForm.balance != null
-                            ? "可划转数量: ${model.transferForm.balance.quantity} USDT"
-                            : "可划转数量: --"),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Row(
+                      SizedBox(height: 15),
+                      Divider(color: Palette.separatorColor),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Flexible(
-                              child: TextFormField(
-                                controller: _amountEditingController,
-                                decoration: InputDecoration(
-                                    hintText: "请输入划转数量",
-                                    hintStyle: StyleFactory.hintStyle,
-                                    border: InputBorder.none),
+                            Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Text("从",
+                                          style:
+                                              StyleFactory.transferStyleTitle),
+                                      SizedBox(width: 36),
+                                      Text(model.transferForm.fromBBBToCybex
+                                          ? "BBB账户"
+                                          : "CYBEX账户"),
+                                    ],
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Divider(
+                                    color: Palette.redOrange,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text("转至",
+                                          style:
+                                              StyleFactory.transferStyleTitle),
+                                      SizedBox(width: 36),
+                                      Text(model.transferForm.fromBBBToCybex
+                                          ? "CYBEX账户"
+                                          : "BBB账户"),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                             GestureDetector(
-                              child: Text("全部划转",
-                                  style: StyleFactory.errorMessageText),
+                              child: Image.asset(R.resAssetsIconsIcSwitch),
                               onTap: () {
-                                setState(() {
-                                  _amountEditingController.text = model
-                                      .transferForm.balance.quantity
-                                      .toStringAsFixed(4);
-                                });
+                                model.switchAccountSide();
                               },
                             )
                           ],
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Palette.separatorColor,
-                                      width: 0.8))),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Visibility(
-                          visible: false,
-                          child: Row(
+                      ),
+                      Divider(
+                        color: Palette.separatorColor,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("数量"),
+                          Text(model.transferForm.balance != null
+                              ? "可划转数量: ${model.transferForm.balance.quantity} USDT"
+                              : "可划转数量: --"),
+                        ],
+                      ),
+                      Column(
+                        children: <Widget>[
+                          Row(
                             children: <Widget>[
-                              Image.asset(R.resAssetsIconsIcWarn),
-                              Text("CYBEX账户余额不足/BBB账户余额不足",
-                                  style: StyleFactory.errorMessageText)
+                              Flexible(
+                                child: TextField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _amountEditingController,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty &&
+                                        double.tryParse(value) != null) {
+                                      model.setTotalAmount(
+                                          value: double.parse(value));
+                                    } else {
+                                      model.setTotalAmount(value: null);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: "请输入划转数量",
+                                      hintStyle: StyleFactory.hintStyle,
+                                      border: InputBorder.none),
+                                ),
+                              ),
+                              GestureDetector(
+                                child: Text("全部划转",
+                                    style: StyleFactory.errorMessageText),
+                                onTap: () {
+                                  _amountEditingController.text = model
+                                      .transferForm.balance.quantity
+                                      .toStringAsFixed(4);
+                                },
+                              )
                             ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text("手续费", style: StyleFactory.transferStyleTitle),
-                            Text("0.0001 CYB",
-                                style: StyleFactory.transferStyleTitle),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        ButtonTheme(
-                          minWidth: double.infinity,
-                          height: 44,
-                          child: WidgetFactory.button(
-                              data: "立即划转",
-                              color: Palette.redOrange,
-                              onPressed: () async {
-                                model.transferForm.totalAmount = Asset(
-                                    amount: double.parse(
-                                        _amountEditingController.text),
-                                    symbol:
-                                        model.transferForm.balance.assetName);
-                                TextEditingController controller =
-                                    TextEditingController();
-                                if (locator.get<UserManager>().user.isLocked) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return DialogFactory.unlockDialog(
-                                            context,
-                                            controller: controller);
-                                      }).then((value) async {
-                                    if (value) {
-                                      callPostWithdraw(model);
-                                    }
-                                  });
-                                } else {
-                                  callPostWithdraw(model);
-                                }
-                              }),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              )),
-            ));
-      },
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Palette.separatorColor,
+                                        width: 0.8))),
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Offstage(
+                            offstage: model.isButtonAvailable ||
+                                model.transferForm.totalAmount.amount == null,
+                            child: Row(
+                              children: <Widget>[
+                                Image.asset(R.resAssetsIconsIcWarn),
+                                Builder(builder: (context) {
+                                  return Text("CYBEX账户余额不足/BBB账户余额不足",
+                                      style: StyleFactory.errorMessageText);
+                                })
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("手续费",
+                                  style: StyleFactory.transferStyleTitle),
+                              Text("0.0001 CYB",
+                                  style: StyleFactory.transferStyleTitle),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          ButtonTheme(
+                            minWidth: double.infinity,
+                            height: 44,
+                            child: WidgetFactory.button(
+                                data: "立即划转",
+                                color: model.isButtonAvailable
+                                    ? Palette.redOrange
+                                    : Palette.subTitleColor,
+                                onPressed: model.isButtonAvailable
+                                    ? () async {
+                                        TextEditingController controller =
+                                            TextEditingController();
+                                        if (locator
+                                            .get<UserManager>()
+                                            .user
+                                            .isLocked) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return DialogFactory
+                                                    .unlockDialog(context,
+                                                        controller: controller);
+                                              }).then((value) async {
+                                            if (value) {
+                                              callPostWithdraw(model);
+                                            }
+                                          });
+                                        } else {
+                                          callPostWithdraw(model);
+                                        }
+                                      }
+                                    : () {}),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+              ));
+        },
+      ),
     );
   }
 
