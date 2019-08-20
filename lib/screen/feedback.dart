@@ -5,12 +5,13 @@ class FeedBackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text(I18n.of(context).logIn, style: StyleFactory.title),
+          title: Text("小助手", style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,

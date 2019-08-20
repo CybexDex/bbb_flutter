@@ -58,6 +58,7 @@
 	"dialog_log_out_content": "确定你已妥善保存了你的密码,并确定希望登出你的账户。",
 	"dialog_log_out_confirm_button": "确认登出",
 	"confirm": "确认",
+	"remider": "提示",
 	"dialog_check_password": "验证密码",
 	"register_error_message_contain_lowercase": "帐户名仅能包含小写字母、数字、横杠",
 	"register_error_message_start_only_letter": "帐户名需要以字母开头",
@@ -113,5 +114,11 @@
 	"choose_env_detail": "请选择环境配置",
 	"investment_hint": "输入数量",
 	"change_to_try_env": "切换到试玩",
-	"change_from_try_env": "退出试玩"
+	"change_from_try_env": "退出试玩",
+	"order_form_reset": "重置",
+	"order_form_balance_not_enough_error": "余额不足",
+	"order_form_supply_not_enough_error": "剩余份数不足",
+	"order_form_input_positive_number_error": "请输入正整数",
+	"order_form_buy_limitation_error": "单笔购买上限",
+	"step_widget_not_set_hint": "不设置"
 }

@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
+import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
+import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,16 +18,20 @@ import 'package:web_socket_channel/io.dart';
 class MarketManager {
   Stream<List<TickerData>> get prices => _priceController.stream;
   BehaviorSubject<TickerData> lastTicker = BehaviorSubject<TickerData>();
-
-  static const String _SERVER_ADDRESS = "wss://nxmdptest.cybex.io/";
-
+  BehaviorSubject<WebSocketPercentageResponse> percentageTicker =
+      BehaviorSubject<WebSocketPercentageResponse>();
+  BehaviorSubject<WebSocketPNLResponse> pnlTicker =
+      BehaviorSubject<WebSocketPNLResponse>();
   BehaviorSubject<List<TickerData>> _priceController =
       BehaviorSubject<List<TickerData>>();
   IOWebSocketChannel _channel;
 
   BBBAPI _api;
+  SharedPref _sharedPref;
 
-  MarketManager({BBBAPI api}) : _api = api;
+  MarketManager({BBBAPI api, SharedPref sharedPref})
+      : _api = api,
+        _sharedPref = sharedPref;
 
   String _assetName;
   MarketDuration _marketDuration = MarketDuration.oneMin;
@@ -45,6 +53,10 @@ class MarketManager {
     send(jsonEncode(WebSocketRequestEntity(
             type: "subscribe", topic: "FAIRPRICE.$_assetName"))
         .toString());
+    send(jsonEncode(WebSocketRequestEntity(
+        type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE)));
+    send(jsonEncode(WebSocketRequestEntity(
+        topic: WebsocketRequestTopic.PNL, type: "subscribe")));
   }
 
   loadMarketHistory(
@@ -73,10 +85,22 @@ class MarketManager {
   initCommunication() {
     reset();
 
-    _channel = IOWebSocketChannel.connect(MarketManager._SERVER_ADDRESS);
+    _channel = IOWebSocketChannel.connect(
+        _sharedPref.getEnvType() == EnvType.Pro
+            ? WebSocketConnection.PRO_WEBSOCKET
+            : WebSocketConnection.UAT_WEBSOCKET);
     _channel.stream.listen((onData) {
+      dispatchMessage(onData);
+    }, onError: (error) {
+      cancelAndRemoveData();
+      loadAllData(_assetName);
+    });
+  }
+
+  dispatchMessage(String response) {
+    if (response.contains(WebsocketRequestTopic.FAIRPRICE)) {
       var wbResponse =
-          WebSocketNXPriceResponseEntity.fromJson(json.decode(onData));
+          WebSocketNXPriceResponseEntity.fromJson(json.decode(response));
       var t_time = DateTime.parse(wbResponse.time);
 
       var t = TickerData(wbResponse.px, t_time);
@@ -97,10 +121,15 @@ class MarketManager {
         }
         _priceController.add(_priceController.value.toList());
       }
-    }, onError: (error) {
-      cancelAndRemoveData();
-      loadAllData(_assetName);
-    });
+    } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE)) {
+      var percentageResponse =
+          WebSocketPercentageResponse.fromJson(json.decode(response));
+      percentageTicker.add(percentageResponse);
+    } else if (response.contains(WebsocketRequestTopic.PNL)) {
+      print(response);
+      var pnlResponse = WebSocketPNLResponse.fromJson(json.decode(response));
+      pnlTicker.add(pnlResponse);
+    }
   }
 
   cancelAndRemoveData() {

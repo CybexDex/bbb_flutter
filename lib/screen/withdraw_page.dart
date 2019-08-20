@@ -125,6 +125,7 @@ class _WithdrawState extends State<WithdrawPage> {
                           children: <Widget>[
                             Flexible(
                               child: TextFormField(
+                                keyboardType: TextInputType.number,
                                 controller: _amountController,
                                 focusNode: _amountFocusNode,
                                 decoration: InputDecoration(

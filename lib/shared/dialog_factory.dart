@@ -12,7 +12,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class DialogFactory {
-  static CupertinoAlertDialog logoutConfirmDialog(BuildContext context,
+  static CupertinoAlertDialog normalConfirmDialog(BuildContext context,
       {String title,
       String content,
       String cancel,
@@ -26,10 +26,12 @@ class DialogFactory {
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
           },
-          child: Text(cancel, style: StyleFactory.dialogButtonFontStyle),
+          child: Text(I18n.of(context).dialogCancelButton,
+              style: StyleFactory.dialogButtonFontStyle),
         ),
         CupertinoDialogAction(
-            child: Text(confirm, style: StyleFactory.dialogButtonFontStyle),
+            child: Text(I18n.of(context).confirm,
+                style: StyleFactory.dialogButtonFontStyle),
             onPressed: onConfirmPressed)
       ],
     );

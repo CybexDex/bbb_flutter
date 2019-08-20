@@ -18,8 +18,11 @@ import '../setup.dart';
 class PnlViewModel extends BaseModel {
   double cutLoss;
   double takeProfit;
+  double invest;
+  double pnlPercent;
   bool shouldShowErrorMessage = false;
-
+  bool isTakeProfitInputCorrect = true;
+  bool isCutLossInputCorrect = true;
   BBBAPI _api;
   UserManager _um;
   MarketManager _mtm;
@@ -51,14 +54,18 @@ class PnlViewModel extends BaseModel {
     model.transactionType = "NxAmend";
     model.cutLossPx = execNow
         ? order.cutLossPx.toStringAsFixed(4)
-        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
-                contract.strikeLevel, contract.conversionRate > 0)
-            .toStringAsFixed(4);
+        : (cutLoss == null
+            ? contract.strikeLevel.toStringAsFixed(4)
+            : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
+                    contract.strikeLevel, contract.conversionRate > 0)
+                .toStringAsFixed(4));
     model.takeProfitPx = execNow
         ? order.takeProfitPx.toStringAsFixed(4)
-        : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
-                contract.strikeLevel, contract.conversionRate > 0)
-            .toStringAsFixed(4);
+        : (takeProfit == null
+            ? "0"
+            : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
+                    contract.strikeLevel, contract.conversionRate > 0)
+                .toStringAsFixed(4));
     model.seller = suffixId(locator.get<SharedPref>().getTestNet()
         ? _um.user.testAccountResponseModel.accountId
         : _um.user.account.id);
@@ -83,15 +90,23 @@ class PnlViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-    takeProfit += 1;
+    if (takeProfit == null) {
+      takeProfit = 50;
+    } else {
+      takeProfit += 1;
+    }
     setBusy(false);
   }
 
   void decreaseTakeProfit() {
-    if (takeProfit.round() > 0) {
-      takeProfit -= 1;
-      setBusy(false);
+    if (takeProfit == null) {
+      takeProfit = 50;
+    } else {
+      if (takeProfit.round() > 0) {
+        takeProfit -= 1;
+      }
     }
+    setBusy(false);
   }
 
   void changeTakeProfit({double profit}) {
@@ -100,21 +115,39 @@ class PnlViewModel extends BaseModel {
   }
 
   void increaseCutLoss() {
-    if (cutLoss.round() < 100) {
-      cutLoss += 1;
-      setBusy(false);
+    if (cutLoss == null) {
+      cutLoss = 50;
+    } else {
+      if (cutLoss.round() < 100) {
+        cutLoss += 1;
+      }
     }
+    setBusy(false);
   }
 
   void decreaseCutLoss() {
-    if (cutLoss.round() > 0) {
-      cutLoss -= 1;
-      setBusy(false);
+    if (cutLoss == null) {
+      cutLoss = 50;
+    } else {
+      if (cutLoss.round() > 0) {
+        cutLoss -= 1;
+      }
     }
+    setBusy(false);
   }
 
   void changeCutLoss({double cutLoss}) {
     this.cutLoss = cutLoss;
+    setBusy(false);
+  }
+
+  void setTakeProfitInputCorrectness(bool value) {
+    isTakeProfitInputCorrect = value;
+    setBusy(false);
+  }
+
+  void setCutLossInputCorectness(bool value) {
+    isCutLossInputCorrect = value;
     setBusy(false);
   }
 

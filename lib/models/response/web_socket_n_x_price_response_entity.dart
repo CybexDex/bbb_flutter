@@ -1,16 +1,19 @@
 class WebSocketNXPriceResponseEntity {
+  String topic;
   String sym;
   int xts;
   double px;
   String time;
 
-  WebSocketNXPriceResponseEntity({this.sym, this.xts, this.px, this.time});
+  WebSocketNXPriceResponseEntity(
+      {this.sym, this.xts, this.px, this.time, this.topic});
 
   WebSocketNXPriceResponseEntity.fromJson(Map<String, dynamic> json) {
     sym = json['sym'];
     xts = json['xts'];
     px = json['px'];
     time = json['time'];
+    topic = json['topic'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +22,7 @@ class WebSocketNXPriceResponseEntity {
     data['xts'] = this.xts;
     data['px'] = this.px;
     data['time'] = this.time;
+    data['topic'] = this.topic;
     return data;
   }
 }

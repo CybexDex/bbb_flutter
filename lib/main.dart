@@ -11,9 +11,9 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
-import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 main() async {
   FlipperClient flipperClient = FlipperClient.getDefault();

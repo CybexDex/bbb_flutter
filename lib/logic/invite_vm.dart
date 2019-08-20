@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:bbb_flutter/base/base_model.dart';
@@ -6,6 +7,7 @@ import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/post_ref_request_model.dart';
 import 'package:bbb_flutter/models/response/query_ref_response_model.dart';
+import 'package:bbb_flutter/models/response/refer_top_list_response.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -16,6 +18,8 @@ class InviteViewModel extends BaseModel {
   UserManager _um;
   QueryRefResponseModel queryRefResponseModel;
   RegisterRefResponseModel registerRefResponseModel;
+  List<Top3> referTopList = [];
+  User referUserAmount;
   int referralNumber = 0;
   String referrer;
   List<ReferralList> referralList = [];
@@ -27,6 +31,7 @@ class InviteViewModel extends BaseModel {
 
   void getRefer() async {
     queryRefResponseModel = await _api.queryRef(accountName: _um.user.name);
+    await getTopList();
     getReferer();
     getReferrals();
     setBusy(false);
@@ -81,5 +86,16 @@ class InviteViewModel extends BaseModel {
       referralNumber = referrals.first.referrals.length;
       referralList = referrals.first.referrals;
     }
+  }
+
+  Future<List<Top3>> getTopList() async {
+    ReferTopListResponse referTopListResponse =
+        await _api.getTopList(accountName: "cy3017");
+    referTopList = referTopListResponse?.top3?.map((value) {
+      value.amount = value.amount.floor() / pow(10, 6);
+      return value;
+    })?.toList();
+    referUserAmount = referTopListResponse?.user;
+    return referTopList;
   }
 }

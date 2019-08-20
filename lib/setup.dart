@@ -59,10 +59,12 @@ setupLocator() async {
       BBBAPIProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<GatewayApi>(
       GatewayAPIProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton<ReferApi>(ReferApiProvider());
+  locator.registerSingleton<ReferApi>(
+      ReferApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<FaucetAPI>(
       FaucetAPIProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton(MarketManager(api: locator<BBBAPI>()));
+  locator.registerSingleton(
+      MarketManager(api: locator<BBBAPI>(), sharedPref: locator<SharedPref>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
 
   locator.registerLazySingleton(() => UserManager(
@@ -90,6 +92,11 @@ setupProviders() {
     StreamProvider(builder: (context) => locator.get<MarketManager>().prices),
     StreamProvider(
         builder: (context) => locator.get<MarketManager>().lastTicker.stream),
+    StreamProvider(
+        builder: (context) =>
+            locator.get<MarketManager>().percentageTicker.stream),
+    StreamProvider(
+        builder: (context) => locator.get<MarketManager>().pnlTicker.stream),
     StreamProvider(
       builder: (context) => locator.get<RefManager>().data,
     ),

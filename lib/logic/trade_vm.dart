@@ -31,7 +31,7 @@ class TradeViewModel extends BaseModel {
       orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
   var ticker;
   var currentTicker;
-  var saveContract;
+  Contract saveContract;
   PostOrderRequestModel order;
   Order buyOrder;
   Commission commission;
@@ -78,9 +78,9 @@ class TradeViewModel extends BaseModel {
   initForm(bool isup) {
     orderForm = OrderForm(
         isUp: isup,
-        cutoff: 50,
-        takeProfit: 50,
         investAmount: 1,
+        showCutoff: false,
+        showProfit: false,
         totalAmount: Asset(amount: 0, symbol: "USDT"),
         fee: Asset(amount: 0, symbol: "USDT"));
   }
@@ -163,38 +163,72 @@ class TradeViewModel extends BaseModel {
   }
 
   void increaseTakeProfit() {
-    orderForm.takeProfit += 1;
+    if (orderForm.takeProfit == null) {
+      orderForm.takeProfit = 50;
+      orderForm.showProfit = true;
+      isTakeProfitInputCorrect = true;
+    } else {
+      orderForm.takeProfit += 1;
+    }
     setBusy(false);
   }
 
   void decreaseTakeProfit() {
-    if (orderForm.takeProfit.round() > 0) {
-      orderForm.takeProfit -= 1;
-      setBusy(false);
+    if (orderForm.takeProfit == null) {
+      orderForm.takeProfit = 50;
+      orderForm.showProfit = true;
+      isTakeProfitInputCorrect = true;
+    } else {
+      if (orderForm.takeProfit.round() > 0) {
+        orderForm.takeProfit -= 1;
+      }
     }
+    setBusy(false);
   }
 
   void changeTakeProfit({double profit}) {
-    print(profit);
+    if (profit == null) {
+      orderForm.showProfit = false;
+    } else {
+      orderForm.showProfit = true;
+    }
+
     orderForm.takeProfit = profit;
     setBusy(false);
   }
 
   void increaseCutLoss() {
-    if (orderForm.cutoff.round() < 100) {
-      orderForm.cutoff += 1;
-      setBusy(false);
+    if (orderForm.cutoff == null) {
+      orderForm.showCutoff = true;
+      orderForm.cutoff = 50;
+      isCutLossInputCorrect = true;
+    } else {
+      if (orderForm.cutoff.round() < 100) {
+        orderForm.cutoff += 1;
+      }
     }
+    setBusy(false);
   }
 
   void decreaseCutLoss() {
-    if (orderForm.cutoff.round() > 0) {
-      orderForm.cutoff -= 1;
-      setBusy(false);
+    if (orderForm.cutoff == null) {
+      orderForm.showCutoff = true;
+      orderForm.cutoff = 50;
+      isCutLossInputCorrect = true;
+    } else {
+      if (orderForm.cutoff.round() > 0) {
+        orderForm.cutoff -= 1;
+      }
     }
+    setBusy(false);
   }
 
   void changeCutLoss({double cutLoss}) {
+    if (cutLoss == null) {
+      orderForm.showCutoff = false;
+    } else {
+      orderForm.showCutoff = true;
+    }
     orderForm.cutoff = cutLoss;
     setBusy(false);
   }
@@ -229,18 +263,23 @@ class TradeViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postOrder() async {
+    print(orderForm.takeProfit);
     order.buyOrder = buyOrder;
     order.commission = commission;
 
     order.underlyingSpotPx = ticker.value.toString();
     order.contractId = saveContract.contractId;
     order.expiration = 0;
-    order.takeProfitPx = OrderCalculate.takeProfitPx(orderForm.takeProfit,
-            ticker.value, saveContract.strikeLevel, orderForm.isUp)
-        .toStringAsFixed(4);
-    order.cutLossPx = OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
-            saveContract.strikeLevel, orderForm.isUp)
-        .toStringAsFixed(4);
+    order.takeProfitPx = orderForm.takeProfit == null
+        ? "0"
+        : OrderCalculate.takeProfitPx(orderForm.takeProfit, ticker.value,
+                saveContract.strikeLevel, orderForm.isUp)
+            .toStringAsFixed(4);
+    order.cutLossPx = orderForm.cutoff == null
+        ? saveContract.strikeLevel.toStringAsFixed(4)
+        : OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
+                saveContract.strikeLevel, orderForm.isUp)
+            .toStringAsFixed(4);
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);

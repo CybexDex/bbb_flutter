@@ -102,8 +102,8 @@ class OrderRecordDetailHeader extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(_model.pnl.toStringAsFixed(4),
-                    style: _model.pnl > 0
+                Text((_model.pnl + _model.commission).toStringAsFixed(4),
+                    style: (_model.pnl + _model.commission) > 0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w600,
@@ -115,7 +115,7 @@ class OrderRecordDetailHeader extends StatelessWidget {
                             fontStyle: FontStyle.normal,
                             fontSize: Dimen.hugLabelFontSize)),
                 Text("   USDT",
-                    style: _model.pnl > 0
+                    style: (_model.pnl + _model.commission) > 0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w400,
@@ -218,10 +218,12 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontSize: 14.0));
               case 6:
                 return Text(
-                    _model.takeProfitPx.toStringAsFixed(4) +
-                        "(" +
-                        takeprofit.toStringAsFixed(0) +
-                        "%)",
+                    _model.takeProfitPx == 0
+                        ? I18n.of(context).stepWidgetNotSetHint
+                        : _model.takeProfitPx.toStringAsFixed(4) +
+                            "(" +
+                            takeprofit.toStringAsFixed(0) +
+                            "%)",
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,
@@ -229,10 +231,12 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontSize: 14.0));
               case 7:
                 return Text(
-                    _model.cutLossPx.toStringAsFixed(4) +
-                        "(" +
-                        cutLoss.toStringAsFixed(0) +
-                        "%)",
+                    _model.cutLossPx == _contract.strikeLevel
+                        ? I18n.of(context).stepWidgetNotSetHint
+                        : _model.cutLossPx.toStringAsFixed(4) +
+                            "(" +
+                            cutLoss.toStringAsFixed(0) +
+                            "%)",
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,

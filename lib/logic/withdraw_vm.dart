@@ -11,6 +11,7 @@ import 'package:bbb_flutter/models/form/withdraw_form_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/gateway_verifyaddress_response_model.dart';
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -50,7 +51,7 @@ class WithdrawViewModel extends BaseModel {
   initForm() {
     withdrawForm = WithdrawForm(
         totalAmount: Asset(amount: 0, symbol: "USDT"),
-        balance: _um.fetchPositionFrom(AssetName.NXUSDT),
+        balance: Position(quantity: 0),
         address: "");
     gatewayAssetResponseModel = GatewayAssetResponseModel(
         minWithdraw: 0, withdrawSwitch: false, withdrawFee: "0.0");
@@ -59,7 +60,8 @@ class WithdrawViewModel extends BaseModel {
   }
 
   void fetchBalances() {
-    withdrawForm.balance = _um.fetchPositionFrom(AssetName.NXUSDT);
+    withdrawForm.balance =
+        _um.fetchPositionFrom(AssetName.NXUSDT) ?? Position(quantity: 0);
   }
 
   void getCurrentBalance() async {
@@ -100,8 +102,8 @@ class WithdrawViewModel extends BaseModel {
         withdrawForm.totalAmount.amount >=
             gatewayAssetResponseModel.minWithdraw &&
         gatewayAssetResponseModel.withdrawSwitch &&
-        (verifyAddressResponseModel.valid ||
-            verifyAddressResponseModel == null))) {
+        (verifyAddressResponseModel == null ||
+            verifyAddressResponseModel.valid))) {
       print("bbb");
       isHide = true;
     } else {

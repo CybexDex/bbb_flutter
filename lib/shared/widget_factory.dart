@@ -80,7 +80,7 @@ class WidgetFactory {
     );
   }
 
-  static Widget inviteStepsPills() {
+  static Widget inviteStepsPills({String step}) {
     return Container(
         alignment: Alignment.center,
         width: 24,
@@ -88,7 +88,7 @@ class WidgetFactory {
         decoration: BoxDecoration(
             color: Palette.inviteStepRoundColor,
             borderRadius: BorderRadius.circular(25)),
-        child: Text("3",
+        child: Text(step,
             style: TextStyle(
                 color: Palette.buttonPrimaryColor,
                 fontWeight: FontWeight.w600,

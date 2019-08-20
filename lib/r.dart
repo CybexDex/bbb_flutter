@@ -1,4 +1,6 @@
 class R {
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_news.svg)
+  static final String resAssetsIconsIcNews = 'res/assets/icons/ic_news.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop2.png)
   static final String resAssetsIconsIcTop2 = 'res/assets/icons/icTop2.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop3.png)
@@ -65,6 +67,8 @@ class R {
   static final String resAssetsIconsIcUsdt = 'res/assets/icons/icUsdt.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/imgBanner.png)
   static final String resAssetsIconsImgBanner = 'res/assets/icons/imgBanner.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_service.svg)
+  static final String resAssetsIconsIcService = 'res/assets/icons/ic_service.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/mask.png)
   static final String resAssetsIconsMask = 'res/assets/icons/mask.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTabArrow.png)

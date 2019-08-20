@@ -39,19 +39,37 @@ class _PnlFormState extends State<PnlForm> {
           onModelReady: (model) {
             final contract = model.currentContract(widget._order);
 
-            model.takeProfit = OrderCalculate.getTakeProfit(
-                widget._order.takeProfitPx,
-                widget._order.boughtPx,
-                contract.strikeLevel,
-                contract.conversionRate > 0);
+            model.takeProfit = widget._order.takeProfitPx == 0
+                ? null
+                : OrderCalculate.getTakeProfit(
+                    widget._order.takeProfitPx,
+                    widget._order.boughtPx,
+                    contract.strikeLevel,
+                    contract.conversionRate > 0);
 
-            model.cutLoss = OrderCalculate.getCutLoss(
-                widget._order.cutLossPx,
-                widget._order.boughtPx,
-                contract.strikeLevel,
-                contract.conversionRate > 0);
-            _cutLossController.text = model.cutLoss.toStringAsFixed(0);
-            _takeProfitController.text = model.takeProfit.toStringAsFixed(0);
+            model.cutLoss = widget._order.cutLossPx == contract.strikeLevel
+                ? null
+                : OrderCalculate.getCutLoss(
+                    widget._order.cutLossPx,
+                    widget._order.boughtPx,
+                    contract.strikeLevel,
+                    contract.conversionRate > 0);
+
+            double invest = OrderCalculate.calculateInvest(
+                orderQtyContract: widget._order.qtyContract,
+                orderBoughtContractPx: widget._order.boughtContractPx);
+
+            model.pnlPercent = (100 *
+                    ((widget._order.pnl + widget._order.commission) / invest))
+                .abs();
+            print(model.pnlPercent);
+
+            _cutLossController.text = model.cutLoss == null
+                ? I18n.of(context).stepWidgetNotSetHint
+                : model.cutLoss.toStringAsFixed(0);
+            _takeProfitController.text = model.takeProfit == null
+                ? I18n.of(context).stepWidgetNotSetHint
+                : model.takeProfit.toStringAsFixed(0);
           },
           builder: (context, model, child) {
             return Align(
@@ -78,9 +96,27 @@ class _PnlFormState extends State<PnlForm> {
                         ),
                         Row(
                           children: <Widget>[
-                            Text(
-                              I18n.of(context).takeProfit,
-                              style: StyleFactory.subTitleStyle,
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  "${I18n.of(context).takeProfit}(%)",
+                                  style: StyleFactory.subTitleStyle,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    model.changeTakeProfit(profit: null);
+                                    _takeProfitController.text =
+                                        I18n.of(context).stepWidgetNotSetHint;
+                                  },
+                                  child: Text(
+                                    I18n.of(context).orderFormReset,
+                                    style: StyleFactory.subTitleStyle,
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(
                                 width: 150,
@@ -89,45 +125,31 @@ class _PnlFormState extends State<PnlForm> {
                                     text: _takeProfitController,
                                     plusOnTap: () {
                                       model.increaseTakeProfit();
-                                      if (model.takeProfit.round() == 0) {
-                                        _takeProfitController.text = "不设置";
-                                      } else {
-                                        _takeProfitController.text =
-                                            model.takeProfit.toStringAsFixed(0);
-                                      }
+                                      _takeProfitController.text =
+                                          model.takeProfit.toStringAsFixed(0);
                                     },
                                     minusOnTap: () {
                                       model.decreaseTakeProfit();
-                                      if (model.takeProfit.round() == 0) {
-                                        _takeProfitController.text = "不设置";
-                                      } else {
-                                        _takeProfitController.text =
-                                            model.takeProfit.toStringAsFixed(0);
-                                      }
+                                      _takeProfitController.text =
+                                          model.takeProfit.toStringAsFixed(0);
                                     },
                                     onChange: (value) {
-                                      model.changeTakeProfit(
-                                          profit: value.isEmpty
-                                              ? 0
-                                              : double.parse(value));
-                                      if (value == "0") {
-                                        _takeProfitController.text = "不设置";
+                                      if (value.isNotEmpty &&
+                                          (double.tryParse(value) == null ||
+                                              double.tryParse(value) < 0)) {
+                                        model.setTakeProfitInputCorrectness(
+                                            false);
+                                      } else {
+                                        model.setTakeProfitInputCorrectness(
+                                            true);
+                                        model.changeTakeProfit(
+                                            profit: value.isEmpty
+                                                ? null
+                                                : double.parse(value));
                                       }
                                     },
                                   ),
-                                )
-
-                                // child: IStep(
-                                //     text: model.takeProfit.round() == 0
-                                //         ? "不设置"
-                                //         : "${model.takeProfit.round().toStringAsFixed(0)}%",
-                                //     plusOnTap: () {
-                                //       model.increaseTakeProfit();
-                                //     },
-                                //     minusOnTap: () {
-                                //       model.decreaseTakeProfit();
-                                //     }),
-                                )
+                                ))
                           ],
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
@@ -136,18 +158,33 @@ class _PnlFormState extends State<PnlForm> {
                         ),
                         Row(
                           children: <Widget>[
-                            Text(
-                              I18n.of(context).cutLoss,
-                              style: StyleFactory.subTitleStyle,
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  "${I18n.of(context).cutLoss}(%)",
+                                  style: StyleFactory.subTitleStyle,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    model.changeCutLoss(cutLoss: null);
+                                    _cutLossController.text =
+                                        I18n.of(context).stepWidgetNotSetHint;
+                                  },
+                                  child: Text(
+                                    I18n.of(context).orderFormReset,
+                                    style: StyleFactory.subTitleStyle,
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(
                                 width: 150,
                                 child: Material(
                                   child: IStep(
                                     text: _cutLossController,
-                                    // text: model.orderForm.cutoff.round() == 0
-                                    //     ? "不设置"
-                                    //     : "${model.orderForm.cutoff.round().toStringAsFixed(0)}%",
                                     plusOnTap: () {
                                       model.increaseCutLoss();
                                       _cutLossController.text =
@@ -155,71 +192,83 @@ class _PnlFormState extends State<PnlForm> {
                                     },
                                     minusOnTap: () {
                                       model.decreaseCutLoss();
-                                      if (model.cutLoss.round() == 0) {
-                                        _cutLossController.text = "不设置";
-                                      } else {
-                                        _cutLossController.text =
-                                            model.cutLoss.toStringAsFixed(0);
-                                      }
+                                      _cutLossController.text =
+                                          model.cutLoss.toStringAsFixed(0);
                                     },
                                     onChange: (value) {
-                                      if (int.parse(value) <= 100) {
+                                      if (value.isNotEmpty &&
+                                          (double.tryParse(value) == null ||
+                                              double.tryParse(value) < 0)) {
+                                        model.setCutLossInputCorectness(false);
+                                      } else {
+                                        model.setCutLossInputCorectness(true);
                                         model.changeCutLoss(
                                             cutLoss: value.isEmpty
-                                                ? 0
-                                                : double.parse(value));
-                                      }
-                                      if (value == "0") {
-                                        _cutLossController.text = "不设置";
-                                      } else if (int.parse(value) > 100) {
-                                        _cutLossController.text = "100";
+                                                ? null
+                                                : double.parse(value) > 100
+                                                    ? 100
+                                                    : double.parse(value));
+                                        if (double.parse(value) > 100) {
+                                          _cutLossController.text = "100";
+                                        }
                                       }
                                     },
                                   ),
-                                )
-                                // child: IStep(
-                                //   text: model.cutLoss.round() == 0
-                                //       ? "不设置"
-                                //       : "${model.cutLoss.round().toStringAsFixed(0)}%",
-                                //   plusOnTap: () {
-                                //     model.increaseCutLoss();
-                                //   },
-                                //   minusOnTap: () {
-                                //     model.decreaseCutLoss();
-                                //   },
-                                // ),
-                                )
+                                ))
                           ],
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(
                           height: 20,
                         ),
+                        Offstage(
+                            offstage: model.isCutLossInputCorrect &&
+                                model.isTakeProfitInputCorrect,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                    I18n.of(context)
+                                        .orderFormInputPositiveNumberError,
+                                    style: StyleFactory.smallButtonTitleStyle),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                              ],
+                            )),
                         ButtonTheme(
                           minWidth: double.infinity,
                           height: 44,
                           child: WidgetFactory.button(
                               data: I18n.of(context).confirm,
-                              color: Palette.redOrange,
-                              onPressed: () async {
-                                TextEditingController controller =
-                                    TextEditingController();
-                                if (locator.get<UserManager>().user.isLocked) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return DialogFactory.unlockDialog(
-                                            context,
-                                            controller: controller);
-                                      }).then((value) async {
-                                    if (value) {
-                                      callAmend(context, model);
+                              color: (model.isCutLossInputCorrect &&
+                                      model.isTakeProfitInputCorrect)
+                                  ? Palette.redOrange
+                                  : Palette.subTitleColor,
+                              onPressed: (model.isCutLossInputCorrect &&
+                                      model.isTakeProfitInputCorrect)
+                                  ? () async {
+                                      print("rr${model.pnlPercent}");
+                                      if ((model.takeProfit != null &&
+                                              model.pnlPercent >
+                                                  model.takeProfit) ||
+                                          (model.cutLoss != null &&
+                                              model.pnlPercent >
+                                                  model.cutLoss)) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return DialogFactory
+                                                  .normalConfirmDialog(context,
+                                                      title: "提示",
+                                                      content:
+                                                          "设置该止盈止损价格会出发平仓， 是否继续");
+                                            });
+                                      } else {
+                                        _onClickSubmit(
+                                            context: context, model: model);
+                                      }
                                     }
-                                  });
-                                } else {
-                                  callAmend(context, model);
-                                }
-                              }),
+                                  : () {}),
                         )
                       ],
                     ),
@@ -251,6 +300,23 @@ class _PnlFormState extends State<PnlForm> {
     } catch (error) {
       Navigator.of(context).pop();
       showToast(context, true, I18n.of(context).failToast);
+    }
+  }
+
+  _onClickSubmit({BuildContext context, PnlViewModel model}) {
+    TextEditingController controller = TextEditingController();
+    if (locator.get<UserManager>().user.isLocked) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return DialogFactory.unlockDialog(context, controller: controller);
+          }).then((value) async {
+        if (value) {
+          callAmend(context, model);
+        }
+      });
+    } else {
+      callAmend(context, model);
     }
   }
 }

@@ -28,6 +28,7 @@ dependencies:
     simple_animations: ^1.0.0
     magical_widget: ^1.0.1
     rosetta: ^0.1.2
+    animator: ^0.1.4
 
     pointycastle: ^1.0.1
     vertical_tabs: ^0.1.4
@@ -68,6 +69,7 @@ flutter:
     - i18n/
     # assets begin
     # res/assets/icons/*
+    - res/assets/icons/ic_news.svg
     - res/assets/icons/icTop2.png
     - res/assets/icons/icTop3.png
     - res/assets/icons/icMaskClose.png
@@ -101,6 +103,7 @@ flutter:
     - res/assets/icons/icHand.png
     - res/assets/icons/icUsdt.png
     - res/assets/icons/imgBanner.png
+    - res/assets/icons/ic_service.svg
     - res/assets/icons/mask.png
     - res/assets/icons/icTabArrow.png
     - res/assets/icons/icTabWithdraw.png

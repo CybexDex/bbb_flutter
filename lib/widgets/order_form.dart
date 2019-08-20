@@ -22,8 +22,8 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
 
   @override
   void initState() {
-    _takeProfitController.text = "50";
-    _cutLossController.text = "50";
+    _takeProfitController.text = "不设置";
+    _cutLossController.text = "不设置";
     _amountController.text = "1";
     super.initState();
   }
@@ -131,9 +131,26 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      I18n.of(context).takeProfit + "(%)",
-                      style: StyleFactory.cellDescLabel,
+                    Container(
+                      width: 160,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            I18n.of(context).takeProfit + "(%)",
+                            style: StyleFactory.cellDescLabel,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              model.changeTakeProfit(profit: null);
+                              _takeProfitController.text =
+                                  I18n.of(context).stepWidgetNotSetHint;
+                            },
+                            child: Text(I18n.of(context).orderFormReset,
+                                style: StyleFactory.cellDescLabel),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(height: 5),
                     SizedBox(
@@ -142,35 +159,24 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                         text: _takeProfitController,
                         plusOnTap: () {
                           model.increaseTakeProfit();
-                          if (model.orderForm.takeProfit.round() == 0) {
-                            _takeProfitController.text = "不设置";
-                          } else {
-                            _takeProfitController.text =
-                                model.orderForm.takeProfit.toStringAsFixed(0);
-                          }
+                          _takeProfitController.text =
+                              model.orderForm.takeProfit.toStringAsFixed(0);
                         },
                         minusOnTap: () {
                           model.decreaseTakeProfit();
-                          if (model.orderForm.takeProfit.round() == 0) {
-                            _takeProfitController.text = "不设置";
-                          } else {
-                            _takeProfitController.text =
-                                model.orderForm.takeProfit.toStringAsFixed(0);
-                          }
+                          _takeProfitController.text =
+                              model.orderForm.takeProfit.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
-                                  double.tryParse(value) == null ||
-                              double.tryParse(value) < 0) {
+                              (double.tryParse(value) == null ||
+                                  double.tryParse(value) < 0)) {
                             model.setTakeProfitInputCorrectness(false);
                           } else {
                             model.setTakeProfitInputCorrectness(true);
                             model.changeTakeProfit(
                                 profit:
-                                    value.isEmpty ? 0 : double.parse(value));
-                            if (value == "0") {
-                              _takeProfitController.text = "不设置";
-                            }
+                                    value.isEmpty ? null : double.parse(value));
                           }
                         },
                       ),
@@ -180,18 +186,32 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      I18n.of(context).cutLoss + "(%)",
-                      style: StyleFactory.cellDescLabel,
+                    Container(
+                      width: 160,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            I18n.of(context).cutLoss + "(%)",
+                            style: StyleFactory.cellDescLabel,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              model.changeCutLoss(cutLoss: null);
+                              _cutLossController.text =
+                                  I18n.of(context).stepWidgetNotSetHint;
+                            },
+                            child: Text(I18n.of(context).orderFormReset,
+                                style: StyleFactory.cellDescLabel),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(height: 5),
                     SizedBox(
                       width: 160,
                       child: IStep(
                         text: _cutLossController,
-                        // text: model.orderForm.cutoff.round() == 0
-                        //     ? "不设置"
-                        //     : "${model.orderForm.cutoff.round().toStringAsFixed(0)}%",
                         plusOnTap: () {
                           model.increaseCutLoss();
                           _cutLossController.text =
@@ -199,28 +219,23 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                         },
                         minusOnTap: () {
                           model.decreaseCutLoss();
-                          if (model.orderForm.cutoff.round() == 0) {
-                            _cutLossController.text = "不设置";
-                          } else {
-                            _cutLossController.text =
-                                model.orderForm.cutoff.toStringAsFixed(0);
-                          }
+                          _cutLossController.text =
+                              model.orderForm.cutoff.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
-                                  double.tryParse(value) == null ||
-                              double.tryParse(value) < 0) {
+                              (double.tryParse(value) == null ||
+                                  double.tryParse(value) < 0)) {
                             model.setCutLossInputCorectness(false);
                           } else {
                             model.setCutLossInputCorectness(true);
-                            if (int.parse(value) <= 100) {
-                              model.changeCutLoss(
-                                  cutLoss:
-                                      value.isEmpty ? 0 : double.parse(value));
-                            }
-                            if (value == "0") {
-                              _cutLossController.text = "不设置";
-                            } else if (int.parse(value) > 100) {
+                            model.changeCutLoss(
+                                cutLoss: value.isEmpty
+                                    ? null
+                                    : double.parse(value) > 100
+                                        ? 100
+                                        : double.parse(value));
+                            if (double.parse(value) > 100) {
                               _cutLossController.text = "100";
                             }
                           }
@@ -319,26 +334,28 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                             if (model.orderForm.investAmount >
                                 refreshContract.availableInventory) {
                               return Text(
-                                "剩余份数不足",
+                                I18n.of(context).orderFormSupplyNotEnoughError,
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (model.usdtBalance == null ||
                                 model.orderForm.totalAmount.amount >
                                     model.usdtBalance.quantity) {
                               return Text(
-                                "余额不足",
+                                I18n.of(context).orderFormBalanceNotEnoughError,
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (model.orderForm.investAmount >
                                 refreshContract.maxOrderQty) {
                               return Text(
-                                "单笔购买上限${refreshContract.maxOrderQty}",
+                                "${I18n.of(context).orderFormBuyLimitationError}${refreshContract.maxOrderQty}",
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (!model.isCutLossInputCorrect ||
                                 !model.isInvestAmountInputCorrect ||
                                 !model.isTakeProfitInputCorrect) {
-                              return Text("请输入正整数",
+                              return Text(
+                                  I18n.of(context)
+                                      .orderFormInputPositiveNumberError,
                                   style: StyleFactory.smallButtonTitleStyle);
                             }
                             return Container();
@@ -346,9 +363,6 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    )
                   ],
                 )),
           ],

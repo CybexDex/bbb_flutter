@@ -21,6 +21,7 @@ class _InviteState extends State<InvitePage> {
       model: InviteViewModel(api: locator.get(), um: locator.get()),
       onModelReady: (model) => model.getRefer(),
       builder: (context, model, child) {
+        print(model.referTopList);
         return Scaffold(
           appBar: AppBar(
             iconTheme: IconThemeData(
@@ -118,13 +119,21 @@ class _InviteState extends State<InvitePage> {
                                         child: Column(
                                           children: <Widget>[
                                             Image.asset(R.resAssetsIconsIcTop2),
+                                            SizedBox(height: 8),
                                             Text(
-                                              "t223***sd",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[1]?.name,
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
                                             ),
                                             Text(
-                                              "111.2USDT",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[1]?.amount
+                                                      ?.toStringAsFixed(4),
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -137,13 +146,21 @@ class _InviteState extends State<InvitePage> {
                                         child: Column(
                                           children: <Widget>[
                                             Image.asset(R.resAssetsIconsIcTop1),
+                                            SizedBox(height: 8),
                                             Text(
-                                              "t223***sd",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[0]?.name,
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
                                             ),
                                             Text(
-                                              "111.2USDT",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[0]?.amount
+                                                      ?.toStringAsFixed(4),
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -156,13 +173,21 @@ class _InviteState extends State<InvitePage> {
                                         child: Column(
                                           children: <Widget>[
                                             Image.asset(R.resAssetsIconsIcTop3),
+                                            SizedBox(height: 8),
                                             Text(
-                                              "t223***sd",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[2]?.name,
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
                                             ),
                                             Text(
-                                              "111.2USDT",
+                                              model.referTopList.isEmpty
+                                                  ? "--"
+                                                  : model
+                                                      ?.referTopList[2]?.amount
+                                                      ?.toStringAsFixed(4),
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -228,7 +253,12 @@ class _InviteState extends State<InvitePage> {
                                       Row(
                                         children: <Widget>[
                                           Text(
-                                            "20",
+                                            model?.referUserAmount == null
+                                                ? "--"
+                                                : (model.referUserAmount.total -
+                                                        model.referUserAmount
+                                                            .pending)
+                                                    .toStringAsFixed(2),
                                             style:
                                                 StyleFactory.inviteAmountStyle,
                                           ),
@@ -390,7 +420,8 @@ class _InviteState extends State<InvitePage> {
                                               child: Column(
                                                 children: <Widget>[
                                                   WidgetFactory
-                                                      .inviteStepsPills(),
+                                                      .inviteStepsPills(
+                                                          step: "1"),
                                                   SizedBox(height: 10),
                                                   Text(
                                                     I18n.of(context)
@@ -407,7 +438,8 @@ class _InviteState extends State<InvitePage> {
                                               child: Column(
                                                 children: <Widget>[
                                                   WidgetFactory
-                                                      .inviteStepsPills(),
+                                                      .inviteStepsPills(
+                                                          step: "2"),
                                                   SizedBox(height: 10),
                                                   Text(
                                                     I18n.of(context)
@@ -424,7 +456,8 @@ class _InviteState extends State<InvitePage> {
                                               child: Column(
                                                 children: <Widget>[
                                                   WidgetFactory
-                                                      .inviteStepsPills(),
+                                                      .inviteStepsPills(
+                                                          step: "3"),
                                                   SizedBox(height: 10),
                                                   Text(
                                                     I18n.of(context)

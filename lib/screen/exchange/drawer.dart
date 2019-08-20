@@ -7,6 +7,7 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
+import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -329,6 +330,10 @@ class UserDrawer extends StatelessWidget {
                                                     .get<FaucetAPI>()
                                                     .setEnvMode(
                                                         envType: EnvType.Pro);
+                                                await locator
+                                                    .get<ReferApi>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Pro);
                                                 userMg.reload();
                                                 Navigator.of(context).pop();
                                               },
@@ -350,6 +355,10 @@ class UserDrawer extends StatelessWidget {
                                                         envType: EnvType.Uat);
                                                 await locator
                                                     .get<FaucetAPI>()
+                                                    .setEnvMode(
+                                                        envType: EnvType.Uat);
+                                                await locator
+                                                    .get<ReferApi>()
                                                     .setEnvMode(
                                                         envType: EnvType.Uat);
                                                 userMg.reload();

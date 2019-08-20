@@ -3,6 +3,8 @@ class OrderForm {
   double takeProfit;
   double cutoff;
   bool isUp;
+  bool showProfit;
+  bool showCutoff;
 
   Asset totalAmount;
   Asset fee;
@@ -13,7 +15,9 @@ class OrderForm {
       this.cutoff,
       this.isUp,
       this.fee,
-      this.totalAmount});
+      this.totalAmount,
+      this.showCutoff,
+      this.showProfit});
 }
 
 class Asset {

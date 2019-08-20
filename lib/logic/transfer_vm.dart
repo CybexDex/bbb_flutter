@@ -98,8 +98,12 @@ class TransferViewModel extends BaseModel {
   Commission getCommission(RefContractResponseModel refData) {
     TransferForm form = transferForm;
     AvailableAsset quoteAsset = transferForm.fromBBBToCybex
-        ? AvailableAsset(
-            assetId: "1.3.803", precision: 6, assetName: AssetName.NXUSDT)
+        ? refData.availableAssets
+            .where((asset) {
+              return asset.assetName == AssetName.NXUSDT;
+            })
+            .toList()
+            .first
         : AvailableAsset(assetId: "1.3.27", precision: 6, assetName: "USDT");
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 

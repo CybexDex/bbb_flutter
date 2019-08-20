@@ -16,19 +16,15 @@ AppBar exchangeAppBar() {
                       child: Padding(
                         padding: EdgeInsets.only(right: 20),
                         child: Center(
-                          child: Text(
-                            I18n.of(context).topUp,
-                            style: StyleFactory.navButtonTitleStyle,
-                            textScaleFactor: 1,
-                          ),
-                        ),
+                            child: SvgPicture.asset(R.resAssetsIconsIcService)),
                       ),
                       onTap: () {
-                        if (bloc.user.logined) {
-                          Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                        } else {
-                          Navigator.of(context).pushNamed(RoutePaths.Login);
-                        }
+                        Navigator.of(context).pushNamed(RoutePaths.Feedback);
+                        // if (bloc.user.logined) {
+                        //   Navigator.of(context).pushNamed(RoutePaths.Deposit);
+                        // } else {
+                        //   Navigator.of(context).pushNamed(RoutePaths.Login);
+                        // }
                       },
                     )),
     ],

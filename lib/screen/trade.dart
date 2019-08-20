@@ -27,7 +27,8 @@ class TradePage extends StatefulWidget {
 
 class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   double showDropdownMenuHeight = 0;
-  MarketManager mtm = MarketManager(api: locator.get());
+  MarketManager mtm =
+      MarketManager(api: locator.get(), sharedPref: locator.get());
 
   void setDropdownMenuHeight() {
     showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;

@@ -71,11 +71,15 @@ class MarketViewModel extends BaseModel {
           underOrder: order.boughtPx + order.commission);
       if (contract.conversionRate > double.minPositive &&
           (data.last.value > order.takeProfitPx ||
-              data.last.value < order.cutLossPx)) {
+              data.last.value < order.cutLossPx) &&
+          (order.takeProfitPx != 0 &&
+              order.cutLossPx != contract.strikeLevel)) {
         vm.getOrders();
       } else if (contract.conversionRate < 0 &&
           (data.last.value < order.takeProfitPx ||
-              data.last.value > order.cutLossPx)) {
+              data.last.value > order.cutLossPx) &&
+          (order.takeProfitPx != 0 &&
+              order.cutLossPx != contract.strikeLevel)) {
         vm.getOrders();
       }
     } else {
@@ -96,11 +100,17 @@ class MarketViewModel extends BaseModel {
       var current = data.last.value;
       suppleData = SuppleData(
           alwaysShow: true,
+          showCutoff: order.showCutoff,
+          showProfit: order.showProfit,
           current: current,
-          takeProfit: OrderCalculate.takeProfitPx(
-              order.takeProfit, current, strikeLevel, order.isUp),
-          cutOff: OrderCalculate.cutLossPx(
-              order.cutoff, current, strikeLevel, order.isUp));
+          takeProfit: order.takeProfit == null
+              ? 0
+              : OrderCalculate.takeProfitPx(
+                  order.takeProfit, current, strikeLevel, order.isUp),
+          cutOff: order.cutoff == null
+              ? strikeLevel
+              : OrderCalculate.cutLossPx(
+                  order.cutoff, current, strikeLevel, order.isUp));
     }
   }
 }

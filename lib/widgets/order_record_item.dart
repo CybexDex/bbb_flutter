@@ -36,8 +36,8 @@ class OrderRecordItem extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  (_model.pnl).toStringAsFixed(4) + " USDT",
-                  style: _model.pnl > 0
+                  (_model.pnl + _model.commission).toStringAsFixed(4) + " USDT",
+                  style: (_model.pnl + _model.commission) > 0
                       ? StyleFactory.buyUpCellLabel
                       : StyleFactory.buyDownCellLabel,
                 )

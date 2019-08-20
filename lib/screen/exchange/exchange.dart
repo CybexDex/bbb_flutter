@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/exchange/drawer.dart';
@@ -10,15 +11,42 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:bbb_flutter/widgets/stagger_animation.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 
-class ExchangePage extends StatelessWidget {
+class ExchangePage extends StatefulWidget {
   ExchangePage({Key key, this.title}) : super(key: key);
 
   final String title;
+
+  @override
+  _ExchangePageState createState() => _ExchangePageState();
+}
+
+class _ExchangePageState extends State<ExchangePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(duration: Duration(seconds: 5), vsync: this);
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        locator<MarketManager>().pnlTicker.value = null;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +84,6 @@ class ExchangePage extends StatelessWidget {
                                     data: I18n.of(context).buyUp,
                                     color: Palette.redOrange,
                                     onPressed: () {
-                                      Navigator.pushNamed(
-                                          context, RoutePaths.Feedback);
-                                      return;
                                       if (locator
                                           .get<UserManager>()
                                           .user
@@ -117,13 +142,32 @@ class ExchangePage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(bottom: 10, left: 20),
-                      child: Align(
-                        child: Text(
-                          I18n.of(context).myOrdersStock,
-                          style: StyleFactory.title,
-                        ),
-                        alignment: Alignment.bottomLeft,
+                      padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            I18n.of(context).myOrdersStock,
+                            style: StyleFactory.title,
+                          ),
+                          Consumer<WebSocketPNLResponse>(
+                            builder: (context, response, child) {
+                              if (response != null &&
+                                  response.pnl > 0 &&
+                                  !_animationController.isAnimating) {
+                                _animationController.reset();
+                                _animationController.forward();
+                                return StaggerAnimation(
+                                  controller: _animationController,
+                                  accountName: response.accountName,
+                                  pnl: response.pnl,
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Consumer4<UserManager, OrderViewModel,

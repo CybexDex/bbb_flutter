@@ -45,7 +45,8 @@ class Dropdown extends StatelessWidget {
                   child: VerticalTabs(
                     selectedTabs: model.orderForm.isUp ? 0 : 1,
                     indicatorWidth: 0,
-                    selectedTabBackgroundColor: Palette.veryLightPink,
+                    selectedTabBackgroundColor:
+                        Palette.dropDwonIndicatorSelectedColor,
                     unselectedTabBackgroundColor:
                         Palette.dropDownIndicatorColor,
                     tabsElevation: 0,
@@ -101,7 +102,7 @@ class Dropdown extends StatelessWidget {
                                   color: model.contract ==
                                           model.getUpContracts()[index]
                                       ? Palette.veryLightPink
-                                      : Palette.dropDownIndicatorColor,
+                                      : Colors.white,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -148,7 +149,7 @@ class Dropdown extends StatelessWidget {
                                   color: model.contract ==
                                           model.getDownContracts()[index]
                                       ? Palette.veryLightPink
-                                      : Palette.dropDownIndicatorColor,
+                                      : Colors.white,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,

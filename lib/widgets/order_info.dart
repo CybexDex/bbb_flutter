@@ -21,16 +21,14 @@ class OrderInfo extends StatelessWidget {
     RefContractResponseModel refData = locator<RefManager>().lastData;
     Contract currentContract =
         getCorrespondContract(orderResponse: _model, refContract: refData);
-    double takeprofit = OrderCalculate.getTakeProfit(
-        _model.takeProfitPx,
-        _model.boughtPx,
-        currentContract.strikeLevel,
-        currentContract.conversionRate > 0);
-    double cutLoss = OrderCalculate.getCutLoss(
-        _model.cutLossPx,
-        _model.boughtPx,
-        currentContract.strikeLevel,
-        currentContract.conversionRate > 0);
+    double takeprofit = _model.takeProfitPx == 0
+        ? null
+        : OrderCalculate.getTakeProfit(_model.takeProfitPx, _model.boughtPx,
+            currentContract.strikeLevel, currentContract.conversionRate > 0);
+    double cutLoss = _model.cutLossPx == currentContract.strikeLevel
+        ? null
+        : OrderCalculate.getCutLoss(_model.cutLossPx, _model.boughtPx,
+            currentContract.strikeLevel, currentContract.conversionRate > 0);
     double invest = OrderCalculate.calculateInvest(
         orderQtyContract: _model.qtyContract,
         orderBoughtContractPx: _model.boughtContractPx);
@@ -144,7 +142,7 @@ class OrderInfo extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
-                              "${takeprofit.round().toStringAsFixed(0)}% / ${cutLoss.round().toStringAsFixed(0)}%",
+                              "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
                               style: StyleFactory.cellTitleStyle,
                             ),
                           ),
@@ -183,12 +181,15 @@ class OrderInfo extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Text(
-                              (_model.pnl).toStringAsFixed(4) +
+                              (_model.pnl + _model.commission)
+                                      .toStringAsFixed(4) +
                                   "(" +
-                                  (100 * (_model.pnl / invest))
+                                  (100 *
+                                          ((_model.pnl + _model.commission) /
+                                              invest))
                                       .toStringAsFixed(1) +
                                   "%)",
-                              style: _model.pnl > 0
+                              style: (_model.pnl + _model.commission) > 0
                                   ? StyleFactory.buyUpOrderInfo
                                   : StyleFactory.buyDownOrderInfo,
                             ),
@@ -213,7 +214,8 @@ class OrderInfo extends StatelessWidget {
                               builder: (context) {
                                 return DialogFactory.closeOutConfirmDialog(
                                     context,
-                                    value: (_model.pnl).toStringAsFixed(4),
+                                    value: (_model.pnl + _model.commission)
+                                        .toStringAsFixed(4),
                                     controller: controller);
                               }).then((value) async {
                             if (value) {

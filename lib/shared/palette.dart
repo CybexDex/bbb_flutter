@@ -26,8 +26,10 @@ class Palette {
 
   static const dropDownIndicatorColor = const Color(0xfffef8f7);
   static const veryLightPink = const Color(0xfffeeae5);
+  static const dropDwonIndicatorSelectedColor = const Color(0xfffdd6cc);
   static const inviteBackgroundColor = const Color(0xfffef1ef);
   static const inviteDivisionHeaderColor = const Color(0xfffff3d3);
   static const investmentAmountColor = const Color(0xffa4c3f4);
   static const clickToTryColor = const Color(0xff3e82eb);
+  static const broadcastAssetColor = const Color(0xffc62c40);
 }

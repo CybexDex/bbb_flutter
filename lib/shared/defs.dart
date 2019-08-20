@@ -13,6 +13,12 @@ class AssetName {
 
 const EmptyString = [null, ""];
 
+class WebsocketRequestTopic {
+  static const FAIRPRICE = "FAIRPRICE";
+  static const PNL = "PNL";
+  static const NX_PERCENTAGE = "NX_PERCENTAGE";
+}
+
 class NetworkConnection {
   static const PRO_STANDARD = "https://nxapi.cybex.io/v1";
   static const PRO_TESTNET = "https://nxtestnet.cybex.io/v1";
@@ -33,4 +39,9 @@ class FaucetConnection {
 class WebSocketConnection {
   static const PRO_WEBSOCKET = "wss://nxmdp.cybex.io";
   static const UAT_WEBSOCKET = "wss://nxmdptest.cybex.io";
+}
+
+class ReferSystemConnection {
+  static const PRO_REFER = "https://refer.cybex.io";
+  static const TEST_REFER = "http://192.168.103.91:8009";
 }

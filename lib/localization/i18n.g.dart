@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String logIn = 'log_in';
+  static final String accountNameHint = 'account_name_hint';
 
   static final String transfer = 'transfer';
 
@@ -106,11 +106,11 @@ class _$Keys {
 
   static final String balanceAvailable = 'balance_available';
 
-  static final String assetCat = 'asset_cat';
+  static final String logIn = 'log_in';
 
   static final String accountName = 'account_name';
 
-  static final String accountNameHint = 'account_name_hint';
+  static final String assetCat = 'asset_cat';
 
   static final String password = 'password';
 
@@ -148,6 +148,8 @@ class _$Keys {
       'dialog_log_out_confirm_button';
 
   static final String confirm = 'confirm';
+
+  static final String remider = 'remider';
 
   static final String dialogCheckPassword = 'dialog_check_password';
 
@@ -192,13 +194,13 @@ class _$Keys {
 
   static final String fundStatusRejected = 'fundStatus_rejected';
 
-  static final String changeFromTryEnv = 'change_from_try_env';
+  static final String fundStatusError = 'fundStatus_error';
 
   static final String tradingDetail = 'trading_detail';
 
   static final String openPositionPrice = 'open_position_price';
 
-  static final String settlementPrice = 'settlement_price';
+  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 
   static final String successToast = 'success_toast';
 
@@ -268,7 +270,23 @@ class _$Keys {
 
   static final String changeToTryEnv = 'change_to_try_env';
 
-  static final String fundStatusError = 'fundStatus_error';
+  static final String changeFromTryEnv = 'change_from_try_env';
+
+  static final String orderFormReset = 'order_form_reset';
+
+  static final String orderFormBalanceNotEnoughError =
+      'order_form_balance_not_enough_error';
+
+  static final String orderFormSupplyNotEnoughError =
+      'order_form_supply_not_enough_error';
+
+  static final String orderFormInputPositiveNumberError =
+      'order_form_input_positive_number_error';
+
+  static final String orderFormBuyLimitationError =
+      'order_form_buy_limitation_error';
+
+  static final String settlementPrice = 'settlement_price';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -289,7 +307,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get logIn => this._translate(_$Keys.logIn);
+  String get accountNameHint => this._translate(_$Keys.accountNameHint);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -327,9 +345,9 @@ abstract class _$I18nHelper {
   String get fee => this._translate(_$Keys.fee);
   String get balance => this._translate(_$Keys.balance);
   String get balanceAvailable => this._translate(_$Keys.balanceAvailable);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get logIn => this._translate(_$Keys.logIn);
   String get accountName => this._translate(_$Keys.accountName);
-  String get accountNameHint => this._translate(_$Keys.accountNameHint);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get password => this._translate(_$Keys.password);
   String get passwordHint => this._translate(_$Keys.passwordHint);
   String get passwordConfirm => this._translate(_$Keys.passwordConfirm);
@@ -349,6 +367,7 @@ abstract class _$I18nHelper {
   String get dialogLogOutConfirmButton =>
       this._translate(_$Keys.dialogLogOutConfirmButton);
   String get confirm => this._translate(_$Keys.confirm);
+  String get remider => this._translate(_$Keys.remider);
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       this._translate(_$Keys.registerErrorMessageContainLowercase);
@@ -376,10 +395,11 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.fundStatusInProgress);
   String get fundStatusCompleted => this._translate(_$Keys.fundStatusCompleted);
   String get fundStatusRejected => this._translate(_$Keys.fundStatusRejected);
-  String get changeFromTryEnv => this._translate(_$Keys.changeFromTryEnv);
+  String get fundStatusError => this._translate(_$Keys.fundStatusError);
   String get tradingDetail => this._translate(_$Keys.tradingDetail);
   String get openPositionPrice => this._translate(_$Keys.openPositionPrice);
-  String get settlementPrice => this._translate(_$Keys.settlementPrice);
+  String get stepWidgetNotSetHint =>
+      this._translate(_$Keys.stepWidgetNotSetHint);
   String get successToast => this._translate(_$Keys.successToast);
   String get failToast => this._translate(_$Keys.failToast);
   String get leverage => this._translate(_$Keys.leverage);
@@ -416,5 +436,15 @@ abstract class _$I18nHelper {
   String get chooseEnvDetail => this._translate(_$Keys.chooseEnvDetail);
   String get investmentHint => this._translate(_$Keys.investmentHint);
   String get changeToTryEnv => this._translate(_$Keys.changeToTryEnv);
-  String get fundStatusError => this._translate(_$Keys.fundStatusError);
+  String get changeFromTryEnv => this._translate(_$Keys.changeFromTryEnv);
+  String get orderFormReset => this._translate(_$Keys.orderFormReset);
+  String get orderFormBalanceNotEnoughError =>
+      this._translate(_$Keys.orderFormBalanceNotEnoughError);
+  String get orderFormSupplyNotEnoughError =>
+      this._translate(_$Keys.orderFormSupplyNotEnoughError);
+  String get orderFormInputPositiveNumberError =>
+      this._translate(_$Keys.orderFormInputPositiveNumberError);
+  String get orderFormBuyLimitationError =>
+      this._translate(_$Keys.orderFormBuyLimitationError);
+  String get settlementPrice => this._translate(_$Keys.settlementPrice);
 }

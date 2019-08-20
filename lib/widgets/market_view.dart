@@ -3,6 +3,7 @@ import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
+import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
@@ -62,9 +63,9 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
       order = Provider.of<OrderViewModel>(context);
     }
 
-    return Consumer2<List<TickerData>, TickerData>(
-      builder: (context, data, last, child) {
-        if (data == null) {
+    return Consumer3<List<TickerData>, TickerData, WebSocketPercentageResponse>(
+      builder: (context, data, last, percentage, child) {
+        if (data == null || percentage == null) {
           return Container();
         }
         var klines = data;
@@ -187,6 +188,7 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                           model.changeScope(start, end);
                         },
                         child: Sparkline(
+                          percentage: percentage,
                           dateFormat: model.dateFormat,
                           data: klines,
                           suppleData: model.suppleData,

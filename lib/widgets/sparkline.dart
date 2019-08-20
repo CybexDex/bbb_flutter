@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' as dui;
 
 import 'package:bbb_flutter/helper/common_utils.dart';
+import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class SuppleData {
   final double underOrder;
   final double current;
   final bool alwaysShow;
+  final bool showProfit;
+  final bool showCutoff;
 
   DateTime stopTime;
   DateTime endTime;
@@ -39,7 +42,9 @@ class SuppleData {
       this.alwaysShow,
       this.current,
       this.stopTime,
-      this.endTime});
+      this.endTime,
+      this.showCutoff,
+      this.showProfit});
 }
 
 class Sparkline extends StatelessWidget {
@@ -48,6 +53,7 @@ class Sparkline extends StatelessWidget {
     @required this.data,
     @required this.startTime,
     @required this.endTime,
+    @required this.percentage,
     this.startLineOfTime,
     this.suppleData,
     this.timeLineGap = const Duration(minutes: 5),
@@ -70,6 +76,7 @@ class Sparkline extends StatelessWidget {
         fontSize: 10.0,
         fontWeight: FontWeight.normal),
   })  : assert(data != null),
+        assert(percentage != null),
         assert(startTime != null),
         assert(endTime != null),
         assert(lineWidth != null),
@@ -84,6 +91,7 @@ class Sparkline extends StatelessWidget {
   DateTime endTime;
   DateTime startLineOfTime;
   SuppleData suppleData;
+  WebSocketPercentageResponse percentage;
 
   final Duration timeLineGap;
   final double marginSpace;
@@ -282,7 +290,22 @@ class Sparkline extends StatelessWidget {
               ),
             );
           }),
-        )
+        ),
+        percentage.nPercentage == 0 && percentage.xPercentage == 0
+            ? Container()
+            : Container(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Container(
+                      child: CustomPaint(
+                        size: Size.infinite,
+                        painter: _PercentageBarPainter(
+                            percentage: percentage.nPercentage),
+                      ),
+                    );
+                  },
+                ),
+              )
       ],
     );
   }
@@ -444,6 +467,64 @@ class _CartesianPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class _PercentageBarPainter extends CustomPainter {
+  final double percentage;
+  _PercentageBarPainter({@required this.percentage});
+  @override
+  void paint(dui.Canvas canvas, Size size) {
+    var downBarPainter = Paint()
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.fill
+      ..color = Palette.shamrockGreen;
+
+    var upBarPainter = Paint()
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.fill
+      ..color = Palette.redOrange;
+    var upTextPainter = TextPainter(
+        text: new TextSpan(
+            text: percentage.toStringAsFixed(0) + "%",
+            style: TextStyle(
+                color: Palette.redOrange,
+                fontSize: 11.0,
+                fontWeight: FontWeight.normal)),
+        textDirection: TextDirection.ltr)
+      ..layout();
+
+    var downTextPainter = TextPainter(
+        text: new TextSpan(
+            text: (100 - percentage).toStringAsFixed(0) + "%",
+            style: TextStyle(
+                color: Palette.shamrockGreen,
+                fontSize: 11.0,
+                fontWeight: FontWeight.normal)),
+        textDirection: TextDirection.ltr)
+      ..layout();
+
+    upTextPainter.paint(canvas, Offset(0, 0));
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(
+            Rect.fromLTWH(0, upTextPainter.height, 4, size.height * 2 / 3),
+            Radius.circular(2)),
+        downBarPainter);
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(
+            Rect.fromLTWH(0, upTextPainter.height, 4,
+                size.height * 2 / 3 * (percentage / 100)),
+            Radius.circular(2)),
+        upBarPainter);
+    downTextPainter.paint(
+        canvas, Offset(0, upTextPainter.height + size.height * 2 / 3));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
 
@@ -700,6 +781,13 @@ class _HorizontalSupplePainter extends CustomPainter {
       suppleData.current
     ];
 
+    final shouldShow = [
+      suppleData.showCutoff ?? true,
+      suppleData.showProfit ?? true,
+      true,
+      true,
+    ];
+
     final colors = [
       Color.fromARGB(255, 60, 184, 121),
       Color.fromARGB(255, 255, 81, 53),
@@ -745,7 +833,9 @@ class _HorizontalSupplePainter extends CustomPainter {
         if (!suppleData.alwaysShow && (offset < 0 || offset > totalDist)) {
           return;
         }
-
+        if (!shouldShow[index]) {
+          return;
+        }
         if (suppleData.alwaysShow) {
           if (offset < 0) {
             dy = size.height - timeAreaHeight - textHeight / 2;
