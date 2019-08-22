@@ -74,8 +74,8 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
               onTap: () => setDropdownMenuHeight(),
               child: Text(
                   model.orderForm.isUp
-                      ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel}"
-                      : "${I18n.of(context).buyDown}-${model.contract.strikeLevel}",
+                      ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel.toStringAsFixed(0)}"
+                      : "${I18n.of(context).buyDown}-${model.contract.strikeLevel.toStringAsFixed(0)}",
                   style: model.orderForm.isUp
                       ? StyleFactory.buyUpTitle
                       : StyleFactory.buyDownTitle),

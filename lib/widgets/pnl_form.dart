@@ -259,7 +259,11 @@ class _PnlFormState extends State<PnlForm> {
                                                   .normalConfirmDialog(context,
                                                       title: "提示",
                                                       content:
-                                                          "设置该止盈止损价格会出发平仓， 是否继续");
+                                                          "设置该止盈止损价格会出发平仓， 是否继续",
+                                                      onConfirmPressed:
+                                                          _onClickSubmit(
+                                                              context: context,
+                                                              model: model));
                                             });
                                       } else {
                                         _onClickSubmit(

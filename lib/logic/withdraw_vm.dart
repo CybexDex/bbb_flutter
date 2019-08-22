@@ -62,6 +62,8 @@ class WithdrawViewModel extends BaseModel {
   void fetchBalances() {
     withdrawForm.balance =
         _um.fetchPositionFrom(AssetName.NXUSDT) ?? Position(quantity: 0);
+    withdrawForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB) ??
+        Position(assetName: AssetName.CYB, quantity: 0);
   }
 
   void getCurrentBalance() async {
@@ -83,7 +85,6 @@ class WithdrawViewModel extends BaseModel {
           asset: AssetName.USDT, address: address);
       setButtonAvailable();
     } catch (e) {
-      print("k");
       verifyAddressResponseModel = VerifyAddressResponseModel();
       verifyAddressResponseModel.valid = false;
       setButtonAvailable();
@@ -98,16 +99,14 @@ class WithdrawViewModel extends BaseModel {
   }
 
   void setButtonAvailable() {
-    if ((withdrawForm.totalAmount.amount <= withdrawForm.balance.quantity &&
+    if (withdrawForm.totalAmount.amount <= withdrawForm.balance.quantity &&
         withdrawForm.totalAmount.amount >=
             gatewayAssetResponseModel.minWithdraw &&
         gatewayAssetResponseModel.withdrawSwitch &&
         (verifyAddressResponseModel == null ||
-            verifyAddressResponseModel.valid))) {
-      print("bbb");
+            verifyAddressResponseModel.valid)) {
       isHide = true;
     } else {
-      print("ccc");
       isHide = false;
     }
   }

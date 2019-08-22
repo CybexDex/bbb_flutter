@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
@@ -121,7 +122,7 @@ class UserDrawer extends StatelessWidget {
                           Text(
                               usdt == null
                                   ? "--"
-                                  : "${usdt.quantity.toStringAsFixed(4)} USDT",
+                                  : "${floor(usdt.quantity, 4)} USDT",
                               style: StyleFactory.hugeTitleStyle)
                         ],
                       ))

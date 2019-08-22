@@ -12,14 +12,17 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flipperkit/flutter_flipperkit.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
 
 main() async {
-  FlipperClient flipperClient = FlipperClient.getDefault();
-  flipperClient.addPlugin(new FlipperNetworkPlugin());
-  flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
-  flipperClient.start();
+  if (buildMode == BuildMode.debug) {
+    FlipperClient flipperClient = FlipperClient.getDefault();
+    flipperClient.addPlugin(new FlipperNetworkPlugin());
+    flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
+    flipperClient.start();
+  }
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -74,14 +77,19 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'BBB',
-          localizationsDelegates: [I18n.delegate],
-          locale: Locale("en"),
+          localizationsDelegates: [
+            GlobalCupertinoLocalizations.delegate,
+            I18n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          locale: Locale("zh"),
           supportedLocales: [
             const Locale("en"),
             const Locale("zh"),
           ],
           localeResolutionCallback: (deviceLocale, supportedLocales) {
-            return Locale("en");
+            return Locale("zh");
           },
           initialRoute: RoutePaths.Home,
           onGenerateRoute: Routes.generateRoute,

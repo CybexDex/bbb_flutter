@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,8 @@ class FundRecordItem extends StatelessWidget {
                     Image.asset(isDeposit
                         ? R.resAssetsIconsIcTabDeposit
                         : R.resAssetsIconsIcTabWithdraw),
-                    Text("${_model.amount} ${_model.assetName}",
+                    Text(
+                        "${double.parse(_model.amount).toStringAsFixed(4)} ${AssetName.USDT}",
                         style: StyleFactory.cellTitleStyle),
                   ],
                 )

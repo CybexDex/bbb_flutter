@@ -31,7 +31,8 @@ class IStep extends StatelessWidget {
               padding: EdgeInsets.only(left: 10),
               child: TextField(
                 controller: this.text,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(
+                    decimal: true, signed: false),
                 onChanged: onChange,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(top: 4, bottom: 4),

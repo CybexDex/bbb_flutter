@@ -7,6 +7,8 @@ class TransferForm {
 
   Asset totalAmount;
   Position balance;
+  Position cybBalance;
 
-  TransferForm({this.fromBBBToCybex, this.totalAmount, this.balance});
+  TransferForm(
+      {this.fromBBBToCybex, this.totalAmount, this.balance, this.cybBalance});
 }

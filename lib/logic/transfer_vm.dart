@@ -9,6 +9,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/form/transfer_form_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -41,9 +42,11 @@ class TransferViewModel extends BaseModel {
 
   initForm() {
     transferForm = TransferForm(
-        fromBBBToCybex: true,
-        totalAmount: Asset(amount: null, symbol: "USDT"),
-        balance: _um.fetchPositionFrom(AssetName.NXUSDT));
+            fromBBBToCybex: true,
+            totalAmount: Asset(amount: null, symbol: "USDT"),
+            balance: _um.fetchPositionFrom(AssetName.NXUSDT),
+            cybBalance: _um.fetchPositionFrom(AssetName.CYB)) ??
+        Position(assetName: AssetName.CYB, quantity: 0);
     getCurrentBalance();
   }
 

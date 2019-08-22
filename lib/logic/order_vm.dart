@@ -12,6 +12,7 @@ class OrderViewModel extends BaseModel {
   List<OrderResponseModel> orders = [];
 
   int index = 0;
+  double totlaPnl = 0;
   BBBAPI _api;
   UserManager _um;
 
@@ -39,10 +40,18 @@ class OrderViewModel extends BaseModel {
 //      setBusy(true);
       orders = await _api.getOrders(_um.user.name, status: [OrderStatus.open]);
       orders = orders.take(10).toList();
+      calculateTotalPnl();
       setBusy(false);
     } else {
       orders = [];
       setBusy(false);
+    }
+  }
+
+  void calculateTotalPnl() {
+    totlaPnl = 0;
+    for (OrderResponseModel orderResponseModel in orders) {
+      totlaPnl += orderResponseModel.pnl;
     }
   }
 

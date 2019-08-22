@@ -67,10 +67,34 @@ class _ExchangePageState extends State<ExchangePage>
                     Expanded(
                         child: Container(
                       padding: Dimen.pageMargin,
-                      child: MarketView(
-                        isTrade: false,
-                        width: ScreenUtil.screenWidthDp - 40,
-                        mtm: locator.get(),
+                      child: Stack(
+                        children: <Widget>[
+                          MarketView(
+                            isTrade: false,
+                            width: ScreenUtil.screenWidthDp - 40,
+                            mtm: locator.get(),
+                          ),
+                          Positioned(
+                            bottom: 25,
+                            child: Consumer<WebSocketPNLResponse>(
+                              builder: (context, response, child) {
+                                if (response != null &&
+                                    response.pnl > 0 &&
+                                    !_animationController.isAnimating) {
+                                  _animationController.reset();
+                                  _animationController.forward();
+                                  return StaggerAnimation(
+                                    controller: _animationController,
+                                    accountName: response.accountName,
+                                    pnl: response.pnl,
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     )),
                     Container(
@@ -150,23 +174,13 @@ class _ExchangePageState extends State<ExchangePage>
                             I18n.of(context).myOrdersStock,
                             style: StyleFactory.title,
                           ),
-                          Consumer<WebSocketPNLResponse>(
-                            builder: (context, response, child) {
-                              if (response != null &&
-                                  response.pnl > 0 &&
-                                  !_animationController.isAnimating) {
-                                _animationController.reset();
-                                _animationController.forward();
-                                return StaggerAnimation(
-                                  controller: _animationController,
-                                  accountName: response.accountName,
-                                  pnl: response.pnl,
-                                );
-                              } else {
-                                return Container();
-                              }
+                          Consumer<OrderViewModel>(
+                            builder: (context, model, child) {
+                              return Text(
+                                "${I18n.of(context).totalPnl} ${model.totlaPnl.toStringAsFixed(4)}",
+                              );
                             },
-                          ),
+                          )
                         ],
                       ),
                     ),

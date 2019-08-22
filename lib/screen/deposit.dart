@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
@@ -17,21 +19,37 @@ class DepositPage extends StatelessWidget {
 
   final GlobalKey _globalKey = GlobalKey();
 
-  Future<Uint8List> _capturePng() async {
-    try {
-      print('inside');
-      RenderRepaintBoundary boundary =
-          _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage();
-      ByteData byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData.buffer.asUint8List();
-      var bs64 = base64Encode(pngBytes);
-      print(pngBytes);
-      print(bs64);
-      return pngBytes;
-    } catch (e) {
-      print(e);
+  _capturePng() async {
+    RenderRepaintBoundary boundary =
+        _globalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage();
+    ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    final result = await ImageGallerySaver.save(byteData.buffer.asUint8List());
+  }
+
+  Future<void> requestPermission(
+      List<PermissionGroup> permissions, BuildContext context) async {
+    final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
+        await PermissionHandler().requestPermissions(permissions);
+    print(permissionRequestResult);
+    if (Platform.isAndroid) {
+      if (permissionRequestResult[permissions[0]] == PermissionStatus.granted) {
+        _capturePng();
+        showToast(context, false, I18n.of(context).savePhotoSuccess);
+      } else {}
+    } else {
+      print(permissions[1]);
+      if (permissionRequestResult[permissions[1]] == PermissionStatus.granted) {
+        _capturePng();
+        showToast(context, false, I18n.of(context).savePhotoSuccess);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) => DialogFactory.normalConfirmDialog(context,
+                title: I18n.of(context).requestPermissionTitle,
+                content: I18n.of(context).requestPermissionContent,
+                onConfirmPressed: () => PermissionHandler().openAppSettings()));
+      }
     }
   }
 
@@ -69,15 +87,20 @@ class DepositPage extends StatelessWidget {
                         RepaintBoundary(
                           key: _globalKey,
                           child: QrImage(
+                            backgroundColor: Colors.white,
                             data: value.user.deposit.address,
                             size: 155,
                           ),
                         ),
                         SizedBox(height: 20),
                         GestureDetector(
-                          child: Text("保存二维码", style: StyleFactory.hyperText),
-                          onTap: _capturePng,
-                        ),
+                            child: Text("保存二维码", style: StyleFactory.hyperText),
+                            onTap: () {
+                              requestPermission([
+                                PermissionGroup.storage,
+                                PermissionGroup.photos
+                              ], context);
+                            }),
                         SizedBox(height: 20),
                         Container(
                             decoration: BoxDecoration(

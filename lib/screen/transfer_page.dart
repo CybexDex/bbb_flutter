@@ -1,7 +1,9 @@
+import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/transfer_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class TransferPage extends StatefulWidget {
@@ -49,7 +51,7 @@ class _TransferState extends State<TransferPage> {
                             I18n.of(context).assetCat,
                             style: StyleFactory.larSubtitle,
                           ),
-                          Text("USDT", style: StyleFactory.larSubtitle),
+                          Text(AssetName.USDT, style: StyleFactory.larSubtitle),
                         ],
                       ),
                       SizedBox(height: 15),
@@ -63,15 +65,15 @@ class _TransferState extends State<TransferPage> {
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
-                                      Text("从",
+                                      Text(I18n.of(context).transferFrom,
                                           style:
                                               StyleFactory.transferStyleTitle),
                                       SizedBox(width: 36),
                                       Text(model.transferForm.fromBBBToCybex
-                                          ? "BBB账户"
-                                          : "CYBEX账户"),
+                                          ? I18n.of(context).transferBbbAccount
+                                          : I18n.of(context)
+                                              .transferCybexAccount),
                                     ],
-                                    mainAxisAlignment: MainAxisAlignment.start,
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -82,13 +84,15 @@ class _TransferState extends State<TransferPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      Text("转至",
+                                      Text(I18n.of(context).transferTo,
                                           style:
                                               StyleFactory.transferStyleTitle),
                                       SizedBox(width: 36),
                                       Text(model.transferForm.fromBBBToCybex
-                                          ? "CYBEX账户"
-                                          : "BBB账户"),
+                                          ? I18n.of(context)
+                                              .transferCybexAccount
+                                          : I18n.of(context)
+                                              .transferBbbAccount),
                                     ],
                                   ),
                                 ],
@@ -112,10 +116,10 @@ class _TransferState extends State<TransferPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text("数量"),
+                          Text(I18n.of(context).transferAmount),
                           Text(model.transferForm.balance != null
-                              ? "可划转数量: ${model.transferForm.balance.quantity} USDT"
-                              : "可划转数量: --"),
+                              ? "${I18n.of(context).transferAvailableAmount}: ${floor(model.transferForm.balance.quantity, 4)} USDT"
+                              : "${I18n.of(context).transferAvailableAmount}: --"),
                         ],
                       ),
                       Column(
@@ -124,7 +128,8 @@ class _TransferState extends State<TransferPage> {
                             children: <Widget>[
                               Flexible(
                                 child: TextField(
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      signed: false, decimal: true),
                                   controller: _amountEditingController,
                                   onChanged: (value) {
                                     if (value.isNotEmpty &&
@@ -136,18 +141,22 @@ class _TransferState extends State<TransferPage> {
                                     }
                                   },
                                   decoration: InputDecoration(
-                                      hintText: "请输入划转数量",
+                                      hintText:
+                                          I18n.of(context).transferAmountHint,
                                       hintStyle: StyleFactory.hintStyle,
                                       border: InputBorder.none),
                                 ),
                               ),
                               GestureDetector(
-                                child: Text("全部划转",
+                                child: Text(I18n.of(context).transferAll,
                                     style: StyleFactory.errorMessageText),
                                 onTap: () {
-                                  _amountEditingController.text = model
-                                      .transferForm.balance.quantity
-                                      .toStringAsFixed(4);
+                                  model.setTotalAmount(
+                                      value: double.parse(floor(
+                                          model.transferForm.balance.quantity,
+                                          4)));
+                                  _amountEditingController.text = floor(
+                                      model.transferForm.balance.quantity, 4);
                                 },
                               )
                             ],
@@ -169,8 +178,18 @@ class _TransferState extends State<TransferPage> {
                               children: <Widget>[
                                 Image.asset(R.resAssetsIconsIcWarn),
                                 Builder(builder: (context) {
-                                  return Text("CYBEX账户余额不足/BBB账户余额不足",
-                                      style: StyleFactory.errorMessageText);
+                                  if (model.transferForm.totalAmount.symbol ==
+                                      AssetName.USDT) {
+                                    return Text(
+                                        I18n.of(context)
+                                            .transferErrorMessageCybNotEnough,
+                                        style: StyleFactory.errorMessageText);
+                                  } else {
+                                    return Text(
+                                        I18n.of(context)
+                                            .transferErrorMessageBbbNotEnough,
+                                        style: StyleFactory.errorMessageText);
+                                  }
                                 })
                               ],
                             ),
@@ -181,9 +200,9 @@ class _TransferState extends State<TransferPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text("手续费",
+                              Text(I18n.of(context).fee,
                                   style: StyleFactory.transferStyleTitle),
-                              Text("0.0001 CYB",
+                              Text("0.01 CYB",
                                   style: StyleFactory.transferStyleTitle),
                             ],
                           ),
@@ -194,31 +213,39 @@ class _TransferState extends State<TransferPage> {
                             minWidth: double.infinity,
                             height: 44,
                             child: WidgetFactory.button(
-                                data: "立即划转",
+                                data: I18n.of(context).transferNow,
                                 color: model.isButtonAvailable
                                     ? Palette.redOrange
                                     : Palette.subTitleColor,
                                 onPressed: model.isButtonAvailable
                                     ? () async {
-                                        TextEditingController controller =
-                                            TextEditingController();
-                                        if (locator
-                                            .get<UserManager>()
-                                            .user
-                                            .isLocked) {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return DialogFactory
-                                                    .unlockDialog(context,
-                                                        controller: controller);
-                                              }).then((value) async {
-                                            if (value) {
-                                              callPostWithdraw(model);
-                                            }
-                                          });
+                                        if (model.transferForm.cybBalance
+                                                .quantity <
+                                            0.01) {
+                                          showToast(context, true,
+                                              I18n.of(context).noFeeError);
                                         } else {
-                                          callPostWithdraw(model);
+                                          TextEditingController controller =
+                                              TextEditingController();
+                                          if (locator
+                                              .get<UserManager>()
+                                              .user
+                                              .isLocked) {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return DialogFactory
+                                                      .unlockDialog(context,
+                                                          controller:
+                                                              controller);
+                                                }).then((value) async {
+                                              if (value) {
+                                                callPostWithdraw(model);
+                                              }
+                                            });
+                                          } else {
+                                            callPostWithdraw(model);
+                                          }
                                         }
                                       }
                                     : () {}),
@@ -243,6 +270,7 @@ class _TransferState extends State<TransferPage> {
         showToast(context, true, responseModel.reason);
       } else {
         showToast(context, false, I18n.of(context).successToast);
+        model.getCurrentBalance();
       }
     } catch (error) {
       Navigator.of(context).pop();

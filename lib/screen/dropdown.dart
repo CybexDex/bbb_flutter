@@ -110,7 +110,7 @@ class Dropdown extends StatelessWidget {
                                       Text(model
                                           .getUpContracts()[index]
                                           .strikeLevel
-                                          .toString()),
+                                          .toStringAsFixed(0)),
                                       Text((model.currentTicker.value /
                                               (model.currentTicker.value -
                                                   model
@@ -120,7 +120,7 @@ class Dropdown extends StatelessWidget {
                                       Text(model
                                           .getUpContracts()[index]
                                           .availableInventory
-                                          .toString())
+                                          .toStringAsFixed(0))
                                     ],
                                   ),
                                 ),
@@ -157,7 +157,7 @@ class Dropdown extends StatelessWidget {
                                       Text(model
                                           .getDownContracts()[index]
                                           .strikeLevel
-                                          .toString()),
+                                          .toStringAsFixed(0)),
                                       Text((model.currentTicker.value /
                                               (model
                                                       .getDownContracts()[index]
@@ -167,7 +167,7 @@ class Dropdown extends StatelessWidget {
                                       Text(model
                                           .getDownContracts()[index]
                                           .availableInventory
-                                          .toString())
+                                          .toStringAsFixed(0))
                                     ],
                                   ),
                                 ),

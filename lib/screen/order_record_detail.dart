@@ -196,7 +196,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 3:
-                return Text(invest.toString(),
+                return Text(invest.toStringAsFixed(4),
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,

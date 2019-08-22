@@ -171,9 +171,21 @@ class _RegisterState extends State<RegisterPage> {
         _errorMessageVisibility = true;
         _isAccountNamePassChecker = false;
       });
+    } else if (accountName.endsWith("-")) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageDashEnd;
+        _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
+      });
     } else if (RegExp("^[a-z]+\$").hasMatch(accountName)) {
       setState(() {
         _errorMessage = I18n.of(context).registerErrorMessageOnlyContainLetter;
+        _errorMessageVisibility = true;
+        _isAccountNamePassChecker = false;
+      });
+    } else if (accountName.length >= 63) {
+      setState(() {
+        _errorMessage = I18n.of(context).registerErrorMessageTooLong;
         _errorMessageVisibility = true;
         _isAccountNamePassChecker = false;
       });
@@ -213,7 +225,7 @@ class _RegisterState extends State<RegisterPage> {
   }
 
   _checkPasswordConfirmation(String confirmPassword) {
-    if (!_isPasswordPassChecker) {
+    if (!_isPasswordPassChecker || confirmPassword.isEmpty) {
       return;
     }
     if (_passwordController.text != confirmPassword) {
@@ -221,12 +233,12 @@ class _RegisterState extends State<RegisterPage> {
           (_isPasswordPassChecker || _passwordController.text.isEmpty)) {
         setState(() {
           _errorMessageVisibility = true;
-          _errorMessage = "密码不一样";
+          _errorMessage = I18n.of(context).registerErrorMessagePasswordConfirm;
         });
         _isPasswordConfirmChecker = false;
       }
     } else {
-      if (_passwordController.text.isNotEmpty) {
+      if (confirmPassword.isNotEmpty) {
         setState(() {
           _isPasswordConfirmChecker = true;
           _errorMessageVisibility = false;
@@ -277,7 +289,7 @@ class _RegisterState extends State<RegisterPage> {
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text("注册", style: StyleFactory.title),
+          title: Text(I18n.of(context).register, style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
@@ -308,7 +320,7 @@ class _RegisterState extends State<RegisterPage> {
                                     Column(children: <Widget>[
                                       Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text("注册",
+                                          child: Text(I18n.of(context).register,
                                               style: StyleFactory.title)),
                                       SizedBox(
                                         height: 10,
@@ -318,7 +330,7 @@ class _RegisterState extends State<RegisterPage> {
                                         child: Visibility(
                                           visible: !_errorMessageVisibility,
                                           child: Text(
-                                            "欢迎注册您的账户!",
+                                            I18n.of(context).welcomeRegister,
                                             style: StyleFactory.cellTitleStyle,
                                           ),
                                           replacement: Text(_errorMessage,
@@ -329,14 +341,15 @@ class _RegisterState extends State<RegisterPage> {
                                       SizedBox(
                                         height: 22,
                                       ),
-                                      TextFormField(
+                                      TextField(
                                         controller: _accountNameController,
+                                        autocorrect: false,
                                         decoration: InputDecoration(
                                             hintText: I18n.of(context)
                                                 .accountNameHint,
                                             hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
-                                                "res/assets/icons/icUser.png"),
+                                                R.resAssetsIconsIcUser),
                                             border: InputBorder.none),
                                       ),
                                       Container(
@@ -352,12 +365,13 @@ class _RegisterState extends State<RegisterPage> {
                                       children: <Widget>[
                                         TextFormField(
                                           controller: _passwordController,
+                                          obscureText: true,
                                           decoration: InputDecoration(
                                               hintText: I18n.of(context)
                                                   .passwordConfirm,
                                               hintStyle: StyleFactory.hintStyle,
                                               icon: Image.asset(
-                                                  "res/assets/icons/icPassword.png"),
+                                                  R.resAssetsIconsIcPassword),
                                               border: InputBorder.none),
                                         ),
                                         Container(
@@ -375,11 +389,13 @@ class _RegisterState extends State<RegisterPage> {
                                         TextFormField(
                                           controller:
                                               _passwordConfirmController,
+                                          obscureText: true,
                                           decoration: InputDecoration(
-                                              hintText: "请再次确认密码",
+                                              hintText: I18n.of(context)
+                                                  .passwordConfirmHint,
                                               hintStyle: StyleFactory.hintStyle,
                                               icon: Image.asset(
-                                                  "res/assets/icons/icPassword.png"),
+                                                  R.resAssetsIconsIcPassword),
                                               border: InputBorder.none),
                                         ),
                                         Container(
@@ -400,11 +416,12 @@ class _RegisterState extends State<RegisterPage> {
                                               child: TextFormField(
                                                 controller: _pinCodeController,
                                                 decoration: InputDecoration(
-                                                    hintText: "请输入验证码",
+                                                    hintText: I18n.of(context)
+                                                        .pinCodeHint,
                                                     hintStyle:
                                                         StyleFactory.hintStyle,
                                                     icon: Image.asset(
-                                                        "res/assets/icons/icCode.png"),
+                                                        R.resAssetsIconsIcCode),
                                                     border: InputBorder.none),
                                               ),
                                             ),
@@ -445,7 +462,7 @@ class _RegisterState extends State<RegisterPage> {
                                   color: _isButtonEnabled
                                       ? Palette.redOrange
                                       : Palette.subTitleColor,
-                                  data: "注册"),
+                                  data: I18n.of(context).register),
                             ))
                       ],
                     ),
@@ -454,12 +471,12 @@ class _RegisterState extends State<RegisterPage> {
                     ),
                     Row(
                       children: <Widget>[
-                        Image.asset("res/assets/icons/icWarn.png"),
+                        Image.asset(R.resAssetsIconsIcWarn),
                         SizedBox(
                           width: 5,
                         ),
                         Text(
-                          "为了您的资金安全请妥善保存您的密码，该密码无法找回!",
+                          I18n.of(context).registerWarningText,
                           style: StyleFactory.subTitleStyle,
                         )
                       ],
@@ -500,8 +517,11 @@ class _RegisterState extends State<RegisterPage> {
                       child: RichText(
                           text: new TextSpan(children: [
                         new TextSpan(
-                            style: StyleFactory.hintStyle, text: "已注册？"),
-                        new TextSpan(style: StyleFactory.hyperText, text: "去登录")
+                            style: StyleFactory.hintStyle,
+                            text: I18n.of(context).alreadyRegister),
+                        new TextSpan(
+                            style: StyleFactory.hyperText,
+                            text: I18n.of(context).registerGoToLogIn)
                       ])),
                       onTap: () {
                         Navigator.pop(context);

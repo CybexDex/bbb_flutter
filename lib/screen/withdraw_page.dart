@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/withdraw_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -49,7 +50,6 @@ class _WithdrawState extends State<WithdrawPage> {
           });
           _addressFocusNode.addListener(() {
             if (!_addressFocusNode.hasFocus) {
-              print(_addressEditController.text);
               model.verifyAddress(address: _addressEditController.text);
             }
           });
@@ -82,7 +82,7 @@ class _WithdrawState extends State<WithdrawPage> {
                         ),
                         Text(
                             model.withdrawForm.balance != null
-                                ? "${model.withdrawForm.balance.quantity} USDT"
+                                ? "${floor(model.withdrawForm.balance.quantity, 4)} USDT"
                                 : "-- USDT",
                             style: StyleFactory.larSubtitle),
                       ],
@@ -96,9 +96,12 @@ class _WithdrawState extends State<WithdrawPage> {
                       alignment: Alignment.centerLeft,
                       child: Text("提现地址"),
                     ),
-                    TextFormField(
+                    TextField(
                       focusNode: _addressFocusNode,
                       controller: _addressEditController,
+                      onChanged: (value) {
+                        model.verifyAddress(address: value);
+                      },
                       decoration: InputDecoration(
                           hintText: "输入或长按粘贴地址",
                           hintStyle: StyleFactory.hintStyle,
@@ -125,7 +128,8 @@ class _WithdrawState extends State<WithdrawPage> {
                           children: <Widget>[
                             Flexible(
                               child: TextFormField(
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true, signed: false),
                                 controller: _amountController,
                                 focusNode: _amountFocusNode,
                                 decoration: InputDecoration(
@@ -139,9 +143,8 @@ class _WithdrawState extends State<WithdrawPage> {
                               child: Text("全部",
                                   style: StyleFactory.errorMessageText),
                               onTap: () {
-                                _amountController.text = model
-                                    .withdrawForm.balance.quantity
-                                    .toStringAsFixed(6);
+                                _amountController.text = floor(
+                                    model.withdrawForm.balance.quantity, 4);
                               },
                             )
                           ],
@@ -176,7 +179,7 @@ class _WithdrawState extends State<WithdrawPage> {
                                     style: StyleFactory.errorMessageText);
                               } else if (model.withdrawForm.totalAmount.amount >
                                   model.withdrawForm.balance.quantity) {
-                                return Text("余额不足",
+                                return Text("余���不足",
                                     style: StyleFactory.errorMessageText);
                               } else if (model.withdrawForm.totalAmount.amount <
                                   model.gatewayAssetResponseModel.minWithdraw) {
@@ -220,8 +223,13 @@ class _WithdrawState extends State<WithdrawPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("到账数量", style: StyleFactory.transferStyleTitle),
-                        Text("${model.withdrawForm.totalAmount.amount} USDT",
-                            style: StyleFactory.transferStyleTitle),
+                        model.withdrawForm.totalAmount.amount == 0
+                            ? Text(
+                                "${model.withdrawForm.totalAmount.amount.toStringAsFixed(4)} USDT",
+                                style: StyleFactory.transferStyleTitle)
+                            : Text(
+                                "${floor((model.withdrawForm.totalAmount.amount - double.parse(model.gatewayAssetResponseModel.withdrawFee)), 4)} USDT",
+                                style: StyleFactory.transferStyleTitle),
                       ],
                     ),
                     SizedBox(
@@ -232,33 +240,41 @@ class _WithdrawState extends State<WithdrawPage> {
                       height: 44,
                       child: WidgetFactory.button(
                           data: "提现",
-                          color: model.isHide
+                          color: model.isHide &&
+                                  model.verifyAddressResponseModel != null
                               ? Palette.redOrange
                               : Palette.subTitleColor,
-                          onPressed: model.isHide
+                          onPressed: model.isHide &&
+                                  model.verifyAddressResponseModel != null
                               ? () async {
-                                  model.withdrawForm.address =
-                                      _addressEditController.text;
-                                  TextEditingController controller =
-                                      TextEditingController();
-
-                                  if (locator
-                                      .get<UserManager>()
-                                      .user
-                                      .isLocked) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return DialogFactory.unlockDialog(
-                                              context,
-                                              controller: controller);
-                                        }).then((value) async {
-                                      if (value) {
-                                        callPostWithdraw(model);
-                                      }
-                                    });
+                                  if (model.withdrawForm.cybBalance.quantity <
+                                      0.01) {
+                                    showToast(context, true,
+                                        I18n.of(context).noFeeError);
                                   } else {
-                                    callPostWithdraw(model);
+                                    model.withdrawForm.address =
+                                        _addressEditController.text;
+                                    TextEditingController controller =
+                                        TextEditingController();
+
+                                    if (locator
+                                        .get<UserManager>()
+                                        .user
+                                        .isLocked) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return DialogFactory.unlockDialog(
+                                                context,
+                                                controller: controller);
+                                          }).then((value) async {
+                                        if (value) {
+                                          callPostWithdraw(model);
+                                        }
+                                      });
+                                    } else {
+                                      callPostWithdraw(model);
+                                    }
                                   }
                                 }
                               : () {}),

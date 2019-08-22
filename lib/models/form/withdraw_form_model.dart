@@ -6,6 +6,7 @@ class WithdrawForm {
   Asset totalAmount;
   Position balance;
   String address;
+  Position cybBalance;
 
-  WithdrawForm({this.totalAmount, this.balance, this.address});
+  WithdrawForm({this.totalAmount, this.balance, this.address, this.cybBalance});
 }

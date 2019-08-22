@@ -92,8 +92,6 @@ class TradeViewModel extends BaseModel {
       _refm.changeDownContractId(contractId);
     }
     orderForm.investAmount = 1;
-    orderForm.takeProfit = 50;
-    orderForm.cutoff = 50;
     orderForm.isUp = isUp;
     updateAmountAndFee();
   }

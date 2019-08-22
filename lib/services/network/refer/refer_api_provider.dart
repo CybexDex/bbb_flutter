@@ -46,7 +46,8 @@ class ReferApiProvider extends ReferApi {
 
   @override
   Future<QueryRefResponseModel> queryRef({String accountName}) async {
-    var response = await dio.get("/refer/?account=$accountName&action=bbbtest");
+    var response =
+        await dio.get("/refer/?account=$accountName&action=cybexbbb");
     var responseData = json.decode(response.data);
     return Future.value(QueryRefResponseModel.fromJson(responseData));
   }

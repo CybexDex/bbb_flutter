@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String password = 'password';
+  static final String pinCodeHint = 'pin_code_hint';
 
   static final String transfer = 'transfer';
 
@@ -112,7 +112,7 @@ class _$Keys {
 
   static final String accountNameHint = 'account_name_hint';
 
-  static final String assetCat = 'asset_cat';
+  static final String password = 'password';
 
   static final String passwordHint = 'password_hint';
 
@@ -124,7 +124,7 @@ class _$Keys {
 
   static final String pinCode = 'pin_code';
 
-  static final String pinCodeHint = 'pin_code_hint';
+  static final String assetCat = 'asset_cat';
 
   static final String getPinCode = 'get_pin_code';
 
@@ -133,6 +133,10 @@ class _$Keys {
   static final String createNewAccount = 'create_new_account';
 
   static final String alreadyRegister = 'already_register';
+
+  static final String registerGoToLogIn = 'register_go_to_log_in';
+
+  static final String welcomeRegister = 'welcome_register';
 
   static final String dialogCancelButton = 'dialog_cancel_button';
 
@@ -180,6 +184,11 @@ class _$Keys {
   static final String registerErrorMessagePasswordConfirm =
       'register_error_message_password_confirm';
 
+  static final String registerErrorMessageTooLong =
+      'register_error_message_too_long';
+
+  static final String registerWarningText = 'register_warning_text';
+
   static final String accountLogInError = 'account_log_in_error';
 
   static final String accountLogOut = 'account_log_out';
@@ -202,7 +211,7 @@ class _$Keys {
 
   static final String settlementPrice = 'settlement_price';
 
-  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
+  static final String successToast = 'success_toast';
 
   static final String failToast = 'fail_toast';
 
@@ -222,7 +231,7 @@ class _$Keys {
 
   static final String userCloseOut = 'user_close_out';
 
-  static final String inviteFriend = 'invite_friend';
+  static final String totalPnl = 'total_pnl';
 
   static final String inviteTopRank = 'invite_top_rank';
 
@@ -288,7 +297,43 @@ class _$Keys {
   static final String orderFormBuyLimitationError =
       'order_form_buy_limitation_error';
 
-  static final String successToast = 'success_toast';
+  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
+
+  static final String transferBbbAccount = 'transfer_bbb_account';
+
+  static final String transferCybexAccount = 'transfer_cybex_account';
+
+  static final String transferTo = 'transfer_to';
+
+  static final String transferFrom = 'transfer_from';
+
+  static final String transferAmount = 'transfer_amount';
+
+  static final String transferAvailableAmount = 'transfer_available_amount';
+
+  static final String transferAmountHint = 'transfer_amount_hint';
+
+  static final String transferAll = 'transfer_all';
+
+  static final String transferErrorMessageCybNotEnough =
+      'transfer_error_message_cyb_not_enough';
+
+  static final String transferErrorMessageBbbNotEnough =
+      'transfer_error_message_bbb_not_enough';
+
+  static final String transferNow = 'transfer_now';
+
+  static final String noFeeError = 'no_fee_error';
+
+  static final String savePhotoSuccess = 'save_photo_success';
+
+  static final String savePhotoFail = 'save_photo_fail';
+
+  static final String requestPermissionTitle = 'request_permission_title';
+
+  static final String requestPermissionContent = 'request_permission_content';
+
+  static final String inviteFriend = 'invite_friend';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -309,7 +354,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get password => this._translate(_$Keys.password);
+  String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -350,17 +395,19 @@ abstract class _$I18nHelper {
   String get logIn => this._translate(_$Keys.logIn);
   String get accountName => this._translate(_$Keys.accountName);
   String get accountNameHint => this._translate(_$Keys.accountNameHint);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get password => this._translate(_$Keys.password);
   String get passwordHint => this._translate(_$Keys.passwordHint);
   String get passwordConfirm => this._translate(_$Keys.passwordConfirm);
   String get passwordConfirmHint => this._translate(_$Keys.passwordConfirmHint);
   String get passwordError => this._translate(_$Keys.passwordError);
   String get pinCode => this._translate(_$Keys.pinCode);
-  String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get getPinCode => this._translate(_$Keys.getPinCode);
   String get register => this._translate(_$Keys.register);
   String get createNewAccount => this._translate(_$Keys.createNewAccount);
   String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
+  String get registerGoToLogIn => this._translate(_$Keys.registerGoToLogIn);
+  String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
   String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
   String get dialogSellTitle => this._translate(_$Keys.dialogSellTitle);
   String get dialogSellContent => this._translate(_$Keys.dialogSellContent);
@@ -389,6 +436,9 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.registerErrorMessagePasswordChecker);
   String get registerErrorMessagePasswordConfirm =>
       this._translate(_$Keys.registerErrorMessagePasswordConfirm);
+  String get registerErrorMessageTooLong =>
+      this._translate(_$Keys.registerErrorMessageTooLong);
+  String get registerWarningText => this._translate(_$Keys.registerWarningText);
   String get accountLogInError => this._translate(_$Keys.accountLogInError);
   String get accountLogOut => this._translate(_$Keys.accountLogOut);
   String get updatedDate => this._translate(_$Keys.updatedDate);
@@ -401,8 +451,7 @@ abstract class _$I18nHelper {
   String get tradingDetail => this._translate(_$Keys.tradingDetail);
   String get openPositionPrice => this._translate(_$Keys.openPositionPrice);
   String get settlementPrice => this._translate(_$Keys.settlementPrice);
-  String get stepWidgetNotSetHint =>
-      this._translate(_$Keys.stepWidgetNotSetHint);
+  String get successToast => this._translate(_$Keys.successToast);
   String get failToast => this._translate(_$Keys.failToast);
   String get leverage => this._translate(_$Keys.leverage);
   String get settlementTime => this._translate(_$Keys.settlementTime);
@@ -412,7 +461,7 @@ abstract class _$I18nHelper {
   String get takeProfitCloseOut => this._translate(_$Keys.takeProfitCloseOut);
   String get cutLossCloseOut => this._translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => this._translate(_$Keys.userCloseOut);
-  String get inviteFriend => this._translate(_$Keys.inviteFriend);
+  String get totalPnl => this._translate(_$Keys.totalPnl);
   String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
   String get inviteReward => this._translate(_$Keys.inviteReward);
   String get inviteRecommendSuc => this._translate(_$Keys.inviteRecommendSuc);
@@ -449,5 +498,29 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormInputPositiveNumberError);
   String get orderFormBuyLimitationError =>
       this._translate(_$Keys.orderFormBuyLimitationError);
-  String get successToast => this._translate(_$Keys.successToast);
+  String get stepWidgetNotSetHint =>
+      this._translate(_$Keys.stepWidgetNotSetHint);
+  String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
+  String get transferCybexAccount =>
+      this._translate(_$Keys.transferCybexAccount);
+  String get transferTo => this._translate(_$Keys.transferTo);
+  String get transferFrom => this._translate(_$Keys.transferFrom);
+  String get transferAmount => this._translate(_$Keys.transferAmount);
+  String get transferAvailableAmount =>
+      this._translate(_$Keys.transferAvailableAmount);
+  String get transferAmountHint => this._translate(_$Keys.transferAmountHint);
+  String get transferAll => this._translate(_$Keys.transferAll);
+  String get transferErrorMessageCybNotEnough =>
+      this._translate(_$Keys.transferErrorMessageCybNotEnough);
+  String get transferErrorMessageBbbNotEnough =>
+      this._translate(_$Keys.transferErrorMessageBbbNotEnough);
+  String get transferNow => this._translate(_$Keys.transferNow);
+  String get noFeeError => this._translate(_$Keys.noFeeError);
+  String get savePhotoSuccess => this._translate(_$Keys.savePhotoSuccess);
+  String get savePhotoFail => this._translate(_$Keys.savePhotoFail);
+  String get requestPermissionTitle =>
+      this._translate(_$Keys.requestPermissionTitle);
+  String get requestPermissionContent =>
+      this._translate(_$Keys.requestPermissionContent);
+  String get inviteFriend => this._translate(_$Keys.inviteFriend);
 }

@@ -18,7 +18,7 @@ class FeedBackScreen extends StatelessWidget {
         ),
         body: WebView(
             initialUrl:
-                "https://v2.zopim.com/widget/livechat.html?api_calls=%5B%5D&hostname=support.cybex.io&key=SUWGxax4XVEoXhYgk3LJi8Wqw2tSeRma&lang=zh-cn&",
+                "https://v2.zopim.com/widget/livechat.html?api_calls=%5B%5D&hostname=bbb2019.zendesk.com&key=JjXVnItWmYIdPB4c4P7j2JAooyHHS55J&lang=zh-cn&",
             javascriptMode: JavascriptMode.unrestricted));
   }
 }
