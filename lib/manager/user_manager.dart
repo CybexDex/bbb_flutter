@@ -21,8 +21,8 @@ import 'market_manager.dart';
 
 class UserManager extends BaseModel {
   UserEntity user;
-  bool withdrawAvailable = false;
-  bool depositAvailable = false;
+  bool withdrawAvailable = true;
+  bool depositAvailable = true;
 
   final SharedPref _pref;
   final BBBAPI _api;

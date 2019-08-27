@@ -9,6 +9,7 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class MarketView extends StatefulWidget {
   final double width;
@@ -67,7 +68,10 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
     return Consumer3<List<TickerData>, TickerData, WebSocketPercentageResponse>(
       builder: (context, data, last, percentage, child) {
         if (data == null || percentage == null) {
-          return Container();
+          return SpinKitWave(
+            color: Palette.redOrange,
+            size: 20,
+          );
         }
         var klines = data;
         if (!isAllEmpty(data) && (data.last.time.minute == last.time.minute)) {

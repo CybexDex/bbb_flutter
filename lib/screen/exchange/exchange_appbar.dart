@@ -56,10 +56,22 @@ AppBar exchangeAppBar() {
           return Text("BTC-USDT --", style: StyleFactory.title);
         }
         return bloc.user.loginType == LoginType.test
-            ? Text("试玩 BTC-USDT ${ticker.value.toStringAsFixed(4)}",
-                style: StyleFactory.title)
-            : Text("BTC-USDT ${ticker.value.toStringAsFixed(4)}",
-                style: StyleFactory.title);
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("试玩 BTC-USDT", style: StyleFactory.title),
+                  Text("${ticker.value.toStringAsFixed(4)}",
+                      style: StyleFactory.subTitleStyle)
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("BTC-USDT", style: StyleFactory.title),
+                  Text("${ticker.value.toStringAsFixed(4)}",
+                      style: StyleFactory.subTitleStyle)
+                ],
+              );
       },
     ),
     backgroundColor: Colors.white,
