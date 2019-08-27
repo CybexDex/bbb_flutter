@@ -44,7 +44,7 @@ class StaggerAnimation extends StatelessWidget {
   // updated to reflect the controller's current value.
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Container(
-      width: 200,
+      width: 250,
       alignment: Alignment.bottomCenter,
       child: Opacity(
         opacity: opacity.value,

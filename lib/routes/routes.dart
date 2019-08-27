@@ -2,6 +2,7 @@ import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
+import 'package:bbb_flutter/screen/help_center.dart';
 import 'package:bbb_flutter/screen/invite_page.dart';
 import 'package:bbb_flutter/screen/login.dart';
 import 'package:bbb_flutter/screen/order_record_detail.dart';
@@ -29,6 +30,7 @@ class RoutePaths {
   static const String Invite = "Invite";
   static const String Feedback = "feedback";
   static const String Share = "Share";
+  static const String Help = "Help";
 }
 
 class Routes {
@@ -64,6 +66,8 @@ class Routes {
             builder: (_) => TradePage(), settings: settings);
       case RoutePaths.Feedback:
         return CupertinoPageRoute(builder: (_) => FeedBackScreen());
+      case RoutePaths.Help:
+        return CupertinoPageRoute(builder: (_) => HelpCenterScreen());
       case RoutePaths.Share:
         return CupertinoPageRoute(builder: (_) => SharePage());
       default:

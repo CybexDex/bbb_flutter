@@ -33,7 +33,7 @@ class OrderInfo extends StatelessWidget {
         orderQtyContract: _model.qtyContract,
         orderBoughtContractPx: _model.boughtContractPx);
 
-    return Consumer<List<TickerData>>(builder: (context, ticker, child) {
+    return Consumer<TickerData>(builder: (context, ticker, child) {
       return Container(
         child: Column(
           children: <Widget>[
@@ -50,11 +50,28 @@ class OrderInfo extends StatelessWidget {
                     _model.contractId,
                     style: StyleFactory.cellTitleStyle,
                   ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    I18n.of(context).actLevel,
+                    style: StyleFactory.cellDescLabel,
+                  ),
+                  Text(
+                    currentContract.conversionRate > 0
+                        ? (ticker.value /
+                                (ticker.value - currentContract.strikeLevel))
+                            .toStringAsFixed(4)
+                        : (ticker.value /
+                                (currentContract.strikeLevel - ticker.value))
+                            .toStringAsFixed(4),
+                    style: StyleFactory.cellDescLabel,
+                  ),
                   Expanded(
                       child: Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            DateFormat("yyyy/MM/dd HH:mm:ss").format(
+                            DateFormat("MM/dd HH:mm").format(
                                 DateTime.parse(_model.createTime).toLocal()),
                             style: StyleFactory.transferStyleTitle,
                           ))),

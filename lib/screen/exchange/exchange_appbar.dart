@@ -2,6 +2,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
@@ -49,11 +50,16 @@ AppBar exchangeAppBar() {
       child: Image.asset(R.resAssetsIconsIcPerson),
     ),
     centerTitle: true,
-    title: Consumer<UserManager>(
-      builder: (context, bloc, child) {
+    title: Consumer2<UserManager, TickerData>(
+      builder: (context, bloc, ticker, child) {
+        if (ticker == null) {
+          return Text("BTC-USDT --", style: StyleFactory.title);
+        }
         return bloc.user.loginType == LoginType.test
-            ? Text("试玩 .BXBT", style: StyleFactory.title)
-            : Text(".BXBT", style: StyleFactory.title);
+            ? Text("试玩 BTC-USDT ${ticker.value.toStringAsFixed(4)}",
+                style: StyleFactory.title)
+            : Text("BTC-USDT ${ticker.value.toStringAsFixed(4)}",
+                style: StyleFactory.title);
       },
     ),
     backgroundColor: Colors.white,

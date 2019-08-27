@@ -51,7 +51,7 @@ class OrderViewModel extends BaseModel {
   void calculateTotalPnl() {
     totlaPnl = 0;
     for (OrderResponseModel orderResponseModel in orders) {
-      totlaPnl += orderResponseModel.pnl;
+      totlaPnl += (orderResponseModel.pnl + orderResponseModel.commission);
     }
   }
 

@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String pinCodeHint = 'pin_code_hint';
+  static final String getPinCode = 'get_pin_code';
 
   static final String transfer = 'transfer';
 
@@ -124,9 +124,9 @@ class _$Keys {
 
   static final String pinCode = 'pin_code';
 
-  static final String assetCat = 'asset_cat';
+  static final String pinCodeHint = 'pin_code_hint';
 
-  static final String getPinCode = 'get_pin_code';
+  static final String assetCat = 'asset_cat';
 
   static final String register = 'register';
 
@@ -231,9 +231,9 @@ class _$Keys {
 
   static final String userCloseOut = 'user_close_out';
 
-  static final String totalPnl = 'total_pnl';
+  static final String inviteFriend = 'invite_friend';
 
-  static final String inviteTopRank = 'invite_top_rank';
+  static final String helpCenter = 'help_center';
 
   static final String inviteReward = 'invite_reward';
 
@@ -333,7 +333,11 @@ class _$Keys {
 
   static final String requestPermissionContent = 'request_permission_content';
 
-  static final String inviteFriend = 'invite_friend';
+  static final String totalPnl = 'total_pnl';
+
+  static final String toastNoContract = 'toast_no_contract';
+
+  static final String inviteTopRank = 'invite_top_rank';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -354,7 +358,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
+  String get getPinCode => this._translate(_$Keys.getPinCode);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -401,8 +405,8 @@ abstract class _$I18nHelper {
   String get passwordConfirmHint => this._translate(_$Keys.passwordConfirmHint);
   String get passwordError => this._translate(_$Keys.passwordError);
   String get pinCode => this._translate(_$Keys.pinCode);
+  String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get getPinCode => this._translate(_$Keys.getPinCode);
   String get register => this._translate(_$Keys.register);
   String get createNewAccount => this._translate(_$Keys.createNewAccount);
   String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
@@ -461,8 +465,8 @@ abstract class _$I18nHelper {
   String get takeProfitCloseOut => this._translate(_$Keys.takeProfitCloseOut);
   String get cutLossCloseOut => this._translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => this._translate(_$Keys.userCloseOut);
-  String get totalPnl => this._translate(_$Keys.totalPnl);
-  String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
+  String get inviteFriend => this._translate(_$Keys.inviteFriend);
+  String get helpCenter => this._translate(_$Keys.helpCenter);
   String get inviteReward => this._translate(_$Keys.inviteReward);
   String get inviteRecommendSuc => this._translate(_$Keys.inviteRecommendSuc);
   String get inviteMyPinCode => this._translate(_$Keys.inviteMyPinCode);
@@ -522,5 +526,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.requestPermissionTitle);
   String get requestPermissionContent =>
       this._translate(_$Keys.requestPermissionContent);
-  String get inviteFriend => this._translate(_$Keys.inviteFriend);
+  String get totalPnl => this._translate(_$Keys.totalPnl);
+  String get toastNoContract => this._translate(_$Keys.toastNoContract);
+  String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
 }

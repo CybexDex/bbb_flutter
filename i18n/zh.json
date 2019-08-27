@@ -142,5 +142,7 @@
 	"save_photo_fail": "没有权限",
 	"request_permission_title": "请求权限",
 	"request_permission_content": "是否打开setting页面设置权限",
-	"total_pnl": "总盈亏≈ "
+	"total_pnl": "总盈亏≈ ",
+	"toast_no_contract": "暂无可买牛熊证",
+	"help_center": "帮助中心"
 }

@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
@@ -109,6 +110,14 @@ class _ExchangePageState extends State<ExchangePage>
                                     color: Palette.redOrange,
                                     onPressed: () {
                                       if (locator
+                                          .get<RefManager>()
+                                          .upContract
+                                          .isEmpty) {
+                                        showToast(context, true,
+                                            I18n.of(context).toastNoContract);
+                                        return;
+                                      }
+                                      if (locator
                                           .get<UserManager>()
                                           .user
                                           .logined) {
@@ -140,6 +149,14 @@ class _ExchangePageState extends State<ExchangePage>
                                     data: I18n.of(context).buyDown,
                                     color: Palette.shamrockGreen,
                                     onPressed: () {
+                                      if (locator
+                                          .get<RefManager>()
+                                          .downContract
+                                          .isEmpty) {
+                                        showToast(context, true,
+                                            I18n.of(context).toastNoContract);
+                                        return;
+                                      }
                                       if (locator
                                           .get<UserManager>()
                                           .user
@@ -189,8 +206,6 @@ class _ExchangePageState extends State<ExchangePage>
                       builder: (context, userMg, data, ref, __, child) {
                         if (!userMg.user.logined ||
                             data.orders.isEmpty ||
-                            locator.get<RefManager>().currentUpContract ==
-                                null ||
                             locator.get<MarketManager>().lastTicker.value ==
                                 null) {
                           return child;
