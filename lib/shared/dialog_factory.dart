@@ -17,7 +17,7 @@ class DialogFactory {
       String content,
       String cancel,
       String confirm,
-      VoidCallback onConfirmPressed}) {
+      Function onConfirmPressed}) {
     return CupertinoAlertDialog(
       title: Text(title),
       content: Text(content),

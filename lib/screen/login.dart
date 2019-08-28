@@ -93,7 +93,7 @@ class _LoginState extends State<LoginPage> {
                                                 .accountNameHint,
                                             hintStyle: StyleFactory.hintStyle,
                                             icon: Image.asset(
-                                                "res/assets/icons/icUser.png"),
+                                                R.resAssetsIconsIcUser),
                                             border: InputBorder.none),
                                       ),
                                       Container(
@@ -109,13 +109,14 @@ class _LoginState extends State<LoginPage> {
                                       children: <Widget>[
                                         TextField(
                                           obscureText: true,
+                                          enableInteractiveSelection: true,
                                           controller: _passwordController,
                                           decoration: InputDecoration(
                                               hintText: I18n.of(context)
                                                   .passwordConfirm,
                                               hintStyle: StyleFactory.hintStyle,
                                               icon: Image.asset(
-                                                  "res/assets/icons/icPassword.png"),
+                                                  R.resAssetsIconsIcPassword),
                                               border: InputBorder.none),
                                         ),
                                         Container(
@@ -188,13 +189,22 @@ class _LoginState extends State<LoginPage> {
                             style: StyleFactory.buyUpOrderInfo,
                           )),
                       onTap: () async {
-                        userLocator.loginWithPrivateKey();
-                        showToast(
-                            context, false, I18n.of(context).changeToTryEnv,
-                            callback: () {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        });
+                        if (await userLocator.loginWithPrivateKey(
+                            bonusEvent: false)) {
+                          showToast(
+                              context, false, I18n.of(context).changeToTryEnv,
+                              callback: () {
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                          });
+                        } else {
+                          showToast(
+                              context, true, I18n.of(context).changeToTryEnv,
+                              callback: () {
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                          });
+                        }
                       },
                     ),
                     SizedBox(

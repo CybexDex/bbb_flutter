@@ -61,14 +61,16 @@ class _TransferState extends State<TransferPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
+                              width: 150,
                               child: Column(
                                 children: <Widget>[
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(I18n.of(context).transferFrom,
                                           style:
                                               StyleFactory.transferStyleTitle),
-                                      SizedBox(width: 36),
                                       Text(model.transferForm.fromBBBToCybex
                                           ? I18n.of(context).transferBbbAccount
                                           : I18n.of(context)
@@ -79,15 +81,15 @@ class _TransferState extends State<TransferPage> {
                                     height: 10,
                                   ),
                                   Divider(
-                                    color: Palette.redOrange,
+                                    color: Colors.transparent,
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(I18n.of(context).transferTo,
                                           style:
                                               StyleFactory.transferStyleTitle),
-                                      SizedBox(width: 36),
                                       Text(model.transferForm.fromBBBToCybex
                                           ? I18n.of(context)
                                               .transferCybexAccount

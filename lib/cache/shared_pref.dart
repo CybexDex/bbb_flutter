@@ -60,6 +60,22 @@ class SharedPref {
     await _prefs.remove('bbb.testAccount');
   }
 
+  TestAccountResponseModel getRewardAccount() {
+    final value = _prefs.getString('bbb.rewardAccount');
+    if (value != null) {
+      return TestAccountResponseModel.fromJson(json.decode(value));
+    }
+    return null;
+  }
+
+  saveRewardAccount({TestAccountResponseModel testAccount}) async {
+    await _prefs.setString('bbb.rewardAccount', testAccount.toString());
+  }
+
+  removeRewardAccount() async {
+    await _prefs.remove('bbb.rewardAccount');
+  }
+
   LoginType getLoginType() {
     var value = _prefs.getString('bbb.loginType');
     if (value != null) {

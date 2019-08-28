@@ -53,13 +53,13 @@ AppBar exchangeAppBar() {
     title: Consumer2<UserManager, TickerData>(
       builder: (context, bloc, ticker, child) {
         if (ticker == null) {
-          return Text("BTC-USDT --", style: StyleFactory.title);
+          return Text("BTC/USDT --", style: StyleFactory.title);
         }
         return bloc.user.loginType == LoginType.test
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("试玩 BTC-USDT", style: StyleFactory.title),
+                  Text("试玩 BTC/USDT", style: StyleFactory.title),
                   Text("${ticker.value.toStringAsFixed(4)}",
                       style: StyleFactory.subTitleStyle)
                 ],
@@ -67,7 +67,7 @@ AppBar exchangeAppBar() {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("BTC-USDT", style: StyleFactory.title),
+                  Text("BTC/USDT", style: StyleFactory.title),
                   Text("${ticker.value.toStringAsFixed(4)}",
                       style: StyleFactory.subTitleStyle)
                 ],

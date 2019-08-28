@@ -44,6 +44,7 @@ class OrderViewModel extends BaseModel {
       setBusy(false);
     } else {
       orders = [];
+      totlaPnl = 0;
       setBusy(false);
     }
   }

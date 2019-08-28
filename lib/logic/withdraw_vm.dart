@@ -74,7 +74,8 @@ class WithdrawViewModel extends BaseModel {
   }
 
   void getAsset() async {
-    gatewayAssetResponseModel = await _gatewayApi.getAsset(asset: "USDT");
+    gatewayAssetResponseModel =
+        await _gatewayApi.getAsset(asset: AssetName.USDTERC20);
     setButtonAvailable();
     setBusy(false);
   }
@@ -82,7 +83,7 @@ class WithdrawViewModel extends BaseModel {
   void verifyAddress({String address}) async {
     try {
       verifyAddressResponseModel = await _gatewayApi.verifyAddress(
-          asset: AssetName.USDT, address: address);
+          asset: AssetName.USDTERC20, address: address);
       setButtonAvailable();
     } catch (e) {
       verifyAddressResponseModel = VerifyAddressResponseModel();

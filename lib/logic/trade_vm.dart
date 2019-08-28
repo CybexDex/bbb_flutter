@@ -267,7 +267,9 @@ class TradeViewModel extends BaseModel {
 
     order.underlyingSpotPx = ticker.value.toString();
     order.contractId = saveContract.contractId;
-    order.expiration = 0;
+    order.expiration = _um.user.testAccountResponseModel?.accountType == 1
+        ? _um.user.testAccountResponseModel.expiration
+        : 0;
     order.takeProfitPx = orderForm.takeProfit == null
         ? "0"
         : OrderCalculate.takeProfitPx(orderForm.takeProfit, ticker.value,

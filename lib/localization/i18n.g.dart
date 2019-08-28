@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String getPinCode = 'get_pin_code';
+  static final String createNewAccount = 'create_new_account';
 
   static final String transfer = 'transfer';
 
@@ -126,11 +126,11 @@ class _$Keys {
 
   static final String pinCodeHint = 'pin_code_hint';
 
-  static final String assetCat = 'asset_cat';
+  static final String getPinCode = 'get_pin_code';
 
   static final String register = 'register';
 
-  static final String createNewAccount = 'create_new_account';
+  static final String assetCat = 'asset_cat';
 
   static final String alreadyRegister = 'already_register';
 
@@ -233,7 +233,7 @@ class _$Keys {
 
   static final String inviteFriend = 'invite_friend';
 
-  static final String helpCenter = 'help_center';
+  static final String inviteTopRank = 'invite_top_rank';
 
   static final String inviteReward = 'invite_reward';
 
@@ -241,7 +241,7 @@ class _$Keys {
 
   static final String inviteMyPinCode = 'invite_my_pin_code';
 
-  static final String inviteMyRecommender = 'invite_my_recommender';
+  static final String withdrawParagraph = 'withdraw_paragraph';
 
   static final String inviteThreeStepOne = 'invite_three_step_one';
 
@@ -337,7 +337,17 @@ class _$Keys {
 
   static final String toastNoContract = 'toast_no_contract';
 
-  static final String inviteTopRank = 'invite_top_rank';
+  static final String helpCenter = 'help_center';
+
+  static final String rewardAccount = 'reward_account';
+
+  static final String quitReward = 'quit_reward';
+
+  static final String changeToReward = 'change_to_reward';
+
+  static final String depositParagraph = 'deposit_paragraph';
+
+  static final String inviteMyRecommender = 'invite_my_recommender';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -358,7 +368,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get getPinCode => this._translate(_$Keys.getPinCode);
+  String get createNewAccount => this._translate(_$Keys.createNewAccount);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -406,9 +416,9 @@ abstract class _$I18nHelper {
   String get passwordError => this._translate(_$Keys.passwordError);
   String get pinCode => this._translate(_$Keys.pinCode);
   String get pinCodeHint => this._translate(_$Keys.pinCodeHint);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get getPinCode => this._translate(_$Keys.getPinCode);
   String get register => this._translate(_$Keys.register);
-  String get createNewAccount => this._translate(_$Keys.createNewAccount);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
   String get registerGoToLogIn => this._translate(_$Keys.registerGoToLogIn);
   String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
@@ -466,11 +476,11 @@ abstract class _$I18nHelper {
   String get cutLossCloseOut => this._translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => this._translate(_$Keys.userCloseOut);
   String get inviteFriend => this._translate(_$Keys.inviteFriend);
-  String get helpCenter => this._translate(_$Keys.helpCenter);
+  String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
   String get inviteReward => this._translate(_$Keys.inviteReward);
   String get inviteRecommendSuc => this._translate(_$Keys.inviteRecommendSuc);
   String get inviteMyPinCode => this._translate(_$Keys.inviteMyPinCode);
-  String get inviteMyRecommender => this._translate(_$Keys.inviteMyRecommender);
+  String get withdrawParagraph => this._translate(_$Keys.withdrawParagraph);
   String get inviteThreeStepOne => this._translate(_$Keys.inviteThreeStepOne);
   String get inviteThreeStepTwo => this._translate(_$Keys.inviteThreeStepTwo);
   String get inviteThreeStepThree =>
@@ -528,5 +538,10 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.requestPermissionContent);
   String get totalPnl => this._translate(_$Keys.totalPnl);
   String get toastNoContract => this._translate(_$Keys.toastNoContract);
-  String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
+  String get helpCenter => this._translate(_$Keys.helpCenter);
+  String get rewardAccount => this._translate(_$Keys.rewardAccount);
+  String get quitReward => this._translate(_$Keys.quitReward);
+  String get changeToReward => this._translate(_$Keys.changeToReward);
+  String get depositParagraph => this._translate(_$Keys.depositParagraph);
+  String get inviteMyRecommender => this._translate(_$Keys.inviteMyRecommender);
 }

@@ -179,7 +179,7 @@ class _WithdrawState extends State<WithdrawPage> {
                                     style: StyleFactory.errorMessageText);
                               } else if (model.withdrawForm.totalAmount.amount >
                                   model.withdrawForm.balance.quantity) {
-                                return Text("余���不足",
+                                return Text("余额不足",
                                     style: StyleFactory.errorMessageText);
                               } else if (model.withdrawForm.totalAmount.amount <
                                   model.gatewayAssetResponseModel.minWithdraw) {
@@ -212,8 +212,7 @@ class _WithdrawState extends State<WithdrawPage> {
                         borderRadius: BorderRadius.all(Radius.circular(4.0) //
                             ),
                       ),
-                      child: Text(
-                          "您将提出您USDT 到外部地址。瑶池（Jadepool）作为Cybex推荐的网关将为您提供这一服务。网关服务需要收取一定的服务手续费，将以USDT支付，从您拟提取的金额中扣除提现过程中还将执行一次Cybex内盘转账，该部分手续费您可选择使用CYB或USDT支付 请务必确认您的提币地址正确，一旦填写错误，您的资产将丢失 所有出入金到账需要一定时限，请耐心等待 提币操作请使用您的个人钱包地址。提币到合约地址、交易所地址、ICO项目地址可能会发生合约执行失败，将导致转账失败，资产将退回到您的Cybex账户，处理时间较长，请您谅解",
+                      child: Text(I18n.of(context).withdrawParagraph,
                           style: StyleFactory.subTitleStyle),
                     ),
                     SizedBox(

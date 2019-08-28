@@ -7,6 +7,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
 
@@ -174,7 +175,10 @@ class Sparkline extends StatelessWidget {
         .toList();
     // Log(package: "").printWrapped(filterData.toString());
     if (filterData.length <= 1) {
-      return Container();
+      return SpinKitWave(
+        color: Palette.redOrange,
+        size: 20,
+      );
     }
     double max = filterData.map((t) => t.value).reduce(math.max);
     double min = filterData.map((t) => t.value).reduce(math.min);

@@ -33,12 +33,13 @@ const Map<MarketDuration, int> marketDurationSecondMap = {
   MarketDuration.oneDay: 86400,
 };
 
-enum LoginType { none, cloud, key, test }
+enum LoginType { none, cloud, key, test, reward }
 const Map<LoginType, String> loginTypeStatusMap = {
   LoginType.none: "NONE",
   LoginType.cloud: "CLOUD",
   LoginType.key: "KEY",
   LoginType.test: "TEST",
+  LoginType.reward: "REWARD",
 };
 
 enum OrderStatus { open, closed, rejected }

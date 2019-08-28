@@ -5,34 +5,44 @@ import 'package:bbb_flutter/helper/utils.dart';
 class TestAccountResponseModel {
   String accountName;
   String accountId;
+  int accountType;
   String privateKey;
-  String publicKey;
+  String cybexAccount;
+  int expiration;
 
   TestAccountResponseModel({
     this.accountName,
     this.accountId,
+    this.accountType,
     this.privateKey,
-    this.publicKey,
+    this.cybexAccount,
+    this.expiration,
   });
 
   factory TestAccountResponseModel.fromJson(jsonRes) => jsonRes == null
       ? null
       : TestAccountResponseModel(
           accountName: convertValueByType(jsonRes['accountName'], String,
-              stack: "TestAccountResponseModel-accountName"),
+              stack: "Root-accountName"),
           accountId: convertValueByType(jsonRes['accountId'], String,
-              stack: "TestAccountResponseModel-accountId"),
+              stack: "Root-accountId"),
+          accountType: convertValueByType(jsonRes['accountType'], int,
+              stack: "Root-accountType"),
           privateKey: convertValueByType(jsonRes['privateKey'], String,
-              stack: "TestAccountResponseModel-privateKey"),
-          publicKey: convertValueByType(jsonRes['publicKey'], String,
-              stack: "TestAccountResponseModel-publicKey"),
+              stack: "Root-privateKey"),
+          cybexAccount: convertValueByType(jsonRes['cybexAccount'], String,
+              stack: "Root-cybexAccount"),
+          expiration: convertValueByType(jsonRes['expiration'], int,
+              stack: "Root-expiration"),
         );
 
   Map<String, dynamic> toJson() => {
         'accountName': accountName,
         'accountId': accountId,
+        'accountType': accountType,
         'privateKey': privateKey,
-        'publicKey': publicKey,
+        'cybexAccount': cybexAccount,
+        'expiration': expiration,
       };
   @override
   String toString() {

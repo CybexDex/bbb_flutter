@@ -2,7 +2,6 @@ import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -15,6 +14,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
+import 'package:intl/intl.dart';
 
 import '../../env.dart';
 
@@ -24,7 +24,9 @@ class UserDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (locator.get<UserManager>().user.testAccountResponseModel == null) {
-      locator.get<UserManager>().getGatewayInfo(assetName: AssetName.USDT);
+      locator.get<UserManager>().getGatewayInfo(assetName: AssetName.USDTERC20);
+      locator.get<UserManager>().checkRewardAccount(
+          accountName: locator.get<UserManager>().user.name, bonusEvent: true);
     }
 
     return Drawer(
@@ -33,6 +35,7 @@ class UserDrawer extends StatelessWidget {
       // space to fit everything.
       child: Consumer<UserManager>(builder: (context, userMg, child) {
         Position usdt = userMg.fetchPositionFrom(AssetName.NXUSDT);
+        print(userMg.hasBonus);
         return ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
@@ -54,32 +57,97 @@ class UserDrawer extends StatelessWidget {
                         ),
                         alignment: Alignment.topLeft,
                       ),
-                      Align(
-                        child: GestureDetector(
-                          child: Offstage(
-                              offstage:
-                                  userMg.user.testAccountResponseModel != null,
-                              child: Row(
-                                children: <Widget>[
-                                  SvgPicture.asset(R.resAssetsIconsIcTry),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  SizedBox(
-                                    height: 36,
-                                    width: 30,
-                                    child: Text(
-                                      I18n.of(context).clickToTry,
-                                      style: StyleFactory.clickToTryStyle,
-                                    ),
-                                  )
-                                ],
-                              )),
-                          onTap: () {
-                            userMg.loginWithPrivateKey();
-                          },
-                        ),
-                        alignment: Alignment.center,
+                      Row(
+                        children: <Widget>[
+                          Align(
+                            child: GestureDetector(
+                              child: Offstage(
+                                  offstage: userMg.user.loginType !=
+                                          LoginType.cloud ||
+                                      !userMg.hasBonus,
+                                  child: Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(R.resAssetsIconsIcTry),
+                                      SizedBox(
+                                        width: 6,
+                                      ),
+                                      SizedBox(
+                                        height: 36,
+                                        width: 30,
+                                        child: Text(
+                                          I18n.of(context).rewardAccount,
+                                          style: StyleFactory.clickToTryStyle,
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                              onTap: () async {
+                                showLoading(context);
+                                if (await userMg.loginWithPrivateKey(
+                                    bonusEvent: true,
+                                    accountName: userMg.user.name)) {
+                                  showToast(context, false,
+                                      I18n.of(context).changeToReward,
+                                      callback: () {
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
+                                  });
+                                } else {
+                                  showToast(context, true,
+                                      I18n.of(context).changeToTryEnv,
+                                      callback: () {
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
+                                  });
+                                }
+                              },
+                            ),
+                            alignment: Alignment.centerRight,
+                          ),
+                          Align(
+                            child: GestureDetector(
+                              child: Offstage(
+                                  offstage:
+                                      userMg.user.loginType != LoginType.cloud,
+                                  child: Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(R.resAssetsIconsIcTry),
+                                      SizedBox(
+                                        width: 6,
+                                      ),
+                                      SizedBox(
+                                        height: 36,
+                                        width: 30,
+                                        child: Text(
+                                          I18n.of(context).clickToTry,
+                                          style: StyleFactory.clickToTryStyle,
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                              onTap: () async {
+                                showLoading(context);
+                                if (await userMg.loginWithPrivateKey(
+                                    bonusEvent: false)) {
+                                  showToast(context, false,
+                                      I18n.of(context).changeToTryEnv,
+                                      callback: () {
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
+                                  });
+                                } else {
+                                  showToast(context, true,
+                                      I18n.of(context).changeToTryEnv,
+                                      callback: () {
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
+                                  });
+                                }
+                              },
+                            ),
+                            alignment: Alignment.center,
+                          )
+                        ],
                       )
                     ],
                   ),
@@ -98,6 +166,11 @@ class UserDrawer extends StatelessWidget {
                       )
                     ],
                   ),
+                  userMg.user.loginType == LoginType.reward
+                      ? Text(
+                          "活动结束时间: ${DateFormat("yyyy/MM/dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(userMg.user.testAccountResponseModel.expiration * 1000))}",
+                          style: StyleFactory.cellDescLabel)
+                      : Container(),
                   Container(
                       margin: EdgeInsets.only(top: 20, left: 20, right: 20),
                       width: 300,
@@ -268,28 +341,28 @@ class UserDrawer extends StatelessWidget {
                                 },
                               )
                             : Container(),
-                        Container(
-                          height: 0.5,
-                          margin: EdgeInsets.only(left: 20, right: 20),
-                          color: Palette.separatorColor,
-                        ),
-                        userMg.user.testAccountResponseModel == null
-                            ? ListTile(
-                                title: Text(
-                                  I18n.of(context).inviteFriend,
-                                  style: StyleFactory.cellTitleStyle,
-                                ),
-                                trailing: GestureDetector(
-                                  child:
-                                      Image.asset(R.resAssetsIconsIcTabArrow),
-                                  onTap: () {},
-                                ),
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, RoutePaths.Invite);
-                                },
-                              )
-                            : Container(),
+                        // Container(
+                        //   height: 0.5,
+                        //   margin: EdgeInsets.only(left: 20, right: 20),
+                        //   color: Palette.separatorColor,
+                        // ),
+                        // userMg.user.testAccountResponseModel == null
+                        //     ? ListTile(
+                        //         title: Text(
+                        //           I18n.of(context).inviteFriend,
+                        //           style: StyleFactory.cellTitleStyle,
+                        //         ),
+                        //         trailing: GestureDetector(
+                        //           child:
+                        //               Image.asset(R.resAssetsIconsIcTabArrow),
+                        //           onTap: () {},
+                        //         ),
+                        //         onTap: () {
+                        //           Navigator.pushNamed(
+                        //               context, RoutePaths.Invite);
+                        //         },
+                        //       )
+                        //     : Container(),
                         Container(
                           height: 0.5,
                           margin: EdgeInsets.only(left: 20, right: 20),
@@ -423,15 +496,21 @@ class UserDrawer extends StatelessWidget {
                       })
                   : WidgetFactory.button(
                       data: userMg.user.testAccountResponseModel != null
-                          ? I18n.of(context).clickToQuit
+                          ? (userMg.user.loginType == LoginType.reward
+                              ? I18n.of(context).quitReward
+                              : I18n.of(context).clickToQuit)
                           : I18n.of(context).logout,
                       color: Palette.redOrange,
                       onPressed: () {
                         if (userMg.user.testAccountResponseModel != null) {
-                          userMg.logoutTestAccount();
                           showToast(
-                              context, false, I18n.of(context).changeFromTryEnv,
+                              context,
+                              false,
+                              userMg.user.loginType == LoginType.reward
+                                  ? I18n.of(context).quitReward
+                                  : I18n.of(context).changeFromTryEnv,
                               callback: () {
+                            userMg.logoutTestAccount();
                             Navigator.pop(context);
                           });
                         } else {
@@ -444,11 +523,5 @@ class UserDrawer extends StatelessWidget {
         );
       }),
     );
-  }
-
-  Future<GatewayAssetResponseModel> getAsset({String asset}) async {
-    GatewayAssetResponseModel responseModel =
-        await locator.get<GatewayApi>().getAsset(asset: AssetName.USDT);
-    return responseModel;
   }
 }

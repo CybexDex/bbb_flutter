@@ -48,7 +48,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
         color: Palette.backButtonColor, //change your color here
       ),
       actions: <Widget>[
-        locator.get<UserManager>().user.loginType == LoginType.test
+        locator.get<UserManager>().user.loginType != LoginType.cloud
             ? Container()
             : GestureDetector(
                 child: Padding(

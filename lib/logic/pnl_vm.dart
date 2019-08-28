@@ -71,7 +71,11 @@ class PnlViewModel extends BaseModel {
         : _um.user.account.id);
     model.refBuyOrderTxId = order.buyOrderTxId;
     model.execNowPx = ticker.value.toString();
-    model.expiration = execNow ? epochTime : 0;
+    model.expiration = execNow
+        ? epochTime
+        : (_um.user.testAccountResponseModel?.accountType == 1
+            ? _um.user.testAccountResponseModel.expiration
+            : 0);
     model.amendCreationTime = epochTime;
 
     final sig =

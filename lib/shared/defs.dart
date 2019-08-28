@@ -9,6 +9,7 @@ class AssetName {
   static const CYB = "CYB";
   static const NXUSDT = "NXCO.USDT";
   static const USDT = "USDT";
+  static const USDTERC20 = "USDTERC20";
 }
 
 const EmptyString = [null, ""];
@@ -27,7 +28,7 @@ class NetworkConnection {
 }
 
 class GatewayConnection {
-  static const PRO_GATEWAY = "https://prd-bbb.cybex.io";
+  static const PRO_GATEWAY = "https://bbb-gateway.cybex.io";
   static const UAT_GATEWAY = "https://uat-bbb.cybex.io";
 }
 

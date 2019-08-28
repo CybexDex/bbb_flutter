@@ -65,10 +65,10 @@ class _PnlFormState extends State<PnlForm> {
 
             _cutLossController.text = model.cutLoss == null
                 ? I18n.of(context).stepWidgetNotSetHint
-                : model.cutLoss.toStringAsFixed(0);
+                : model.cutLoss.round().toStringAsFixed(0);
             _takeProfitController.text = model.takeProfit == null
                 ? I18n.of(context).stepWidgetNotSetHint
-                : model.takeProfit.toStringAsFixed(0);
+                : model.takeProfit.round().toStringAsFixed(0);
           },
           builder: (context, model, child) {
             return Align(
@@ -106,6 +106,7 @@ class _PnlFormState extends State<PnlForm> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
+                                    model.setTakeProfitInputCorrectness(true);
                                     model.changeTakeProfit(profit: null);
                                     _takeProfitController.text =
                                         I18n.of(context).stepWidgetNotSetHint;
@@ -168,6 +169,7 @@ class _PnlFormState extends State<PnlForm> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
+                                    model.setCutLossInputCorectness(true);
                                     model.changeCutLoss(cutLoss: null);
                                     _cutLossController.text =
                                         I18n.of(context).stepWidgetNotSetHint;
@@ -260,10 +262,11 @@ class _PnlFormState extends State<PnlForm> {
                                                       title: "提示",
                                                       content:
                                                           "设置该止盈止损价格会出发平仓， 是否继续",
-                                                      onConfirmPressed:
-                                                          _onClickSubmit(
-                                                              context: context,
-                                                              model: model));
+                                                      onConfirmPressed: () {
+                                                _onClickSubmit(
+                                                    context: context,
+                                                    model: model);
+                                              });
                                             });
                                       } else {
                                         _onClickSubmit(

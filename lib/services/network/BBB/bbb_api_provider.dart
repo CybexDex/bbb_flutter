@@ -1,4 +1,3 @@
-
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
@@ -178,8 +177,22 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<TestAccountResponseModel> getTestAccount() async {
-    var response = await dio.get("/testAccount");
-    return Future.value(TestAccountResponseModel.fromJson(response.data));
+  Future<TestAccountResponseModel> getTestAccount(
+      {bool bonusEvent, String accountName}) async {
+    Dio singleDio = Dio();
+    if (_pref.getEnvType() == EnvType.Pro) {
+      singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
+    } else if (_pref.getEnvType() == EnvType.Uat) {
+      singleDio.options.baseUrl = NetworkConnection.UAT_TESTNET;
+    }
+    var params = Map<String, dynamic>();
+    params["bonusEvent"] = bonusEvent;
+    if (accountName != null) {
+      params["cybexAccount"] = accountName;
+    }
+    var response = await singleDio.get("/testAccount", queryParameters: params);
+    return Future.value(response.data["Status"] == "Failed"
+        ? null
+        : TestAccountResponseModel.fromJson(response.data));
   }
 }

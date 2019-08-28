@@ -500,14 +500,24 @@ class _RegisterState extends State<RegisterPage> {
                             I18n.of(context).clickToTry,
                             style: StyleFactory.buyUpOrderInfo,
                           )),
-                      onTap: () {
-                        locator.get<UserManager>().loginWithPrivateKey();
-                        showToast(
-                            context, false, I18n.of(context).changeToTryEnv,
-                            callback: () {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        });
+                      onTap: () async {
+                        if (await locator
+                            .get<UserManager>()
+                            .loginWithPrivateKey(bonusEvent: false)) {
+                          showToast(
+                              context, false, I18n.of(context).changeToTryEnv,
+                              callback: () {
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                          });
+                        } else {
+                          showToast(
+                              context, true, I18n.of(context).changeToTryEnv,
+                              callback: () {
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                          });
+                        }
                       },
                     ),
                     SizedBox(

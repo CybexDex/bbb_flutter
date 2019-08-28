@@ -29,7 +29,8 @@ abstract class BBBAPI {
 
   Future<List<FundRecordModel>> getFundRecords(
       {String name, DateTime start, DateTime end});
-  Future<TestAccountResponseModel> getTestAccount();
+  Future<TestAccountResponseModel> getTestAccount(
+      {bool bonusEvent, String accountName});
 
   ///post
   Future<PostOrderResponseModel> postOrder({PostOrderRequestModel order});

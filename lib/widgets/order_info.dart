@@ -284,7 +284,7 @@ class OrderInfo extends StatelessWidget {
 
   openDialog(BuildContext context) {
     Function callback = () {
-      Navigator.of(context).pop();
+      Navigator.of(context).popUntil((route) => route.isFirst);
     };
     showGeneralDialog(
       context: context,

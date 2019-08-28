@@ -23,6 +23,7 @@ class UserManager extends BaseModel {
   UserEntity user;
   bool withdrawAvailable = true;
   bool depositAvailable = true;
+  bool hasBonus = false;
 
   final SharedPref _pref;
   final BBBAPI _api;
@@ -67,19 +68,26 @@ class UserManager extends BaseModel {
     return false;
   }
 
-  Future<bool> loginWithPrivateKey() async {
-    await locator.get<BBBAPI>().setTestNet(isTestNet: true);
-
-    TestAccountResponseModel testAccount =
-        _pref.getTestAccount() ?? await _api.getTestAccount();
+  Future<bool> loginWithPrivateKey(
+      {bool bonusEvent, String accountName}) async {
+    TestAccountResponseModel testAccount = bonusEvent
+        ? await _api.getTestAccount(
+            bonusEvent: bonusEvent, accountName: accountName)
+        : (_pref.getTestAccount() ??
+            await _api.getTestAccount(
+                bonusEvent: bonusEvent, accountName: accountName));
     if (testAccount != null) {
       try {
+        await locator.get<BBBAPI>().setTestNet(isTestNet: true);
         await unlockWithPrivKey(testAccount: testAccount);
         user.testAccountResponseModel = testAccount;
-        user.loginType = LoginType.test;
+        user.loginType =
+            testAccount.accountType == 1 ? LoginType.reward : LoginType.test;
         user.name = testAccount.accountName;
-        _pref.saveLoginType(loginType: LoginType.test);
-        _pref.saveTestAccount(testAccount: testAccount);
+        _pref.saveLoginType(loginType: user.loginType);
+        testAccount.accountType == 1
+            ? _pref.saveRewardAccount(testAccount: testAccount)
+            : _pref.saveTestAccount(testAccount: testAccount);
         _pref.saveUserName(name: user.name);
         fetchBalances(name: user.name);
         locator.get<MarketManager>().cancelAndRemoveData();
@@ -90,7 +98,6 @@ class UserManager extends BaseModel {
         return false;
       }
     }
-
     return false;
   }
 
@@ -167,6 +174,13 @@ class UserManager extends BaseModel {
     }
   }
 
+  checkRewardAccount({String accountName, bool bonusEvent}) async {
+    TestAccountResponseModel testAccount = await _api.getTestAccount(
+        accountName: accountName, bonusEvent: bonusEvent);
+    hasBonus = testAccount != null;
+    notifyListeners();
+  }
+
   Future<AccountKeysEntity> generateAccountKeys(
       {String name, String password}) async {
     await CybexFlutterPlugin.cancelDefaultPubKey();
@@ -216,10 +230,14 @@ class UserManager extends BaseModel {
     user.keys = null;
     user.permission = null;
     user.balances = null;
+    user.loginType = LoginType.none;
     notifyListeners();
   }
 
   logoutTestAccount() async {
+    if (user.testAccountResponseModel.accountType == 1) {
+      _pref.removeRewardAccount();
+    }
     user.testAccountResponseModel = null;
     if (user.account != null) {
       user.loginType = LoginType.cloud;

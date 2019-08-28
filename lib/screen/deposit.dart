@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,7 +25,8 @@ class DepositPage extends StatelessWidget {
         _globalKey.currentContext.findRenderObject();
     ui.Image image = await boundary.toImage();
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    final result = await ImageGallerySaver.save(byteData.buffer.asUint8List());
+    final result =
+        await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
   }
 
   Future<void> requestPermission(
@@ -56,7 +58,7 @@ class DepositPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _bloc = locator<UserManager>();
-    _bloc.getDepositAddress(name: _bloc.user.name, asset: "USDT");
+    _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
 
     return Scaffold(
         appBar: AppBar(
@@ -138,7 +140,7 @@ class DepositPage extends StatelessWidget {
                                 BorderRadius.all(Radius.circular(4.0) //
                                     ),
                           ),
-                          child: Text("请勿向该地址转账非USDT资产",
+                          child: Text(I18n.of(context).depositParagraph,
                               style: StyleFactory.subTitleStyle),
                         )
                       ],
