@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 1.0.0+3
+version: 1.0.0+4
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -38,12 +38,12 @@ dependencies:
     flutter_localizations:
         sdk: flutter # The following adds the Cupertino Icons font to your application.
     web_socket_channel: ^1.0.12
-   
+
     cupertino_icons: ^0.1.2
     provider: ^3.0.0+1
     rxdart: ^0.22.0
     get_it: ^1.0.3+1
-    quiver: '>=2.0.0 <3.0.0'
+    quiver: ">=2.0.0 <3.0.0"
     oktoast: ^2.1.9
     rflutter_alert: ^1.0.3
     pull_to_refresh: ^1.4.7
@@ -52,10 +52,10 @@ dependencies:
     keyboard_avoider: ^0.1.2
     rx_command: ^4.3.1+1
     rx_widgets: ^2.2.0+1
-    flutter_flipperkit: ^0.0.18
+    # flutter_flipperkit: ^0.0.19
     webview_flutter: ^0.3.11+3
     image_gallery_saver: ^1.1.0
-    permission_handler: '^3.2.0'
+    permission_handler: "^3.2.0"
 
 dev_dependencies:
     flutter_test:
@@ -68,47 +68,47 @@ flutter:
     uses-material-design: true
 
     assets:
-    - i18n/
-    # assets begin
-    # res/assets/icons/*
-    - res/assets/icons/ic_news.svg
-    - res/assets/icons/icTop2.png
-    - res/assets/icons/icTop3.png
-    - res/assets/icons/icMaskClose.png
-    - res/assets/icons/ic_add_2.svg
-    - res/assets/icons/icTop1.png
-    - res/assets/icons/icAdd.png
-    - res/assets/icons/icReduce.png
-    - res/assets/icons/icFail.png
-    - res/assets/icons/icDownGreen14.png
-    - res/assets/icons/icDropdown.png
-    - res/assets/icons/icPerson.png
-    - res/assets/icons/icWarn.png
-    - res/assets/icons/icChange.png
-    - res/assets/icons/icUpRed14.png
-    - res/assets/icons/icSuccess.png
-    - res/assets/icons/icPassword.png
-    - res/assets/icons/icEmpty.png
-    - res/assets/icons/icTabDeposit.png
-    - res/assets/icons/icFallGreen.png
-    - res/assets/icons/icTime.png
-    - res/assets/icons/ic_title_line.svg
-    - res/assets/icons/icNotifyBack.png
-    - res/assets/icons/content_copy.svg
-    - res/assets/icons/icSwitch.png
-    - res/assets/icons/ic_reduce_2.svg
-    - res/assets/icons/icAccount.png
-    - res/assets/icons/icRiseRed18.png
-    - res/assets/icons/share.png
-    - res/assets/icons/icRevise.png
-    - res/assets/icons/icCode.png
-    - res/assets/icons/icUser.png
-    - res/assets/icons/icHand.png
-    - res/assets/icons/icUsdt.png
-    - res/assets/icons/imgBanner.png
-    - res/assets/icons/ic_service.svg
-    - res/assets/icons/mask.png
-    - res/assets/icons/icTabArrow.png
-    - res/assets/icons/icTabWithdraw.png
-    - res/assets/icons/ic_try.svg
+        - i18n/
+        # assets begin
+        # res/assets/icons/*
+        - res/assets/icons/ic_news.svg
+        - res/assets/icons/icTop2.png
+        - res/assets/icons/icTop3.png
+        - res/assets/icons/icMaskClose.png
+        - res/assets/icons/ic_add_2.svg
+        - res/assets/icons/icTop1.png
+        - res/assets/icons/icAdd.png
+        - res/assets/icons/icReduce.png
+        - res/assets/icons/icFail.png
+        - res/assets/icons/icDownGreen14.png
+        - res/assets/icons/icDropdown.png
+        - res/assets/icons/icPerson.png
+        - res/assets/icons/icWarn.png
+        - res/assets/icons/icChange.png
+        - res/assets/icons/icUpRed14.png
+        - res/assets/icons/icSuccess.png
+        - res/assets/icons/icPassword.png
+        - res/assets/icons/icEmpty.png
+        - res/assets/icons/icTabDeposit.png
+        - res/assets/icons/icFallGreen.png
+        - res/assets/icons/icTime.png
+        - res/assets/icons/ic_title_line.svg
+        - res/assets/icons/icNotifyBack.png
+        - res/assets/icons/content_copy.svg
+        - res/assets/icons/icSwitch.png
+        - res/assets/icons/ic_reduce_2.svg
+        - res/assets/icons/icAccount.png
+        - res/assets/icons/icRiseRed18.png
+        - res/assets/icons/share.png
+        - res/assets/icons/icRevise.png
+        - res/assets/icons/icCode.png
+        - res/assets/icons/icUser.png
+        - res/assets/icons/icHand.png
+        - res/assets/icons/icUsdt.png
+        - res/assets/icons/imgBanner.png
+        - res/assets/icons/ic_service.svg
+        - res/assets/icons/mask.png
+        - res/assets/icons/icTabArrow.png
+        - res/assets/icons/icTabWithdraw.png
+        - res/assets/icons/ic_try.svg
     # assets end
