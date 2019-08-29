@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/account_util.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
 import 'package:bbb_flutter/models/entity/user_entity.dart';
@@ -252,6 +253,7 @@ class UserManager extends BaseModel {
       _pref.removeUserName();
     }
     await locator<BBBAPI>().setTestNet(isTestNet: false);
+    locator.get<RefManager>().refreshRefData();
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);
     notifyListeners();

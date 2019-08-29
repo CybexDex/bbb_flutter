@@ -137,7 +137,7 @@
 	"transfer_error_message_cyb_not_enough": "CYBEX账户余额不足",
 	"transfer_error_message_bbb_not_enough": "BBB账户余额不足",
 	"transfer_now": "立即划转",
-	"no_fee_error": "账户cyb余额额不足, 手续费不足, 请充值cyb",
+	"no_fee_error": "账户cyb余额不足, 手续费不足, 请充值cyb",
 	"save_photo_success": "保存成功",
 	"save_photo_fail": "没有权限",
 	"request_permission_title": "请求权限",

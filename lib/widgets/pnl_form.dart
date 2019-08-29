@@ -125,11 +125,13 @@ class _PnlFormState extends State<PnlForm> {
                                     text: _takeProfitController,
                                     plusOnTap: () {
                                       model.increaseTakeProfit();
+                                      model.setTakeProfitInputCorrectness(true);
                                       _takeProfitController.text =
                                           model.takeProfit.toStringAsFixed(0);
                                     },
                                     minusOnTap: () {
                                       model.decreaseTakeProfit();
+                                      model.setTakeProfitInputCorrectness(true);
                                       _takeProfitController.text =
                                           model.takeProfit.toStringAsFixed(0);
                                     },
@@ -188,11 +190,13 @@ class _PnlFormState extends State<PnlForm> {
                                     text: _cutLossController,
                                     plusOnTap: () {
                                       model.increaseCutLoss();
+                                      model.setCutLossInputCorectness(true);
                                       _cutLossController.text =
                                           model.cutLoss.toStringAsFixed(0);
                                     },
                                     minusOnTap: () {
                                       model.decreaseCutLoss();
+                                      model.setCutLossInputCorectness(true);
                                       _cutLossController.text =
                                           model.cutLoss.toStringAsFixed(0);
                                     },

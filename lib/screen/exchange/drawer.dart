@@ -389,7 +389,7 @@ class UserDrawer extends StatelessWidget {
                           margin: EdgeInsets.only(left: 20, right: 20),
                           color: Palette.separatorColor,
                         ),
-                        BuildMode.debug == buildMode
+                        false
                             ? ListTile(
                                 title: Text(
                                   I18n.of(context).changeEnv,
@@ -509,8 +509,8 @@ class UserDrawer extends StatelessWidget {
                               userMg.user.loginType == LoginType.reward
                                   ? I18n.of(context).quitReward
                                   : I18n.of(context).changeFromTryEnv,
-                              callback: () {
-                            userMg.logoutTestAccount();
+                              callback: () async {
+                            await userMg.logoutTestAccount();
                             Navigator.pop(context);
                           });
                         } else {

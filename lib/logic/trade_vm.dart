@@ -187,6 +187,7 @@ class TradeViewModel extends BaseModel {
   void changeTakeProfit({double profit}) {
     if (profit == null) {
       orderForm.showProfit = false;
+      isTakeProfitInputCorrect = true;
     } else {
       orderForm.showProfit = true;
     }
@@ -224,6 +225,7 @@ class TradeViewModel extends BaseModel {
   void changeCutLoss({double cutLoss}) {
     if (cutLoss == null) {
       orderForm.showCutoff = false;
+      isCutLossInputCorrect = true;
     } else {
       orderForm.showCutoff = true;
     }
