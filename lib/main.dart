@@ -9,12 +9,13 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:catcher/catcher_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
-import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 
 main() async {
   if (buildMode == BuildMode.debug) {
@@ -38,24 +39,14 @@ main() async {
   await setupLocator();
   setupProviders();
 
-  FlutterError.onError = (FlutterErrorDetails details) async {
-    if (buildMode == BuildMode.debug) {
-      // In development mode simply print to console.
-      FlutterError.dumpErrorToConsole(details);
-    } else {
-      // In production mode report to the application zone to report to
-      // Sentry.
-      Zone.current.handleUncaughtError(details.exception, details.stack);
-    }
-  };
+  CatcherOptions debugOptions =
+      CatcherOptions(PageReportMode(showStackTrace: true), [ConsoleHandler()]);
+  CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
+    SentryHandler(
+        "https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"),
+  ]);
 
-  runZoned<Future<void>>(() async {
-    runApp(MyApp());
-  }, onError: (error, stackTrace) {
-    // Whenever an error occurs, call the `_reportError` function. This sends
-    // Dart errors to the dev console or Sentry depending on the environment.
-    reportError(error, stackTrace);
-  });
+  Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
 
   if (locator.get<UserManager>().user.logined) {
     locator
@@ -75,6 +66,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: providers,
         child: MaterialApp(
+          navigatorKey: Catcher.navigatorKey,
+          builder: (BuildContext context, Widget widget) {
+            Catcher.addDefaultErrorWidget(
+                showStacktrace: true,
+                customTitle: " error title",
+                customDescription: " error description");
+            return widget;
+          },
           debugShowCheckedModeBanner: false,
           title: 'BBB',
           localizationsDelegates: [
