@@ -4,6 +4,7 @@ import 'package:bbb_flutter/logic/withdraw_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class WithdrawPage extends StatefulWidget {
@@ -247,7 +248,7 @@ class _WithdrawState extends State<WithdrawPage> {
                                   model.verifyAddressResponseModel != null
                               ? () async {
                                   if (model.withdrawForm.cybBalance.quantity <
-                                      0.01) {
+                                      (AssetDef.CYB_TRANSFER.amount / 100000)) {
                                     showToast(context, true,
                                         I18n.of(context).noFeeError);
                                   } else {

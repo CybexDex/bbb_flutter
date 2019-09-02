@@ -59,11 +59,11 @@ class OrderInfo extends StatelessWidget {
                   ),
                   Text(
                     currentContract.conversionRate > 0
-                        ? (ticker.value /
-                                (ticker.value - currentContract.strikeLevel))
+                        ? (_model.boughtPx /
+                                (_model.boughtPx - currentContract.strikeLevel))
                             .toStringAsFixed(4)
-                        : (ticker.value /
-                                (currentContract.strikeLevel - ticker.value))
+                        : (_model.boughtPx /
+                                (currentContract.strikeLevel - _model.boughtPx))
                             .toStringAsFixed(4),
                     style: StyleFactory.cellDescLabel,
                   ),

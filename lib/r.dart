@@ -45,6 +45,8 @@ class R {
   static final String resAssetsIconsIcTitleLine = 'res/assets/icons/ic_title_line.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icNotifyBack.png)
   static final String resAssetsIconsIcNotifyBack = 'res/assets/icons/icNotifyBack.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_rewoard.svg)
+  static final String resAssetsIconsIcRewoard = 'res/assets/icons/ic_rewoard.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/content_copy.svg)
   static final String resAssetsIconsContentCopy = 'res/assets/icons/content_copy.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icSwitch.png)

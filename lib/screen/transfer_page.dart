@@ -180,18 +180,28 @@ class _TransferState extends State<TransferPage> {
                               children: <Widget>[
                                 Image.asset(R.resAssetsIconsIcWarn),
                                 Builder(builder: (context) {
-                                  if (model.transferForm.totalAmount.symbol ==
+                                  if (model.transferForm.totalAmount.amount <
+                                      0) {
+                                    return Text(
+                                        I18n.of(context)
+                                            .orderFormInputPositiveNumberError,
+                                        style: StyleFactory.errorMessageText);
+                                  } else if (model
+                                          .transferForm.totalAmount.symbol ==
                                       AssetName.USDT) {
                                     return Text(
                                         I18n.of(context)
                                             .transferErrorMessageCybNotEnough,
                                         style: StyleFactory.errorMessageText);
-                                  } else {
+                                  } else if (model
+                                          .transferForm.totalAmount.symbol ==
+                                      AssetName.NXUSDT) {
                                     return Text(
                                         I18n.of(context)
                                             .transferErrorMessageBbbNotEnough,
                                         style: StyleFactory.errorMessageText);
                                   }
+                                  return Container();
                                 })
                               ],
                             ),
@@ -223,7 +233,8 @@ class _TransferState extends State<TransferPage> {
                                     ? () async {
                                         if (model.transferForm.cybBalance
                                                 .quantity <
-                                            0.01) {
+                                            (AssetDef.CYB_TRANSFER.amount /
+                                                100000)) {
                                           showToast(context, true,
                                               I18n.of(context).noFeeError);
                                         } else {

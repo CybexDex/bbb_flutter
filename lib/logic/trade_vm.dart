@@ -81,8 +81,10 @@ class TradeViewModel extends BaseModel {
         investAmount: 1,
         showCutoff: false,
         showProfit: false,
-        totalAmount: Asset(amount: 0, symbol: "USDT"),
-        fee: Asset(amount: 0, symbol: "USDT"));
+        totalAmount: Asset(amount: 0, symbol: AssetName.USDT),
+        cybBalance: _um.fetchPositionFrom(AssetName.CYB) ??
+            Position(assetName: AssetName.CYB, quantity: 0),
+        fee: Asset(amount: 0, symbol: AssetName.USDT));
   }
 
   updateCurrentContract(bool isUp, String contractId) {
@@ -285,6 +287,7 @@ class TradeViewModel extends BaseModel {
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
+
     if (_um.user.testAccountResponseModel != null) {
       await CybexFlutterPlugin.setDefaultPrivKey(
           _um.user.testAccountResponseModel.privateKey);
@@ -371,7 +374,7 @@ class TradeViewModel extends BaseModel {
     comm.refBlockId = refData.refBlockId;
 
     comm.txExpiration = expir + 5 * 60;
-    comm.fee = AssetDef.CYB;
+    comm.fee = AssetDef.CYB_TRANSFER;
     comm.from = suffixId(locator.get<SharedPref>().getTestNet()
         ? _um.user.testAccountResponseModel.accountId
         : _um.user.account.id);

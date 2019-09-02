@@ -1,3 +1,5 @@
+import 'package:bbb_flutter/models/response/positions_response_model.dart';
+
 class OrderForm {
   int investAmount;
   double takeProfit;
@@ -5,6 +7,7 @@ class OrderForm {
   bool isUp;
   bool showProfit;
   bool showCutoff;
+  Position cybBalance;
 
   Asset totalAmount;
   Asset fee;
@@ -17,7 +20,8 @@ class OrderForm {
       this.fee,
       this.totalAmount,
       this.showCutoff,
-      this.showProfit});
+      this.showProfit,
+      this.cybBalance});
 }
 
 class Asset {

@@ -219,28 +219,51 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     : Palette.subTitleColor,
                                                 onPressed: model.isSatisfied
                                                     ? () async {
-                                                        model.saveOrder();
-                                                        TextEditingController
-                                                            passwordEditor =
-                                                            TextEditingController();
-                                                        showDialog(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                true,
-                                                            builder: (context) {
-                                                              return DialogFactory
-                                                                  .confirmDialog(
-                                                                      context,
-                                                                      model:
-                                                                          model,
-                                                                      controller:
-                                                                          passwordEditor);
-                                                            }).then((value) async {
-                                                          if (value) {
-                                                            callPostOrder(
-                                                                context, model);
-                                                          }
-                                                        });
+                                                        if (model
+                                                                    .orderForm
+                                                                    .cybBalance
+                                                                    .quantity <
+                                                                (AssetDef
+                                                                        .CYB_TRANSFER
+                                                                        .amount /
+                                                                    100000) &&
+                                                            locator
+                                                                    .get<
+                                                                        UserManager>()
+                                                                    .user
+                                                                    .testAccountResponseModel ==
+                                                                null) {
+                                                          showToast(
+                                                              context,
+                                                              true,
+                                                              I18n.of(context)
+                                                                  .noFeeError);
+                                                        } else {
+                                                          model.saveOrder();
+                                                          TextEditingController
+                                                              passwordEditor =
+                                                              TextEditingController();
+                                                          showDialog(
+                                                              context: context,
+                                                              barrierDismissible:
+                                                                  true,
+                                                              builder:
+                                                                  (context) {
+                                                                return DialogFactory
+                                                                    .confirmDialog(
+                                                                        context,
+                                                                        model:
+                                                                            model,
+                                                                        controller:
+                                                                            passwordEditor);
+                                                              }).then((value) async {
+                                                            if (value) {
+                                                              callPostOrder(
+                                                                  context,
+                                                                  model);
+                                                            }
+                                                          });
+                                                        }
                                                       }
                                                     : () {})
                                             : WidgetFactory.button(
@@ -252,28 +275,51 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     : Palette.subTitleColor,
                                                 onPressed: model.isSatisfied
                                                     ? () async {
-                                                        model.saveOrder();
-                                                        TextEditingController
-                                                            passwordEditor =
-                                                            TextEditingController();
-                                                        showDialog(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                true,
-                                                            builder: (context) {
-                                                              return DialogFactory
-                                                                  .confirmDialog(
-                                                                      context,
-                                                                      model:
-                                                                          model,
-                                                                      controller:
-                                                                          passwordEditor);
-                                                            }).then((value) async {
-                                                          if (value) {
-                                                            callPostOrder(
-                                                                context, model);
-                                                          }
-                                                        });
+                                                        if (model
+                                                                    .orderForm
+                                                                    .cybBalance
+                                                                    .quantity <
+                                                                (AssetDef
+                                                                        .CYB_TRANSFER
+                                                                        .amount /
+                                                                    100000) &&
+                                                            locator
+                                                                    .get<
+                                                                        UserManager>()
+                                                                    .user
+                                                                    .testAccountResponseModel ==
+                                                                null) {
+                                                          showToast(
+                                                              context,
+                                                              true,
+                                                              I18n.of(context)
+                                                                  .noFeeError);
+                                                        } else {
+                                                          model.saveOrder();
+                                                          TextEditingController
+                                                              passwordEditor =
+                                                              TextEditingController();
+                                                          showDialog(
+                                                              context: context,
+                                                              barrierDismissible:
+                                                                  true,
+                                                              builder:
+                                                                  (context) {
+                                                                return DialogFactory
+                                                                    .confirmDialog(
+                                                                        context,
+                                                                        model:
+                                                                            model,
+                                                                        controller:
+                                                                            passwordEditor);
+                                                              }).then((value) async {
+                                                            if (value) {
+                                                              callPostOrder(
+                                                                  context,
+                                                                  model);
+                                                            }
+                                                          });
+                                                        }
                                                       }
                                                     : () {})),
                                   ),

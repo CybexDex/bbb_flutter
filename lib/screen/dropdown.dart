@@ -25,15 +25,21 @@ class Dropdown extends StatelessWidget {
                   children: <Widget>[
                     SizedBox(
                       width: 85,
-                      child: Text("类型"),
+                      child: Text(I18n.of(context).type,
+                          style: StyleFactory.navButtonTitleStyle),
                     ),
                     Expanded(
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("强制平仓价格"),
-                        Text(I18n.of(context).actLevel),
-                        Text("剩余可买"),
+                        Text(
+                          I18n.of(context).forceClosePrice,
+                          style: StyleFactory.navButtonTitleStyle,
+                        ),
+                        Text(I18n.of(context).actLevel,
+                            style: StyleFactory.navButtonTitleStyle),
+                        Text(I18n.of(context).restAmount,
+                            style: StyleFactory.navButtonTitleStyle),
                       ],
                     )),
                   ],

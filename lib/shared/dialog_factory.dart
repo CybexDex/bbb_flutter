@@ -66,6 +66,7 @@ class DialogFactory {
                     borderRadius: BorderRadius.circular(4.0),
                     child: TextField(
                       controller: _textEditorController,
+                      enableInteractiveSelection: true,
                       obscureText: true,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(

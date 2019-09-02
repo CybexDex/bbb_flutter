@@ -53,169 +53,172 @@ class _ExchangePageState extends State<ExchangePage>
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         builder: (_) => locator.get<OrderViewModel>(),
-        child: Scaffold(
-            resizeToAvoidBottomPadding: false,
-            key: globalKey,
-            drawer: UserDrawer(),
-            appBar: exchangeAppBar(),
-            body: SafeArea(
-                left: false,
-                right: false,
-                child: Container(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Expanded(
-                        child: Container(
-                      padding: Dimen.pageMargin,
-                      child: Stack(
-                        children: <Widget>[
-                          MarketView(
-                            isTrade: false,
-                            width: ScreenUtil.screenWidthDp - 40,
-                            mtm: locator.get(),
-                          ),
-                          Positioned(
-                            bottom: 25,
-                            child: Consumer<WebSocketPNLResponse>(
-                              builder: (context, response, child) {
-                                if (response != null &&
-                                    response.pnl > 0 &&
-                                    !_animationController.isAnimating) {
-                                  _animationController.reset();
-                                  _animationController.forward();
-                                  return StaggerAnimation(
-                                    controller: _animationController,
-                                    accountName: response.accountName,
-                                    pnl: response.pnl,
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              },
+        child: Consumer<UserManager>(builder: (context, user, child) {
+          return Scaffold(
+              resizeToAvoidBottomPadding: false,
+              key: globalKey,
+              drawer: user.user.logined ? UserDrawer() : null,
+              appBar: exchangeAppBar(),
+              body: SafeArea(
+                  left: false,
+                  right: false,
+                  child: Container(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                          child: Container(
+                        padding: Dimen.pageMargin,
+                        child: Stack(
+                          children: <Widget>[
+                            MarketView(
+                              isTrade: false,
+                              width: ScreenUtil.screenWidthDp - 40,
+                              mtm: locator.get(),
                             ),
-                          ),
-                        ],
+                            Positioned(
+                              bottom: 25,
+                              child: Consumer<WebSocketPNLResponse>(
+                                builder: (context, response, child) {
+                                  if (response != null &&
+                                      response.pnl > 0 &&
+                                      !_animationController.isAnimating) {
+                                    _animationController.reset();
+                                    _animationController.forward();
+                                    return StaggerAnimation(
+                                      controller: _animationController,
+                                      accountName: response.accountName,
+                                      pnl: response.pnl,
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                                flex: 1,
+                                child: Builder(
+                                  builder: (context) => WidgetFactory.button(
+                                      data: I18n.of(context).buyUp,
+                                      color: Palette.redOrange,
+                                      onPressed: () {
+                                        if (locator
+                                            .get<RefManager>()
+                                            .upContract
+                                            .isEmpty) {
+                                          showToast(context, true,
+                                              I18n.of(context).toastNoContract);
+                                          return;
+                                        }
+                                        if (locator
+                                            .get<UserManager>()
+                                            .user
+                                            .logined) {
+                                          Navigator.pushNamed(
+                                                  context, RoutePaths.Trade,
+                                                  arguments: RouteParamsOfTrade(
+                                                      contract: locator
+                                                          .get<RefManager>()
+                                                          .currentUpContract,
+                                                      isUp: true,
+                                                      title: "ttes"))
+                                              .then((v) {
+                                            Provider.of<OrderViewModel>(context)
+                                                .getOrders();
+                                          });
+                                        } else {
+                                          Navigator.of(context)
+                                              .pushNamed(RoutePaths.Login);
+                                        }
+                                      }),
+                                )),
+                            Container(
+                              width: 20,
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Builder(
+                                  builder: (context) => WidgetFactory.button(
+                                      data: I18n.of(context).buyDown,
+                                      color: Palette.shamrockGreen,
+                                      onPressed: () {
+                                        if (locator
+                                            .get<RefManager>()
+                                            .downContract
+                                            .isEmpty) {
+                                          showToast(context, true,
+                                              I18n.of(context).toastNoContract);
+                                          return;
+                                        }
+                                        if (locator
+                                            .get<UserManager>()
+                                            .user
+                                            .logined) {
+                                          Navigator.pushNamed(
+                                                  context, RoutePaths.Trade,
+                                                  arguments: RouteParamsOfTrade(
+                                                      contract: locator
+                                                          .get<RefManager>()
+                                                          .currentDownContract,
+                                                      isUp: false,
+                                                      title: "ttes"))
+                                              .then((v) {
+                                            Provider.of<OrderViewModel>(context)
+                                                .getOrders();
+                                          });
+                                        } else {
+                                          Navigator.of(context)
+                                              .pushNamed(RoutePaths.Login);
+                                        }
+                                      }),
+                                )),
+                          ],
+                        ),
                       ),
-                    )),
-                    Container(
-                      margin: EdgeInsets.all(20),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                              flex: 1,
-                              child: Builder(
-                                builder: (context) => WidgetFactory.button(
-                                    data: I18n.of(context).buyUp,
-                                    color: Palette.redOrange,
-                                    onPressed: () {
-                                      if (locator
-                                          .get<RefManager>()
-                                          .upContract
-                                          .isEmpty) {
-                                        showToast(context, true,
-                                            I18n.of(context).toastNoContract);
-                                        return;
-                                      }
-                                      if (locator
-                                          .get<UserManager>()
-                                          .user
-                                          .logined) {
-                                        Navigator.pushNamed(
-                                                context, RoutePaths.Trade,
-                                                arguments: RouteParamsOfTrade(
-                                                    contract: locator
-                                                        .get<RefManager>()
-                                                        .currentUpContract,
-                                                    isUp: true,
-                                                    title: "ttes"))
-                                            .then((v) {
-                                          Provider.of<OrderViewModel>(context)
-                                              .getOrders();
-                                        });
-                                      } else {
-                                        Navigator.of(context)
-                                            .pushNamed(RoutePaths.Login);
-                                      }
-                                    }),
-                              )),
-                          Container(
-                            width: 20,
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Builder(
-                                builder: (context) => WidgetFactory.button(
-                                    data: I18n.of(context).buyDown,
-                                    color: Palette.shamrockGreen,
-                                    onPressed: () {
-                                      if (locator
-                                          .get<RefManager>()
-                                          .downContract
-                                          .isEmpty) {
-                                        showToast(context, true,
-                                            I18n.of(context).toastNoContract);
-                                        return;
-                                      }
-                                      if (locator
-                                          .get<UserManager>()
-                                          .user
-                                          .logined) {
-                                        Navigator.pushNamed(
-                                                context, RoutePaths.Trade,
-                                                arguments: RouteParamsOfTrade(
-                                                    contract: locator
-                                                        .get<RefManager>()
-                                                        .currentDownContract,
-                                                    isUp: false,
-                                                    title: "ttes"))
-                                            .then((v) {
-                                          Provider.of<OrderViewModel>(context)
-                                              .getOrders();
-                                        });
-                                      } else {
-                                        Navigator.of(context)
-                                            .pushNamed(RoutePaths.Login);
-                                      }
-                                    }),
-                              )),
-                        ],
+                      Container(
+                        padding:
+                            EdgeInsets.only(bottom: 10, left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              I18n.of(context).myOrdersStock,
+                              style: StyleFactory.title,
+                            ),
+                            Consumer<OrderViewModel>(
+                              builder: (context, model, child) {
+                                return Text(
+                                  "${I18n.of(context).totalPnl} ${model.totlaPnl.toStringAsFixed(4)}",
+                                );
+                              },
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            I18n.of(context).myOrdersStock,
-                            style: StyleFactory.title,
-                          ),
-                          Consumer<OrderViewModel>(
-                            builder: (context, model, child) {
-                              return Text(
-                                "${I18n.of(context).totalPnl} ${model.totlaPnl.toStringAsFixed(4)}",
-                              );
-                            },
-                          )
-                        ],
+                      Consumer4<UserManager, OrderViewModel,
+                          RefContractResponseModel, TickerData>(
+                        builder: (context, userMg, data, ref, __, child) {
+                          if (!userMg.user.logined ||
+                              data.orders.isEmpty ||
+                              locator.get<MarketManager>().lastTicker.value ==
+                                  null) {
+                            return child;
+                          }
+                          return _stockWidget(context, data);
+                        },
+                        child: _emptyStockWidget(),
                       ),
-                    ),
-                    Consumer4<UserManager, OrderViewModel,
-                        RefContractResponseModel, TickerData>(
-                      builder: (context, userMg, data, ref, __, child) {
-                        if (!userMg.user.logined ||
-                            data.orders.isEmpty ||
-                            locator.get<MarketManager>().lastTicker.value ==
-                                null) {
-                          return child;
-                        }
-                        return _stockWidget(context, data);
-                      },
-                      child: _emptyStockWidget(),
-                    ),
-                  ],
-                )))));
+                    ],
+                  ))));
+        }));
   }
 
   Widget _emptyStockWidget() {

@@ -67,7 +67,8 @@ class UserDrawer extends StatelessWidget {
                                       !userMg.hasBonus,
                                   child: Row(
                                     children: <Widget>[
-                                      SvgPicture.asset(R.resAssetsIconsIcTry),
+                                      SvgPicture.asset(
+                                          R.resAssetsIconsIcRewoard),
                                       SizedBox(
                                         width: 6,
                                       ),
@@ -76,7 +77,8 @@ class UserDrawer extends StatelessWidget {
                                         width: 30,
                                         child: Text(
                                           I18n.of(context).rewardAccount,
-                                          style: StyleFactory.clickToTryStyle,
+                                          style:
+                                              StyleFactory.clickToRewardStyle,
                                         ),
                                       )
                                     ],

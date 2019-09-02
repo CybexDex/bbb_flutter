@@ -53,6 +53,7 @@ class TransferViewModel extends BaseModel {
   void switchAccountSide() {
     transferForm.fromBBBToCybex = !transferForm.fromBBBToCybex;
     fetchBalances();
+    setTotalAmount(value: transferForm.totalAmount.amount);
     setBusy(false);
   }
 
@@ -66,12 +67,13 @@ class TransferViewModel extends BaseModel {
   void getCurrentBalance() async {
     await _um.fetchBalances(name: _um.user.name);
     fetchBalances();
+    setTotalAmount(value: transferForm.totalAmount.amount);
     setBusy(false);
   }
 
   void setTotalAmount({double value}) {
     transferForm.totalAmount.amount = value;
-    if (value == null || value > transferForm.balance.quantity) {
+    if (value == null || value > transferForm.balance.quantity || value <= 0) {
       isButtonAvailable = false;
     } else {
       isButtonAvailable = true;

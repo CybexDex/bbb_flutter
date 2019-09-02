@@ -37,11 +37,13 @@ class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RoutePaths.Home:
-        return CupertinoPageRoute(builder: (context) {
-          ScreenUtil.instance = ScreenUtil(width: 375, height: 667)
-            ..init(context);
-          return ExchangePage(title: '.BXBT');
-        });
+        return CupertinoPageRoute(
+            builder: (context) {
+              ScreenUtil.instance = ScreenUtil(width: 375, height: 667)
+                ..init(context);
+              return ExchangePage(title: '.BXBT');
+            },
+            settings: RouteSettings(isInitialRoute: true));
       case RoutePaths.Login:
         return CupertinoPageRoute(builder: (_) => LoginPage());
       case RoutePaths.Register:

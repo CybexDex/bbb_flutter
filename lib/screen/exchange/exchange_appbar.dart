@@ -67,7 +67,11 @@ AppBar exchangeAppBar() {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("BTC/USDT", style: StyleFactory.title),
+                  Text(
+                      bloc.user.loginType == LoginType.reward
+                          ? "奖励 BTC/USDT"
+                          : "BTC/USDT",
+                      style: StyleFactory.title),
                   Text("${ticker.value.toStringAsFixed(4)}",
                       style: StyleFactory.subTitleStyle)
                 ],

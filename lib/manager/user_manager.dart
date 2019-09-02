@@ -251,6 +251,7 @@ class UserManager extends BaseModel {
       user.loginType = LoginType.none;
       user.name = null;
       _pref.removeUserName();
+      user.balances = null;
     }
     await locator<BBBAPI>().setTestNet(isTestNet: false);
     locator.get<RefManager>().refreshRefData();

@@ -8,6 +8,7 @@ class Palette {
   static const lineGradintColorStart = const Color(0x220d6efe);
   static const lineGradientColorEnd = const Color(0x000d6efe);
   static const orangeish = const Color(0xffff8b3d);
+  static const orageTry = const Color(0xfffc8100);
   static const separatorColor = const Color(0xffdddddd);
   static const veryLightPinkTwo = const Color(0xffeaeaea);
   static const inviteAddButtonColor = const Color(0xfff5ca20);

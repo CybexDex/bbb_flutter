@@ -1,12 +1,73 @@
 PODS:
+  - boost-for-react-native (1.63.0)
+  - CocoaAsyncSocket (7.6.3)
+  - CocoaLibEvent (1.0.0)
+  - ComponentKit (0.27):
+    - Yoga (~> 1.14)
   - cybex_flutter_plugin (0.0.1):
     - Flutter
+  - DoubleConversion (1.1.5)
+  - Flipper (0.23.1):
+    - Flipper-Folly (~> 2.0)
+    - Flipper-RSocket (~> 1.0)
+  - Flipper-Folly (2.0.0):
+    - boost-for-react-native
+    - CocoaLibEvent (~> 1.0)
+    - DoubleConversion
+    - glog
+    - openssl-ios-bitcode (~> 1.0)
+  - Flipper-PeerTalk (0.0.4)
+  - Flipper-RSocket (1.0.0):
+    - Flipper-Folly (~> 2.0)
+  - FlipperKit (0.23.1):
+    - FlipperKit/Core (= 0.23.1)
+  - FlipperKit/Core (0.23.1):
+    - Flipper (~> 0.23.1)
+    - FlipperKit/CppBridge
+    - FlipperKit/FBCxxUtils
+    - FlipperKit/FBDefines
+    - FlipperKit/FKPortForwarding
+  - FlipperKit/CppBridge (0.23.1):
+    - Flipper (~> 0.23.1)
+  - FlipperKit/FBCxxUtils (0.23.1):
+    - Flipper-Folly (~> 2.0)
+  - FlipperKit/FBDefines (0.23.1)
+  - FlipperKit/FKPortForwarding (0.23.1):
+    - CocoaAsyncSocket (~> 7.6)
+    - Flipper-PeerTalk (~> 0.0.4)
+  - FlipperKit/FlipperKitLayoutComponentKitSupport (0.23.1):
+    - ComponentKit (~> 0.27)
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitLayoutPlugin
+    - FlipperKit/FlipperKitLayoutTextSearchable
+    - Yoga (~> 1.14)
+  - FlipperKit/FlipperKitLayoutPlugin (0.23.1):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitLayoutTextSearchable
+    - Yoga (~> 1.14)
+    - YogaKit (~> 1.14)
+  - FlipperKit/FlipperKitLayoutTextSearchable (0.23.1)
+  - FlipperKit/FlipperKitNetworkPlugin (0.23.1):
+    - FlipperKit/Core
+  - FlipperKit/FlipperKitUserDefaultsPlugin (0.23.1):
+    - FlipperKit/Core
+  - FlipperKit/SKIOSNetworkPlugin (0.23.1):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitNetworkPlugin
   - Flutter (1.0.0)
+  - flutter_flipperkit (0.0.6):
+    - FlipperKit (~> 0.23.1)
+    - FlipperKit/FlipperKitLayoutComponentKitSupport (~> 0.23.1)
+    - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.23.1)
+    - FlipperKit/SKIOSNetworkPlugin (~> 0.23.1)
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - glog (0.3.4)
   - image_gallery_saver (0.0.1):
     - Flutter
+  - openssl-ios-bitcode (1.0.216)
   - path_provider (0.0.1):
     - Flutter
   - permission_handler (3.2.2):
@@ -18,10 +79,14 @@ PODS:
     - FMDB (~> 2.7.2)
   - webview_flutter (0.0.1):
     - Flutter
+  - Yoga (1.14.0)
+  - YogaKit (1.14.0):
+    - Yoga (~> 1.14)
 
 DEPENDENCIES:
   - cybex_flutter_plugin (from `.symlinks/plugins/cybex_flutter_plugin/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_flipperkit (from `.symlinks/plugins/flutter_flipperkit/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -31,13 +96,29 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - boost-for-react-native
+    - CocoaAsyncSocket
+    - CocoaLibEvent
+    - ComponentKit
+    - DoubleConversion
+    - Flipper
+    - Flipper-Folly
+    - Flipper-PeerTalk
+    - Flipper-RSocket
+    - FlipperKit
     - FMDB
+    - glog
+    - openssl-ios-bitcode
+    - Yoga
+    - YogaKit
 
 EXTERNAL SOURCES:
   cybex_flutter_plugin:
     :path: ".symlinks/plugins/cybex_flutter_plugin/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
+  flutter_flipperkit:
+    :path: ".symlinks/plugins/flutter_flipperkit/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   path_provider:
@@ -52,15 +133,30 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
+  CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
+  ComponentKit: 8af44a3fbb55fcd1d36a048cf24f1133ac6e6a77
   cybex_flutter_plugin: b3a2f301a41187a1fb1838d90c96dcd85def90f7
+  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
+  Flipper: cba441efc92632cafb055a21070ec05217c39a5f
+  Flipper-Folly: 47dd8eaa8bf2245683e67c83121e6d2d8f4807cd
+  Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
+  Flipper-RSocket: 1260a31c05c238eabfa9bb8a64e3983049048371
+  FlipperKit: 0d4708bd52c930e647282593119f111da7716e69
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_flipperkit: 4c609b40a520b0cb3a2b648a9bd605b3fe15490a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   image_gallery_saver: 1798f45aab0db52c4a2a161409c361340a19908e
+  openssl-ios-bitcode: b46298bcbc3e218fe13e376142af616850a36f7d
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
   webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
+  Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
+  YogaKit: 5d1dc899cecd5946e5a758a0c3997704a4b48d01
 
 PODFILE CHECKSUM: 6cab27c7a1ea95ca5bafaa6dd6ab0744573d24c9
 
