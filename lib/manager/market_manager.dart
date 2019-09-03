@@ -85,9 +85,12 @@ class MarketManager {
   initCommunication() {
     reset();
 
-    _channel = IOWebSocketChannel.connect(
-        _sharedPref.getEnvType() == EnvType.Pro
-            ? WebSocketConnection.PRO_WEBSOCKET
+    _channel = _sharedPref.getEnvType() == EnvType.Pro
+        ? IOWebSocketChannel.connect(_sharedPref.getTestNet()
+            ? WebSocketConnection.PRO_TEST_WEBSOCKET
+            : WebSocketConnection.PRO_WEBSOCKET)
+        : IOWebSocketChannel.connect(_sharedPref.getTestNet()
+            ? WebSocketConnection.UAT_TEST_WEBSOCKET
             : WebSocketConnection.UAT_WEBSOCKET);
     _channel.stream.listen((onData) {
       dispatchMessage(onData);
@@ -101,9 +104,9 @@ class MarketManager {
     if (response.contains(WebsocketRequestTopic.FAIRPRICE)) {
       var wbResponse =
           WebSocketNXPriceResponseEntity.fromJson(json.decode(response));
-      var t_time = DateTime.parse(wbResponse.time);
+      var tTime = DateTime.parse(wbResponse.time);
 
-      var t = TickerData(wbResponse.px, t_time);
+      var t = TickerData(wbResponse.px, tTime);
 
       lastTicker.add(t);
       if (isAllEmpty(_priceController.value)) {

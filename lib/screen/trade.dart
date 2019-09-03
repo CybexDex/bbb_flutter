@@ -351,7 +351,9 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
         showToast(context, true, postOrderResponseModel.reason);
       } else {
         await model.fetchPostion(name: AssetName.NXUSDT);
-        showToast(context, false, I18n.of(context).successToast);
+        showToast(context, false, I18n.of(context).successToast, callback: () {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        });
       }
     } catch (e) {
       Navigator.of(context).pop();

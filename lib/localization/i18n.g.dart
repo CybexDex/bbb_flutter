@@ -243,11 +243,11 @@ class _$Keys {
 
   static final String inviteMyRecommender = 'invite_my_recommender';
 
-  static final String type = 'type';
+  static final String inviteThreeStepOne = 'invite_three_step_one';
 
   static final String inviteThreeStepTwo = 'invite_three_step_two';
 
-  static final String inviteThreeStepThree = 'invite_three_step_three';
+  static final String pnl = 'pnl';
 
   static final String inviteGainReward = 'invite_gain_reward';
 
@@ -351,7 +351,13 @@ class _$Keys {
 
   static final String forceClosePrice = 'force_close_price';
 
-  static final String inviteThreeStepOne = 'invite_three_step_one';
+  static final String type = 'type';
+
+  static final String version = 'version';
+
+  static final String triggerCloseContent = 'trigger_close_content';
+
+  static final String inviteThreeStepThree = 'invite_three_step_three';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -485,10 +491,9 @@ abstract class _$I18nHelper {
   String get inviteRecommendSuc => this._translate(_$Keys.inviteRecommendSuc);
   String get inviteMyPinCode => this._translate(_$Keys.inviteMyPinCode);
   String get inviteMyRecommender => this._translate(_$Keys.inviteMyRecommender);
-  String get type => this._translate(_$Keys.type);
+  String get inviteThreeStepOne => this._translate(_$Keys.inviteThreeStepOne);
   String get inviteThreeStepTwo => this._translate(_$Keys.inviteThreeStepTwo);
-  String get inviteThreeStepThree =>
-      this._translate(_$Keys.inviteThreeStepThree);
+  String get pnl => this._translate(_$Keys.pnl);
   String get inviteGainReward => this._translate(_$Keys.inviteGainReward);
   String get inviteRecommendation =>
       this._translate(_$Keys.inviteRecommendation);
@@ -549,5 +554,9 @@ abstract class _$I18nHelper {
   String get depositParagraph => this._translate(_$Keys.depositParagraph);
   String get withdrawParagraph => this._translate(_$Keys.withdrawParagraph);
   String get forceClosePrice => this._translate(_$Keys.forceClosePrice);
-  String get inviteThreeStepOne => this._translate(_$Keys.inviteThreeStepOne);
+  String get type => this._translate(_$Keys.type);
+  String get version => this._translate(_$Keys.version);
+  String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
+  String get inviteThreeStepThree =>
+      this._translate(_$Keys.inviteThreeStepThree);
 }

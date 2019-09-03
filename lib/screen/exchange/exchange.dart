@@ -243,7 +243,7 @@ class _ExchangePageState extends State<ExchangePage>
     return Column(children: [
       CarouselSlider(
           viewportFraction: 0.92,
-          aspectRatio: 335 / 194,
+          aspectRatio: 335 / 200,
           autoPlay: false,
           reverse: false,
           enableInfiniteScroll: false,

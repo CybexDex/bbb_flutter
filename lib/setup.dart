@@ -17,6 +17,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:package_info/package_info.dart';
 
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
@@ -52,6 +53,8 @@ Logger getLogger(String className) {
 
 setupLocator() async {
   var pref = await SharedPref.create();
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  locator.registerSingleton(packageInfo);
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));

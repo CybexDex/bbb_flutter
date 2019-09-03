@@ -166,11 +166,17 @@ class UserManager extends BaseModel {
   }
 
   getGatewayInfo({String assetName}) async {
-    GatewayAssetResponseModel gatewayAssetResponseModel =
-        await locator.get<GatewayApi>().getAsset(asset: assetName);
-    if (gatewayAssetResponseModel != null) {
-      depositAvailable = gatewayAssetResponseModel.depositSwitch;
-      withdrawAvailable = gatewayAssetResponseModel.withdrawSwitch;
+    try {
+      GatewayAssetResponseModel gatewayAssetResponseModel =
+          await locator.get<GatewayApi>().getAsset(asset: assetName);
+      if (gatewayAssetResponseModel != null) {
+        depositAvailable = gatewayAssetResponseModel.depositSwitch;
+        withdrawAvailable = gatewayAssetResponseModel.withdrawSwitch;
+        notifyListeners();
+      }
+    } catch (err) {
+      depositAvailable = false;
+      withdrawAvailable = false;
       notifyListeners();
     }
   }

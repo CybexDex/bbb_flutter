@@ -22,7 +22,6 @@ Path dashPath(
   }
 
   dashOffset = dashOffset ?? const DashOffset.absolute(0.0);
-  // TODO: Is there some way to determine how much of a path would be visible today?
 
   final Path dest = Path();
   for (final PathMetric metric in source.computeMetrics()) {

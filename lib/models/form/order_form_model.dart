@@ -25,7 +25,7 @@ class OrderForm {
 }
 
 class Asset {
-  double amount;
+  double amount = 0;
   String symbol;
 
   Asset({this.amount, this.symbol});

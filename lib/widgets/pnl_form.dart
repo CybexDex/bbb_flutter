@@ -254,18 +254,21 @@ class _PnlFormState extends State<PnlForm> {
                                   ? () async {
                                       if ((model.takeProfit != null &&
                                               model.pnlPercent >
-                                                  model.takeProfit) ||
+                                                  model.takeProfit &&
+                                              widget._order.pnl > 0) ||
                                           (model.cutLoss != null &&
                                               model.pnlPercent >
-                                                  model.cutLoss)) {
+                                                  model.cutLoss &&
+                                              widget._order.pnl < 0)) {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
                                               return DialogFactory
                                                   .normalConfirmDialog(context,
-                                                      title: "提示",
-                                                      content:
-                                                          "设置该止盈止损价格会出发平仓， 是否继续",
+                                                      title: I18n.of(context)
+                                                          .remider,
+                                                      content: I18n.of(context)
+                                                          .triggerCloseContent,
                                                       onConfirmPressed: () {
                                                 _onClickSubmit(
                                                     context: context,

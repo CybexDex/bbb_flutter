@@ -39,6 +39,8 @@ class FaucetConnection {
 
 class WebSocketConnection {
   static const PRO_WEBSOCKET = "wss://nxmdp.cybex.io";
+  static const PRO_TEST_WEBSOCKET = "wss://nxmdp-tn.cybex.io";
+  static const UAT_TEST_WEBSOCKET = "wss://nxmdptest-tn.cybex.io";
   static const UAT_WEBSOCKET = "wss://nxmdptest.cybex.io";
 }
 

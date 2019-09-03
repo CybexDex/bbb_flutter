@@ -123,7 +123,7 @@
 	"order_form_reset": "重置",
 	"order_form_balance_not_enough_error": "余额不足",
 	"order_form_supply_not_enough_error": "剩余份数不足",
-	"order_form_input_positive_number_error": "请输入正整数",
+	"order_form_input_positive_number_error": "请输入正数",
 	"order_form_buy_limitation_error": "单笔购买上限",
 	"step_widget_not_set_hint": "不设置",
 	"transfer_bbb_account": "BBB账户",
@@ -137,7 +137,7 @@
 	"transfer_error_message_cyb_not_enough": "CYBEX账户余额不足",
 	"transfer_error_message_bbb_not_enough": "BBB账户余额不足",
 	"transfer_now": "立即划转",
-	"no_fee_error": "账户cyb余额不足, 手续费不足, 请充值cyb",
+	"no_fee_error": "账户CYB余额不足",
 	"save_photo_success": "保存成功",
 	"save_photo_fail": "没有权限",
 	"request_permission_title": "请求权限",
@@ -151,5 +151,8 @@
 	"deposit_paragraph": "仅支持以太ERC20链的USDT充值，充入其他资产将不可找回",
 	"withdraw_paragraph": "请注意，仅支持提币到ERC20 USDT地址，提币到合约地址或ICO地址可能导致失败",
 	"force_close_price": "强平价格",
-	"type": "类型"
+	"type": "类型",
+	"version": "版本",
+	"trigger_close_content": "设置该止盈止损价格会触发平仓， 是否继续",
+	"pnl": "净利润"
 }

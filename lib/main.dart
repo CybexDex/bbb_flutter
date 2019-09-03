@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:bbb_flutter/env.dart';
@@ -39,14 +38,14 @@ main() async {
   await setupLocator();
   setupProviders();
 
-  CatcherOptions debugOptions =
-      CatcherOptions(PageReportMode(showStackTrace: true), [ConsoleHandler()]);
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(), []);
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
     SentryHandler(
         "https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"),
   ]);
 
   Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
+  // runApp(MyApp());
 
   if (locator.get<UserManager>().user.logined) {
     locator

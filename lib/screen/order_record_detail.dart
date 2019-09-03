@@ -143,6 +143,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
     I18n.of(globalKey.currentContext).investPay,
     I18n.of(globalKey.currentContext).fee,
     I18n.of(globalKey.currentContext).accruedInterest,
+    I18n.of(globalKey.currentContext).pnl,
     I18n.of(globalKey.currentContext).takeProfit,
     I18n.of(globalKey.currentContext).cutLoss,
     I18n.of(globalKey.currentContext).openPositionTime,
@@ -217,6 +218,14 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 6:
+                return Text(_model.pnl.toStringAsFixed(4),
+                    style: TextStyle(
+                        color: Color(0xff333333),
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14.0));
+
+              case 7:
                 return Text(
                     _model.takeProfitPx == 0
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -229,7 +238,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 7:
+              case 8:
                 return Text(
                     _model.cutLossPx == _contract.strikeLevel
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -242,7 +251,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 8:
+              case 9:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.createTime).toLocal()),
@@ -251,7 +260,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 9:
+              case 10:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.settleTime).toLocal()),
@@ -260,7 +269,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 10:
+              case 11:
                 return Text(closeResonCN(_model.closeReason),
                     style: TextStyle(
                         color: Color(0xff333333),

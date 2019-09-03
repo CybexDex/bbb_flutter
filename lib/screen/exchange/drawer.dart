@@ -15,27 +15,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info/package_info.dart';
 
-import '../../env.dart';
-
-class UserDrawer extends StatelessWidget {
+class UserDrawer extends StatefulWidget {
   const UserDrawer({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  _UserDrawerState createState() => _UserDrawerState();
+}
+
+class _UserDrawerState extends State<UserDrawer> {
+  @override
+  void initState() {
     if (locator.get<UserManager>().user.testAccountResponseModel == null) {
       locator.get<UserManager>().getGatewayInfo(assetName: AssetName.USDTERC20);
       locator.get<UserManager>().checkRewardAccount(
           accountName: locator.get<UserManager>().user.name, bonusEvent: true);
     }
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the Drawer if there isn't enough vertical
       // space to fit everything.
       child: Consumer<UserManager>(builder: (context, userMg, child) {
         Position usdt = userMg.fetchPositionFrom(AssetName.NXUSDT);
-        print(userMg.hasBonus);
         return ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
@@ -521,6 +528,13 @@ class UserDrawer extends StatelessWidget {
                         }
                       }),
             ),
+            Container(
+                alignment: Alignment.bottomRight,
+                margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Text(
+                  "${I18n.of(context).version}: ${locator.get<PackageInfo>().version}",
+                  style: StyleFactory.subTitleStyle,
+                ))
           ],
         );
       }),

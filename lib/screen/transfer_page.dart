@@ -180,8 +180,10 @@ class _TransferState extends State<TransferPage> {
                               children: <Widget>[
                                 Image.asset(R.resAssetsIconsIcWarn),
                                 Builder(builder: (context) {
-                                  if (model.transferForm.totalAmount.amount <
-                                      0) {
+                                  if (model.transferForm.totalAmount.amount !=
+                                          null &&
+                                      model.transferForm.totalAmount.amount <=
+                                          0) {
                                     return Text(
                                         I18n.of(context)
                                             .orderFormInputPositiveNumberError,

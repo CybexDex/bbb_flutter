@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
@@ -40,6 +41,9 @@ class OrderViewModel extends BaseModel {
 //      setBusy(true);
       orders = await _api.getOrders(_um.user.name, status: [OrderStatus.open]);
       orders = orders.take(10).toList();
+      if (orders.length > 0) {
+        index = min(index, orders.length - 1);
+      }
       calculateTotalPnl();
       setBusy(false);
     } else {

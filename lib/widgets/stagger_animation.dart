@@ -44,7 +44,7 @@ class StaggerAnimation extends StatelessWidget {
   // updated to reflect the controller's current value.
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Container(
-      width: 250,
+      width: 180,
       alignment: Alignment.bottomCenter,
       child: Opacity(
         opacity: opacity.value,
@@ -79,9 +79,13 @@ class StaggerAnimation extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 7),
-                  child: Text(
-                    "$accountName 盈利",
-                    style: StyleFactory.subTitleStyle,
+                  child: Container(
+                    width: 60,
+                    child: Text(
+                      "$accountName 盈利",
+                      style: StyleFactory.subTitleStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 Text(

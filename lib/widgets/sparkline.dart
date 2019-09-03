@@ -24,7 +24,6 @@ class TickerData {
   }
 }
 
-@immutable
 class SuppleData {
   final double cutOff;
   final double takeProfit;
@@ -600,16 +599,16 @@ class _TimeSharePainter extends CustomPainter {
         path.moveTo(x, y);
       } else {
         /// CurrentSpot
-        double px = x;
-        double py = y;
+        // double px = x;
+        // double py = y;
 
         /// previous spot
         double p0x = getPixelX(
             data[i - 1].time.difference(realStartTime).inSeconds, size);
         double p0y = getPixelY(data[i - 1].value, size);
 
-        double x1 = p0x + lX;
-        double y1 = p0y + lY;
+        // double x1 = p0x + lX;
+        // double y1 = p0y + lY;
 
         /// next point
         int nextIndex = i + 1 < data.length ? i + 1 : i;
@@ -620,8 +619,8 @@ class _TimeSharePainter extends CustomPainter {
         double smoothness = 0.3; //0 - 1
         lX = ((p1x - p0x) / 2) * smoothness;
         lY = ((p1y - p0y) / 2) * smoothness;
-        double x2 = px - lX;
-        double y2 = py - lY;
+        // double x2 = px - lX;
+        // double y2 = py - lY;
 
         // path.cubicTo(x1, y1, x2, y2, px, py);
         path.lineTo(x, y);
