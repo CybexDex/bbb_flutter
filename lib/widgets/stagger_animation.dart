@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,6 @@ class StaggerAnimation extends StatelessWidget {
   // updated to reflect the controller's current value.
   Widget _buildAnimation(BuildContext context, Widget child) {
     return Container(
-      width: 180,
       alignment: Alignment.bottomCenter,
       child: Opacity(
         opacity: opacity.value,
@@ -80,11 +80,9 @@ class StaggerAnimation extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 7),
                   child: Container(
-                    width: 60,
                     child: Text(
-                      "$accountName 盈利",
+                      "${getEllipsisName(value: accountName)} 盈利  ",
                       style: StyleFactory.subTitleStyle,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

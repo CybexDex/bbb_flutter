@@ -48,3 +48,17 @@ String formatBytesAsHexString(Uint8List bytes) {
   }
   return result.toString();
 }
+
+String getEllipsisName({String value}) {
+  if (value == null) {
+    return null;
+  }
+
+  if (value.length >= 4) {
+    return value.substring(0, 2) +
+        "..." +
+        value.substring(value.length - 2, value.length);
+  }
+
+  return value;
+}
