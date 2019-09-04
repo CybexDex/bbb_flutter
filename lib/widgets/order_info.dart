@@ -198,15 +198,22 @@ class OrderInfo extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Text(
-                              (_model.pnl + _model.commission)
+                              (_model.pnl +
+                                          _model.commission +
+                                          _model.accruedInterest)
                                       .toStringAsFixed(4) +
                                   "(" +
                                   (100 *
-                                          ((_model.pnl + _model.commission) /
+                                          ((_model.pnl +
+                                                  _model.commission +
+                                                  _model.accruedInterest) /
                                               invest))
                                       .toStringAsFixed(1) +
                                   "%)",
-                              style: (_model.pnl + _model.commission) > 0
+                              style: (_model.pnl +
+                                          _model.commission +
+                                          _model.accruedInterest) >
+                                      0
                                   ? StyleFactory.buyUpOrderInfo
                                   : StyleFactory.buyDownOrderInfo,
                             ),

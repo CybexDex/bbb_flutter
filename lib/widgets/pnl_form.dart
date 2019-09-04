@@ -60,7 +60,10 @@ class _PnlFormState extends State<PnlForm> {
                 orderBoughtContractPx: widget._order.boughtContractPx);
 
             model.pnlPercent = (100 *
-                    ((widget._order.pnl + widget._order.commission) / invest))
+                    ((widget._order.pnl +
+                            widget._order.commission +
+                            widget._order.accruedInterest) /
+                        invest))
                 .abs();
 
             _cutLossController.text = model.cutLoss == null

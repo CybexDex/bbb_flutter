@@ -102,8 +102,13 @@ class OrderRecordDetailHeader extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text((_model.pnl + _model.commission).toStringAsFixed(4),
-                    style: (_model.pnl + _model.commission) > 0
+                Text(
+                    (_model.pnl + _model.commission + _model.accruedInterest)
+                        .toStringAsFixed(4),
+                    style: (_model.pnl +
+                                _model.commission +
+                                _model.accruedInterest) >
+                            0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w600,
@@ -115,7 +120,10 @@ class OrderRecordDetailHeader extends StatelessWidget {
                             fontStyle: FontStyle.normal,
                             fontSize: Dimen.hugLabelFontSize)),
                 Text("   USDT",
-                    style: (_model.pnl + _model.commission) > 0
+                    style: (_model.pnl +
+                                _model.commission +
+                                _model.accruedInterest) >
+                            0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w400,
