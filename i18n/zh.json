@@ -21,7 +21,7 @@
 	"take_profit": "止盈",
 	"cut_loss": "止损",
 	"act_level": "实际杠杆",
-	"invest": "投资",
+	"invest": "投资额",
 	"invest_pay": "投资总额",
 	"interest_rate": "利率",
 	"per_day": "/天",
@@ -125,7 +125,7 @@
 	"order_form_supply_not_enough_error": "剩余份数不足",
 	"order_form_input_positive_number_error": "请输入正数",
 	"order_form_buy_limitation_error": "单笔购买上限",
-	"step_widget_not_set_hint": "不设置",
+	"step_widget_not_set_hint": "-",
 	"transfer_bbb_account": "BBB账户",
 	"transfer_cybex_account": "CYBEX账户",
 	"transfer_to": "转至",
@@ -154,5 +154,8 @@
 	"type": "类型",
 	"version": "版本",
 	"trigger_close_content": "设置该止盈止损价格会触发平仓， 是否继续",
-	"pnl": "净利润"
+	"pnl": "净利润",
+	"percentage_up": "看涨",
+	"percentage_down": "看跌",
+	"invest_amount_order_info": "份数"
 }

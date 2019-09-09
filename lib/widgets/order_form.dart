@@ -22,8 +22,8 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
 
   @override
   void initState() {
-    _takeProfitController.text = "不设置";
-    _cutLossController.text = "不设置";
+    _takeProfitController.text = "-";
+    _cutLossController.text = "-";
     _amountController.text = "1";
     super.initState();
   }

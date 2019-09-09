@@ -3,6 +3,7 @@ import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/setup.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
@@ -322,13 +323,18 @@ class DialogFactory {
   }
 
   static Widget closeOutConfirmDialog(BuildContext context,
-      {String value, TextEditingController controller}) {
+      {String value, String pnl, TextEditingController controller}) {
     return CupertinoAlertDialog(
       title: Text(I18n.of(context).closeOut),
       content: Column(
         children: <Widget>[
           Text(I18n.of(context).dialogSellContent),
-          Text(value + "USDT"),
+          SizedBox(height: 1),
+          Text(value + AssetName.USDT),
+          SizedBox(height: 1),
+          Text(I18n.of(context).pnl),
+          SizedBox(height: 1),
+          Text(pnl),
         ],
       ),
       actions: <Widget>[

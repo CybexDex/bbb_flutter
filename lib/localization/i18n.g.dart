@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String alreadyRegister = 'already_register';
+  static final String welcomeRegister = 'welcome_register';
 
   static final String transfer = 'transfer';
 
@@ -132,11 +132,11 @@ class _$Keys {
 
   static final String createNewAccount = 'create_new_account';
 
-  static final String assetCat = 'asset_cat';
+  static final String alreadyRegister = 'already_register';
 
   static final String registerGoToLogIn = 'register_go_to_log_in';
 
-  static final String welcomeRegister = 'welcome_register';
+  static final String assetCat = 'asset_cat';
 
   static final String dialogCancelButton = 'dialog_cancel_button';
 
@@ -247,11 +247,11 @@ class _$Keys {
 
   static final String inviteThreeStepTwo = 'invite_three_step_two';
 
-  static final String pnl = 'pnl';
+  static final String inviteThreeStepThree = 'invite_three_step_three';
 
   static final String inviteGainReward = 'invite_gain_reward';
 
-  static final String inviteRecommendation = 'invite_recommendation';
+  static final String investAmountOrderInfo = 'invest_amount_order_info';
 
   static final String inviteAddReferer = 'invite_add_referer';
 
@@ -357,7 +357,13 @@ class _$Keys {
 
   static final String triggerCloseContent = 'trigger_close_content';
 
-  static final String inviteThreeStepThree = 'invite_three_step_three';
+  static final String pnl = 'pnl';
+
+  static final String percentageUp = 'percentage_up';
+
+  static final String percentageDown = 'percentage_down';
+
+  static final String inviteRecommendation = 'invite_recommendation';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -378,7 +384,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
+  String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -429,9 +435,9 @@ abstract class _$I18nHelper {
   String get getPinCode => this._translate(_$Keys.getPinCode);
   String get register => this._translate(_$Keys.register);
   String get createNewAccount => this._translate(_$Keys.createNewAccount);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
   String get registerGoToLogIn => this._translate(_$Keys.registerGoToLogIn);
-  String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
   String get dialogSellTitle => this._translate(_$Keys.dialogSellTitle);
   String get dialogSellContent => this._translate(_$Keys.dialogSellContent);
@@ -493,10 +499,11 @@ abstract class _$I18nHelper {
   String get inviteMyRecommender => this._translate(_$Keys.inviteMyRecommender);
   String get inviteThreeStepOne => this._translate(_$Keys.inviteThreeStepOne);
   String get inviteThreeStepTwo => this._translate(_$Keys.inviteThreeStepTwo);
-  String get pnl => this._translate(_$Keys.pnl);
+  String get inviteThreeStepThree =>
+      this._translate(_$Keys.inviteThreeStepThree);
   String get inviteGainReward => this._translate(_$Keys.inviteGainReward);
-  String get inviteRecommendation =>
-      this._translate(_$Keys.inviteRecommendation);
+  String get investAmountOrderInfo =>
+      this._translate(_$Keys.investAmountOrderInfo);
   String get inviteAddReferer => this._translate(_$Keys.inviteAddReferer);
   String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
   String get clickToTry => this._translate(_$Keys.clickToTry);
@@ -557,6 +564,9 @@ abstract class _$I18nHelper {
   String get type => this._translate(_$Keys.type);
   String get version => this._translate(_$Keys.version);
   String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
-  String get inviteThreeStepThree =>
-      this._translate(_$Keys.inviteThreeStepThree);
+  String get pnl => this._translate(_$Keys.pnl);
+  String get percentageUp => this._translate(_$Keys.percentageUp);
+  String get percentageDown => this._translate(_$Keys.percentageDown);
+  String get inviteRecommendation =>
+      this._translate(_$Keys.inviteRecommendation);
 }

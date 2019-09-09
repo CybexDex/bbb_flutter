@@ -303,6 +303,7 @@ class Sparkline extends StatelessWidget {
                       child: CustomPaint(
                         size: Size.infinite,
                         painter: _PercentageBarPainter(
+                            context: context,
                             percentage: percentage.nPercentage),
                       ),
                     );
@@ -475,7 +476,8 @@ class _CartesianPainter extends CustomPainter {
 
 class _PercentageBarPainter extends CustomPainter {
   final double percentage;
-  _PercentageBarPainter({@required this.percentage});
+  final BuildContext context;
+  _PercentageBarPainter({@required this.percentage, @required this.context});
   @override
   void paint(dui.Canvas canvas, Size size) {
     var downBarPainter = Paint()
@@ -491,7 +493,9 @@ class _PercentageBarPainter extends CustomPainter {
       ..color = Palette.redOrange;
     var upTextPainter = TextPainter(
         text: new TextSpan(
-            text: percentage.toStringAsFixed(0) + "%",
+            text: percentage.toStringAsFixed(0) +
+                "%" +
+                I18n.of(context).percentageUp,
             style: TextStyle(
                 color: Palette.redOrange,
                 fontSize: 11.0,
@@ -501,7 +505,9 @@ class _PercentageBarPainter extends CustomPainter {
 
     var downTextPainter = TextPainter(
         text: new TextSpan(
-            text: (100 - percentage.round()).toStringAsFixed(0) + "%",
+            text: (100 - percentage.round()).toStringAsFixed(0) +
+                "%" +
+                I18n.of(context).percentageDown,
             style: TextStyle(
                 color: Palette.shamrockGreen,
                 fontSize: 11.0,
