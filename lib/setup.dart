@@ -7,6 +7,8 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
+import 'package:bbb_flutter/services/network/configure/configure_api.dart';
+import 'package:bbb_flutter/services/network/configure/configure_api_provider.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
@@ -66,6 +68,8 @@ setupLocator() async {
       ReferApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<FaucetAPI>(
       FaucetAPIProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ConfigureApi>(
+      ConfiguireApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton(
       MarketManager(api: locator<BBBAPI>(), sharedPref: locator<SharedPref>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));

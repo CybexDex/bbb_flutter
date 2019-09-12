@@ -122,7 +122,7 @@ class Dropdown extends StatelessWidget {
                                                   model
                                                       .getUpContracts()[index]
                                                       .strikeLevel))
-                                          .toStringAsFixed(4)),
+                                          .toStringAsFixed(1)),
                                       Text(model
                                           .getUpContracts()[index]
                                           .availableInventory
@@ -151,7 +151,7 @@ class Dropdown extends StatelessWidget {
                                   function();
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 50, right: 20),
+                                  padding: EdgeInsets.only(left: 30, right: 20),
                                   color: model.contract ==
                                           model.getDownContracts()[index]
                                       ? Palette.veryLightPink
@@ -169,7 +169,7 @@ class Dropdown extends StatelessWidget {
                                                       .getDownContracts()[index]
                                                       .strikeLevel -
                                                   model.currentTicker.value))
-                                          .toStringAsFixed(4)),
+                                          .toStringAsFixed(1)),
                                       Text(model
                                           .getDownContracts()[index]
                                           .availableInventory

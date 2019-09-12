@@ -18,6 +18,8 @@ import '../setup.dart';
 class PnlViewModel extends BaseModel {
   double cutLoss;
   double takeProfit;
+  double cutLossPx;
+  double takeProfitPx;
   double invest;
   double pnlPercent;
   bool shouldShowErrorMessage = false;
@@ -73,7 +75,8 @@ class PnlViewModel extends BaseModel {
     model.execNowPx = ticker.value.toString();
     model.expiration = execNow
         ? epochTime
-        : (_um.user.testAccountResponseModel?.accountType == 1
+        : (_um.user.testAccountResponseModel != null &&
+                _um.user.testAccountResponseModel.accountType >= 1
             ? _um.user.testAccountResponseModel.expiration
             : 0);
     model.amendCreationTime = epochTime;
@@ -93,16 +96,22 @@ class PnlViewModel extends BaseModel {
     }
   }
 
-  void increaseTakeProfit() {
+  void increaseTakeProfit({OrderResponseModel order}) {
     if (takeProfit == null) {
       takeProfit = 50;
     } else {
       takeProfit += 1;
     }
+    final contract = currentContract(order);
+    takeProfitPx = OrderCalculate.takeProfitPx(
+        takeProfit,
+        order.underlyingSpotPx,
+        contract.strikeLevel,
+        contract.conversionRate > 0);
     setBusy(false);
   }
 
-  void decreaseTakeProfit() {
+  void decreaseTakeProfit({OrderResponseModel order}) {
     if (takeProfit == null) {
       takeProfit = 50;
     } else {
@@ -110,15 +119,26 @@ class PnlViewModel extends BaseModel {
         takeProfit -= 1;
       }
     }
+    final contract = currentContract(order);
+    takeProfitPx = OrderCalculate.takeProfitPx(
+        takeProfit,
+        order.underlyingSpotPx,
+        contract.strikeLevel,
+        contract.conversionRate > 0);
     setBusy(false);
   }
 
-  void changeTakeProfit({double profit}) {
+  void changeTakeProfit({double profit, OrderResponseModel order}) {
     this.takeProfit = profit;
+    final contract = currentContract(order);
+    takeProfitPx = profit == null
+        ? 0
+        : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
+            contract.strikeLevel, contract.conversionRate > 0);
     setBusy(false);
   }
 
-  void increaseCutLoss() {
+  void increaseCutLoss({OrderResponseModel order}) {
     if (cutLoss == null) {
       cutLoss = 50;
     } else {
@@ -126,10 +146,13 @@ class PnlViewModel extends BaseModel {
         cutLoss += 1;
       }
     }
+    final contract = currentContract(order);
+    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
+        contract.strikeLevel, contract.conversionRate > 0);
     setBusy(false);
   }
 
-  void decreaseCutLoss() {
+  void decreaseCutLoss({OrderResponseModel order}) {
     if (cutLoss == null) {
       cutLoss = 50;
     } else {
@@ -137,11 +160,19 @@ class PnlViewModel extends BaseModel {
         cutLoss -= 1;
       }
     }
+    final contract = currentContract(order);
+    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
+        contract.strikeLevel, contract.conversionRate > 0);
     setBusy(false);
   }
 
-  void changeCutLoss({double cutLoss}) {
+  void changeCutLoss({double cutLoss, OrderResponseModel order}) {
     this.cutLoss = cutLoss;
+    final contract = currentContract(order);
+    cutLoss == null
+        ? contract.strikeLevel.toStringAsFixed(4)
+        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
+            contract.strikeLevel, contract.conversionRate > 0);
     setBusy(false);
   }
 

@@ -38,7 +38,7 @@ class OrderInfo extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 18,
+              flex: 20,
               child: Row(
                 children: <Widget>[
                   Padding(
@@ -54,18 +54,11 @@ class OrderInfo extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    I18n.of(context).actLevel,
+                    "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
                     style: StyleFactory.cellDescLabel,
                   ),
-                  Text(
-                    currentContract.conversionRate > 0
-                        ? (_model.boughtPx /
-                                (_model.boughtPx - currentContract.strikeLevel))
-                            .toStringAsFixed(1)
-                        : (_model.boughtPx /
-                                (currentContract.strikeLevel - _model.boughtPx))
-                            .toStringAsFixed(1),
-                    style: StyleFactory.cellDescLabel,
+                  SizedBox(
+                    width: 5,
                   ),
                   Expanded(
                       child: Align(
@@ -81,7 +74,7 @@ class OrderInfo extends StatelessWidget {
             Expanded(flex: 5, child: SizedBox()),
             Divider(color: Palette.separatorColor),
             Expanded(
-                flex: 40,
+                flex: 115,
                 child: Row(
                   children: <Widget>[
                     Column(
@@ -98,53 +91,12 @@ class OrderInfo extends StatelessWidget {
                           _model.boughtPx.toStringAsFixed(4),
                           style: StyleFactory.cellTitleStyle,
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
-                          style: StyleFactory.cellDescLabel,
-                        ),
-                        SizedBox(
-                          height: 1,
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
                         ),
                         Text(
-                          "${invest.toStringAsFixed(4)}/${_model.qtyContract.toStringAsFixed(0)}",
-                          style: StyleFactory.cellTitleStyle,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(I18n.of(context).accruedInterest,
-                            style: StyleFactory.cellDescLabel),
-                        SizedBox(
-                          height: 1,
-                        ),
-                        Text(
-                          _model.accruedInterest.toStringAsFixed(4),
-                          style: StyleFactory.cellTitleStyle,
-                        )
-                      ],
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                )),
-            Expanded(
-                flex: 5,
-                child: SizedBox(
-                  height: 8,
-                )),
-            Expanded(
-                flex: 40,
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          I18n.of(context).forcePrice,
+                          I18n.of(context).forceClosePrice,
                           style: StyleFactory.cellDescLabel,
                         ),
                         SizedBox(
@@ -157,7 +109,23 @@ class OrderInfo extends StatelessWidget {
                       ],
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Text(
+                          "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
+                          style: StyleFactory.cellDescLabel,
+                        ),
+                        SizedBox(
+                          height: 1,
+                        ),
+                        Text(
+                          "${invest.toStringAsFixed(4)}/${_model.qtyContract.toStringAsFixed(0)}",
+                          style: StyleFactory.cellTitleStyle,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
+                        ),
                         Text(
                           I18n.of(context).fee,
                           style: StyleFactory.cellDescLabel,
@@ -172,8 +140,21 @@ class OrderInfo extends StatelessWidget {
                       ],
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Text(I18n.of(context).accruedInterest,
+                            style: StyleFactory.cellDescLabel),
+                        SizedBox(
+                          height: 1,
+                        ),
+                        Text(
+                          _model.accruedInterest.toStringAsFixed(4),
+                          style: StyleFactory.cellTitleStyle,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(),
+                        ),
                         Text(
                           "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
                           style: StyleFactory.cellDescLabel,
@@ -184,12 +165,9 @@ class OrderInfo extends StatelessWidget {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Text(
-                                "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
-                                style: StyleFactory.cellTitleStyle,
-                              ),
+                            Text(
+                              "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
+                              style: StyleFactory.cellTitleStyle,
                             ),
                             GestureDetector(
                               child: Image.asset(R.resAssetsIconsIcRevise),
@@ -205,46 +183,76 @@ class OrderInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 )),
             // Expanded(
-            //     flex: 18,
+            //     flex: 65,
             //     child: Row(
             //       children: <Widget>[
-            //         Text(
-            //           _model.forceClosePx.toStringAsFixed(4),
-            //           style: StyleFactory.cellTitleStyle,
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: <Widget>[
+            //             Text(
+            //               I18n.of(context).forcePrice,
+            //               style: StyleFactory.cellDescLabel,
+            //             ),
+            //             SizedBox(
+            //               height: 1,
+            //             ),
+            //             Text(
+            //               _model.forceClosePx.toStringAsFixed(4),
+            //               style: StyleFactory.cellTitleStyle,
+            //             ),
+            //           ],
             //         ),
-            //         Expanded(
-            //             child: Align(
-            //           alignment: Alignment.centerRight,
-            //           child: Row(
-            //             mainAxisSize: MainAxisSize.min,
-            //             children: <Widget>[
-            //               Padding(
-            //                 padding: EdgeInsets.only(right: 10),
-            //                 child: Text(
-            //                   "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
-            //                   style: StyleFactory.cellTitleStyle,
+            //         Column(
+            //           children: <Widget>[
+            //             Text(
+            //               I18n.of(context).fee,
+            //               style: StyleFactory.cellDescLabel,
+            //             ),
+            //             SizedBox(
+            //               height: 1,
+            //             ),
+            //             Text(
+            //               _model.commission.toStringAsFixed(4),
+            //               style: StyleFactory.cellTitleStyle,
+            //             )
+            //           ],
+            //         ),
+            //         Column(
+            //           crossAxisAlignment: CrossAxisAlignment.end,
+            //           children: <Widget>[
+            //             Text(
+            //               "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
+            //               style: StyleFactory.cellDescLabel,
+            //             ),
+            //             SizedBox(
+            //               height: 1,
+            //             ),
+            //             Row(
+            //               mainAxisSize: MainAxisSize.min,
+            //               children: <Widget>[
+            //                 Padding(
+            //                   padding: EdgeInsets.only(right: 10),
+            //                   child: Text(
+            //                     "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
+            //                     style: StyleFactory.cellTitleStyle,
+            //                   ),
             //                 ),
-            //               ),
-            //               GestureDetector(
-            //                 child: Image.asset(R.resAssetsIconsIcRevise),
-            //                 onTap: () {
-            //                   openDialog(context);
-            //                 },
-            //               )
-            //             ],
-            //           ),
-            //         ))
+            //                 GestureDetector(
+            //                   child: Image.asset(R.resAssetsIconsIcRevise),
+            //                   onTap: () {
+            //                     openDialog(context);
+            //                   },
+            //                 )
+            //               ],
+            //             )
+            //           ],
+            //         )
             //       ],
             //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
             //     )),
-            Expanded(
-                flex: 5,
-                child: SizedBox(
-                  height: 1,
-                )),
             Divider(color: Palette.separatorColor),
             Expanded(
-                flex: 45,
+                flex: 60,
                 child: Row(
                   children: <Widget>[
                     Column(
@@ -316,11 +324,7 @@ class OrderInfo extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                 )),
-            Expanded(
-                flex: 5,
-                child: SizedBox(
-                  height: 8,
-                ))
+            Expanded(flex: 5, child: SizedBox())
           ],
         ),
       );

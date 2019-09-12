@@ -83,10 +83,10 @@ class UserManager extends BaseModel {
         await unlockWithPrivKey(testAccount: testAccount);
         user.testAccountResponseModel = testAccount;
         user.loginType =
-            testAccount.accountType == 1 ? LoginType.reward : LoginType.test;
+            testAccount.accountType >= 1 ? LoginType.reward : LoginType.test;
         user.name = testAccount.accountName;
         _pref.saveLoginType(loginType: user.loginType);
-        testAccount.accountType == 1
+        testAccount.accountType >= 1
             ? _pref.saveRewardAccount(testAccount: testAccount)
             : _pref.saveTestAccount(testAccount: testAccount);
         _pref.saveUserName(name: user.name);
@@ -242,7 +242,7 @@ class UserManager extends BaseModel {
   }
 
   logoutTestAccount() async {
-    if (user.testAccountResponseModel.accountType == 1) {
+    if (user.testAccountResponseModel.accountType >= 1) {
       _pref.removeRewardAccount();
     }
     user.testAccountResponseModel = null;

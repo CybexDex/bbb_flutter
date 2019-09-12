@@ -30,7 +30,8 @@ showLoading(BuildContext context) {
         ),
       );
     },
-    barrierDismissible: false,
+    barrierDismissible: true,
+    barrierLabel: "dd",
     barrierColor: Colors.white10,
     transitionDuration: const Duration(milliseconds: 10),
   );

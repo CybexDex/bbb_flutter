@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/exchange/drawer.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_appbar.dart';
+import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
@@ -17,6 +21,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ExchangePage extends StatefulWidget {
   ExchangePage({Key key, this.title}) : super(key: key);
@@ -34,6 +40,7 @@ class _ExchangePageState extends State<ExchangePage>
   @override
   void initState() {
     super.initState();
+    checkConfiguretion();
     _animationController =
         AnimationController(duration: Duration(seconds: 5), vsync: this);
     _animationController.addStatusListener((status) {
@@ -219,6 +226,41 @@ class _ExchangePageState extends State<ExchangePage>
                     ],
                   ))));
         }));
+  }
+
+  checkConfiguretion() async {
+    await locator.get<ConfigureApi>().getUpdateInfo(isIOS: Platform.isIOS);
+
+    UpdateResponse updateResponse = locator.get<ConfigureApi>().updateResponse;
+    bool isForce =
+        updateResponse.isForceUpdate(locator.get<PackageInfo>().version);
+    if (updateResponse.needUpdate(locator.get<PackageInfo>().version)) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+            barrierDismissible: !isForce,
+            context: context,
+            builder: (context) {
+              return DialogFactory.normalConfirmDialog(context,
+                  title: I18n.of(context).updateTitle,
+                  isForce: isForce,
+                  content: updateResponse.cnUpdateInfo, onConfirmPressed: () {
+                _launchURL(url: updateResponse.url);
+                if (!isForce) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+              });
+            });
+      });
+    }
+  }
+
+  _launchURL({String url}) async {
+    print(url);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Widget _emptyStockWidget() {

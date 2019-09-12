@@ -48,3 +48,8 @@ class ReferSystemConnection {
   static const PRO_REFER = "https://refer.cybex.io";
   static const TEST_REFER = "http://192.168.103.91:8009";
 }
+
+class ConfigureConnection {
+  static const PRO_CONFIGURE = "https://app.cybex.io";
+  static const UAT_CONFIGURE = "http://47.100.98.113:3039";
+}

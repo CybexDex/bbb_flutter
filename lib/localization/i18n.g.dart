@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String welcomeRegister = 'welcome_register';
+  static final String dialogCancelButton = 'dialog_cancel_button';
 
   static final String transfer = 'transfer';
 
@@ -136,9 +136,9 @@ class _$Keys {
 
   static final String registerGoToLogIn = 'register_go_to_log_in';
 
-  static final String assetCat = 'asset_cat';
+  static final String welcomeRegister = 'welcome_register';
 
-  static final String dialogCancelButton = 'dialog_cancel_button';
+  static final String assetCat = 'asset_cat';
 
   static final String dialogSellTitle = 'dialog_sell_title';
 
@@ -251,13 +251,13 @@ class _$Keys {
 
   static final String inviteGainReward = 'invite_gain_reward';
 
-  static final String investAmountOrderInfo = 'invest_amount_order_info';
+  static final String inviteRecommendation = 'invite_recommendation';
 
   static final String inviteAddReferer = 'invite_add_referer';
 
   static final String inviteInputPinCode = 'invite_input_pin_code';
 
-  static final String clickToTry = 'click_to_try';
+  static final String noConnection = 'no_connection';
 
   static final String clickToQuit = 'click_to_quit';
 
@@ -363,7 +363,15 @@ class _$Keys {
 
   static final String percentageDown = 'percentage_down';
 
-  static final String inviteRecommendation = 'invite_recommendation';
+  static final String investAmountOrderInfo = 'invest_amount_order_info';
+
+  static final String updateTitle = 'update_title';
+
+  static final String connectToWifi = 'connect_to_wifi';
+
+  static final String connectToMobile = 'connect_to_mobile';
+
+  static final String clickToTry = 'click_to_try';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -384,7 +392,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
+  String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -437,8 +445,8 @@ abstract class _$I18nHelper {
   String get createNewAccount => this._translate(_$Keys.createNewAccount);
   String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
   String get registerGoToLogIn => this._translate(_$Keys.registerGoToLogIn);
+  String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
   String get dialogSellTitle => this._translate(_$Keys.dialogSellTitle);
   String get dialogSellContent => this._translate(_$Keys.dialogSellContent);
   String get dialogLogOutTitle => this._translate(_$Keys.dialogLogOutTitle);
@@ -502,11 +510,11 @@ abstract class _$I18nHelper {
   String get inviteThreeStepThree =>
       this._translate(_$Keys.inviteThreeStepThree);
   String get inviteGainReward => this._translate(_$Keys.inviteGainReward);
-  String get investAmountOrderInfo =>
-      this._translate(_$Keys.investAmountOrderInfo);
+  String get inviteRecommendation =>
+      this._translate(_$Keys.inviteRecommendation);
   String get inviteAddReferer => this._translate(_$Keys.inviteAddReferer);
   String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
-  String get clickToTry => this._translate(_$Keys.clickToTry);
+  String get noConnection => this._translate(_$Keys.noConnection);
   String get clickToQuit => this._translate(_$Keys.clickToQuit);
   String get share => this._translate(_$Keys.share);
   String get oneMin => this._translate(_$Keys.oneMin);
@@ -567,6 +575,10 @@ abstract class _$I18nHelper {
   String get pnl => this._translate(_$Keys.pnl);
   String get percentageUp => this._translate(_$Keys.percentageUp);
   String get percentageDown => this._translate(_$Keys.percentageDown);
-  String get inviteRecommendation =>
-      this._translate(_$Keys.inviteRecommendation);
+  String get investAmountOrderInfo =>
+      this._translate(_$Keys.investAmountOrderInfo);
+  String get updateTitle => this._translate(_$Keys.updateTitle);
+  String get connectToWifi => this._translate(_$Keys.connectToWifi);
+  String get connectToMobile => this._translate(_$Keys.connectToMobile);
+  String get clickToTry => this._translate(_$Keys.clickToTry);
 }

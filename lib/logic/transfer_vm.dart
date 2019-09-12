@@ -44,7 +44,8 @@ class TransferViewModel extends BaseModel {
     transferForm = TransferForm(
             fromBBBToCybex: true,
             totalAmount: Asset(amount: null, symbol: "USDT"),
-            balance: _um.fetchPositionFrom(AssetName.NXUSDT),
+            balance: _um.fetchPositionFrom(AssetName.NXUSDT) ??
+                Position(assetName: AssetName.NXUSDT, quantity: 0),
             cybBalance: _um.fetchPositionFrom(AssetName.CYB)) ??
         Position(assetName: AssetName.CYB, quantity: 0);
     getCurrentBalance();
@@ -73,7 +74,10 @@ class TransferViewModel extends BaseModel {
 
   void setTotalAmount({double value}) {
     transferForm.totalAmount.amount = value;
-    if (value == null || value > transferForm.balance.quantity || value <= 0) {
+    if (value == null ||
+        transferForm.balance == null ||
+        value > transferForm.balance.quantity ||
+        value <= 0) {
       isButtonAvailable = false;
     } else {
       isButtonAvailable = true;

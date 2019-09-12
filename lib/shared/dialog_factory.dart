@@ -18,23 +18,31 @@ class DialogFactory {
       String content,
       String cancel,
       String confirm,
+      bool isForce = false,
       Function onConfirmPressed}) {
     return CupertinoAlertDialog(
       title: Text(title),
       content: Text(content),
-      actions: <Widget>[
-        CupertinoDialogAction(
-          onPressed: () {
-            Navigator.of(context, rootNavigator: true).pop();
-          },
-          child: Text(I18n.of(context).dialogCancelButton,
-              style: StyleFactory.dialogButtonFontStyle),
-        ),
-        CupertinoDialogAction(
-            child: Text(I18n.of(context).confirm,
-                style: StyleFactory.dialogButtonFontStyle),
-            onPressed: onConfirmPressed)
-      ],
+      actions: isForce
+          ? <Widget>[
+              CupertinoDialogAction(
+                  child: Text(I18n.of(context).confirm,
+                      style: StyleFactory.dialogButtonFontStyle),
+                  onPressed: onConfirmPressed)
+            ]
+          : <Widget>[
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                child: Text(I18n.of(context).dialogCancelButton,
+                    style: StyleFactory.dialogButtonFontStyle),
+              ),
+              CupertinoDialogAction(
+                  child: Text(I18n.of(context).confirm,
+                      style: StyleFactory.dialogButtonFontStyle),
+                  onPressed: onConfirmPressed)
+            ],
     );
   }
 
@@ -334,7 +342,7 @@ class DialogFactory {
           SizedBox(height: 1),
           Text(I18n.of(context).pnl),
           SizedBox(height: 1),
-          Text(pnl),
+          Text(pnl + AssetName.USDT),
         ],
       ),
       actions: <Widget>[

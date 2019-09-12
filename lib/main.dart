@@ -8,11 +8,13 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/connection_widget.dart';
 import 'package:catcher/catcher_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
 
@@ -46,7 +48,6 @@ main() async {
 
   Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
   // runApp(MyApp());
-
   if (locator.get<UserManager>().user.logined) {
     locator
         .get<UserManager>()
@@ -64,33 +65,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: providers,
-        child: MaterialApp(
-          navigatorKey: Catcher.navigatorKey,
-          builder: (BuildContext context, Widget widget) {
-            Catcher.addDefaultErrorWidget(
-                showStacktrace: true,
-                customTitle: " error title",
-                customDescription: " error description");
-            return widget;
-          },
-          debugShowCheckedModeBanner: false,
-          title: 'BBB',
-          localizationsDelegates: [
-            GlobalCupertinoLocalizations.delegate,
-            I18n.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
-          ],
-          locale: Locale("zh"),
-          supportedLocales: [
-            const Locale("en"),
-            const Locale("zh"),
-          ],
-          localeResolutionCallback: (deviceLocale, supportedLocales) {
-            return Locale("zh");
-          },
-          initialRoute: RoutePaths.Home,
-          onGenerateRoute: Routes.generateRoute,
+        child: OKToast(
+          child: ConnectionWidget(
+            child: MaterialApp(
+              navigatorKey: Catcher.navigatorKey,
+              builder: (BuildContext context, Widget widget) {
+                Catcher.addDefaultErrorWidget(
+                    showStacktrace: true,
+                    customTitle: " error title",
+                    customDescription: " error description");
+                return widget;
+              },
+              debugShowCheckedModeBanner: false,
+              title: 'BBB',
+              localizationsDelegates: [
+                GlobalCupertinoLocalizations.delegate,
+                I18n.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate
+              ],
+              locale: Locale("zh"),
+              supportedLocales: [
+                const Locale("en"),
+                const Locale("zh"),
+              ],
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                return Locale("zh");
+              },
+              initialRoute: RoutePaths.Home,
+              onGenerateRoute: Routes.generateRoute,
+            ),
+          ),
         ));
   }
 }

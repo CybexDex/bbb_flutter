@@ -54,6 +54,8 @@ class _PnlFormState extends State<PnlForm> {
                     widget._order.boughtPx,
                     contract.strikeLevel,
                     contract.conversionRate > 0);
+            model.cutLossPx = widget._order.cutLossPx;
+            model.takeProfitPx = widget._order.takeProfitPx;
 
             double invest = OrderCalculate.calculateInvest(
                 orderQtyContract: widget._order.qtyContract,
@@ -127,13 +129,15 @@ class _PnlFormState extends State<PnlForm> {
                                   child: IStep(
                                     text: _takeProfitController,
                                     plusOnTap: () {
-                                      model.increaseTakeProfit();
+                                      model.increaseTakeProfit(
+                                          order: widget._order);
                                       model.setTakeProfitInputCorrectness(true);
                                       _takeProfitController.text =
                                           model.takeProfit.toStringAsFixed(0);
                                     },
                                     minusOnTap: () {
-                                      model.decreaseTakeProfit();
+                                      model.decreaseTakeProfit(
+                                          order: widget._order);
                                       model.setTakeProfitInputCorrectness(true);
                                       _takeProfitController.text =
                                           model.takeProfit.toStringAsFixed(0);
@@ -150,7 +154,8 @@ class _PnlFormState extends State<PnlForm> {
                                         model.changeTakeProfit(
                                             profit: value.isEmpty
                                                 ? null
-                                                : double.parse(value));
+                                                : double.parse(value),
+                                            order: widget._order);
                                       }
                                     },
                                   ),
@@ -159,7 +164,17 @@ class _PnlFormState extends State<PnlForm> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 5,
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            "≈ ${model.takeProfitPx.toStringAsFixed(4)}",
+                            style: StyleFactory.cellDescLabel,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Row(
                           children: <Widget>[
@@ -192,13 +207,15 @@ class _PnlFormState extends State<PnlForm> {
                                   child: IStep(
                                     text: _cutLossController,
                                     plusOnTap: () {
-                                      model.increaseCutLoss();
+                                      model.increaseCutLoss(
+                                          order: widget._order);
                                       model.setCutLossInputCorectness(true);
                                       _cutLossController.text =
                                           model.cutLoss.toStringAsFixed(0);
                                     },
                                     minusOnTap: () {
-                                      model.decreaseCutLoss();
+                                      model.decreaseCutLoss(
+                                          order: widget._order);
                                       model.setCutLossInputCorectness(true);
                                       _cutLossController.text =
                                           model.cutLoss.toStringAsFixed(0);
@@ -215,7 +232,8 @@ class _PnlFormState extends State<PnlForm> {
                                                 ? null
                                                 : double.parse(value) > 100
                                                     ? 100
-                                                    : double.parse(value));
+                                                    : double.parse(value),
+                                            order: widget._order);
                                         if (double.parse(value) > 100) {
                                           _cutLossController.text = "100";
                                         }
@@ -227,7 +245,17 @@ class _PnlFormState extends State<PnlForm> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 5,
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            "≈ ${model.cutLossPx.toStringAsFixed(4)}",
+                            style: StyleFactory.cellDescLabel,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         Offstage(
                             offstage: model.isCutLossInputCorrect &&

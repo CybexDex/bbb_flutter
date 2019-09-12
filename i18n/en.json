@@ -55,7 +55,7 @@
 	"welcome_register": "欢迎注册您的账户!",
 	"dialog_cancel_button": "取消",
 	"dialog_sell_title": "平仓",
-	"dialog_sell_content": "当前平仓预计收益:",
+	"dialog_sell_content": "合约预期收益",
 	"dialog_log_out_title": "登出",
 	"dialog_log_out_content": "确定你已妥善保存了你的密码,并确定希望登出你的账户。",
 	"dialog_log_out_confirm_button": "确认登出",
@@ -154,8 +154,12 @@
 	"type": "类型",
 	"version": "版本",
 	"trigger_close_content": "设置该止盈止损价格会触发平仓， 是否继续",
-	"pnl": "净利润",
+	"pnl": "净收益",
 	"percentage_up": "看涨",
 	"percentage_down": "看跌",
-	"invest_amount_order_info": "份数"
+	"invest_amount_order_info": "份数",
+	"update_title": "版本更新",
+	"connect_to_wifi": "连接到wifi",
+	"connect_to_mobile": "连接到蜂窝网",
+	"no_connection": "无网络连接"
 }

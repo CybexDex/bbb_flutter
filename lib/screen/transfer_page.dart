@@ -153,12 +153,15 @@ class _TransferState extends State<TransferPage> {
                                 child: Text(I18n.of(context).transferAll,
                                     style: StyleFactory.errorMessageText),
                                 onTap: () {
-                                  model.setTotalAmount(
-                                      value: double.parse(floor(
-                                          model.transferForm.balance.quantity,
-                                          4)));
-                                  _amountEditingController.text = floor(
-                                      model.transferForm.balance.quantity, 4);
+                                  if (model.transferForm.balance != null) {
+                                    model.setTotalAmount(
+                                        value: double.tryParse(floor(
+                                            model.transferForm?.balance
+                                                ?.quantity,
+                                            4)));
+                                    _amountEditingController.text = floor(
+                                        model.transferForm.balance.quantity, 4);
+                                  }
                                 },
                               )
                             ],
@@ -188,16 +191,18 @@ class _TransferState extends State<TransferPage> {
                                         I18n.of(context)
                                             .orderFormInputPositiveNumberError,
                                         style: StyleFactory.errorMessageText);
-                                  } else if (model
-                                          .transferForm.totalAmount.symbol ==
-                                      AssetName.USDT) {
+                                  } else if (model.transferForm.totalAmount
+                                              .symbol ==
+                                          AssetName.USDT ||
+                                      !model.transferForm.fromBBBToCybex) {
                                     return Text(
                                         I18n.of(context)
                                             .transferErrorMessageCybNotEnough,
                                         style: StyleFactory.errorMessageText);
-                                  } else if (model
-                                          .transferForm.totalAmount.symbol ==
-                                      AssetName.NXUSDT) {
+                                  } else if (model.transferForm.totalAmount
+                                              .symbol ==
+                                          AssetName.NXUSDT ||
+                                      model.transferForm.fromBBBToCybex) {
                                     return Text(
                                         I18n.of(context)
                                             .transferErrorMessageBbbNotEnough,

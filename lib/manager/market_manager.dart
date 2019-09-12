@@ -86,9 +86,11 @@ class MarketManager {
     reset();
 
     _channel = _sharedPref.getEnvType() == EnvType.Pro
-        ? IOWebSocketChannel.connect(_sharedPref.getTestNet()
-            ? WebSocketConnection.PRO_TEST_WEBSOCKET
-            : WebSocketConnection.PRO_WEBSOCKET)
+        ? IOWebSocketChannel.connect(
+            _sharedPref.getTestNet()
+                ? WebSocketConnection.PRO_TEST_WEBSOCKET
+                : WebSocketConnection.PRO_WEBSOCKET,
+          )
         : IOWebSocketChannel.connect(_sharedPref.getTestNet()
             ? WebSocketConnection.UAT_TEST_WEBSOCKET
             : WebSocketConnection.UAT_WEBSOCKET);
@@ -129,7 +131,6 @@ class MarketManager {
           WebSocketPercentageResponse.fromJson(json.decode(response));
       percentageTicker.add(percentageResponse);
     } else if (response.contains(WebsocketRequestTopic.PNL)) {
-      print(response);
       var pnlResponse = WebSocketPNLResponse.fromJson(json.decode(response));
       pnlTicker.add(pnlResponse);
     }

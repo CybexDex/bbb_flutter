@@ -76,7 +76,7 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      "${model.actLevel.toStringAsFixed(4)}",
+                      "${model.actLevel.toStringAsFixed(1)}",
                       style: StyleFactory.cellTitleStyle,
                     )
                   ],
