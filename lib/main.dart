@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
 
 main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (buildMode == BuildMode.debug) {
     FlipperClient flipperClient = FlipperClient.getDefault();
     flipperClient.addPlugin(new FlipperNetworkPlugin());

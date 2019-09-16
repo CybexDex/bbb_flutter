@@ -1,4 +1,4 @@
-package com.nbltrustdev.cybex.bbb_flutter;
+package com.nbltrustdev.bbb_flutter;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

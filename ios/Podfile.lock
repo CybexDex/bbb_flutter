@@ -1,10 +1,14 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - catcher (0.0.1):
+    - Flutter
   - CocoaAsyncSocket (7.6.3)
   - CocoaLibEvent (1.0.0)
   - ComponentKit (0.27):
     - Yoga (~> 1.14)
   - cybex_flutter_plugin (0.0.1):
+    - Flutter
+  - device_info (0.0.1):
     - Flutter
   - DoubleConversion (1.1.5)
   - Flipper (0.23.1):
@@ -61,6 +65,12 @@ PODS:
     - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.23.1)
     - FlipperKit/SKIOSNetworkPlugin (~> 0.23.1)
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
+  - flutter_mailer (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -68,6 +78,8 @@ PODS:
   - image_gallery_saver (0.0.1):
     - Flutter
   - openssl-ios-bitcode (1.0.216)
+  - package_info (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - permission_handler (3.2.2):
@@ -84,10 +96,16 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
+  - catcher (from `.symlinks/plugins/catcher/ios`)
   - cybex_flutter_plugin (from `.symlinks/plugins/cybex_flutter_plugin/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_flipperkit (from `.symlinks/plugins/flutter_flipperkit/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -113,14 +131,26 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
+  catcher:
+    :path: ".symlinks/plugins/catcher/ios"
   cybex_flutter_plugin:
     :path: ".symlinks/plugins/cybex_flutter_plugin/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   flutter_flipperkit:
     :path: ".symlinks/plugins/flutter_flipperkit/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_mailer:
+    :path: ".symlinks/plugins/flutter_mailer/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -134,22 +164,28 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  catcher: e5585ed31458c849f4fd9c3719b2fcb0188b8918
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   ComponentKit: 8af44a3fbb55fcd1d36a048cf24f1133ac6e6a77
   cybex_flutter_plugin: b3a2f301a41187a1fb1838d90c96dcd85def90f7
+  device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Flipper: cba441efc92632cafb055a21070ec05217c39a5f
   Flipper-Folly: 47dd8eaa8bf2245683e67c83121e6d2d8f4807cd
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   Flipper-RSocket: 1260a31c05c238eabfa9bb8a64e3983049048371
   FlipperKit: 0d4708bd52c930e647282593119f111da7716e69
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_flipperkit: 4c609b40a520b0cb3a2b648a9bd605b3fe15490a
+  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
+  flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   image_gallery_saver: 1798f45aab0db52c4a2a161409c361340a19908e
   openssl-ios-bitcode: b46298bcbc3e218fe13e376142af616850a36f7d
+  package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523

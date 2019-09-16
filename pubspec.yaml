@@ -14,7 +14,6 @@ dependencies:
             url: git@github.com:CybexDex/cybex_flutter_plugin.git
             ref: develop
     dio: ^2.1.0
-    charts_flutter: ^0.6.0
     qr_flutter: ^2.0.0
     jdenticon_dart: ^1.2.1+1
     flutter_svg:
@@ -72,48 +71,48 @@ flutter:
     uses-material-design: true
 
     assets:
-    - i18n/
+        - i18n/
         # assets begin
         # res/assets/icons/*
-    - res/assets/icons/ic_news.svg
-    - res/assets/icons/icTop2.png
-    - res/assets/icons/icTop3.png
-    - res/assets/icons/icMaskClose.png
-    - res/assets/icons/ic_add_2.svg
-    - res/assets/icons/icTop1.png
-    - res/assets/icons/icAdd.png
-    - res/assets/icons/icReduce.png
-    - res/assets/icons/icFail.png
-    - res/assets/icons/icDownGreen14.png
-    - res/assets/icons/icDropdown.png
-    - res/assets/icons/icPerson.png
-    - res/assets/icons/icWarn.png
-    - res/assets/icons/icChange.png
-    - res/assets/icons/icUpRed14.png
-    - res/assets/icons/icSuccess.png
-    - res/assets/icons/icPassword.png
-    - res/assets/icons/icEmpty.png
-    - res/assets/icons/icTabDeposit.png
-    - res/assets/icons/icFallGreen.png
-    - res/assets/icons/icTime.png
-    - res/assets/icons/ic_title_line.svg
-    - res/assets/icons/icNotifyBack.png
-    - res/assets/icons/ic_rewoard.svg
-    - res/assets/icons/content_copy.svg
-    - res/assets/icons/icSwitch.png
-    - res/assets/icons/ic_reduce_2.svg
-    - res/assets/icons/icAccount.png
-    - res/assets/icons/icRiseRed18.png
-    - res/assets/icons/share.png
-    - res/assets/icons/icRevise.png
-    - res/assets/icons/icCode.png
-    - res/assets/icons/icUser.png
-    - res/assets/icons/icHand.png
-    - res/assets/icons/icUsdt.png
-    - res/assets/icons/imgBanner.png
-    - res/assets/icons/ic_service.svg
-    - res/assets/icons/mask.png
-    - res/assets/icons/icTabArrow.png
-    - res/assets/icons/icTabWithdraw.png
-    - res/assets/icons/ic_try.svg
+        - res/assets/icons/ic_news.svg
+        - res/assets/icons/icTop2.png
+        - res/assets/icons/icTop3.png
+        - res/assets/icons/icMaskClose.png
+        - res/assets/icons/ic_add_2.svg
+        - res/assets/icons/icTop1.png
+        - res/assets/icons/icAdd.png
+        - res/assets/icons/icReduce.png
+        - res/assets/icons/icFail.png
+        - res/assets/icons/icDownGreen14.png
+        - res/assets/icons/icDropdown.png
+        - res/assets/icons/icPerson.png
+        - res/assets/icons/icWarn.png
+        - res/assets/icons/icChange.png
+        - res/assets/icons/icUpRed14.png
+        - res/assets/icons/icSuccess.png
+        - res/assets/icons/icPassword.png
+        - res/assets/icons/icEmpty.png
+        - res/assets/icons/icTabDeposit.png
+        - res/assets/icons/icFallGreen.png
+        - res/assets/icons/icTime.png
+        - res/assets/icons/ic_title_line.svg
+        - res/assets/icons/icNotifyBack.png
+        - res/assets/icons/ic_rewoard.svg
+        - res/assets/icons/content_copy.svg
+        - res/assets/icons/icSwitch.png
+        - res/assets/icons/ic_reduce_2.svg
+        - res/assets/icons/icAccount.png
+        - res/assets/icons/icRiseRed18.png
+        - res/assets/icons/share.png
+        - res/assets/icons/icRevise.png
+        - res/assets/icons/icCode.png
+        - res/assets/icons/icUser.png
+        - res/assets/icons/icHand.png
+        - res/assets/icons/icUsdt.png
+        - res/assets/icons/imgBanner.png
+        - res/assets/icons/ic_service.svg
+        - res/assets/icons/mask.png
+        - res/assets/icons/icTabArrow.png
+        - res/assets/icons/icTabWithdraw.png
+        - res/assets/icons/ic_try.svg
     # assets end
