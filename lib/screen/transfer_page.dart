@@ -242,7 +242,7 @@ class _TransferState extends State<TransferPage> {
                                                 .quantity <
                                             (AssetDef.CYB_TRANSFER.amount /
                                                 100000)) {
-                                          showToast(context, true,
+                                          showNotification(context, true,
                                               I18n.of(context).noFeeError);
                                         } else {
                                           TextEditingController controller =
@@ -287,14 +287,14 @@ class _TransferState extends State<TransferPage> {
       PostOrderResponseModel responseModel = await model.postTransfer();
       Navigator.of(context).pop();
       if (responseModel.status == "Failed") {
-        showToast(context, true, responseModel.reason);
+        showNotification(context, true, responseModel.errorMesage);
       } else {
-        showToast(context, false, I18n.of(context).successToast);
+        showNotification(context, false, I18n.of(context).successToast);
         model.getCurrentBalance();
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showToast(context, true, I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).failToast);
     }
   }
 }

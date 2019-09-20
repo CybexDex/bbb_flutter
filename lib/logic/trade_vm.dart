@@ -265,7 +265,6 @@ class TradeViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postOrder() async {
-    print(orderForm.takeProfit);
     order.buyOrder = buyOrder;
     order.commission = commission;
 

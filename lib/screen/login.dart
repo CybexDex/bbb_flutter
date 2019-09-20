@@ -191,14 +191,14 @@ class _LoginState extends State<LoginPage> {
                       onTap: () async {
                         if (await userLocator.loginWithPrivateKey(
                             bonusEvent: false)) {
-                          showToast(
+                          showNotification(
                               context, false, I18n.of(context).changeToTryEnv,
                               callback: () {
                             Navigator.of(context)
                                 .popUntil((route) => route.isFirst);
                           });
                         } else {
-                          showToast(
+                          showNotification(
                               context, true, I18n.of(context).changeToTryEnv,
                               callback: () {
                             Navigator.of(context)

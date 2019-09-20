@@ -62,8 +62,8 @@ class _ExchangePageState extends State<ExchangePage>
         builder: (_) => locator.get<OrderViewModel>(),
         child: Consumer<UserManager>(builder: (context, user, child) {
           return Scaffold(
-              resizeToAvoidBottomPadding: false,
               key: globalKey,
+              resizeToAvoidBottomPadding: false,
               drawer: user.user.logined ? UserDrawer() : null,
               appBar: exchangeAppBar(),
               body: SafeArea(
@@ -118,10 +118,14 @@ class _ExchangePageState extends State<ExchangePage>
                                       color: Palette.redOrange,
                                       onPressed: () {
                                         if (locator
-                                            .get<RefManager>()
-                                            .upContract
-                                            .isEmpty) {
-                                          showToast(context, true,
+                                                    .get<RefManager>()
+                                                    .upContract ==
+                                                null ||
+                                            locator
+                                                .get<RefManager>()
+                                                .upContract
+                                                .isEmpty) {
+                                          showNotification(context, true,
                                               I18n.of(context).toastNoContract);
                                           return;
                                         }
@@ -158,10 +162,14 @@ class _ExchangePageState extends State<ExchangePage>
                                       color: Palette.shamrockGreen,
                                       onPressed: () {
                                         if (locator
-                                            .get<RefManager>()
-                                            .downContract
-                                            .isEmpty) {
-                                          showToast(context, true,
+                                                    .get<RefManager>()
+                                                    .downContract ==
+                                                null ||
+                                            locator
+                                                .get<RefManager>()
+                                                .downContract
+                                                .isEmpty) {
+                                          showNotification(context, true,
                                               I18n.of(context).toastNoContract);
                                           return;
                                         }
@@ -221,7 +229,9 @@ class _ExchangePageState extends State<ExchangePage>
                           }
                           return _stockWidget(context, data);
                         },
-                        child: _emptyStockWidget(),
+                        child: Container(
+                            margin: EdgeInsets.only(bottom: 40),
+                            child: _emptyStockWidget()),
                       ),
                     ],
                   ))));

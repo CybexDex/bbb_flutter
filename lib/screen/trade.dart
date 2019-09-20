@@ -233,7 +233,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                                     .user
                                                                     .testAccountResponseModel ==
                                                                 null) {
-                                                          showToast(
+                                                          showNotification(
                                                               context,
                                                               true,
                                                               I18n.of(context)
@@ -289,7 +289,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                                     .user
                                                                     .testAccountResponseModel ==
                                                                 null) {
-                                                          showToast(
+                                                          showNotification(
                                                               context,
                                                               true,
                                                               I18n.of(context)
@@ -348,16 +348,17 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
       PostOrderResponseModel postOrderResponseModel = await model.postOrder();
       Navigator.of(context).pop();
       if (postOrderResponseModel.status == "Failed") {
-        showToast(context, true, postOrderResponseModel.reason);
+        showNotification(context, true, postOrderResponseModel.errorMesage);
       } else {
         await model.fetchPostion(name: AssetName.NXUSDT);
-        showToast(context, false, I18n.of(context).successToast, callback: () {
+        showNotification(context, false, I18n.of(context).successToast,
+            callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         });
       }
     } catch (e) {
       Navigator.of(context).pop();
-      showToast(context, true, I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).failToast);
       locator.get<Logger>().e(e);
     }
   }

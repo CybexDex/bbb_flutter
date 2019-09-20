@@ -1,13 +1,14 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-void showToast(BuildContext context, bool isFaild, String content,
+void showNotification(BuildContext context, bool isFaild, String content,
     {Function callback}) {
   showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         Future.delayed(Duration(seconds: 3), () {
-          Navigator.of(context).pop();
+          Navigator.of(context)?.pop();
         });
         return isFaild
             ? DialogFactory.failDialog(context, content: content)

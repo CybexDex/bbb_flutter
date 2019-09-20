@@ -95,14 +95,14 @@ class _UserDrawerState extends State<UserDrawer> {
                                 if (await userMg.loginWithPrivateKey(
                                     bonusEvent: true,
                                     accountName: userMg.user.name)) {
-                                  showToast(context, false,
+                                  showNotification(context, false,
                                       I18n.of(context).changeToReward,
                                       callback: () {
                                     Navigator.of(context)
                                         .popUntil((route) => route.isFirst);
                                   });
                                 } else {
-                                  showToast(context, true,
+                                  showNotification(context, true,
                                       I18n.of(context).changeToTryEnv,
                                       callback: () {
                                     Navigator.of(context)
@@ -138,14 +138,14 @@ class _UserDrawerState extends State<UserDrawer> {
                                 showLoading(context);
                                 if (await userMg.loginWithPrivateKey(
                                     bonusEvent: false)) {
-                                  showToast(context, false,
+                                  showNotification(context, false,
                                       I18n.of(context).changeToTryEnv,
                                       callback: () {
                                     Navigator.of(context)
                                         .popUntil((route) => route.isFirst);
                                   });
                                 } else {
-                                  showToast(context, true,
+                                  showNotification(context, true,
                                       I18n.of(context).changeToTryEnv,
                                       callback: () {
                                     Navigator.of(context)
@@ -509,7 +509,7 @@ class _UserDrawerState extends State<UserDrawer> {
                       color: Palette.redOrange,
                       onPressed: () {
                         if (userMg.user.testAccountResponseModel != null) {
-                          showToast(
+                          showNotification(
                               context,
                               false,
                               userMg.user.loginType == LoginType.reward

@@ -30,7 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String dialogCancelButton = 'dialog_cancel_button';
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String transfer = 'transfer';
 
@@ -138,7 +139,7 @@ class _$Keys {
 
   static final String welcomeRegister = 'welcome_register';
 
-  static final String assetCat = 'asset_cat';
+  static final String dialogCancelButton = 'dialog_cancel_button';
 
   static final String dialogSellTitle = 'dialog_sell_title';
 
@@ -160,8 +161,7 @@ class _$Keys {
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
 
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String assetCat = 'asset_cat';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
@@ -257,7 +257,7 @@ class _$Keys {
 
   static final String inviteInputPinCode = 'invite_input_pin_code';
 
-  static final String noConnection = 'no_connection';
+  static final String clickToTry = 'click_to_try';
 
   static final String clickToQuit = 'click_to_quit';
 
@@ -297,7 +297,7 @@ class _$Keys {
   static final String orderFormBuyLimitationError =
       'order_form_buy_limitation_error';
 
-  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
+  static final String error1037 = 'error_1037';
 
   static final String transferBbbAccount = 'transfer_bbb_account';
 
@@ -371,7 +371,63 @@ class _$Keys {
 
   static final String connectToMobile = 'connect_to_mobile';
 
-  static final String clickToTry = 'click_to_try';
+  static final String noConnection = 'no_connection';
+
+  static final String error1001 = 'error_1001';
+
+  static final String error1002 = 'error_1002';
+
+  static final String error1004 = 'error_1004';
+
+  static final String error1005 = 'error_1005';
+
+  static final String error1013 = 'error_1013';
+
+  static final String error1014 = 'error_1014';
+
+  static final String error1016 = 'error_1016';
+
+  static final String error1017 = 'error_1017';
+
+  static final String error1018 = 'error_1018';
+
+  static final String error1019 = 'error_1019';
+
+  static final String error1020 = 'error_1020';
+
+  static final String error1021 = 'error_1021';
+
+  static final String error1022 = 'error_1022';
+
+  static final String error1023 = 'error_1023';
+
+  static final String error1024 = 'error_1024';
+
+  static final String error1025 = 'error_1025';
+
+  static final String error1026 = 'error_1026';
+
+  static final String error1027 = 'error_1027';
+
+  static final String error1028 = 'error_1028';
+
+  static final String error1029 = 'error_1029';
+
+  static final String error1030 = 'error_1030';
+
+  static final String error1031 = 'error_1031';
+
+  static final String error1032 = 'error_1032';
+
+  static final String error1033 = 'error_1033';
+
+  static final String error1034 = 'error_1034';
+
+  static final String error1035 = 'error_1035';
+
+  static final String error1036 = 'error_1036';
+
+  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -392,7 +448,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -446,7 +503,7 @@ abstract class _$I18nHelper {
   String get alreadyRegister => this._translate(_$Keys.alreadyRegister);
   String get registerGoToLogIn => this._translate(_$Keys.registerGoToLogIn);
   String get welcomeRegister => this._translate(_$Keys.welcomeRegister);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get dialogCancelButton => this._translate(_$Keys.dialogCancelButton);
   String get dialogSellTitle => this._translate(_$Keys.dialogSellTitle);
   String get dialogSellContent => this._translate(_$Keys.dialogSellContent);
   String get dialogLogOutTitle => this._translate(_$Keys.dialogLogOutTitle);
@@ -458,8 +515,7 @@ abstract class _$I18nHelper {
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       this._translate(_$Keys.registerErrorMessageContainLowercase);
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
   String get registerErrorMessageShouldNotContainContinuesDash =>
@@ -514,7 +570,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.inviteRecommendation);
   String get inviteAddReferer => this._translate(_$Keys.inviteAddReferer);
   String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
-  String get noConnection => this._translate(_$Keys.noConnection);
+  String get clickToTry => this._translate(_$Keys.clickToTry);
   String get clickToQuit => this._translate(_$Keys.clickToQuit);
   String get share => this._translate(_$Keys.share);
   String get oneMin => this._translate(_$Keys.oneMin);
@@ -536,8 +592,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormInputPositiveNumberError);
   String get orderFormBuyLimitationError =>
       this._translate(_$Keys.orderFormBuyLimitationError);
-  String get stepWidgetNotSetHint =>
-      this._translate(_$Keys.stepWidgetNotSetHint);
+  String get error1037 => this._translate(_$Keys.error1037);
   String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
   String get transferCybexAccount =>
       this._translate(_$Keys.transferCybexAccount);
@@ -580,5 +635,34 @@ abstract class _$I18nHelper {
   String get updateTitle => this._translate(_$Keys.updateTitle);
   String get connectToWifi => this._translate(_$Keys.connectToWifi);
   String get connectToMobile => this._translate(_$Keys.connectToMobile);
-  String get clickToTry => this._translate(_$Keys.clickToTry);
+  String get noConnection => this._translate(_$Keys.noConnection);
+  String get error1001 => this._translate(_$Keys.error1001);
+  String get error1002 => this._translate(_$Keys.error1002);
+  String get error1004 => this._translate(_$Keys.error1004);
+  String get error1005 => this._translate(_$Keys.error1005);
+  String get error1013 => this._translate(_$Keys.error1013);
+  String get error1014 => this._translate(_$Keys.error1014);
+  String get error1016 => this._translate(_$Keys.error1016);
+  String get error1017 => this._translate(_$Keys.error1017);
+  String get error1018 => this._translate(_$Keys.error1018);
+  String get error1019 => this._translate(_$Keys.error1019);
+  String get error1020 => this._translate(_$Keys.error1020);
+  String get error1021 => this._translate(_$Keys.error1021);
+  String get error1022 => this._translate(_$Keys.error1022);
+  String get error1023 => this._translate(_$Keys.error1023);
+  String get error1024 => this._translate(_$Keys.error1024);
+  String get error1025 => this._translate(_$Keys.error1025);
+  String get error1026 => this._translate(_$Keys.error1026);
+  String get error1027 => this._translate(_$Keys.error1027);
+  String get error1028 => this._translate(_$Keys.error1028);
+  String get error1029 => this._translate(_$Keys.error1029);
+  String get error1030 => this._translate(_$Keys.error1030);
+  String get error1031 => this._translate(_$Keys.error1031);
+  String get error1032 => this._translate(_$Keys.error1032);
+  String get error1033 => this._translate(_$Keys.error1033);
+  String get error1034 => this._translate(_$Keys.error1034);
+  String get error1035 => this._translate(_$Keys.error1035);
+  String get error1036 => this._translate(_$Keys.error1036);
+  String get stepWidgetNotSetHint =>
+      this._translate(_$Keys.stepWidgetNotSetHint);
 }

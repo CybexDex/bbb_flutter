@@ -328,7 +328,8 @@ class _InviteState extends State<InvitePage> {
                                                       .get<UserManager>()
                                                       .user
                                                       .name));
-                                              showToast(context, false, "复制成功");
+                                              showNotification(
+                                                  context, false, "复制成功");
                                             },
                                             child: SvgPicture.asset(
                                                 R.resAssetsIconsContentCopy),
@@ -585,7 +586,7 @@ class _InviteState extends State<InvitePage> {
 
     if (registerRefResponseModel == null) {
       Navigator.of(context).pop();
-      showToast(
+      showNotification(
         context,
         true,
         I18n.of(context).failToast,
@@ -593,7 +594,7 @@ class _InviteState extends State<InvitePage> {
     } else {
       if (!registerRefResponseModel.success) {
         Navigator.of(context).pop();
-        showToast(
+        showNotification(
           context,
           true,
           registerRefResponseModel.reason,
@@ -601,7 +602,7 @@ class _InviteState extends State<InvitePage> {
       } else {
         Navigator.of(context).pop();
         model.getRefer();
-        showToast(
+        showNotification(
           context,
           false,
           I18n.of(context).successToast,

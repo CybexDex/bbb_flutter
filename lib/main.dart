@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_umeng_analytics/flutter_umeng_analytics.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'manager/ref_manager.dart';
@@ -35,6 +36,11 @@ main() async {
     SystemUiOverlayStyle systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    UMengAnalytics.init('5d8097684ca3578029000341',
+        policy: Policy.BATCH, encrypt: true, reportCrash: false);
+  } else if (Platform.isIOS) {
+    UMengAnalytics.init('5d8098c90cafb277140006f7',
+        policy: Policy.BATCH, encrypt: true, reportCrash: false);
   }
 
   setupLog();
@@ -65,38 +71,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: providers,
-        child: OKToast(
-          child: ConnectionWidget(
-            child: MaterialApp(
-              navigatorKey: Catcher.navigatorKey,
-              builder: (BuildContext context, Widget widget) {
-                Catcher.addDefaultErrorWidget(
-                    showStacktrace: true,
-                    customTitle: " error title",
-                    customDescription: " error description");
-                return widget;
-              },
-              debugShowCheckedModeBanner: false,
-              title: 'BBB',
-              localizationsDelegates: [
-                GlobalCupertinoLocalizations.delegate,
-                I18n.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate
-              ],
-              locale: Locale("zh"),
-              supportedLocales: [
-                const Locale("en"),
-                const Locale("zh"),
-              ],
-              localeResolutionCallback: (deviceLocale, supportedLocales) {
-                return Locale("zh");
-              },
-              initialRoute: RoutePaths.Home,
-              onGenerateRoute: Routes.generateRoute,
-            ),
+      providers: providers,
+      child: OKToast(
+        child: ConnectionWidget(
+          child: MaterialApp(
+            navigatorKey: Catcher.navigatorKey,
+            builder: (BuildContext context, Widget widget) {
+              Catcher.addDefaultErrorWidget(
+                  showStacktrace: true,
+                  customTitle: " error title",
+                  customDescription: " error description");
+              return widget;
+            },
+            debugShowCheckedModeBanner: false,
+            title: 'BBB',
+            localizationsDelegates: [
+              GlobalCupertinoLocalizations.delegate,
+              I18n.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate
+            ],
+            locale: Locale("zh"),
+            supportedLocales: [
+              const Locale("en"),
+              const Locale("zh"),
+            ],
+            localeResolutionCallback: (deviceLocale, supportedLocales) {
+              return Locale("zh");
+            },
+            initialRoute: RoutePaths.Home,
+            onGenerateRoute: Routes.generateRoute,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

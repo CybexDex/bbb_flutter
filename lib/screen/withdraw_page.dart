@@ -249,7 +249,7 @@ class _WithdrawState extends State<WithdrawPage> {
                               ? () async {
                                   if (model.withdrawForm.cybBalance.quantity <
                                       (AssetDef.CYB_TRANSFER.amount / 100000)) {
-                                    showToast(context, true,
+                                    showNotification(context, true,
                                         I18n.of(context).noFeeError);
                                   } else {
                                     model.withdrawForm.address =
@@ -293,13 +293,13 @@ class _WithdrawState extends State<WithdrawPage> {
       PostOrderResponseModel responseModel = await model.postWithdraw();
       Navigator.of(context).pop();
       if (responseModel.status == "Failed") {
-        showToast(context, true, responseModel.reason);
+        showNotification(context, true, responseModel.errorMesage);
       } else {
-        showToast(context, false, I18n.of(context).successToast);
+        showNotification(context, false, I18n.of(context).successToast);
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showToast(context, true, I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).failToast);
     }
   }
 }

@@ -504,14 +504,14 @@ class _RegisterState extends State<RegisterPage> {
                         if (await locator
                             .get<UserManager>()
                             .loginWithPrivateKey(bonusEvent: false)) {
-                          showToast(
+                          showNotification(
                               context, false, I18n.of(context).changeToTryEnv,
                               callback: () {
                             Navigator.of(context)
                                 .popUntil((route) => route.isFirst);
                           });
                         } else {
-                          showToast(
+                          showNotification(
                               context, true, I18n.of(context).changeToTryEnv,
                               callback: () {
                             Navigator.of(context)

@@ -36,13 +36,13 @@ class DepositPage extends StatelessWidget {
     if (Platform.isAndroid) {
       if (permissionRequestResult[permissions[0]] == PermissionStatus.granted) {
         _capturePng();
-        showToast(context, false, I18n.of(context).savePhotoSuccess);
+        showNotification(context, false, I18n.of(context).savePhotoSuccess);
       } else {}
     } else {
       print(permissions[1]);
       if (permissionRequestResult[permissions[1]] == PermissionStatus.granted) {
         _capturePng();
-        showToast(context, false, I18n.of(context).savePhotoSuccess);
+        showNotification(context, false, I18n.of(context).savePhotoSuccess);
       } else {
         showDialog(
             context: context,
@@ -126,7 +126,7 @@ class DepositPage extends StatelessWidget {
                                   onTap: () {
                                     Clipboard.setData(ClipboardData(
                                         text: value.user.deposit.address));
-                                    showToast(context, false, "复制成功");
+                                    showNotification(context, false, "复制成功");
                                   },
                                 )
                               ],

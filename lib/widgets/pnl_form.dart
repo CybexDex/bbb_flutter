@@ -286,11 +286,19 @@ class _PnlFormState extends State<PnlForm> {
                                       if ((model.takeProfit != null &&
                                               model.pnlPercent >
                                                   model.takeProfit &&
-                                              widget._order.pnl > 0) ||
+                                              widget._order.pnl +
+                                                      widget._order.commission +
+                                                      widget._order
+                                                          .accruedInterest >
+                                                  0) ||
                                           (model.cutLoss != null &&
                                               model.pnlPercent >
                                                   model.cutLoss &&
-                                              widget._order.pnl < 0)) {
+                                              widget._order.pnl +
+                                                      widget._order.commission +
+                                                      widget._order
+                                                          .accruedInterest <
+                                                  0)) {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
@@ -335,14 +343,14 @@ class _PnlFormState extends State<PnlForm> {
           await model.amend(widget._order, false);
       Navigator.of(context).pop();
       if (postOrderResponseModel.status == "Failed") {
-        showToast(context, true, postOrderResponseModel.reason);
+        showNotification(context, true, postOrderResponseModel.errorMesage);
       } else {
-        showToast(context, false, I18n.of(context).successToast,
+        showNotification(context, false, I18n.of(context).successToast,
             callback: widget._callback);
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showToast(context, true, I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).failToast);
     }
   }
 

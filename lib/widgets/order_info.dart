@@ -51,7 +51,7 @@ class OrderInfo extends StatelessWidget {
                     style: StyleFactory.cellTitleStyle,
                   ),
                   SizedBox(
-                    width: 10,
+                    width: 25,
                   ),
                   Text(
                     "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
@@ -152,7 +152,6 @@ class OrderInfo extends StatelessWidget {
                           style: StyleFactory.cellTitleStyle,
                         ),
                         Expanded(
-                          flex: 1,
                           child: SizedBox(),
                         ),
                         Text(
@@ -163,16 +162,22 @@ class OrderInfo extends StatelessWidget {
                           height: 1,
                         ),
                         Row(
-                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Text(
                               "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
                               style: StyleFactory.cellTitleStyle,
                             ),
+                            SizedBox(
+                              width: 5,
+                            ),
                             GestureDetector(
-                              child: Image.asset(R.resAssetsIconsIcRevise),
+                              child: SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: Image.asset(R.resAssetsIconsIcRevise)),
                               onTap: () {
-                                openDialog(context);
+                                openDialog(globalKey.currentContext);
                               },
                             )
                           ],
@@ -315,7 +320,7 @@ class OrderInfo extends StatelessWidget {
                                     pnl: _model.pnl.toStringAsFixed(4),
                                     controller: controller);
                               }).then((value) async {
-                            if (value) {
+                            if (value != null && value) {
                               callAmend(context);
                             }
                           });
@@ -406,14 +411,14 @@ class OrderInfo extends StatelessWidget {
           await pnlViewModel.amend(_model, true);
       Navigator.of(context).pop();
       if (postOrderResponseModel.status == "Failed") {
-        showToast(context, true, postOrderResponseModel.reason);
+        showNotification(context, true, postOrderResponseModel.errorMesage);
       } else {
-        showToast(context, false,
+        showNotification(context, false,
             I18n.of(context).closeOut + I18n.of(context).successToast);
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showToast(context, true,
+      showNotification(context, true,
           I18n.of(context).closeOut + I18n.of(context).failToast);
     }
   }
