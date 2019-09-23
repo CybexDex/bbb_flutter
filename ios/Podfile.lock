@@ -190,7 +190,7 @@ SPEC CHECKSUMS:
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   ComponentKit: 8af44a3fbb55fcd1d36a048cf24f1133ac6e6a77
   connectivity: c72716e202a1225ec4810740d5cb56b8ae3bf4cc
-  cybex_flutter_plugin: b3a2f301a41187a1fb1838d90c96dcd85def90f7
+  cybex_flutter_plugin: a16be87c9abbcf7fd041e3cb04219e5a62e63515
   device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   Flipper: cba441efc92632cafb055a21070ec05217c39a5f
@@ -206,7 +206,7 @@ SPEC CHECKSUMS:
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  image_gallery_saver: 1798f45aab0db52c4a2a161409c361340a19908e
+  image_gallery_saver: 6d422f8c5b40f5b57e8c3298d1fa6b1653c088c0
   openssl-ios-bitcode: b46298bcbc3e218fe13e376142af616850a36f7d
   package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
@@ -220,6 +220,6 @@ SPEC CHECKSUMS:
   Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
   YogaKit: 5d1dc899cecd5946e5a758a0c3997704a4b48d01
 
-PODFILE CHECKSUM: 6cab27c7a1ea95ca5bafaa6dd6ab0744573d24c9
+PODFILE CHECKSUM: e4addd5e48ca29b4f079d7752901392d1a2de058
 
 COCOAPODS: 1.6.1

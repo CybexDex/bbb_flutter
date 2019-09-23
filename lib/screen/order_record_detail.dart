@@ -149,6 +149,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
     I18n.of(globalKey.currentContext).openPositionPrice,
     I18n.of(globalKey.currentContext).settlementPrice,
     I18n.of(globalKey.currentContext).investPay,
+    I18n.of(globalKey.currentContext).actLevel,
     I18n.of(globalKey.currentContext).fee,
     I18n.of(globalKey.currentContext).accruedInterest,
     I18n.of(globalKey.currentContext).pnl,
@@ -212,20 +213,28 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 4:
-                return Text(_model.commission.toStringAsFixed(4),
+                return Text(
+                    "${_contract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - _contract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (_contract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 5:
-                return Text(_model.accruedInterest.toStringAsFixed(4),
+                return Text(_model.commission.toStringAsFixed(4),
                     style: TextStyle(
                         color: Color(0xff333333),
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
               case 6:
+                return Text(_model.accruedInterest.toStringAsFixed(4),
+                    style: TextStyle(
+                        color: Color(0xff333333),
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14.0));
+              case 7:
                 return Text(_model.pnl.toStringAsFixed(4),
                     style: TextStyle(
                         color: Color(0xff333333),
@@ -233,7 +242,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
 
-              case 7:
+              case 8:
                 return Text(
                     _model.takeProfitPx == 0
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -246,7 +255,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 8:
+              case 9:
                 return Text(
                     _model.cutLossPx == _contract.strikeLevel
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -259,7 +268,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 9:
+              case 10:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.createTime).toLocal()),
@@ -268,7 +277,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 10:
+              case 11:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.settleTime).toLocal()),
@@ -277,7 +286,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         fontSize: 14.0));
-              case 11:
+              case 12:
                 return Text(closeResonCN(_model.closeReason),
                     style: TextStyle(
                         color: Color(0xff333333),

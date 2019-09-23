@@ -40,7 +40,7 @@ class OrderViewModel extends BaseModel {
     if (_um.user.logined) {
 //      setBusy(true);
       orders = await _api.getOrders(_um.user.name, status: [OrderStatus.open]);
-      orders = orders.take(10).toList();
+      orders = orders.toList();
       if (orders.length > 0) {
         index = min(index, orders.length - 1);
       }
