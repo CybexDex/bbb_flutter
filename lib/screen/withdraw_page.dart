@@ -288,7 +288,7 @@ class _WithdrawState extends State<WithdrawPage> {
   }
 
   callPostWithdraw(WithdrawViewModel model) async {
-    showLoading(context);
+    showLoading(context, isBarrierDismissible: false);
     try {
       PostOrderResponseModel responseModel = await model.postWithdraw();
       Navigator.of(context).pop();
@@ -296,6 +296,7 @@ class _WithdrawState extends State<WithdrawPage> {
         showNotification(context, true, responseModel.errorMesage);
       } else {
         showNotification(context, false, I18n.of(context).successToast);
+        model.getCurrentBalance();
       }
     } catch (error) {
       Navigator.of(context).pop();

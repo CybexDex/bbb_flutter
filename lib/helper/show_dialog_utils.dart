@@ -20,7 +20,7 @@ void showNotification(BuildContext context, bool isFaild, String content,
   });
 }
 
-showLoading(BuildContext context) {
+showLoading(BuildContext context, {bool isBarrierDismissible}) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animate1, animate2) {
@@ -31,7 +31,7 @@ showLoading(BuildContext context) {
         ),
       );
     },
-    barrierDismissible: true,
+    barrierDismissible: isBarrierDismissible ?? true,
     barrierLabel: "dd",
     barrierColor: Colors.white10,
     transitionDuration: const Duration(milliseconds: 10),

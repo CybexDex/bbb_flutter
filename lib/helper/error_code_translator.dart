@@ -59,6 +59,9 @@ String translatePostOrderResponseErrorCode({int code, BuildContext context}) {
     case 1037:
       return I18n.of(context).error1037;
       break;
+    case 1038:
+      return I18n.of(context).error1038;
+      break;
     default:
       return I18n.of(context).failToast;
   }

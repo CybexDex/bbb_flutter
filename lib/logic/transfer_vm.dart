@@ -96,6 +96,7 @@ class TransferViewModel extends BaseModel {
     withdraw.transfer = await CybexFlutterPlugin.transferOperation(commission);
     withdraw.transactionType =
         transferForm.fromBBBToCybex ? "NxCybexWithdraw" : "NxCybexDeposit";
+    withdraw.memo = transferForm.fromBBBToCybex ? "" : null;
 
     locator.get<Logger>().i(withdraw.toRawJson());
 

@@ -114,32 +114,9 @@ class _RegisterState extends State<RegisterPage> {
   @override
   void initState() {
     super.initState();
-    controllerListener();
-    createFocusNode();
   }
 
-  controllerListener() {
-    _accountNameController.addListener(() {
-      _checkAccountName(_accountNameController.text);
-    });
-
-    _passwordController.addListener(() {
-      _checkPassword(_passwordController.text);
-    });
-
-    _passwordConfirmController.addListener(() {
-      _checkPasswordConfirmation(_passwordConfirmController.text);
-    });
-
-    _pinCodeController.addListener(() {
-      _setButtonState(_isAccountNamePassChecker &&
-          _isPasswordPassChecker &&
-          _isPasswordConfirmChecker &&
-          _pinCodeController.text.isNotEmpty);
-    });
-  }
-
-  _checkAccountName(String accountName) {
+  _checkAccountName(String accountName) async {
     if (accountName.isEmpty) {
       setState(() {
         _errorMessage = "请输入账号";
@@ -190,7 +167,7 @@ class _RegisterState extends State<RegisterPage> {
         _isAccountNamePassChecker = false;
       });
     } else {
-      _processAccountCheck(accountName);
+      await _processAccountCheck(accountName);
     }
     _setButtonState(_isAccountNamePassChecker &&
         _isPasswordPassChecker &&
@@ -252,12 +229,6 @@ class _RegisterState extends State<RegisterPage> {
         _pinCodeController.text.isNotEmpty);
   }
 
-  createFocusNode() {
-    // var _accountNameFocusNode = FocusNode();
-    // var _passwordFocusNode = FocusNode();
-    // var _passwordConfirmFocusNode = FocusNode();
-  }
-
   _processAccountCheck(String accountName) async {
     if (await locator.get<UserManager>().checkAccount(name: accountName)) {
       setState(() {
@@ -283,155 +254,82 @@ class _RegisterState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Palette.backButtonColor, //change your color here
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Palette.backButtonColor, //change your color here
+            ),
+            centerTitle: true,
+            title: Text(I18n.of(context).register, style: StyleFactory.title),
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            elevation: 0,
           ),
-          centerTitle: true,
-          title: Text(I18n.of(context).register, style: StyleFactory.title),
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          child: SafeArea(
-              child: Container(
-            margin: Dimen.pageMargin,
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          decoration: DecorationFactory.cornerShadowDecoration,
-                          height: 333,
-                          margin: EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(padding: EdgeInsets.only(top: 29)),
-                              Expanded(
-                                  child: ListView(
-                                      padding:
-                                          EdgeInsets.only(left: 20, right: 20),
-                                      children: <Widget>[
-                                    Column(children: <Widget>[
-                                      Align(
+          body: SingleChildScrollView(
+            child: SafeArea(
+                child: Container(
+              margin: Dimen.pageMargin,
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            decoration:
+                                DecorationFactory.cornerShadowDecoration,
+                            height: 333,
+                            margin: EdgeInsets.only(top: 20),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(padding: EdgeInsets.only(top: 29)),
+                                Expanded(
+                                    child: ListView(
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 20),
+                                        children: <Widget>[
+                                      Column(children: <Widget>[
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                I18n.of(context).register,
+                                                style: StyleFactory.title)),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Align(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(I18n.of(context).register,
-                                              style: StyleFactory.title)),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Visibility(
-                                          visible: !_errorMessageVisibility,
-                                          child: Text(
-                                            I18n.of(context).welcomeRegister,
-                                            style: StyleFactory.cellTitleStyle,
-                                          ),
-                                          replacement: Text(_errorMessage,
-                                              style: StyleFactory
-                                                  .errorMessageText),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 22,
-                                      ),
-                                      TextField(
-                                        controller: _accountNameController,
-                                        autocorrect: false,
-                                        decoration: InputDecoration(
-                                            hintText: I18n.of(context)
-                                                .accountNameHint,
-                                            hintStyle: StyleFactory.hintStyle,
-                                            icon: Image.asset(
-                                                R.resAssetsIconsIcUser),
-                                            border: InputBorder.none),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color:
-                                                        Palette.separatorColor,
-                                                    width: 0.5))),
-                                      )
-                                    ]),
-                                    Column(
-                                      children: <Widget>[
-                                        TextFormField(
-                                          controller: _passwordController,
-                                          obscureText: true,
-                                          decoration: InputDecoration(
-                                              hintText: I18n.of(context)
-                                                  .passwordConfirm,
-                                              hintStyle: StyleFactory.hintStyle,
-                                              icon: Image.asset(
-                                                  R.resAssetsIconsIcPassword),
-                                              border: InputBorder.none),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: Palette
-                                                          .separatorColor,
-                                                      width: 0.5))),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        TextFormField(
-                                          controller:
-                                              _passwordConfirmController,
-                                          obscureText: true,
-                                          decoration: InputDecoration(
-                                              hintText: I18n.of(context)
-                                                  .passwordConfirmHint,
-                                              hintStyle: StyleFactory.hintStyle,
-                                              icon: Image.asset(
-                                                  R.resAssetsIconsIcPassword),
-                                              border: InputBorder.none),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: Palette
-                                                          .separatorColor,
-                                                      width: 0.5))),
-                                        )
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Flexible(
-                                              child: TextFormField(
-                                                controller: _pinCodeController,
-                                                decoration: InputDecoration(
-                                                    hintText: I18n.of(context)
-                                                        .pinCodeHint,
-                                                    hintStyle:
-                                                        StyleFactory.hintStyle,
-                                                    icon: Image.asset(
-                                                        R.resAssetsIconsIcCode),
-                                                    border: InputBorder.none),
-                                              ),
+                                          child: Visibility(
+                                            visible: !_errorMessageVisibility,
+                                            child: Text(
+                                              I18n.of(context).welcomeRegister,
+                                              style:
+                                                  StyleFactory.cellTitleStyle,
                                             ),
-                                            GestureDetector(
-                                              child: _widget,
-                                              onTap: () {
-                                                displaySvg();
-                                              },
-                                            )
-                                          ],
+                                            replacement: Text(_errorMessage,
+                                                style: StyleFactory
+                                                    .errorMessageText),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 22,
+                                        ),
+                                        TextField(
+                                          controller: _accountNameController,
+                                          onChanged: (value) {
+                                            _checkAccountName(value);
+                                          },
+                                          autocorrect: false,
+                                          decoration: InputDecoration(
+                                              hintText: I18n.of(context)
+                                                  .accountNameHint,
+                                              hintStyle: StyleFactory.hintStyle,
+                                              icon: Image.asset(
+                                                  R.resAssetsIconsIcUser),
+                                              border: InputBorder.none),
                                         ),
                                         Container(
                                           decoration: BoxDecoration(
@@ -441,106 +339,204 @@ class _RegisterState extends State<RegisterPage> {
                                                           .separatorColor,
                                                       width: 0.5))),
                                         )
-                                      ],
-                                    ),
-                                  ]))
-                            ],
+                                      ]),
+                                      Column(
+                                        children: <Widget>[
+                                          TextFormField(
+                                            controller: _passwordController,
+                                            onChanged: (value) {
+                                              _checkPassword(value);
+                                            },
+                                            obscureText: true,
+                                            decoration: InputDecoration(
+                                                hintText: I18n.of(context)
+                                                    .passwordConfirm,
+                                                hintStyle:
+                                                    StyleFactory.hintStyle,
+                                                icon: Image.asset(
+                                                    R.resAssetsIconsIcPassword),
+                                                border: InputBorder.none),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Palette
+                                                            .separatorColor,
+                                                        width: 0.5))),
+                                          )
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          TextFormField(
+                                            controller:
+                                                _passwordConfirmController,
+                                            onChanged: (value) {
+                                              _checkPasswordConfirmation(value);
+                                            },
+                                            obscureText: true,
+                                            decoration: InputDecoration(
+                                                hintText: I18n.of(context)
+                                                    .passwordConfirmHint,
+                                                hintStyle:
+                                                    StyleFactory.hintStyle,
+                                                icon: Image.asset(
+                                                    R.resAssetsIconsIcPassword),
+                                                border: InputBorder.none),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Palette
+                                                            .separatorColor,
+                                                        width: 0.5))),
+                                          )
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Flexible(
+                                                child: TextFormField(
+                                                  controller:
+                                                      _pinCodeController,
+                                                  onChanged: (value) {
+                                                    _setButtonState(
+                                                        _isAccountNamePassChecker &&
+                                                            _isPasswordPassChecker &&
+                                                            _isPasswordConfirmChecker &&
+                                                            value.isNotEmpty);
+                                                  },
+                                                  decoration: InputDecoration(
+                                                      hintText: I18n.of(context)
+                                                          .pinCodeHint,
+                                                      hintStyle: StyleFactory
+                                                          .hintStyle,
+                                                      icon: Image.asset(R
+                                                          .resAssetsIconsIcCode),
+                                                      border: InputBorder.none),
+                                                ),
+                                              ),
+                                              GestureDetector(
+                                                child: _widget,
+                                                onTap: () {
+                                                  displaySvg();
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Palette
+                                                            .separatorColor,
+                                                        width: 0.5))),
+                                          )
+                                        ],
+                                      ),
+                                    ]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 325),
-                            child: ButtonTheme(
-                              minWidth: 200,
-                              child: WidgetFactory.button(
-                                  onPressed: _isButtonEnabled
-                                      ? () async {
-                                          showLoading(context);
-                                          await _processRegister();
-                                        }
-                                      : () {},
-                                  color: _isButtonEnabled
-                                      ? Palette.redOrange
-                                      : Palette.subTitleColor,
-                                  data: I18n.of(context).register),
-                            ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Image.asset(R.resAssetsIconsIcWarn),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          I18n.of(context).registerWarningText,
-                          style: StyleFactory.subTitleStyle,
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 48,
-                    ),
-                    GestureDetector(
-                      child: Container(
-                          alignment: Alignment.center,
-                          width: 200,
-                          margin: EdgeInsets.only(top: 20),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Palette.redOrange),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0) //
-                                    ),
+                          Container(
+                              alignment: Alignment.bottomCenter,
+                              margin: EdgeInsets.only(top: 325),
+                              child: ButtonTheme(
+                                minWidth: 200,
+                                child: WidgetFactory.button(
+                                    onPressed: _isButtonEnabled
+                                        ? () async {
+                                            showLoading(context);
+                                            await _processRegister();
+                                          }
+                                        : () {},
+                                    color: _isButtonEnabled
+                                        ? Palette.redOrange
+                                        : Palette.subTitleColor,
+                                    data: I18n.of(context).register),
+                              ))
+                        ],
+                      ),
+                      SizedBox(
+                        height: 32,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Image.asset(R.resAssetsIconsIcWarn),
+                          SizedBox(
+                            width: 5,
                           ),
-                          child: Text(
-                            I18n.of(context).clickToTry,
-                            style: StyleFactory.buyUpOrderInfo,
-                          )),
-                      onTap: () async {
-                        if (await locator
-                            .get<UserManager>()
-                            .loginWithPrivateKey(bonusEvent: false)) {
-                          showNotification(
-                              context, false, I18n.of(context).changeToTryEnv,
-                              callback: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          });
-                        } else {
-                          showNotification(
-                              context, true, I18n.of(context).changeToTryEnv,
-                              callback: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    GestureDetector(
-                      child: RichText(
-                          text: new TextSpan(children: [
-                        new TextSpan(
-                            style: StyleFactory.hintStyle,
-                            text: I18n.of(context).alreadyRegister),
-                        new TextSpan(
-                            style: StyleFactory.hyperText,
-                            text: I18n.of(context).registerGoToLogIn)
-                      ])),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
-                )),
+                          Text(
+                            I18n.of(context).registerWarningText,
+                            style: StyleFactory.subTitleStyle,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 48,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                            alignment: Alignment.center,
+                            width: 200,
+                            margin: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Palette.redOrange),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0) //
+                                      ),
+                            ),
+                            child: Text(
+                              I18n.of(context).clickToTry,
+                              style: StyleFactory.buyUpOrderInfo,
+                            )),
+                        onTap: () async {
+                          if (await locator
+                              .get<UserManager>()
+                              .loginWithPrivateKey(bonusEvent: false)) {
+                            showNotification(
+                                context, false, I18n.of(context).changeToTryEnv,
+                                callback: () {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            });
+                          } else {
+                            showNotification(
+                                context, true, I18n.of(context).changeToTryEnv,
+                                callback: () {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            });
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      GestureDetector(
+                        child: RichText(
+                            text: new TextSpan(children: [
+                          new TextSpan(
+                              style: StyleFactory.hintStyle,
+                              text: I18n.of(context).alreadyRegister),
+                          new TextSpan(
+                              style: StyleFactory.hyperText,
+                              text: I18n.of(context).registerGoToLogIn)
+                        ])),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  )),
+            )),
           )),
-        ));
+    );
   }
 
   @override

@@ -164,7 +164,10 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<PostOrderResponseModel> postTransfer(
       {PostWithdrawRequestModel transfer}) async {
-    var response = await dio.post("/transaction", data: transfer.toJson());
+    var response = await dio.post("/transaction",
+        data: transfer.memo != null
+            ? transfer.toWithdrawJson()
+            : transfer.toJson());
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 

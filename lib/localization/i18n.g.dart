@@ -30,8 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String registerErrorMessageContainLowercase =
+      'register_error_message_contain_lowercase';
 
   static final String transfer = 'transfer';
 
@@ -158,10 +158,10 @@ class _$Keys {
 
   static final String dialogCheckPassword = 'dialog_check_password';
 
-  static final String registerErrorMessageContainLowercase =
-      'register_error_message_contain_lowercase';
-
   static final String assetCat = 'asset_cat';
+
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
@@ -297,9 +297,9 @@ class _$Keys {
   static final String orderFormBuyLimitationError =
       'order_form_buy_limitation_error';
 
-  static final String error1037 = 'error_1037';
+  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 
-  static final String transferBbbAccount = 'transfer_bbb_account';
+  static final String error1038 = 'error_1038';
 
   static final String transferCybexAccount = 'transfer_cybex_account';
 
@@ -427,7 +427,9 @@ class _$Keys {
 
   static final String error1036 = 'error_1036';
 
-  static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
+  static final String error1037 = 'error_1037';
+
+  static final String transferBbbAccount = 'transfer_bbb_account';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -448,8 +450,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get registerErrorMessageContainLowercase =>
+      this._translate(_$Keys.registerErrorMessageContainLowercase);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -513,9 +515,9 @@ abstract class _$I18nHelper {
   String get confirm => this._translate(_$Keys.confirm);
   String get remider => this._translate(_$Keys.remider);
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
-  String get registerErrorMessageContainLowercase =>
-      this._translate(_$Keys.registerErrorMessageContainLowercase);
   String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
   String get registerErrorMessageShouldNotContainContinuesDash =>
@@ -592,8 +594,9 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormInputPositiveNumberError);
   String get orderFormBuyLimitationError =>
       this._translate(_$Keys.orderFormBuyLimitationError);
-  String get error1037 => this._translate(_$Keys.error1037);
-  String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
+  String get stepWidgetNotSetHint =>
+      this._translate(_$Keys.stepWidgetNotSetHint);
+  String get error1038 => this._translate(_$Keys.error1038);
   String get transferCybexAccount =>
       this._translate(_$Keys.transferCybexAccount);
   String get transferTo => this._translate(_$Keys.transferTo);
@@ -663,6 +666,6 @@ abstract class _$I18nHelper {
   String get error1034 => this._translate(_$Keys.error1034);
   String get error1035 => this._translate(_$Keys.error1035);
   String get error1036 => this._translate(_$Keys.error1036);
-  String get stepWidgetNotSetHint =>
-      this._translate(_$Keys.stepWidgetNotSetHint);
+  String get error1037 => this._translate(_$Keys.error1037);
+  String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
 }

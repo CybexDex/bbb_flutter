@@ -37,86 +37,66 @@ class _LoginState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Palette.backButtonColor, //change your color here
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Palette.backButtonColor, //change your color here
+            ),
+            centerTitle: true,
+            title: Text(I18n.of(context).logIn, style: StyleFactory.title),
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            elevation: 0,
           ),
-          centerTitle: true,
-          title: Text(I18n.of(context).logIn, style: StyleFactory.title),
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          elevation: 0,
-        ),
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Container(
-                margin: Dimen.pageMargin,
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          width: double.infinity,
-                          decoration: DecorationFactory.cornerShadowDecoration,
-                          height: 200,
-                          margin: EdgeInsets.only(top: 20),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(padding: EdgeInsets.only(top: 29)),
-                              Expanded(
-                                  child: ListView(
-                                      padding:
-                                          EdgeInsets.only(left: 20, right: 20),
-                                      children: <Widget>[
-                                    Column(children: <Widget>[
-                                      Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Visibility(
-                                            visible: !_errorMessageVisible,
-                                            child: Text(
-                                              "欢迎登录您的账户!",
-                                              style: StyleFactory.title,
-                                            ),
-                                            replacement: Text(_errorMessage,
-                                                style: StyleFactory
-                                                    .errorMessageText),
-                                          )),
-                                      SizedBox(
-                                        height: 15,
-                                      ),
-                                      TextField(
-                                        autocorrect: false,
-                                        controller: _accountNameController,
-                                        decoration: InputDecoration(
-                                            hintText: I18n.of(context)
-                                                .accountNameHint,
-                                            hintStyle: StyleFactory.hintStyle,
-                                            icon: Image.asset(
-                                                R.resAssetsIconsIcUser),
-                                            border: InputBorder.none),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color:
-                                                        Palette.separatorColor,
-                                                    width: 0.5))),
-                                      )
-                                    ]),
-                                    Column(
-                                      children: <Widget>[
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Container(
+                  margin: Dimen.pageMargin,
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            decoration:
+                                DecorationFactory.cornerShadowDecoration,
+                            height: 200,
+                            margin: EdgeInsets.only(top: 20),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(padding: EdgeInsets.only(top: 29)),
+                                Expanded(
+                                    child: ListView(
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 20),
+                                        children: <Widget>[
+                                      Column(children: <Widget>[
+                                        Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Visibility(
+                                              visible: !_errorMessageVisible,
+                                              child: Text(
+                                                "欢迎登录您的账户!",
+                                                style: StyleFactory.title,
+                                              ),
+                                              replacement: Text(_errorMessage,
+                                                  style: StyleFactory
+                                                      .errorMessageText),
+                                            )),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
                                         TextField(
-                                          obscureText: true,
-                                          enableInteractiveSelection: true,
-                                          controller: _passwordController,
+                                          autocorrect: false,
+                                          controller: _accountNameController,
                                           decoration: InputDecoration(
                                               hintText: I18n.of(context)
-                                                  .passwordConfirm,
+                                                  .accountNameHint,
                                               hintStyle: StyleFactory.hintStyle,
                                               icon: Image.asset(
-                                                  R.resAssetsIconsIcPassword),
+                                                  R.resAssetsIconsIcUser),
                                               border: InputBorder.none),
                                         ),
                                         Container(
@@ -127,108 +107,134 @@ class _LoginState extends State<LoginPage> {
                                                           .separatorColor,
                                                       width: 0.5))),
                                         )
-                                      ],
-                                    )
-                                  ]))
-                            ],
+                                      ]),
+                                      Column(
+                                        children: <Widget>[
+                                          TextField(
+                                            obscureText: true,
+                                            enableInteractiveSelection: true,
+                                            controller: _passwordController,
+                                            decoration: InputDecoration(
+                                                hintText: I18n.of(context)
+                                                    .passwordConfirm,
+                                                hintStyle:
+                                                    StyleFactory.hintStyle,
+                                                icon: Image.asset(
+                                                    R.resAssetsIconsIcPassword),
+                                                border: InputBorder.none),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Palette
+                                                            .separatorColor,
+                                                        width: 0.5))),
+                                          )
+                                        ],
+                                      )
+                                    ]))
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                            alignment: Alignment.bottomCenter,
-                            margin: EdgeInsets.only(top: 190),
-                            child: ButtonTheme(
-                              minWidth: 200,
-                              child: WidgetFactory.button(
-                                  onPressed: _enableButton
-                                      ? () async {
-                                          setState(() {
-                                            _loadingVisibility = true;
-                                          });
-                                          if (await userLocator.loginWith(
-                                              name: _accountNameController.text,
-                                              password:
-                                                  _passwordController.text)) {
-                                            Navigator.of(context).popUntil(
-                                                (route) => route.isFirst);
-                                          } else {
+                          Container(
+                              alignment: Alignment.bottomCenter,
+                              margin: EdgeInsets.only(top: 190),
+                              child: ButtonTheme(
+                                minWidth: 200,
+                                child: WidgetFactory.button(
+                                    onPressed: _enableButton
+                                        ? () async {
                                             setState(() {
-                                              _errorMessageVisible = true;
-                                              _errorMessage = I18n.of(context)
-                                                  .accountLogInError;
+                                              _loadingVisibility = true;
+                                            });
+                                            if (await userLocator.loginWith(
+                                                name:
+                                                    _accountNameController.text,
+                                                password:
+                                                    _passwordController.text)) {
+                                              Navigator.of(context).popUntil(
+                                                  (route) => route.isFirst);
+                                            } else {
+                                              setState(() {
+                                                _errorMessageVisible = true;
+                                                _errorMessage = I18n.of(context)
+                                                    .accountLogInError;
+                                              });
+                                            }
+                                            setState(() {
+                                              _loadingVisibility = false;
                                             });
                                           }
-                                          setState(() {
-                                            _loadingVisibility = false;
-                                          });
-                                        }
-                                      : () {},
-                                  color: _enableButton
-                                      ? Palette.redOrange
-                                      : Palette.subTitleColor,
-                                  data: I18n.of(context).logIn),
-                            ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    GestureDetector(
-                      child: Container(
-                          alignment: Alignment.center,
-                          width: 200,
-                          margin: EdgeInsets.only(top: 20),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Palette.redOrange),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0) //
-                                    ),
-                          ),
-                          child: Text(
-                            I18n.of(context).clickToTry,
-                            style: StyleFactory.buyUpOrderInfo,
-                          )),
-                      onTap: () async {
-                        if (await userLocator.loginWithPrivateKey(
-                            bonusEvent: false)) {
-                          showNotification(
-                              context, false, I18n.of(context).changeToTryEnv,
-                              callback: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          });
-                        } else {
-                          showNotification(
-                              context, true, I18n.of(context).changeToTryEnv,
-                              callback: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          });
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        I18n.of(context).createNewAccount,
-                        style: StyleFactory.hyperText,
+                                        : () {},
+                                    color: _enableButton
+                                        ? Palette.redOrange
+                                        : Palette.subTitleColor,
+                                    data: I18n.of(context).logIn),
+                              ))
+                        ],
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(context, RoutePaths.Register);
-                      },
-                    ),
-                    Visibility(
-                      visible: _loadingVisibility,
-                      child: SpinKitWave(
-                        color: Palette.redOrange,
-                        size: 50,
+                      SizedBox(
+                        height: 40,
                       ),
-                    )
-                  ],
-                )),
-          ),
-        ));
+                      GestureDetector(
+                        child: Container(
+                            alignment: Alignment.center,
+                            width: 200,
+                            margin: EdgeInsets.only(top: 20),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Palette.redOrange),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0) //
+                                      ),
+                            ),
+                            child: Text(
+                              I18n.of(context).clickToTry,
+                              style: StyleFactory.buyUpOrderInfo,
+                            )),
+                        onTap: () async {
+                          if (await userLocator.loginWithPrivateKey(
+                              bonusEvent: false)) {
+                            showNotification(
+                                context, false, I18n.of(context).changeToTryEnv,
+                                callback: () {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            });
+                          } else {
+                            showNotification(
+                                context, true, I18n.of(context).changeToTryEnv,
+                                callback: () {
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            });
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      GestureDetector(
+                        child: Text(
+                          I18n.of(context).createNewAccount,
+                          style: StyleFactory.hyperText,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, RoutePaths.Register);
+                        },
+                      ),
+                      Visibility(
+                        visible: _loadingVisibility,
+                        child: SpinKitWave(
+                          color: Palette.redOrange,
+                          size: 50,
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          )),
+    );
   }
 }

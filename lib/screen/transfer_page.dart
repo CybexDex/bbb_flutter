@@ -178,7 +178,7 @@ class _TransferState extends State<TransferPage> {
                           ),
                           Offstage(
                             offstage: model.isButtonAvailable ||
-                                model.transferForm.totalAmount.amount == null,
+                                _amountEditingController.text.isEmpty,
                             child: Row(
                               children: <Widget>[
                                 Image.asset(R.resAssetsIconsIcWarn),
@@ -282,7 +282,7 @@ class _TransferState extends State<TransferPage> {
   }
 
   callPostWithdraw(TransferViewModel model) async {
-    showLoading(context);
+    showLoading(context, isBarrierDismissible: false);
     try {
       PostOrderResponseModel responseModel = await model.postTransfer();
       Navigator.of(context).pop();
