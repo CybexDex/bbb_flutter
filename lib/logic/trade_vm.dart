@@ -82,8 +82,7 @@ class TradeViewModel extends BaseModel {
         showCutoff: false,
         showProfit: false,
         totalAmount: Asset(amount: 0, symbol: AssetName.USDT),
-        cybBalance: _um.fetchPositionFrom(AssetName.CYB) ??
-            Position(assetName: AssetName.CYB, quantity: 0),
+        cybBalance: Position(assetName: AssetName.CYB, quantity: 0),
         fee: Asset(amount: 0, symbol: AssetName.USDT));
   }
 
@@ -246,6 +245,7 @@ class TradeViewModel extends BaseModel {
   fetchPostion({String name}) async {
     await _um.fetchBalances(name: _um.user.name);
     usdtBalance = _um.fetchPositionFrom(name);
+    orderForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB);
     setBusy(false);
   }
 
