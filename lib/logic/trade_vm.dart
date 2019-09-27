@@ -245,7 +245,8 @@ class TradeViewModel extends BaseModel {
   fetchPostion({String name}) async {
     await _um.fetchBalances(name: _um.user.name);
     usdtBalance = _um.fetchPositionFrom(name);
-    orderForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB);
+    orderForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB) ??
+        Position(assetName: AssetName.CYB, quantity: 0);
     setBusy(false);
   }
 

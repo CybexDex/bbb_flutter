@@ -57,12 +57,19 @@ class RefManager {
 
   firstLoadData() async {
     RefContractResponseModel _ = await refreshRefData();
+    updateUpContractId();
+    updateDownContractId();
+    startLoop();
+  }
+
+  updateUpContractId() {
     changeUpContractId(
         upContract.isEmpty ? null : upContract.first?.contractId);
+  }
+
+  updateDownContractId() {
     changeDownContractId(
         downContract.isEmpty ? null : downContract.first?.contractId);
-
-    startLoop();
   }
 
   changeUpContractId(String id) {

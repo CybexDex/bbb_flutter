@@ -309,6 +309,7 @@ class OrderInfo extends StatelessWidget {
                           TextEditingController controller =
                               TextEditingController();
                           showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return DialogFactory.closeOutConfirmDialog(
@@ -406,7 +407,7 @@ class OrderInfo extends StatelessWidget {
         mtm: locator.get(),
         refm: locator.get());
     try {
-      showLoading(context);
+      showLoading(context, isBarrierDismissible: false);
       PostOrderResponseModel postOrderResponseModel =
           await pnlViewModel.amend(_model, true);
       Navigator.of(context).pop();

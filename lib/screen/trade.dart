@@ -219,20 +219,20 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     : Palette.subTitleColor,
                                                 onPressed: model.isSatisfied
                                                     ? () async {
-                                                        if (model
+                                                        if (locator
+                                                                    .get<
+                                                                        UserManager>()
+                                                                    .user
+                                                                    .testAccountResponseModel ==
+                                                                null &&
+                                                            model
                                                                     .orderForm
                                                                     .cybBalance
                                                                     .quantity <
                                                                 (AssetDef
                                                                         .CYB_TRANSFER
                                                                         .amount /
-                                                                    100000) &&
-                                                            locator
-                                                                    .get<
-                                                                        UserManager>()
-                                                                    .user
-                                                                    .testAccountResponseModel ==
-                                                                null) {
+                                                                    100000)) {
                                                           showNotification(
                                                               context,
                                                               true,
@@ -275,20 +275,20 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     : Palette.subTitleColor,
                                                 onPressed: model.isSatisfied
                                                     ? () async {
-                                                        if (model
+                                                        if (locator
+                                                                    .get<
+                                                                        UserManager>()
+                                                                    .user
+                                                                    .testAccountResponseModel ==
+                                                                null &&
+                                                            model
                                                                     .orderForm
                                                                     .cybBalance
                                                                     .quantity <
                                                                 (AssetDef
                                                                         .CYB_TRANSFER
                                                                         .amount /
-                                                                    100000) &&
-                                                            locator
-                                                                    .get<
-                                                                        UserManager>()
-                                                                    .user
-                                                                    .testAccountResponseModel ==
-                                                                null) {
+                                                                    100000)) {
                                                           showNotification(
                                                               context,
                                                               true,
@@ -343,7 +343,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   }
 
   callPostOrder(BuildContext context, TradeViewModel model) async {
-    showLoading(context);
+    showLoading(context, isBarrierDismissible: false);
     try {
       PostOrderResponseModel postOrderResponseModel = await model.postOrder();
       Navigator.of(context).pop();

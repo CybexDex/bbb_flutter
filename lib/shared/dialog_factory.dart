@@ -356,7 +356,8 @@ class DialogFactory {
         CupertinoDialogAction(
             child: Text(I18n.of(context).confirm,
                 style: StyleFactory.dialogButtonFontStyle),
-            onPressed: () {
+            onPressed: () async {
+              print("kkk");
               if (locator.get<UserManager>().user.isLocked) {
                 showDialog(
                     context: context,
@@ -374,7 +375,7 @@ class DialogFactory {
               } else {
                 if (locator.get<UserManager>().user.testAccountResponseModel !=
                     null) {
-                  CybexFlutterPlugin.setDefaultPrivKey(locator
+                  await CybexFlutterPlugin.setDefaultPrivKey(locator
                       .get<UserManager>()
                       .user
                       .testAccountResponseModel
