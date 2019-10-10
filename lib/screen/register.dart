@@ -8,6 +8,7 @@ import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/models/response/register_response_model.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -94,6 +95,7 @@ class _RegisterState extends State<RegisterPage> {
       if (await locator.get<UserManager>().loginWith(
           name: _accountNameController.text,
           password: _passwordController.text)) {
+        await checkAdd(context, activityTypes[ActivityType.register]);
         Navigator.of(context).popUntil((route) => route.isFirst);
       } else {
         setState(() {

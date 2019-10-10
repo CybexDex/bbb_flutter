@@ -55,6 +55,12 @@ const Map<ContractStatus, String> contractStatusMap = {
   ContractStatus.knocked_out: "KNOCKED_OUT",
 };
 
+enum ActivityType { register, mainActivity }
+const Map<ActivityType, int> activityTypes = {
+  ActivityType.register: 0,
+  ActivityType.mainActivity: 1
+};
+
 enum FundType {
   userDepositExtern,
   userWithdrawExtern,

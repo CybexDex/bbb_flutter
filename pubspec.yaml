@@ -116,4 +116,5 @@ flutter:
         - res/assets/icons/icTabArrow.png
         - res/assets/icons/icTabWithdraw.png
         - res/assets/icons/ic_try.svg
+        - res/assets/icons/ic_adds_cancel.svg
     # assets end

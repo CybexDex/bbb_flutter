@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:package_info/package_info.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ExchangePage extends StatefulWidget {
   ExchangePage({Key key, this.title}) : super(key: key);
@@ -254,22 +253,16 @@ class _ExchangePageState extends State<ExchangePage>
                   title: I18n.of(context).updateTitle,
                   isForce: isForce,
                   content: updateResponse.cnUpdateInfo, onConfirmPressed: () {
-                _launchURL(url: updateResponse.url);
+                launchURL(url: updateResponse.url);
                 if (!isForce) {
                   Navigator.of(context, rootNavigator: true).pop();
+                  checkAdd(context, activityTypes[ActivityType.mainActivity]);
                 }
               });
             });
       });
-    }
-  }
-
-  _launchURL({String url}) async {
-    print(url);
-    if (await canLaunch(url)) {
-      await launch(url);
     } else {
-      throw 'Could not launch $url';
+      checkAdd(context, activityTypes[ActivityType.mainActivity]);
     }
   }
 

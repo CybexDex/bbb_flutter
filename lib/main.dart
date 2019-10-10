@@ -46,7 +46,8 @@ main() async {
   await setupLocator();
   setupProviders();
 
-  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(), []);
+  CatcherOptions debugOptions =
+      CatcherOptions(SilentReportMode(), [ConsoleHandler()]);
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
     SentryHandler(
         "https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"),

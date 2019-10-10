@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -32,8 +33,19 @@ class ConfiguireApiProvider extends ConfigureApi {
   Future<UpdateResponse> getUpdateInfo({bool isIOS}) async {
     var response = await dio
         .get(isIOS ? "/BBB_IOS_store_update.json" : "/BBB_Android_update.json");
-    print(response);
     updateResponse = UpdateResponse.fromJson(response.data);
     return Future.value(UpdateResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<List<ActivitiesResponse>> getActivities() async {
+    var response = await dio.get("/json/bbb_activities.json");
+    var responseData = response.data as List;
+    if (responseData == null) {
+      return Future.value([]);
+    }
+    activitiesResponseList =
+        responseData.map((data) => ActivitiesResponse.fromJson(data)).toList();
+    return Future.value(activitiesResponseList);
   }
 }

@@ -81,4 +81,6 @@ class R {
   static final String resAssetsIconsIcTabWithdraw = 'res/assets/icons/icTabWithdraw.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_try.svg)
   static final String resAssetsIconsIcTry = 'res/assets/icons/ic_try.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_adds_cancel.svg)
+  static final String resAssetsIconsIcAddsCancel = 'res/assets/icons/ic_adds_cancel.svg';
 }

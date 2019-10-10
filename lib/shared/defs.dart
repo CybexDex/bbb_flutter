@@ -33,7 +33,7 @@ class GatewayConnection {
 }
 
 class FaucetConnection {
-  static const PRO_FAUCET = "https://faucet.cybex.io";
+  static const PRO_FAUCET = "https://faucetbbb.cybex.io";
   static const UAT_FAUCET = "http://uatfaucet.51nebula.com";
 }
 

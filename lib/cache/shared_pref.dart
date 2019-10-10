@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
+import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +44,23 @@ class SharedPref {
 
   removeAccount() async {
     await _prefs.remove('bbb.account');
+  }
+
+  ActivitiesResponse getActivityResponse({String name}) {
+    final value = _prefs.getString(name);
+    if (value != null) {
+      return ActivitiesResponse.fromRawJson(value);
+    }
+    return null;
+  }
+
+  saveActivitiesResponse({ActivitiesResponse activitiesResponse}) async {
+    await _prefs.setString(
+        activitiesResponse.name, activitiesResponse.toString());
+  }
+
+  removeActivitiesResponse() async {
+    await _prefs.remove('bbb.mainActivity');
   }
 
   TestAccountResponseModel getTestAccount() {

@@ -10,6 +10,7 @@ import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class DialogFactory {
@@ -357,7 +358,6 @@ class DialogFactory {
             child: Text(I18n.of(context).confirm,
                 style: StyleFactory.dialogButtonFontStyle),
             onPressed: () async {
-              print("kkk");
               if (locator.get<UserManager>().user.isLocked) {
                 showDialog(
                     context: context,
@@ -385,6 +385,28 @@ class DialogFactory {
               }
             })
       ],
+    );
+  }
+
+  static Widget addsDialog(BuildContext context,
+      {String url, String img, Function onImageTap}) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+              onTap: onImageTap, child: Image.network(img, width: 270)),
+          SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: SvgPicture.asset(
+              R.resAssetsIconsIcAddsCancel,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
