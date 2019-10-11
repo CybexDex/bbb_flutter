@@ -1,11 +1,11 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
+    return WebviewScaffold(
+        url: "https://bbb2019.zendesk.com/hc/zh-cn",
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Palette.backButtonColor, //change your color here
@@ -15,9 +15,15 @@ class HelpCenterScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
+          leading: GestureDetector(
+            child: BackButtonIcon(),
+            onTap: () {
+              Navigator.of(context).pop();
+              flutterWebViewPlugin.close();
+            },
+          ),
         ),
-        body: WebView(
-            initialUrl: "https://bbb2019.zendesk.com/hc/zh-cn",
-            javascriptMode: JavascriptMode.unrestricted));
+        withZoom: true,
+        hidden: true);
   }
 }

@@ -16,6 +16,7 @@ import 'package:bbb_flutter/services/network/gateway/getway_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -24,6 +25,7 @@ import 'package:package_info/package_info.dart';
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
 final globalKey = GlobalKey();
+final flutterWebViewPlugin = FlutterWebviewPlugin();
 
 class SimpleLogPrinter extends LogPrinter {
   final String className;

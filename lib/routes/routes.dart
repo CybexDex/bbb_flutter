@@ -69,7 +69,8 @@ class Routes {
       case RoutePaths.Feedback:
         return CupertinoPageRoute(builder: (_) => FeedBackScreen());
       case RoutePaths.Help:
-        return CupertinoPageRoute(builder: (_) => HelpCenterScreen());
+        return CupertinoPageRoute(
+            fullscreenDialog: true, builder: (_) => HelpCenterScreen());
       case RoutePaths.Share:
         return CupertinoPageRoute(builder: (_) => SharePage());
       default:
