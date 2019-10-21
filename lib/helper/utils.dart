@@ -49,13 +49,13 @@ String formatBytesAsHexString(Uint8List bytes) {
   return result.toString();
 }
 
-String getEllipsisName({String value}) {
+String getEllipsisName({String value, int precision}) {
   if (value == null) {
     return null;
   }
-
-  if (value.length >= 7) {
-    return value.substring(0, 4) +
+  precision = precision ?? 6;
+  if (value.length >= precision) {
+    return value.substring(0, 3) +
         "***" +
         value.substring(value.length - 2, value.length);
   }

@@ -15,6 +15,7 @@ class InvitePage extends StatefulWidget {
 }
 
 class _InviteState extends State<InvitePage> {
+  GlobalKey _listviewContainer = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return BaseWidget<InviteViewModel>(
@@ -510,6 +511,7 @@ class _InviteState extends State<InvitePage> {
                               ),
                             ),
                             Container(
+                              key: _listviewContainer,
                               decoration: DecorationFactory
                                   .invitationContainerShadowDecoration,
                               margin: EdgeInsets.only(
@@ -554,16 +556,18 @@ class _InviteState extends State<InvitePage> {
                                       itemBuilder: (context, index) {
                                         return Container(
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
-                                              Text(
-                                                  getEllipsisName(
-                                                      value: model
-                                                          .referralList[index]
-                                                          .referral),
-                                                  style: StyleFactory
-                                                      .dialogContentStyle),
+                                              Container(
+                                                width: (_getSize() - 20) / 2,
+                                                child: Text(
+                                                    getEllipsisName(
+                                                        value: model
+                                                            .referralList[index]
+                                                            .referral,
+                                                        precision: 10),
+                                                    style: StyleFactory
+                                                        .dialogContentStyle),
+                                              ),
                                               Text(
                                                   DateFormat("yyyy-MM-dd HH:mm")
                                                       .format(DateTime
@@ -594,6 +598,12 @@ class _InviteState extends State<InvitePage> {
         );
       },
     );
+  }
+
+  double _getSize() {
+    final RenderBox renderBox =
+        _listviewContainer.currentContext.findRenderObject();
+    return renderBox.size.width;
   }
 
   callRegister(

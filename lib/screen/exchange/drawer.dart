@@ -557,9 +557,9 @@ class _UserDrawerState extends State<UserDrawer> {
     return CarouselSlider(
         viewportFraction: 0.92,
         aspectRatio: 269 / 66,
-        autoPlay: true,
+        autoPlay: items.length > 1,
         reverse: false,
-        enableInfiniteScroll: true,
+        enableInfiniteScroll: items.length > 1,
         items: items.map((i) {
           return Builder(
             builder: (BuildContext context) {
