@@ -1,8 +1,7 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/logic/invite_vm.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,28 +18,31 @@ class _InviteState extends State<InvitePage> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<InviteViewModel>(
-      model: InviteViewModel(api: locator.get(), um: locator.get()),
+      model: InviteViewModel(
+          api: locator.get(),
+          nodeApi: locator.get(),
+          refm: locator.get(),
+          um: locator.get()),
       onModelReady: (model) => model.getRefer(),
       builder: (context, model, child) {
-        print(model.referTopList);
         return Scaffold(
           appBar: AppBar(
             actions: <Widget>[
-              GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Center(
-                    child: Text(
-                      I18n.of(context).share,
-                      style: StyleFactory.navButtonTitleStyle,
-                      textScaleFactor: 1,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutePaths.Share);
-                },
-              )
+              // GestureDetector(
+              //   child: Padding(
+              //     padding: EdgeInsets.only(right: 20),
+              //     child: Center(
+              //       child: Text(
+              //         I18n.of(context).share,
+              //         style: StyleFactory.navButtonTitleStyle,
+              //         textScaleFactor: 1,
+              //       ),
+              //     ),
+              //   ),
+              //   onTap: () {
+              //     Navigator.of(context).pushNamed(RoutePaths.Share);
+              //   },
+              // )
             ],
             iconTheme: IconThemeData(
               color: Palette.backButtonColor, //change your color here
@@ -79,14 +81,21 @@ class _InviteState extends State<InvitePage> {
                                           right: 14,
                                           top: 3,
                                           bottom: 3),
-                                      child: Text("规则",
-                                          style: TextStyle(
-                                              decoration: TextDecoration.none,
-                                              color: Palette.pagePrimaryColor,
-                                              fontWeight: FontWeight.w400,
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: Dimen
-                                                  .verySmallLabelFontSize)),
+                                      child: GestureDetector(
+                                        child: Text("规则",
+                                            style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                color: Palette.pagePrimaryColor,
+                                                fontWeight: FontWeight.w400,
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: Dimen
+                                                    .verySmallLabelFontSize)),
+                                        onTap: () {
+                                          launchURL(
+                                              url:
+                                                  "https://bbb2019.zendesk.com/hc/zh-cn/articles/360035284551");
+                                        },
+                                      ),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Palette.pagePrimaryColor),
@@ -141,17 +150,21 @@ class _InviteState extends State<InvitePage> {
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
-                                                  : model
-                                                      ?.referTopList[1]?.name,
+                                                  : getEllipsisName(
+                                                      value: model
+                                                          ?.referTopList[1]
+                                                          ?.to),
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
+                                            ),
+                                            SizedBox(
+                                              height: 2,
                                             ),
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
                                                   : model
-                                                      ?.referTopList[1]?.amount
-                                                      ?.toStringAsFixed(4),
+                                                      ?.referTopList[1]?.amount,
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -168,17 +181,21 @@ class _InviteState extends State<InvitePage> {
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
-                                                  : model
-                                                      ?.referTopList[0]?.name,
+                                                  : getEllipsisName(
+                                                      value: model
+                                                          ?.referTopList[0]
+                                                          ?.to),
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
+                                            ),
+                                            SizedBox(
+                                              height: 2,
                                             ),
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
                                                   : model
-                                                      ?.referTopList[0]?.amount
-                                                      ?.toStringAsFixed(4),
+                                                      ?.referTopList[0]?.amount,
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -195,17 +212,21 @@ class _InviteState extends State<InvitePage> {
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
-                                                  : model
-                                                      ?.referTopList[2]?.name,
+                                                  : getEllipsisName(
+                                                      value: model
+                                                          ?.referTopList[2]
+                                                          ?.to),
                                               style: StyleFactory
                                                   .dialogContentTitleStyle,
+                                            ),
+                                            SizedBox(
+                                              height: 2,
                                             ),
                                             Text(
                                               model.referTopList.isEmpty
                                                   ? "--"
                                                   : model
-                                                      ?.referTopList[2]?.amount
-                                                      ?.toStringAsFixed(4),
+                                                      ?.referTopList[2]?.amount,
                                               style: StyleFactory
                                                   .dialogContentStyle,
                                             )
@@ -253,94 +274,85 @@ class _InviteState extends State<InvitePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
-                                      Text(I18n.of(context).inviteReward,
-                                          style: StyleFactory
-                                              .dialogContentTitleStyle),
-                                      Text(
-                                        I18n.of(context).inviteRecommendSuc,
-                                        style: StyleFactory
-                                            .dialogContentTitleStyle,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 15),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      Row(
+                                      Column(
                                         children: <Widget>[
                                           Text(
-                                            model?.referUserAmount == null
-                                                ? "--"
-                                                : (model.referUserAmount.total -
-                                                        model.referUserAmount
-                                                            .pending)
-                                                    .toStringAsFixed(2),
+                                              I18n.of(context).inviteReward +
+                                                  "(USDT)",
+                                              style: StyleFactory
+                                                  .dialogContentTitleStyle),
+                                          SizedBox(height: 15),
+                                          Text(
+                                            model?.referRewardAmount.toString(),
                                             style:
                                                 StyleFactory.inviteAmountStyle,
                                           ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text("USDT",
-                                              style:
-                                                  StyleFactory.buyUpCellLabel)
                                         ],
                                       ),
-                                      Row(
+                                      Column(
                                         children: <Widget>[
                                           Text(
-                                            model.referralNumber.toString(),
-                                            style:
-                                                StyleFactory.inviteAmountStyle,
+                                            I18n.of(context).inviteRecommendSuc,
+                                            style: StyleFactory
+                                                .dialogContentTitleStyle,
                                           ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text("人",
-                                              style:
-                                                  StyleFactory.buyUpCellLabel)
+                                          SizedBox(height: 15),
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                model.referralNumber.toString(),
+                                                style: StyleFactory
+                                                    .inviteAmountStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text("人",
+                                                  style: StyleFactory
+                                                      .buyUpCellLabel)
+                                            ],
+                                          )
                                         ],
                                       )
                                     ],
                                   ),
                                   SizedBox(height: 15),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      Text(I18n.of(context).inviteMyPinCode,
-                                          style: StyleFactory.subTitleStyle),
-                                      Row(
-                                        children: <Widget>[
-                                          Text(
-                                            locator
-                                                .get<UserManager>()
-                                                .user
-                                                .name,
-                                            style: StyleFactory.subTitleStyle,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: locator
-                                                      .get<UserManager>()
-                                                      .user
-                                                      .name));
-                                              showNotification(
-                                                  context, false, "复制成功");
-                                            },
-                                            child: SvgPicture.asset(
-                                                R.resAssetsIconsContentCopy),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
+                                  // 我的推荐码 暂时隐藏
+                                  // Row(
+                                  //   mainAxisAlignment:
+                                  //       MainAxisAlignment.spaceAround,
+                                  //   children: <Widget>[
+                                  //     Text(I18n.of(context).inviteMyPinCode,
+                                  //         style: StyleFactory.subTitleStyle),
+                                  //     Row(
+                                  //       children: <Widget>[
+                                  //         Text(
+                                  //           locator
+                                  //               .get<UserManager>()
+                                  //               .user
+                                  //               .name,
+                                  //           style: StyleFactory.subTitleStyle,
+                                  //         ),
+                                  //         GestureDetector(
+                                  //           onTap: () {
+                                  //             Clipboard.setData(ClipboardData(
+                                  //                 text: locator
+                                  //                     .get<UserManager>()
+                                  //                     .user
+                                  //                     .name));
+                                  //             showNotification(
+                                  //                 context, false, "复制成功");
+                                  //           },
+                                  //           child: SvgPicture.asset(
+                                  //               R.resAssetsIconsContentCopy),
+                                  //         ),
+                                  //       ],
+                                  //     )
+                                  //   ],
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10,
+                                  // ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
@@ -528,8 +540,11 @@ class _InviteState extends State<InvitePage> {
                                     ),
                                   ),
                                   ListView.separated(
-                                      padding:
-                                          EdgeInsets.only(top: 20, bottom: 20),
+                                      padding: EdgeInsets.only(
+                                          top: 20,
+                                          bottom: 20,
+                                          left: 20,
+                                          right: 20),
                                       shrinkWrap: true,
                                       separatorBuilder: (context, index) {
                                         return Container(height: 10);
@@ -539,11 +554,13 @@ class _InviteState extends State<InvitePage> {
                                         return Container(
                                           child: Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
+                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(
-                                                  model.referralList[index]
-                                                      .referral,
+                                                  getEllipsisName(
+                                                      value: model
+                                                          .referralList[index]
+                                                          .referral),
                                                   style: StyleFactory
                                                       .dialogContentStyle),
                                               Text(

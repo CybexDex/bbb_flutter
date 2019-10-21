@@ -31,6 +31,8 @@ class Palette {
   static const inviteBackgroundColor = const Color(0xfffef1ef);
   static const inviteDivisionHeaderColor = const Color(0xfffff3d3);
   static const investmentAmountColor = const Color(0xffa4c3f4);
-  static const clickToTryColor = const Color(0xff3e82eb);
+  static const clickToTryColor = const Color(0xff2c56b6);
   static const broadcastAssetColor = const Color(0xffc62c40);
+  static const drawerBackgroundColor = const Color(0xfff7f6fb);
+  static const invitePromotionBadgeColor = const Color(0xffffa700);
 }

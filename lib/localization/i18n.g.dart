@@ -30,8 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageContainLowercase =
-      'register_error_message_contain_lowercase';
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String transfer = 'transfer';
 
@@ -158,10 +158,10 @@ class _$Keys {
 
   static final String dialogCheckPassword = 'dialog_check_password';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerErrorMessageContainLowercase =
+      'register_error_message_contain_lowercase';
 
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String assetCat = 'asset_cat';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
@@ -299,9 +299,9 @@ class _$Keys {
 
   static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 
-  static final String error1038 = 'error_1038';
+  static final String transferBbbAccount = 'transfer_bbb_account';
 
-  static final String transferCybexAccount = 'transfer_cybex_account';
+  static final String error1038 = 'error_1038';
 
   static final String transferTo = 'transfer_to';
 
@@ -373,6 +373,8 @@ class _$Keys {
 
   static final String noConnection = 'no_connection';
 
+  static final String suspend = 'suspend';
+
   static final String error1001 = 'error_1001';
 
   static final String error1002 = 'error_1002';
@@ -429,7 +431,7 @@ class _$Keys {
 
   static final String error1037 = 'error_1037';
 
-  static final String transferBbbAccount = 'transfer_bbb_account';
+  static final String transferCybexAccount = 'transfer_cybex_account';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -450,8 +452,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageContainLowercase =>
-      this._translate(_$Keys.registerErrorMessageContainLowercase);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -515,9 +517,9 @@ abstract class _$I18nHelper {
   String get confirm => this._translate(_$Keys.confirm);
   String get remider => this._translate(_$Keys.remider);
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
+  String get registerErrorMessageContainLowercase =>
+      this._translate(_$Keys.registerErrorMessageContainLowercase);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
   String get registerErrorMessageShouldNotContainContinuesDash =>
@@ -596,9 +598,8 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormBuyLimitationError);
   String get stepWidgetNotSetHint =>
       this._translate(_$Keys.stepWidgetNotSetHint);
+  String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
   String get error1038 => this._translate(_$Keys.error1038);
-  String get transferCybexAccount =>
-      this._translate(_$Keys.transferCybexAccount);
   String get transferTo => this._translate(_$Keys.transferTo);
   String get transferFrom => this._translate(_$Keys.transferFrom);
   String get transferAmount => this._translate(_$Keys.transferAmount);
@@ -639,6 +640,7 @@ abstract class _$I18nHelper {
   String get connectToWifi => this._translate(_$Keys.connectToWifi);
   String get connectToMobile => this._translate(_$Keys.connectToMobile);
   String get noConnection => this._translate(_$Keys.noConnection);
+  String get suspend => this._translate(_$Keys.suspend);
   String get error1001 => this._translate(_$Keys.error1001);
   String get error1002 => this._translate(_$Keys.error1002);
   String get error1004 => this._translate(_$Keys.error1004);
@@ -667,5 +669,6 @@ abstract class _$I18nHelper {
   String get error1035 => this._translate(_$Keys.error1035);
   String get error1036 => this._translate(_$Keys.error1036);
   String get error1037 => this._translate(_$Keys.error1037);
-  String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
+  String get transferCybexAccount =>
+      this._translate(_$Keys.transferCybexAccount);
 }

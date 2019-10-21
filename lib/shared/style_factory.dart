@@ -247,12 +247,18 @@ class StyleFactory {
       color: Palette.clickToTryColor,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.smallLabelFontSize);
+      fontSize: Dimen.verySmallLabelFontSize);
 
   static var clickToTryStyle = TextStyle(
       decoration: TextDecoration.none,
       color: Palette.orageTry,
       fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.verySmallLabelFontSize);
+
+  static var inviteBadgeFontStyle = TextStyle(
+      color: Palette.invitePromotionBadgeColor,
+      fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
 }

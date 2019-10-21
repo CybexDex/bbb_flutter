@@ -29,7 +29,7 @@ class UserManager extends BaseModel {
   final SharedPref _pref;
   final BBBAPI _api;
 
-  UserManager({SharedPref pref, BBBAPI api, this.user})
+  UserManager({pref, BBBAPI api, this.user})
       : _pref = pref,
         _api = api;
 

@@ -54,9 +54,9 @@ String getEllipsisName({String value}) {
     return null;
   }
 
-  if (value.length >= 4) {
-    return value.substring(0, 2) +
-        "..." +
+  if (value.length >= 7) {
+    return value.substring(0, 4) +
+        "***" +
         value.substring(value.length - 2, value.length);
   }
 

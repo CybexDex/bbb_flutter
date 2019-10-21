@@ -12,7 +12,22 @@ class AssetName {
   static const USDTERC20 = "USDTERC20";
 }
 
+class MethodName {
+  static const TOTAL_TRANSFER = "get_total_transfer";
+  static const TOP_LIST = "get_top10_transfer_by_from_asset_human";
+}
+
+class AccountName {
+  static const REFER_REBATE_ACCOUNT = "bbb-rebator";
+}
+
+class AccountID {
+  static const REFER_REBATE_ACCOUNT_ID = "1.2.58267";
+}
+
 const EmptyString = [null, ""];
+const HTTPString = "https";
+const ReferAction = "cybexbbb";
 
 class WebsocketRequestTopic {
   static const FAIRPRICE = "FAIRPRICE";
@@ -52,4 +67,9 @@ class ReferSystemConnection {
 class ConfigureConnection {
   static const PRO_CONFIGURE = "https://app.cybex.io";
   static const UAT_CONFIGURE = "http://47.100.98.113:3039";
+}
+
+class NodeConnection {
+  static const PRO_NODE = "https://normal-hongkong.cybex.io";
+  static const UAT_NODE = "http://43.252.132.74:58090";
 }

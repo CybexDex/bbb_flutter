@@ -2,6 +2,7 @@ import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
+import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -71,7 +72,10 @@ checkAdd(BuildContext context, int type) async {
             builder: (context) {
               return DialogFactory.addsDialog(context,
                   url: response.url, img: response.image, onImageTap: () {
-                if (response.url.contains("https")) {
+                if (response.url == null || response.url.isEmpty) {
+                  return;
+                }
+                if (response.url.contains(HTTPString)) {
                   launchURL(url: Uri.encodeFull(response.url));
                 } else {
                   Navigator.of(context).pushNamed(response.url);

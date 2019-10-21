@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
@@ -47,5 +48,17 @@ class ConfiguireApiProvider extends ConfigureApi {
     activitiesResponseList =
         responseData.map((data) => ActivitiesResponse.fromJson(data)).toList();
     return Future.value(activitiesResponseList);
+  }
+
+  @override
+  Future<List<BannerResponse>> getBanner() async {
+    var response = await dio.get("/json/bbb_banners.json");
+    var responseData = response.data as List;
+    if (responseData == null) {
+      return Future.value([]);
+    }
+    bannersResponseList =
+        responseData.map((data) => BannerResponse.fromJson(data)).toList();
+    return Future.value(bannersResponseList);
   }
 }

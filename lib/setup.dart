@@ -13,6 +13,8 @@ import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api_provider.dart';
+import 'package:bbb_flutter/services/network/node/node_api.dart';
+import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -75,6 +77,8 @@ setupLocator() async {
   locator.registerSingleton(
       MarketManager(api: locator<BBBAPI>(), sharedPref: locator<SharedPref>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
+  locator.registerSingleton<NodeApi>(
+      NodeApiProvider(sharedPref: locator<SharedPref>()));
 
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),
