@@ -283,7 +283,8 @@ class _InviteState extends State<InvitePage> {
                                                   .dialogContentTitleStyle),
                                           SizedBox(height: 15),
                                           Text(
-                                            model?.referRewardAmount.toString(),
+                                            model?.referRewardAmount
+                                                ?.toStringAsFixed(4),
                                             style:
                                                 StyleFactory.inviteAmountStyle,
                                           ),

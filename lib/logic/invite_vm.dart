@@ -133,8 +133,9 @@ class InviteViewModel extends BaseModel {
         NodeRequestModel(params: params, method: MethodName.TOTAL_TRANSFER);
     NodeResponose<int> totalTranfer =
         await _nodeApi.getTotalTransfer(nodeRequestModel: nodeRequestModel);
-    referRewardAmount =
-        (totalTranfer.result[1] / pow(10, rebateAsset.precision));
+    referRewardAmount = totalTranfer?.result != null
+        ? (totalTranfer.result[1] / pow(10, rebateAsset?.precision))
+        : 0;
   }
 
   Future getTotalTopList() async {
