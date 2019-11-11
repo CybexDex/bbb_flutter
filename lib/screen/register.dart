@@ -34,6 +34,8 @@ class _RegisterState extends State<RegisterPage> {
   bool _isAccountNamePassChecker = false;
   bool _isPasswordPassChecker = false;
   bool _isPasswordConfirmChecker = false;
+  bool _passwordObscureText = true;
+  bool _passwordConfirmObscureText = true;
   String _capid;
 
   String _errorMessage = "";
@@ -349,7 +351,7 @@ class _RegisterState extends State<RegisterPage> {
                                             onChanged: (value) {
                                               _checkPassword(value);
                                             },
-                                            obscureText: true,
+                                            obscureText: _passwordObscureText,
                                             decoration: InputDecoration(
                                                 hintText: I18n.of(context)
                                                     .passwordConfirm,
@@ -357,6 +359,18 @@ class _RegisterState extends State<RegisterPage> {
                                                     StyleFactory.hintStyle,
                                                 icon: Image.asset(
                                                     R.resAssetsIconsIcPassword),
+                                                suffixIcon: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _passwordObscureText =
+                                                          !_passwordObscureText;
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                      _passwordObscureText
+                                                          ? Icons.visibility_off
+                                                          : Icons.visibility),
+                                                ),
                                                 border: InputBorder.none),
                                           ),
                                           Container(
@@ -377,7 +391,8 @@ class _RegisterState extends State<RegisterPage> {
                                             onChanged: (value) {
                                               _checkPasswordConfirmation(value);
                                             },
-                                            obscureText: true,
+                                            obscureText:
+                                                _passwordConfirmObscureText,
                                             decoration: InputDecoration(
                                                 hintText: I18n.of(context)
                                                     .passwordConfirmHint,
@@ -385,6 +400,18 @@ class _RegisterState extends State<RegisterPage> {
                                                     StyleFactory.hintStyle,
                                                 icon: Image.asset(
                                                     R.resAssetsIconsIcPassword),
+                                                suffixIcon: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _passwordConfirmObscureText =
+                                                          !_passwordConfirmObscureText;
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                      _passwordConfirmObscureText
+                                                          ? Icons.visibility_off
+                                                          : Icons.visibility),
+                                                ),
                                                 border: InputBorder.none),
                                           ),
                                           Container(

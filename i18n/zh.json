@@ -191,5 +191,12 @@
 	"error_1035": "价格不匹配",
 	"error_1036": "没有市场数据",
 	"error_1037": "受限制的账户",
-	"error_1038": "链上余额不足"
+	"error_1038": "链上余额不足",
+	"forum": "社区",
+	"astrology": "\"星\"赏",
+	"blockchain_vip": "表姐之家",
+	"news": "资讯",
+	"forum_create": "原创: ",
+	"forum_author": "作者: ",
+	"forum_source": "来源: "
 }

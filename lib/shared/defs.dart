@@ -73,3 +73,8 @@ class NodeConnection {
   static const PRO_NODE = "https://normal-hongkong.cybex.io";
   static const UAT_NODE = "http://43.252.132.74:58090";
 }
+
+class ForumConnection {
+  static const PRO_NODE = "https://guests-cfg.cybex.io";
+  static const UAT_NODE = "";
+}

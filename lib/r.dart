@@ -1,6 +1,8 @@
 class R {
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_visibility.svg)
   static final String resAssetsIconsIcVisibility = 'res/assets/icons/ic_visibility.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/astrology_banner.svg)
+  static final String resAssetsIconsAstrologyBanner = 'res/assets/icons/astrology_banner.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_news.svg)
   static final String resAssetsIconsIcNews = 'res/assets/icons/ic_news.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop2.png)

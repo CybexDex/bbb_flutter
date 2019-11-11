@@ -17,6 +17,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_umeng_analytics/flutter_umeng_analytics.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'manager/ref_manager.dart';
 
 main() async {
@@ -86,6 +87,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'BBB',
             localizationsDelegates: [
+              RefreshLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
               I18n.delegate,
               GlobalMaterialLocalizations.delegate,

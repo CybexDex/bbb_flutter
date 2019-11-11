@@ -30,8 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String registerErrorMessageShouldNotContainContinuesDash =
+      'register_error_message_should_not_contain_continues_dash';
 
   static final String transfer = 'transfer';
 
@@ -161,13 +161,13 @@ class _$Keys {
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
 
-  static final String registerErrorMessageShouldNotContainContinuesDash =
-      'register_error_message_should_not_contain_continues_dash';
+  static final String assetCat = 'asset_cat';
 
   static final String registerErrorMessageDashEnd =
       'register_error_message_dash_end';
@@ -301,7 +301,7 @@ class _$Keys {
 
   static final String transferBbbAccount = 'transfer_bbb_account';
 
-  static final String error1038 = 'error_1038';
+  static final String transferCybexAccount = 'transfer_cybex_account';
 
   static final String transferTo = 'transfer_to';
 
@@ -309,7 +309,7 @@ class _$Keys {
 
   static final String transferAmount = 'transfer_amount';
 
-  static final String transferAvailableAmount = 'transfer_available_amount';
+  static final String forumSource = 'forum_source';
 
   static final String transferAmountHint = 'transfer_amount_hint';
 
@@ -431,7 +431,21 @@ class _$Keys {
 
   static final String error1037 = 'error_1037';
 
-  static final String transferCybexAccount = 'transfer_cybex_account';
+  static final String error1038 = 'error_1038';
+
+  static final String forum = 'forum';
+
+  static final String astrology = 'astrology';
+
+  static final String blockchainVip = 'blockchain_vip';
+
+  static final String news = 'news';
+
+  static final String forumCreate = 'forum_create';
+
+  static final String forumAuthor = 'forum_author';
+
+  static final String transferAvailableAmount = 'transfer_available_amount';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -452,8 +466,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get registerErrorMessageShouldNotContainContinuesDash =>
+      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -519,11 +533,11 @@ abstract class _$I18nHelper {
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       this._translate(_$Keys.registerErrorMessageContainLowercase);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
-  String get registerErrorMessageShouldNotContainContinuesDash =>
-      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get registerErrorMessageDashEnd =>
       this._translate(_$Keys.registerErrorMessageDashEnd);
   String get registerErrorMessageOnlyContainLetter =>
@@ -599,12 +613,12 @@ abstract class _$I18nHelper {
   String get stepWidgetNotSetHint =>
       this._translate(_$Keys.stepWidgetNotSetHint);
   String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
-  String get error1038 => this._translate(_$Keys.error1038);
+  String get transferCybexAccount =>
+      this._translate(_$Keys.transferCybexAccount);
   String get transferTo => this._translate(_$Keys.transferTo);
   String get transferFrom => this._translate(_$Keys.transferFrom);
   String get transferAmount => this._translate(_$Keys.transferAmount);
-  String get transferAvailableAmount =>
-      this._translate(_$Keys.transferAvailableAmount);
+  String get forumSource => this._translate(_$Keys.forumSource);
   String get transferAmountHint => this._translate(_$Keys.transferAmountHint);
   String get transferAll => this._translate(_$Keys.transferAll);
   String get transferErrorMessageCybNotEnough =>
@@ -669,6 +683,13 @@ abstract class _$I18nHelper {
   String get error1035 => this._translate(_$Keys.error1035);
   String get error1036 => this._translate(_$Keys.error1036);
   String get error1037 => this._translate(_$Keys.error1037);
-  String get transferCybexAccount =>
-      this._translate(_$Keys.transferCybexAccount);
+  String get error1038 => this._translate(_$Keys.error1038);
+  String get forum => this._translate(_$Keys.forum);
+  String get astrology => this._translate(_$Keys.astrology);
+  String get blockchainVip => this._translate(_$Keys.blockchainVip);
+  String get news => this._translate(_$Keys.news);
+  String get forumCreate => this._translate(_$Keys.forumCreate);
+  String get forumAuthor => this._translate(_$Keys.forumAuthor);
+  String get transferAvailableAmount =>
+      this._translate(_$Keys.transferAvailableAmount);
 }

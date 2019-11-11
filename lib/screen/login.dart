@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _LoginState extends State<LoginPage> {
   bool _errorMessageVisible = false;
   bool _loadingVisibility = false;
   bool _enableButton = false;
+  bool _obscureText = true;
   String _errorMessage = "";
   var userLocator = locator<UserManager>();
   @override
@@ -111,7 +113,7 @@ class _LoginState extends State<LoginPage> {
                                       Column(
                                         children: <Widget>[
                                           TextField(
-                                            obscureText: true,
+                                            obscureText: _obscureText,
                                             enableInteractiveSelection: true,
                                             controller: _passwordController,
                                             decoration: InputDecoration(
@@ -121,7 +123,19 @@ class _LoginState extends State<LoginPage> {
                                                     StyleFactory.hintStyle,
                                                 icon: Image.asset(
                                                     R.resAssetsIconsIcPassword),
-                                                border: InputBorder.none),
+                                                border: InputBorder.none,
+                                                suffixIcon: GestureDetector(
+                                                    dragStartBehavior:
+                                                        DragStartBehavior.down,
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _obscureText =
+                                                            !_obscureText;
+                                                      });
+                                                    },
+                                                    child: Icon(_obscureText
+                                                        ? Icons.visibility_off
+                                                        : Icons.visibility))),
                                           ),
                                           Container(
                                             decoration: BoxDecoration(

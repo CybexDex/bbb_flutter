@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
+import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
 import 'package:bbb_flutter/screen/help_center.dart';
 import 'package:bbb_flutter/screen/invite_page.dart';
@@ -31,6 +32,7 @@ class RoutePaths {
   static const String Feedback = "feedback";
   static const String Share = "Share";
   static const String Help = "Help";
+  static const String Forum = "Forum";
 }
 
 class Routes {
@@ -73,6 +75,8 @@ class Routes {
             fullscreenDialog: true, builder: (_) => HelpCenterScreen());
       case RoutePaths.Share:
         return CupertinoPageRoute(builder: (_) => SharePage());
+      case RoutePaths.Forum:
+        return CupertinoPageRoute(builder: (_) => ForumHome());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

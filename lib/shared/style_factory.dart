@@ -261,4 +261,30 @@ class StyleFactory {
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
+  //Forum
+
+  static var forumTitleFontStyle = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.forumItemTitleColor,
+    fontSize: Dimen.forumTitleFontSize,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 1,
+  );
+
+  static var forumContentFontStyle = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.forumItemContentColor,
+    fontSize: Dimen.forumContentFontSize,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
+
+  static var forumItemLabelFontStyle = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.forumItemContentColor.withOpacity(0.6),
+    fontSize: Dimen.forumLableFontSize,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
 }

@@ -411,6 +411,16 @@ class _UserDrawerState extends State<UserDrawer> {
                               Navigator.pushNamed(context, RoutePaths.Help);
                             },
                           ),
+                          ListTile(
+                            leading: SvgPicture.asset(R.resAssetsIconsIcHelp),
+                            title: Text(
+                              I18n.of(context).forum,
+                              style: StyleFactory.larSubtitle,
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, RoutePaths.Forum);
+                            },
+                          ),
                           false
                               ? ListTile(
                                   title: Text(

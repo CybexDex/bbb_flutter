@@ -11,6 +11,8 @@ import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api_provider.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api_provider.dart';
+import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
+import 'package:bbb_flutter/services/network/forumApi/forum_api_provider.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api_provider.dart';
 import 'package:bbb_flutter/services/network/node/node_api.dart';
@@ -79,6 +81,8 @@ setupLocator() async {
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
   locator.registerSingleton<NodeApi>(
       NodeApiProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ForumApi>(
+      ForumApiProvider(sharedPref: locator<SharedPref>()));
 
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),

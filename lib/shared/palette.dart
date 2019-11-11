@@ -35,4 +35,8 @@ class Palette {
   static const broadcastAssetColor = const Color(0xffc62c40);
   static const drawerBackgroundColor = const Color(0xfff7f6fb);
   static const invitePromotionBadgeColor = const Color(0xffffa700);
+  static const newsDashColor = const Color(0xffd2d2d2);
+  //Forum
+  static const forumItemTitleColor = const Color(0xff282c35);
+  static const forumItemContentColor = const Color(0xff6f7072);
 }

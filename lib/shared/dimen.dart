@@ -25,4 +25,9 @@ class Dimen {
 
   static const pageMargin = EdgeInsets.only(left: 20, right: 20, top: 0);
   static const smallButtonPadding = EdgeInsets.fromLTRB(6, 1, 6, 1);
+
+  //Forum Font Dimen
+  static double forumTitleFontSize = ScreenUtil.getInstance().setSp(15.0);
+  static double forumContentFontSize = ScreenUtil.getInstance().setSp(14.0);
+  static double forumLableFontSize = ScreenUtil.getInstance().setSp(12.0);
 }
