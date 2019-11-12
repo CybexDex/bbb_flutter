@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 1.0.5+1
+version: 1.0.6+1
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -51,7 +51,7 @@ dependencies:
     keyboard_avoider: ^0.1.2
     rx_command: ^4.3.1+1
     rx_widgets: ^2.2.0+1
-    flutter_flipperkit: ^0.0.19
+    # flutter_flipperkit: ^0.0.20
     webview_flutter: ^0.3.11+3
     flutter_webview_plugin: ^0.3.8
     image_gallery_saver: ^1.1.0

@@ -1,11 +1,6 @@
 PODS:
-  - boost-for-react-native (1.63.0)
   - catcher (0.0.1):
     - Flutter
-  - CocoaAsyncSocket (7.6.3)
-  - CocoaLibEvent (1.0.0)
-  - ComponentKit (0.27):
-    - Yoga (~> 1.14)
   - connectivity (0.0.1):
     - Flutter
     - Reachability
@@ -13,61 +8,7 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
-  - DoubleConversion (1.1.5)
-  - Flipper (0.23.1):
-    - Flipper-Folly (~> 2.0)
-    - Flipper-RSocket (~> 1.0)
-  - Flipper-Folly (2.0.0):
-    - boost-for-react-native
-    - CocoaLibEvent (~> 1.0)
-    - DoubleConversion
-    - glog
-    - openssl-ios-bitcode (~> 1.0)
-  - Flipper-PeerTalk (0.0.4)
-  - Flipper-RSocket (1.0.0):
-    - Flipper-Folly (~> 2.0)
-  - FlipperKit (0.23.1):
-    - FlipperKit/Core (= 0.23.1)
-  - FlipperKit/Core (0.23.1):
-    - Flipper (~> 0.23.1)
-    - FlipperKit/CppBridge
-    - FlipperKit/FBCxxUtils
-    - FlipperKit/FBDefines
-    - FlipperKit/FKPortForwarding
-  - FlipperKit/CppBridge (0.23.1):
-    - Flipper (~> 0.23.1)
-  - FlipperKit/FBCxxUtils (0.23.1):
-    - Flipper-Folly (~> 2.0)
-  - FlipperKit/FBDefines (0.23.1)
-  - FlipperKit/FKPortForwarding (0.23.1):
-    - CocoaAsyncSocket (~> 7.6)
-    - Flipper-PeerTalk (~> 0.0.4)
-  - FlipperKit/FlipperKitLayoutComponentKitSupport (0.23.1):
-    - ComponentKit (~> 0.27)
-    - FlipperKit/Core
-    - FlipperKit/FlipperKitLayoutPlugin
-    - FlipperKit/FlipperKitLayoutTextSearchable
-    - Yoga (~> 1.14)
-  - FlipperKit/FlipperKitLayoutPlugin (0.23.1):
-    - FlipperKit/Core
-    - FlipperKit/FlipperKitLayoutTextSearchable
-    - Yoga (~> 1.14)
-    - YogaKit (~> 1.14)
-  - FlipperKit/FlipperKitLayoutTextSearchable (0.23.1)
-  - FlipperKit/FlipperKitNetworkPlugin (0.23.1):
-    - FlipperKit/Core
-  - FlipperKit/FlipperKitUserDefaultsPlugin (0.23.1):
-    - FlipperKit/Core
-  - FlipperKit/SKIOSNetworkPlugin (0.23.1):
-    - FlipperKit/Core
-    - FlipperKit/FlipperKitNetworkPlugin
   - Flutter (1.0.0)
-  - flutter_flipperkit (0.0.6):
-    - FlipperKit (~> 0.23.1)
-    - FlipperKit/FlipperKitLayoutComponentKitSupport (~> 0.23.1)
-    - FlipperKit/FlipperKitUserDefaultsPlugin (~> 0.23.1)
-    - FlipperKit/SKIOSNetworkPlugin (~> 0.23.1)
-    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_mailer (0.0.1):
@@ -82,10 +23,8 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - glog (0.3.4)
   - image_gallery_saver (0.0.1):
     - Flutter
-  - openssl-ios-bitcode (1.0.216)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -103,17 +42,13 @@ PODS:
     - Flutter
   - webview_flutter (0.0.1):
     - Flutter
-  - Yoga (1.14.0)
-  - YogaKit (1.14.0):
-    - Yoga (~> 1.14)
 
 DEPENDENCIES:
   - catcher (from `.symlinks/plugins/catcher/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - cybex_flutter_plugin (from `.symlinks/plugins/cybex_flutter_plugin/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
-  - flutter_flipperkit (from `.symlinks/plugins/flutter_flipperkit/ios`)
+  - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
   - flutter_umeng_analytics (from `.symlinks/plugins/flutter_umeng_analytics/ios`)
@@ -129,24 +64,10 @@ DEPENDENCIES:
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - boost-for-react-native
-    - CocoaAsyncSocket
-    - CocoaLibEvent
-    - ComponentKit
-    - DoubleConversion
-    - Flipper
-    - Flipper-Folly
-    - Flipper-PeerTalk
-    - Flipper-RSocket
-    - FlipperKit
+  https://github.com/CocoaPods/Specs.git:
     - FMDB
-    - glog
-    - openssl-ios-bitcode
     - Reachability
     - UMengAnalytics-NO-IDFA
-    - Yoga
-    - YogaKit
 
 EXTERNAL SOURCES:
   catcher:
@@ -158,9 +79,7 @@ EXTERNAL SOURCES:
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
-  flutter_flipperkit:
-    :path: ".symlinks/plugins/flutter_flipperkit/ios"
+    :path: Flutter
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_mailer:
@@ -189,31 +108,18 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   catcher: e5585ed31458c849f4fd9c3719b2fcb0188b8918
-  CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
-  CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
-  ComponentKit: 8af44a3fbb55fcd1d36a048cf24f1133ac6e6a77
   connectivity: c72716e202a1225ec4810740d5cb56b8ae3bf4cc
   cybex_flutter_plugin: a16be87c9abbcf7fd041e3cb04219e5a62e63515
   device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
-  DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
-  Flipper: cba441efc92632cafb055a21070ec05217c39a5f
-  Flipper-Folly: 47dd8eaa8bf2245683e67c83121e6d2d8f4807cd
-  Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
-  Flipper-RSocket: 1260a31c05c238eabfa9bb8a64e3983049048371
-  FlipperKit: 0d4708bd52c930e647282593119f111da7716e69
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_flipperkit: 4c609b40a520b0cb3a2b648a9bd605b3fe15490a
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
   flutter_umeng_analytics: 75b4569c5f0740bf86665e1b5ac3c8a79cf9c933
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  image_gallery_saver: 6d422f8c5b40f5b57e8c3298d1fa6b1653c088c0
-  openssl-ios-bitcode: b46298bcbc3e218fe13e376142af616850a36f7d
+  image_gallery_saver: 73b3cd8ad9c950c739878af9c311744d1bf5405d
   package_info: 78cabb3c322943c55d39676f4a5bfc748c01d055
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   permission_handler: d59f41439f5bc6c4d1005f3355e98f05ddc68ece
@@ -223,9 +129,7 @@ SPEC CHECKSUMS:
   UMengAnalytics-NO-IDFA: 16666e32edce5be44ae5b14aaaa7f3582e09d6ab
   url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
   webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
-  Yoga: cff67a400f6b74dc38eb0bad4f156673d9aa980c
-  YogaKit: 5d1dc899cecd5946e5a758a0c3997704a4b48d01
 
-PODFILE CHECKSUM: e4addd5e48ca29b4f079d7752901392d1a2de058
+PODFILE CHECKSUM: 8b37e455a0072038b3bb8f56f2a11b4a84b514b5
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.8.4

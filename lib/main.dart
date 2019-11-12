@@ -12,7 +12,7 @@ import 'package:bbb_flutter/widgets/connection_widget.dart';
 import 'package:catcher/catcher_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_flipperkit/flutter_flipperkit.dart';
+// import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_umeng_analytics/flutter_umeng_analytics.dart';
 import 'package:oktoast/oktoast.dart';
@@ -21,11 +21,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'manager/ref_manager.dart';
 
 main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (buildMode == BuildMode.debug) {
-    FlipperClient flipperClient = FlipperClient.getDefault();
-    flipperClient.addPlugin(new FlipperNetworkPlugin());
-    flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
-    flipperClient.start();
+    // FlipperClient flipperClient = FlipperClient.getDefault();
+    // flipperClient.addPlugin(new FlipperNetworkPlugin());
+    // flipperClient.addPlugin(new FlipperSharedPreferencesPlugin());
+    // flipperClient.start();
   }
 
   SystemChrome.setPreferredOrientations(
