@@ -12,6 +12,7 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:dio/dio.dart';
@@ -26,6 +27,7 @@ class BBBAPIProvider extends BBBAPI {
     _dispatchNode();
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
+    setupProxy(dio);
   }
 
   @override

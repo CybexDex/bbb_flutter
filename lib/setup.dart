@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -19,7 +22,9 @@ import 'package:bbb_flutter/services/network/node/node_api.dart';
 import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -121,4 +126,24 @@ setupProviders() {
       builder: (context) => locator.get<TimerManager>().tick,
     )
   ];
+}
+
+setupProxy(Dio dio) {
+  if (buildMode == BuildMode.release || Platform.isAndroid) {
+    return;
+  }
+  String proxy = Platform.isAndroid ? '0.0.0.0:9090' : 'localhost:9090';
+
+  (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+      (client) {
+    // Hook into the findProxy callback to set the client's proxy.
+    client.findProxy = (url) {
+      return 'PROXY $proxy';
+    };
+
+    // This is a workaround to allow Charles to receive
+    // SSL payloads when your app is running on Android.
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => Platform.isAndroid;
+  };
 }

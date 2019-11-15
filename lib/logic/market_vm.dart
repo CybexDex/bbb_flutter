@@ -70,13 +70,15 @@ class MarketViewModel extends BaseModel {
           takeProfit: order.takeProfitPx,
           cutOff: order.cutLossPx,
           underOrder: order.boughtPx + order.commission);
-      if (contract.conversionRate > double.minPositive &&
+      if (contract != null &&
+          contract.conversionRate > double.minPositive &&
           (data.last.value > order.takeProfitPx ||
               data.last.value < order.cutLossPx) &&
           (order.takeProfitPx != 0 &&
               order.cutLossPx != contract.strikeLevel)) {
         vm.getOrders();
-      } else if (contract.conversionRate < 0 &&
+      } else if (contract != null &&
+          contract.conversionRate < 0 &&
           (data.last.value < order.takeProfitPx ||
               data.last.value > order.cutLossPx) &&
           (order.takeProfitPx != 0 &&

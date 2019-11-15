@@ -23,36 +23,43 @@ class _ConnectionWidgetState extends State<ConnectionWidget> {
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       if (result == ConnectivityResult.wifi) {
-        showToast(
-          I18n.of(globalKey.currentContext).connectToWifi,
-          duration: Duration(seconds: 5),
-          position: ToastPosition.bottom,
-          backgroundColor: Colors.black.withOpacity(0.8),
-          radius: 13.0,
-          textStyle: TextStyle(fontSize: 18.0),
-        );
+        Future.delayed(Duration.zero, () {
+          showToast(
+            I18n.of(globalKey.currentContext).connectToWifi,
+            duration: Duration(seconds: 5),
+            position: ToastPosition.bottom,
+            backgroundColor: Colors.black.withOpacity(0.8),
+            radius: 13.0,
+            textStyle: TextStyle(fontSize: 18.0),
+          );
+        });
         locator.get<MarketManager>().cancelAndRemoveData();
         locator.get<MarketManager>().loadAllData("BXBT");
       } else if (result == ConnectivityResult.mobile) {
-        showToast(
-          I18n.of(globalKey.currentContext).connectToMobile,
-          duration: Duration(seconds: 5),
-          position: ToastPosition.bottom,
-          backgroundColor: Colors.black.withOpacity(0.8),
-          radius: 13.0,
-          textStyle: TextStyle(fontSize: 18.0),
-        );
+        Future.delayed(Duration.zero, () {
+          showToast(
+            I18n.of(globalKey.currentContext).connectToMobile,
+            duration: Duration(seconds: 5),
+            position: ToastPosition.bottom,
+            backgroundColor: Colors.black.withOpacity(0.8),
+            radius: 13.0,
+            textStyle: TextStyle(fontSize: 18.0),
+          );
+        });
+
         locator.get<MarketManager>().cancelAndRemoveData();
         locator.get<MarketManager>().loadAllData("BXBT");
       } else {
-        showToast(
-          I18n.of(globalKey.currentContext).noConnection,
-          duration: Duration(seconds: 5),
-          position: ToastPosition.bottom,
-          backgroundColor: Colors.black.withOpacity(0.8),
-          radius: 13.0,
-          textStyle: TextStyle(fontSize: 18.0),
-        );
+        Future.delayed(Duration.zero, () {
+          showToast(
+            I18n.of(globalKey.currentContext).noConnection,
+            duration: Duration(seconds: 5),
+            position: ToastPosition.bottom,
+            backgroundColor: Colors.black.withOpacity(0.8),
+            radius: 13.0,
+            textStyle: TextStyle(fontSize: 18.0),
+          );
+        });
       }
     });
   }
