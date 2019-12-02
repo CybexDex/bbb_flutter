@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 1.0.6+1
+version: 1.0.7+1
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -79,15 +79,18 @@ flutter:
         # assets begin
         # res/assets/icons/*
         - res/assets/icons/ic_visibility.svg
+        - res/assets/icons/ic_revise_yellow.svg
         - res/assets/icons/ic_news.svg
         - res/assets/icons/icTop2.png
         - res/assets/icons/icTop3.png
         - res/assets/icons/icMaskClose.png
         - res/assets/icons/ic_add_2.svg
         - res/assets/icons/icTop1.png
+        - res/assets/icons/ic_no_stoke.svg
         - res/assets/icons/icAdd.png
         - res/assets/icons/icReduce.png
         - res/assets/icons/icFail.png
+        - res/assets/icons/ic_pull_down.svg
         - res/assets/icons/icDownGreen14.png
         - res/assets/icons/icDropdown.png
         - res/assets/icons/icPerson.png
@@ -111,12 +114,14 @@ flutter:
         - res/assets/icons/ic_reward_account.svg
         - res/assets/icons/ic_reduce_2.svg
         - res/assets/icons/icAccount.png
+        - res/assets/icons/ic_no_orders.svg
         - res/assets/icons/icRiseRed18.png
         - res/assets/icons/share.png
         - res/assets/icons/icRevise.png
         - res/assets/icons/icCode.png
         - res/assets/icons/ic_help.svg
         - res/assets/icons/ic_send.svg
+        - res/assets/icons/ic_pull_up.svg
         - res/assets/icons/icUser.png
         - res/assets/icons/icHand.png
         - res/assets/icons/icUsdt.png
@@ -127,6 +132,7 @@ flutter:
         - res/assets/icons/icTabArrow.png
         - res/assets/icons/ic_wdrecords.svg
         - res/assets/icons/icTabWithdraw.png
+        - res/assets/icons/hold_all.svg
         - res/assets/icons/ic_logout.svg
         - res/assets/icons/ic_try.svg
         - res/assets/icons/ic_adds_cancel.svg

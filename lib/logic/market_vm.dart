@@ -1,6 +1,5 @@
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
-import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -106,14 +105,12 @@ class MarketViewModel extends BaseModel {
           showCutoff: order.showCutoff,
           showProfit: order.showProfit,
           current: current,
-          takeProfit: order.takeProfit == null
-              ? 0
-              : OrderCalculate.takeProfitPx(
-                  order.takeProfit, current, strikeLevel, order.isUp),
-          cutOff: order.cutoff == null
-              ? strikeLevel
-              : OrderCalculate.cutLossPx(
-                  order.cutoff, current, strikeLevel, order.isUp));
+          takeProfit: order.takeProfitPx == null ? 0 : order.takeProfitPx,
+          // : OrderCalculate.takeProfitPx(
+          //     order.takeProfit, current, strikeLevel, order.isUp),
+          cutOff: order.cutoffPx == null ? strikeLevel : order.cutoffPx);
+      // : OrderCalculate.cutLossPx(
+      //     order.cutoff, current, strikeLevel, order.isUp));
     }
   }
 }

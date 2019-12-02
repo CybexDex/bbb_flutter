@@ -30,8 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageShouldNotContainContinuesDash =
-      'register_error_message_should_not_contain_continues_dash';
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String transfer = 'transfer';
 
@@ -107,6 +107,16 @@ class _$Keys {
 
   static final String balanceAvailable = 'balance_available';
 
+  static final String pnlAmendByPercentage = 'pnl_amend_by_percentage';
+
+  static final String pnlAmendByPrice = 'pnl_amend_by_price';
+
+  static final String holdAll = 'hold_all';
+
+  static final String resetPnl = 'reset_pnl';
+
+  static final String selectAll = 'select_all';
+
   static final String logIn = 'log_in';
 
   static final String accountName = 'account_name';
@@ -161,13 +171,13 @@ class _$Keys {
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
 
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String assetCat = 'asset_cat';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerErrorMessageShouldNotContainContinuesDash =
+      'register_error_message_should_not_contain_continues_dash';
 
   static final String registerErrorMessageDashEnd =
       'register_error_message_dash_end';
@@ -297,6 +307,12 @@ class _$Keys {
   static final String orderFormBuyLimitationError =
       'order_form_buy_limitation_error';
 
+  static final String orderFormBuyUpCutlossLowerStriklevel =
+      'order_form_buy_up_cutloss_lower_striklevel';
+
+  static final String orderFormBuyDownCutlossHigherStriklevel =
+      'order_form_buy_down_cutloss_higher_striklevel';
+
   static final String stepWidgetNotSetHint = 'step_widget_not_set_hint';
 
   static final String transferBbbAccount = 'transfer_bbb_account';
@@ -305,11 +321,11 @@ class _$Keys {
 
   static final String transferTo = 'transfer_to';
 
-  static final String transferFrom = 'transfer_from';
+  static final String forumSource = 'forum_source';
 
   static final String transferAmount = 'transfer_amount';
 
-  static final String forumSource = 'forum_source';
+  static final String transferAvailableAmount = 'transfer_available_amount';
 
   static final String transferAmountHint = 'transfer_amount_hint';
 
@@ -445,7 +461,7 @@ class _$Keys {
 
   static final String forumAuthor = 'forum_author';
 
-  static final String transferAvailableAmount = 'transfer_available_amount';
+  static final String transferFrom = 'transfer_from';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -466,8 +482,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageShouldNotContainContinuesDash =>
-      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -505,6 +521,12 @@ abstract class _$I18nHelper {
   String get fee => this._translate(_$Keys.fee);
   String get balance => this._translate(_$Keys.balance);
   String get balanceAvailable => this._translate(_$Keys.balanceAvailable);
+  String get pnlAmendByPercentage =>
+      this._translate(_$Keys.pnlAmendByPercentage);
+  String get pnlAmendByPrice => this._translate(_$Keys.pnlAmendByPrice);
+  String get holdAll => this._translate(_$Keys.holdAll);
+  String get resetPnl => this._translate(_$Keys.resetPnl);
+  String get selectAll => this._translate(_$Keys.selectAll);
   String get logIn => this._translate(_$Keys.logIn);
   String get accountName => this._translate(_$Keys.accountName);
   String get accountNameHint => this._translate(_$Keys.accountNameHint);
@@ -533,11 +555,11 @@ abstract class _$I18nHelper {
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       this._translate(_$Keys.registerErrorMessageContainLowercase);
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerErrorMessageShouldNotContainContinuesDash =>
+      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
   String get registerErrorMessageDashEnd =>
       this._translate(_$Keys.registerErrorMessageDashEnd);
   String get registerErrorMessageOnlyContainLetter =>
@@ -610,15 +632,20 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.orderFormInputPositiveNumberError);
   String get orderFormBuyLimitationError =>
       this._translate(_$Keys.orderFormBuyLimitationError);
+  String get orderFormBuyUpCutlossLowerStriklevel =>
+      this._translate(_$Keys.orderFormBuyUpCutlossLowerStriklevel);
+  String get orderFormBuyDownCutlossHigherStriklevel =>
+      this._translate(_$Keys.orderFormBuyDownCutlossHigherStriklevel);
   String get stepWidgetNotSetHint =>
       this._translate(_$Keys.stepWidgetNotSetHint);
   String get transferBbbAccount => this._translate(_$Keys.transferBbbAccount);
   String get transferCybexAccount =>
       this._translate(_$Keys.transferCybexAccount);
   String get transferTo => this._translate(_$Keys.transferTo);
-  String get transferFrom => this._translate(_$Keys.transferFrom);
-  String get transferAmount => this._translate(_$Keys.transferAmount);
   String get forumSource => this._translate(_$Keys.forumSource);
+  String get transferAmount => this._translate(_$Keys.transferAmount);
+  String get transferAvailableAmount =>
+      this._translate(_$Keys.transferAvailableAmount);
   String get transferAmountHint => this._translate(_$Keys.transferAmountHint);
   String get transferAll => this._translate(_$Keys.transferAll);
   String get transferErrorMessageCybNotEnough =>
@@ -690,6 +717,5 @@ abstract class _$I18nHelper {
   String get news => this._translate(_$Keys.news);
   String get forumCreate => this._translate(_$Keys.forumCreate);
   String get forumAuthor => this._translate(_$Keys.forumAuthor);
-  String get transferAvailableAmount =>
-      this._translate(_$Keys.transferAvailableAmount);
+  String get transferFrom => this._translate(_$Keys.transferFrom);
 }

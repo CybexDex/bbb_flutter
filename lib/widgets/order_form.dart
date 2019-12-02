@@ -12,18 +12,19 @@ class OrderFormWidget extends StatefulWidget {
         super(key: key);
 
   @override
-  _OrderFormWidgetState createState() => _OrderFormWidgetState();
+  OrderFormWidgetState createState() => OrderFormWidgetState();
 }
 
-class _OrderFormWidgetState extends State<OrderFormWidget> {
+class OrderFormWidgetState extends State<OrderFormWidget> {
   TextEditingController _amountController = TextEditingController();
   TextEditingController _takeProfitController = TextEditingController();
   TextEditingController _cutLossController = TextEditingController();
 
   @override
   void initState() {
+    print("sss");
     _takeProfitController.text = "-";
-    _cutLossController.text = "-";
+    _cutLossController.text = widget._contract.strikeLevel.toStringAsFixed(0);
     _amountController.text = "1";
     super.initState();
   }
@@ -34,95 +35,69 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
         builder: (context, model, userModel, refData, child) {
       Contract refreshContract = model.contract;
       return Container(
+        padding: EdgeInsets.only(top: 10, right: 15, left: 15),
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      I18n.of(context).balanceAvailable,
-                      style: StyleFactory.cellDescLabel,
+                      model.usdtBalance != null
+                          ? "${model.usdtBalance.quantity.toStringAsFixed(4)}"
+                          : "--",
+                      style: StyleFactory.cellTitleStyle,
                     ),
                     SizedBox(height: 6),
                     Text(
-                      model.usdtBalance != null
-                          ? "${model.usdtBalance.quantity.toStringAsFixed(4)} USDT"
-                          : "-- USDT",
-                      style: StyleFactory.cellTitleStyle,
+                      "${I18n.of(context).balanceAvailable}(USDT)",
+                      style: StyleFactory.cellDescLabel,
                     ),
                   ],
                 ),
+                Container(
+                  height: 36,
+                  width: 1,
+                  color: Palette.separatorColor,
+                ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      "${refreshContract.strikeLevel.toStringAsFixed(0)}",
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                    SizedBox(height: 6),
                     Text(
                       I18n.of(context).forcePrice,
                       style: StyleFactory.cellDescLabel,
                     ),
-                    SizedBox(height: 6),
-                    Text(
-                      "${refreshContract.strikeLevel.toStringAsFixed(0)} USDT",
-                      style: StyleFactory.cellTitleStyle,
-                    ),
                   ],
                 ),
+                Container(
+                  height: 36,
+                  width: 1,
+                  color: Palette.separatorColor,
+                ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    Text(
+                      "${model.actLevel.toStringAsFixed(1)}",
+                      style: StyleFactory.cellTitleStyle,
+                    ),
+                    SizedBox(height: 6),
                     Text(
                       "${I18n.of(context).actLevel}",
                       style: StyleFactory.cellDescLabel,
                     ),
-                    SizedBox(height: 6),
-                    Text(
-                      "${model.actLevel.toStringAsFixed(1)}",
-                      style: StyleFactory.cellTitleStyle,
-                    )
                   ],
                 )
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
-            SizedBox(height: 15),
-            Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "${I18n.of(context).fee}",
-                      style: StyleFactory.cellDescLabel,
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      "${model.orderForm.fee.amount.toStringAsFixed(4)} USDT",
-                      style: StyleFactory.cellTitleStyle,
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      "${I18n.of(context).interestRate}",
-                      style: StyleFactory.cellDescLabel,
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} USDT${I18n.of(context).perDay}",
-                      style: StyleFactory.cellTitleStyle,
-                    )
-                  ],
-                )
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 10),
             Divider(height: 0.5, color: Palette.separatorColor),
             SizedBox(height: 20),
             Row(
@@ -137,14 +112,13 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            I18n.of(context).takeProfit + "(%)",
+                            I18n.of(context).takeProfit,
                             style: StyleFactory.cellDescLabel,
                           ),
                           GestureDetector(
                             onTap: () {
-                              model.changeTakeProfit(profit: null);
-                              _takeProfitController.text =
-                                  I18n.of(context).stepWidgetNotSetHint;
+                              model.changeTakeProfitPx(profit: null);
+                              _takeProfitController.text = "-";
                             },
                             child: Text(I18n.of(context).orderFormReset,
                                 style: StyleFactory.cellDescLabel),
@@ -158,14 +132,17 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                       child: IStep(
                         text: _takeProfitController,
                         plusOnTap: () {
-                          model.increaseTakeProfit();
+                          model.increaseTakeProfitPx();
                           _takeProfitController.text =
-                              model.orderForm.takeProfit.toStringAsFixed(0);
+                              model.orderForm.takeProfitPx.toStringAsFixed(0);
                         },
                         minusOnTap: () {
-                          model.decreaseTakeProfit();
+                          model.decreaseTakeProfitPx();
                           _takeProfitController.text =
-                              model.orderForm.takeProfit.toStringAsFixed(0);
+                              model.orderForm.takeProfitPx == null
+                                  ? "-"
+                                  : model.orderForm.takeProfitPx
+                                      .toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
@@ -174,7 +151,7 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                             model.setTakeProfitInputCorrectness(false);
                           } else {
                             model.setTakeProfitInputCorrectness(true);
-                            model.changeTakeProfit(
+                            model.changeTakeProfitPx(
                                 profit:
                                     value.isEmpty ? null : double.parse(value));
                           }
@@ -192,14 +169,15 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            I18n.of(context).cutLoss + "(%)",
+                            I18n.of(context).cutLoss,
                             style: StyleFactory.cellDescLabel,
                           ),
                           GestureDetector(
                             onTap: () {
-                              model.changeCutLoss(cutLoss: null);
-                              _cutLossController.text =
-                                  I18n.of(context).stepWidgetNotSetHint;
+                              model.changeCutLossPx(cutLoss: null);
+                              _cutLossController.text = widget
+                                  ._contract.strikeLevel
+                                  .toStringAsFixed(0);
                             },
                             child: Text(I18n.of(context).orderFormReset,
                                 style: StyleFactory.cellDescLabel),
@@ -213,14 +191,14 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                       child: IStep(
                         text: _cutLossController,
                         plusOnTap: () {
-                          model.increaseCutLoss();
+                          model.increaseCutLossPx();
                           _cutLossController.text =
-                              model.orderForm.cutoff.toStringAsFixed(0);
+                              model.orderForm.cutoffPx.toStringAsFixed(0);
                         },
                         minusOnTap: () {
-                          model.decreaseCutLoss();
+                          model.decreaseCutLossPx();
                           _cutLossController.text =
-                              model.orderForm.cutoff.toStringAsFixed(0);
+                              model.orderForm.cutoffPx.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
@@ -229,15 +207,19 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                             model.setCutLossInputCorectness(false);
                           } else {
                             model.setCutLossInputCorectness(true);
-                            model.changeCutLoss(
+                            model.changeCutLossPx(
                                 cutLoss: value.isEmpty
                                     ? null
-                                    : double.parse(value) > 100
-                                        ? 100
-                                        : double.parse(value));
-                            if (double.parse(value) > 100) {
-                              _cutLossController.text = "100";
-                            }
+                                    // : double.parse(value) >
+                                    //         model.currentTicker.value
+                                    //     ? model.currentTicker.value
+                                    : double.parse(value));
+                            // if (double.parse(value) >
+                            //     widget._contract.strikeLevel) {
+                            //   _cutLossController.text = widget
+                            //       ._contract.strikeLevel
+                            //       .toStringAsFixed(0);
+                            // }
                           }
                         },
                       ),
@@ -315,6 +297,43 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
+            SizedBox(
+              height: 9,
+            ),
+            Row(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).fee}(USDT): ",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      "${model.orderForm.fee.amount.toStringAsFixed(4)}",
+                      style: StyleFactory.cellTitleStyle,
+                    )
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      "${I18n.of(context).interestRate}(USDT): ",
+                      style: StyleFactory.cellDescLabel,
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} ${I18n.of(context).perDay}",
+                      style: StyleFactory.cellTitleStyle,
+                    )
+                  ],
+                )
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
             Offstage(
                 offstage: model.isSatisfied ||
                     model.orderForm.totalAmount.amount <= double.minPositive,
@@ -357,6 +376,19 @@ class _OrderFormWidgetState extends State<OrderFormWidget> {
                                   I18n.of(context)
                                       .orderFormInputPositiveNumberError,
                                   style: StyleFactory.smallButtonTitleStyle);
+                            } else if (!model.isCutLossCorrect &&
+                                model.orderForm.isUp) {
+                              return Text(
+                                  I18n.of(context)
+                                      .orderFormBuyUpCutlossLowerStriklevel,
+                                  style: StyleFactory.smallButtonTitleStyle);
+                            } else if (!model.isCutLossCorrect &&
+                                !model.orderForm.isUp) {
+                              return Text(
+                                I18n.of(context)
+                                    .orderFormBuyDownCutlossHigherStriklevel,
+                                style: StyleFactory.smallButtonTitleStyle,
+                              );
                             }
                             return Container();
                           },

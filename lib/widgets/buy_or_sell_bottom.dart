@@ -11,31 +11,28 @@ class BuyOrSellBottom extends StatelessWidget {
         child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  totalAmount > double.minPositive
-                      ? totalAmount.toStringAsFixed(4) + " USDT"
-                      : "-- USDT",
-                  style: StyleFactory.buySellValueText,
-                ),
-                SizedBox(width: 8),
-              ],
+            Text("${I18n.of(context).investPay}: ",
+                style: TextStyle(
+                  fontFamily: 'PingFangSC',
+                  color: Color(0xff6f7072),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 0,
+                )),
+            Text(
+              totalAmount > double.minPositive
+                  ? totalAmount.toStringAsFixed(4) + " USDT"
+                  : "-- USDT",
+              style: StyleFactory.buySellValueText,
             ),
-            Row(
-              children: <Widget>[
-                Text(
-                  "${I18n.of(context).investPay}",
-                  style: StyleFactory.buySellExplainText,
-                ),
-              ],
-            )
           ],
+        ),
+        Row(
+          children: <Widget>[],
         ),
         Expanded(
           flex: 0,

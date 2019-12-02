@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
-import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -27,6 +26,7 @@ class TradeViewModel extends BaseModel {
   bool isTakeProfitInputCorrect = true;
   bool isCutLossInputCorrect = true;
   bool isInvestAmountInputCorrect = true;
+  bool isCutLossCorrect = true;
   Contract get contract =>
       orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
   var ticker;
@@ -87,6 +87,7 @@ class TradeViewModel extends BaseModel {
   }
 
   updateCurrentContract(bool isUp, String contractId) {
+    print("ddd");
     if (isUp) {
       _refm.changeUpContractId(contractId);
     } else {
@@ -131,7 +132,8 @@ class TradeViewModel extends BaseModel {
         orderForm.totalAmount.amount <= double.minPositive ||
         !isTakeProfitInputCorrect ||
         !isCutLossInputCorrect ||
-        !isInvestAmountInputCorrect) {
+        !isInvestAmountInputCorrect ||
+        !isCutLossCorrect) {
       isSatisfied = false;
     } else {
       isSatisfied = true;
@@ -197,6 +199,42 @@ class TradeViewModel extends BaseModel {
     setBusy(false);
   }
 
+  void increaseTakeProfitPx() {
+    if (orderForm.takeProfitPx == null) {
+      orderForm.takeProfitPx = 1;
+      orderForm.showProfit = true;
+      isTakeProfitInputCorrect = true;
+    } else {
+      orderForm.takeProfitPx += 1;
+    }
+    setBusy(false);
+  }
+
+  void decreaseTakeProfitPx() {
+    if (orderForm.takeProfitPx == null) {
+      return;
+    } else {
+      if (orderForm.takeProfitPx.round() > 0) {
+        orderForm.showProfit = true;
+        isTakeProfitInputCorrect = true;
+        orderForm.takeProfitPx -= 1;
+      }
+    }
+    setBusy(false);
+  }
+
+  void changeTakeProfitPx({double profit}) {
+    if (profit == null) {
+      orderForm.showProfit = false;
+      isTakeProfitInputCorrect = true;
+    } else {
+      orderForm.showProfit = true;
+    }
+
+    orderForm.takeProfitPx = profit;
+    setBusy(false);
+  }
+
   void increaseCutLoss() {
     if (orderForm.cutoff == null) {
       orderForm.showCutoff = true;
@@ -232,6 +270,56 @@ class TradeViewModel extends BaseModel {
     }
     orderForm.cutoff = cutLoss;
     setBusy(false);
+  }
+
+  void increaseCutLossPx() {
+    if (orderForm.cutoffPx == null) {
+      orderForm.showCutoff = true;
+      orderForm.cutoffPx = contract.strikeLevel + 1;
+      isCutLossInputCorrect = true;
+    } else {
+      orderForm.cutoffPx += 1;
+    }
+    checkIfCutLossCorrect();
+    updateAmountAndFee();
+    setBusy(false);
+  }
+
+  void decreaseCutLossPx() {
+    if (orderForm.cutoffPx == null) {
+      orderForm.showCutoff = true;
+      orderForm.cutoffPx = contract.strikeLevel - 1;
+      isCutLossInputCorrect = true;
+    } else {
+      if (orderForm.cutoffPx.round() > 0) {
+        orderForm.cutoffPx -= 1;
+      }
+    }
+    checkIfCutLossCorrect();
+    setBusy(false);
+  }
+
+  void changeCutLossPx({double cutLoss}) {
+    if (cutLoss == null) {
+      orderForm.showCutoff = false;
+      isCutLossInputCorrect = true;
+    } else {
+      orderForm.showCutoff = true;
+    }
+    orderForm.cutoffPx = cutLoss;
+    checkIfCutLossCorrect();
+    setBusy(false);
+  }
+
+  void checkIfCutLossCorrect() {
+    if (orderForm.cutoffPx != null &&
+        ((orderForm.isUp && orderForm.cutoffPx < contract.strikeLevel) ||
+            (!orderForm.isUp && orderForm.cutoffPx > contract.strikeLevel))) {
+      isCutLossCorrect = false;
+    } else {
+      isCutLossCorrect = true;
+    }
+    updateAmountAndFee();
   }
 
   List<Contract> getUpContracts() {
@@ -275,16 +363,18 @@ class TradeViewModel extends BaseModel {
             _um.user.testAccountResponseModel.accountType >= 1
         ? _um.user.testAccountResponseModel.expiration
         : 0;
-    order.takeProfitPx = orderForm.takeProfit == null
+    order.takeProfitPx = orderForm.takeProfitPx == null
         ? "0"
-        : OrderCalculate.takeProfitPx(orderForm.takeProfit, ticker.value,
-                saveContract.strikeLevel, orderForm.isUp)
-            .toStringAsFixed(4);
-    order.cutLossPx = orderForm.cutoff == null
+        : orderForm.takeProfitPx.toStringAsFixed(4);
+    // : OrderCalculate.takeProfitPx(orderForm.takeProfit, ticker.value,
+    //         saveContract.strikeLevel, orderForm.isUp)
+    //     .toStringAsFixed(4);
+    order.cutLossPx = orderForm.cutoffPx == null
         ? saveContract.strikeLevel.toStringAsFixed(4)
-        : OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
-                saveContract.strikeLevel, orderForm.isUp)
-            .toStringAsFixed(4);
+        : orderForm.cutoffPx.toStringAsFixed(4);
+    // : OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
+    //         saveContract.strikeLevel, orderForm.isUp)
+    //     .toStringAsFixed(4);
 
     order.buyOrder =
         await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
@@ -298,6 +388,7 @@ class TradeViewModel extends BaseModel {
 
     order.buyOrderTxId = order.buyOrder.transactionid;
     locator.get<Logger>().i(order.toRawJson());
+    print(order.cutLossPx);
 
     PostOrderResponseModel res = await _api.postOrder(order: order);
     locator.get<Logger>().w(res.toRawJson());

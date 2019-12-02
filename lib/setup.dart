@@ -124,15 +124,18 @@ setupProviders() {
     ),
     StreamProvider(
       builder: (context) => locator.get<TimerManager>().tick,
-    )
+    ),
+    StreamProvider(
+        builder: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
   ];
 }
 
 setupProxy(Dio dio) {
+  return;
   if (buildMode == BuildMode.release || Platform.isAndroid) {
     return;
   }
-  String proxy = Platform.isAndroid ? '0.0.0.0:9090' : 'localhost:9090';
+  String proxy = Platform.isAndroid ? '0.0.0.0:8888' : 'localhost:8888';
 
   (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
       (client) {

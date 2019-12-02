@@ -4,6 +4,8 @@ class OrderForm {
   int investAmount;
   double takeProfit;
   double cutoff;
+  double takeProfitPx;
+  double cutoffPx;
   bool isUp;
   bool showProfit;
   bool showCutoff;
@@ -16,6 +18,8 @@ class OrderForm {
       {this.investAmount,
       this.takeProfit,
       this.cutoff,
+      this.takeProfitPx,
+      this.cutoffPx,
       this.isUp,
       this.fee,
       this.totalAmount,

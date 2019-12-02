@@ -12,8 +12,10 @@ import 'package:intl/intl.dart';
 
 class OrderInfo extends StatelessWidget {
   final OrderResponseModel _model;
-  OrderInfo({Key key, OrderResponseModel model})
+  final bool _isAll;
+  OrderInfo({Key key, OrderResponseModel model, bool isAll})
       : _model = model,
+        _isAll = isAll,
         super(key: key);
 
   @override
@@ -40,157 +42,172 @@ class OrderInfo extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 20,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: getUpOrDownIcon(
-                              orderResponse: _model,
-                              refContract: currentContract),
-                        ),
-                        Text(
-                          _model.contractId,
-                          style: StyleFactory.cellTitleStyle,
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        Text(
-                          "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
-                          style: StyleFactory.cellDescLabel,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                            child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  DateFormat("MM/dd HH:mm").format(
-                                      DateTime.parse(_model.createTime)
-                                          .toLocal()),
-                                  style: StyleFactory.transferStyleTitle,
-                                ))),
-                      ],
-                    ),
-                  ),
-                  Expanded(flex: 5, child: SizedBox()),
-                  Divider(color: Palette.separatorColor),
-                  Expanded(
-                      flex: 115,
+                    flex: 40,
+                    child: Container(
+                      color: Color(0xfff6f6f6),
+                      padding: EdgeInsets.only(left: 15, right: 15),
                       child: Row(
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                I18n.of(context).openPositionPrice,
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                _model.boughtPx.toStringAsFixed(4),
-                                style: StyleFactory.cellTitleStyle,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox(),
-                              ),
-                              Text(
-                                I18n.of(context).forceClosePrice,
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                _model.forceClosePx.toStringAsFixed(4),
-                                style: StyleFactory.cellTitleStyle,
-                              ),
-                            ],
+                          Padding(
+                            padding: EdgeInsets.only(right: 4),
+                            child: Text(
+                              _model.contractId,
+                              style: StyleFactory.cellTitleStyle,
+                            ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                "${invest.toStringAsFixed(4)}/${_model.qtyContract.toStringAsFixed(0)}",
-                                style: StyleFactory.cellTitleStyle,
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: SizedBox(),
-                              ),
-                              Text(
-                                I18n.of(context).fee,
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                _model.commission.toStringAsFixed(4),
-                                style: StyleFactory.cellTitleStyle,
-                              )
-                            ],
+                          getUpOrDownIcon(
+                              orderResponse: _model,
+                              refContract: currentContract),
+                          SizedBox(
+                            width: 25,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(I18n.of(context).accruedInterest,
-                                  style: StyleFactory.cellDescLabel),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Text(
-                                _model.accruedInterest.toStringAsFixed(4),
-                                style: StyleFactory.cellTitleStyle,
-                              ),
-                              Expanded(
-                                child: SizedBox(),
-                              ),
-                              Text(
-                                "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
-                                    style: StyleFactory.cellTitleStyle,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  GestureDetector(
-                                    child: SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: Image.asset(
-                                            R.resAssetsIconsIcRevise)),
-                                    onTap: () {
-                                      openDialog(globalKey.currentContext);
-                                    },
-                                  )
-                                ],
-                              )
-                            ],
-                          )
+                          Text(
+                            "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
+                            style: StyleFactory.cellDescLabel,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                              child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    DateFormat("MM/dd HH:mm").format(
+                                        DateTime.parse(_model.createTime)
+                                            .toLocal()),
+                                    style: StyleFactory.transferStyleTitle,
+                                  ))),
                         ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                      flex: 150,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 15, right: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                ),
+                                Text(
+                                  I18n.of(context).openPositionPrice,
+                                  style: StyleFactory.cellDescLabel,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  _model.boughtPx.toStringAsFixed(4),
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(flex: 15, child: Container()),
+                                Text(
+                                  I18n.of(context).forceClosePrice,
+                                  style: StyleFactory.cellDescLabel,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  _model.forceClosePx.toStringAsFixed(4),
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                )
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                ),
+                                Text(
+                                  "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
+                                  style: StyleFactory.cellDescLabel,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  "${invest.toStringAsFixed(4)}/${_model.qtyContract.toStringAsFixed(0)}",
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 15,
+                                ),
+                                Text(
+                                  I18n.of(context).fee,
+                                  style: StyleFactory.cellDescLabel,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  _model.commission.toStringAsFixed(4),
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                ),
+                                Text(I18n.of(context).accruedInterest,
+                                    style: StyleFactory.cellDescLabel),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  _model.accruedInterest.toStringAsFixed(4),
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 15,
+                                ),
+                                Text(
+                                  "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
+                                  style: StyleFactory.cellDescLabel,
+                                ),
+                                Expanded(
+                                  child: Container(),
+                                  flex: 5,
+                                ),
+                                Text(
+                                  "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
+                                  style: StyleFactory.orderFormValueStyle,
+                                ),
+                                Expanded(
+                                  flex: 23,
+                                  child: Container(),
+                                ),
+                              ],
+                            )
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
                       )),
                   // Expanded(
                   //     flex: 65,
@@ -260,84 +277,166 @@ class OrderInfo extends StatelessWidget {
                   //       ],
                   //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //     )),
-                  Divider(color: Palette.separatorColor),
-                  Expanded(
-                      flex: 60,
-                      child: Row(
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                I18n.of(context).futureProfit,
-                                style: StyleFactory.cellDescLabel,
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    (_model.pnl +
-                                                _model.commission +
-                                                _model.accruedInterest)
-                                            .toStringAsFixed(4) +
-                                        "(" +
-                                        (100 *
-                                                ((_model.pnl +
-                                                        _model.commission +
-                                                        _model
-                                                            .accruedInterest) /
-                                                    invest))
-                                            .toStringAsFixed(1) +
-                                        "%)",
-                                    style: (_model.pnl +
-                                                _model.commission +
-                                                _model.accruedInterest) >
-                                            0
-                                        ? StyleFactory.buyUpOrderInfo
-                                        : StyleFactory.buyDownOrderInfo,
-                                  ),
-                                  Text(
-                                    " USDT",
-                                    style: StyleFactory.cellTitleStyle,
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          WidgetFactory.button(
-                              data: I18n.of(context).closeOut,
-                              color: Palette.redOrange,
-                              topPadding: 5,
-                              bottomPadding: 5,
-                              onPressed: () async {
-                                TextEditingController controller =
-                                    TextEditingController();
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return DialogFactory
-                                          .closeOutConfirmDialog(context,
-                                              value: (_model.pnl +
-                                                      _model.commission +
-                                                      _model.accruedInterest)
-                                                  .toStringAsFixed(4),
-                                              pnl:
-                                                  _model.pnl.toStringAsFixed(4),
-                                              controller: controller);
-                                    }).then((value) async {
-                                  if (value != null && value) {
-                                    callAmend(context);
-                                  }
-                                });
-                              }),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      )),
-                  Expanded(flex: 5, child: SizedBox())
+                  _isAll
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 15, right: 15),
+                          child: Divider(color: Palette.separatorColor))
+                      : Container(
+                          color: Color(0xfff6f6f6),
+                          height: 7,
+                        ),
+
+                  _isAll
+                      ? Expanded(
+                          flex: 50,
+                          child: Container(
+                            padding: EdgeInsets.only(right: 15, left: 15),
+                            child: Row(
+                              children: <Widget>[
+                                Text(I18n.of(context).futureProfit,
+                                    style: TextStyle(
+                                      fontFamily: 'PingFangSC',
+                                      color: Color(0xff6f7072),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FontStyle.normal,
+                                    )),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      (_model.pnl +
+                                                  _model.commission +
+                                                  _model.accruedInterest)
+                                              .toStringAsFixed(4) +
+                                          "(" +
+                                          (100 *
+                                                  ((_model.pnl +
+                                                          _model.commission +
+                                                          _model
+                                                              .accruedInterest) /
+                                                      invest))
+                                              .toStringAsFixed(1) +
+                                          "%)",
+                                      style: (_model.pnl +
+                                                  _model.commission +
+                                                  _model.accruedInterest) >
+                                              0
+                                          ? StyleFactory.buyUpOrderInfo
+                                          : StyleFactory.buyDownOrderInfo,
+                                    ),
+                                    Text(
+                                      " USDT",
+                                      style: StyleFactory.cellTitleStyle,
+                                    )
+                                    // WidgetFactory.button(
+                                    //     data: I18n.of(context).closeOut,
+                                    //     color: Palette.redOrange,
+                                    //     topPadding: 5,
+                                    //     bottomPadding: 5,
+                                    //     onPressed: () async {
+                                    //       TextEditingController controller =
+                                    //           TextEditingController();
+                                    //       showDialog(
+                                    //           barrierDismissible: false,
+                                    //           context: context,
+                                    //           builder: (context) {
+                                    //             return DialogFactory
+                                    //                 .closeOutConfirmDialog(context,
+                                    //                     value: (_model.pnl +
+                                    //                             _model.commission +
+                                    //                             _model.accruedInterest)
+                                    //                         .toStringAsFixed(4),
+                                    //                     pnl:
+                                    //                         _model.pnl.toStringAsFixed(4),
+                                    //                     controller: controller);
+                                    //           }).then((value) async {
+                                    //         if (value != null && value) {
+                                    //           callAmend(context);
+                                    //         }
+                                    //       });
+                                    //     }),
+                                  ],
+                                ),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                          ))
+                      : Expanded(
+                          flex: 50,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Row(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text("${I18n.of(context).futureProfit} ",
+                                        style: TextStyle(
+                                          fontFamily: 'PingFangSC',
+                                          color: Color(0xff6f7072),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FontStyle.normal,
+                                        )),
+                                    Text(
+                                      (_model.pnl +
+                                                  _model.commission +
+                                                  _model.accruedInterest)
+                                              .toStringAsFixed(4) +
+                                          "(" +
+                                          (100 *
+                                                  ((_model.pnl +
+                                                          _model.commission +
+                                                          _model
+                                                              .accruedInterest) /
+                                                      invest))
+                                              .toStringAsFixed(1) +
+                                          "%)",
+                                      style: (_model.pnl +
+                                                  _model.commission +
+                                                  _model.accruedInterest) >
+                                              0
+                                          ? StyleFactory.buyUpOrderInfo
+                                          : StyleFactory.buyDownOrderInfo,
+                                    ),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    TextEditingController controller =
+                                        TextEditingController();
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) {
+                                          return DialogFactory
+                                              .closeOutConfirmDialog(context,
+                                                  value: (_model.pnl +
+                                                          _model.commission +
+                                                          _model
+                                                              .accruedInterest)
+                                                      .toStringAsFixed(4),
+                                                  pnl: _model.pnl
+                                                      .toStringAsFixed(4),
+                                                  controller: controller);
+                                        }).then((value) async {
+                                      if (value != null && value) {
+                                        callAmend(context);
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      child: new Text(
+                                        "平仓",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      width: 130,
+                                      color: Palette.invitePromotionBadgeColor),
+                                ),
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                          )),
                 ],
               ),
             );
@@ -348,9 +447,15 @@ class OrderInfo extends StatelessWidget {
       {OrderResponseModel orderResponse, Contract refContract}) {
     if (refContract.contractId == orderResponse.contractId) {
       if (refContract.conversionRate > 0) {
-        return Image.asset(R.resAssetsIconsIcUpRed14, width: 14, height: 14);
+        return Icon(
+          Icons.arrow_upward,
+          color: Palette.redOrange,
+        );
       } else {
-        return Image.asset(R.resAssetsIconsIcDownGreen14);
+        return Icon(
+          Icons.arrow_downward,
+          color: Palette.shamrockGreen,
+        );
       }
     }
     return null;
@@ -371,27 +476,25 @@ class OrderInfo extends StatelessWidget {
     return null;
   }
 
-  openDialog(BuildContext context) {
-    Function callback = () {
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    };
-    showGeneralDialog(
-      context: context,
-      pageBuilder: (BuildContext buildContext, Animation<double> animation,
-          Animation<double> secondaryAnimation) {
-        return Builder(builder: (BuildContext context) {
-          return PnlForm(model: _model, callback: callback);
-        });
-      },
-      barrierDismissible: true,
-      barrierLabel: "",
-      barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 150),
-      transitionBuilder: _buildMaterialDialogTransitions,
-    ).then((v) {
-//
-    });
-  }
+  // openDialog(BuildContext context, OrderResponseModel model) {
+  //   Function callback = () {
+  //     Navigator.of(context).popUntil((route) => route.isFirst);
+  //   };
+  //   showGeneralDialog(
+  //     context: context,
+  //     pageBuilder: (BuildContext buildContext, Animation<double> animation,
+  //         Animation<double> secondaryAnimation) {
+  //       return Builder(builder: (BuildContext context) {
+  //         return PnlForm(model: model, callback: callback);
+  //       });
+  //     },
+  //     barrierDismissible: true,
+  //     barrierLabel: "",
+  //     barrierColor: Colors.black54,
+  //     transitionDuration: const Duration(milliseconds: 150),
+  //     transitionBuilder: _buildMaterialDialogTransitions,
+  //   ).then((v) {});
+  // }
 
   Widget _buildMaterialDialogTransitions(
       BuildContext context,
@@ -416,7 +519,7 @@ class OrderInfo extends StatelessWidget {
     try {
       showLoading(context, isBarrierDismissible: false);
       PostOrderResponseModel postOrderResponseModel =
-          await pnlViewModel.amend(_model, true);
+          await pnlViewModel.amend(_model, true, false);
       Navigator.of(context).pop();
       if (postOrderResponseModel.status == "Failed") {
         showNotification(context, true, postOrderResponseModel.errorMesage);

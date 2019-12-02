@@ -32,6 +32,7 @@ class OrderCalculate {
 
   static double takeProfitPx(
       double takeProfit, double basePx, double strikeLevel, bool isUp) {
+    takeProfit = takeProfit.roundToDouble();
     if (isUp) {
       return basePx + (basePx - strikeLevel) * takeProfit / 100;
     } else {
@@ -50,6 +51,7 @@ class OrderCalculate {
 
   static double cutLossPx(
       double cutLoss, double basePx, double strikeLevel, bool isUp) {
+    cutLoss = cutLoss.roundToDouble();
     if (isUp) {
       return basePx - (basePx - strikeLevel) * cutLoss / 100;
     } else {

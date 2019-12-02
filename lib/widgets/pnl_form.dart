@@ -5,7 +5,9 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:bbb_flutter/widgets/istep.dart';
+import 'package:bbb_flutter/widgets/revise_px_widget.dart';
+import 'package:bbb_flutter/widgets/revise_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class PnlForm extends StatefulWidget {
@@ -23,6 +25,16 @@ class PnlForm extends StatefulWidget {
 class _PnlFormState extends State<PnlForm> {
   TextEditingController _takeProfitController = TextEditingController();
   TextEditingController _cutLossController = TextEditingController();
+  TextEditingController _takeProfitPxController = TextEditingController();
+  TextEditingController _cutLossPxController = TextEditingController();
+
+  int currentSegment = 0;
+
+  void onValueChanged(int newValue) {
+    setState(() {
+      currentSegment = newValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +86,13 @@ class _PnlFormState extends State<PnlForm> {
             _takeProfitController.text = model.takeProfit == null
                 ? I18n.of(context).stepWidgetNotSetHint
                 : model.takeProfit.round().toStringAsFixed(0);
+
+            _cutLossPxController.text = model.cutLossPx == contract.strikeLevel
+                ? I18n.of(context).stepWidgetNotSetHint
+                : model.cutLossPx.round().toStringAsFixed(0);
+            _takeProfitPxController.text = model.takeProfitPx == 0
+                ? I18n.of(context).stepWidgetNotSetHint
+                : model.takeProfitPx.round().toStringAsFixed(0);
           },
           builder: (context, model, child) {
             return Align(
@@ -87,237 +106,98 @@ class _PnlFormState extends State<PnlForm> {
                         left: 20, top: 20, right: 20, bottom: 40),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        GestureDetector(
-                          child: Image.asset(R.resAssetsIconsIcMaskClose),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  "${I18n.of(context).takeProfit}(%)",
-                                  style: StyleFactory.subTitleStyle,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    model.setTakeProfitInputCorrectness(true);
-                                    model.changeTakeProfit(profit: null);
-                                    _takeProfitController.text =
-                                        I18n.of(context).stepWidgetNotSetHint;
-                                  },
-                                  child: Text(
-                                    I18n.of(context).orderFormReset,
-                                    style: StyleFactory.subTitleStyle,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                                width: 150,
-                                child: Material(
-                                  child: IStep(
-                                    text: _takeProfitController,
-                                    plusOnTap: () {
-                                      model.increaseTakeProfit(
-                                          order: widget._order);
-                                      model.setTakeProfitInputCorrectness(true);
-                                      _takeProfitController.text =
-                                          model.takeProfit.toStringAsFixed(0);
-                                    },
-                                    minusOnTap: () {
-                                      model.decreaseTakeProfit(
-                                          order: widget._order);
-                                      model.setTakeProfitInputCorrectness(true);
-                                      _takeProfitController.text =
-                                          model.takeProfit.toStringAsFixed(0);
-                                    },
-                                    onChange: (value) {
-                                      if (value.isNotEmpty &&
-                                          (double.tryParse(value) == null ||
-                                              double.tryParse(value) < 0)) {
-                                        model.setTakeProfitInputCorrectness(
-                                            false);
-                                      } else {
-                                        model.setTakeProfitInputCorrectness(
-                                            true);
-                                        model.changeTakeProfit(
-                                            profit: value.isEmpty
-                                                ? null
-                                                : double.parse(value),
-                                            order: widget._order);
-                                      }
-                                    },
-                                  ),
-                                ))
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            "≈ ${model.takeProfitPx.toStringAsFixed(4)}",
-                            style: StyleFactory.cellDescLabel,
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            child: Image.asset(R.resAssetsIconsIcMaskClose),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  "${I18n.of(context).cutLoss}(%)",
-                                  style: StyleFactory.subTitleStyle,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    model.setCutLossInputCorectness(true);
-                                    model.changeCutLoss(cutLoss: null);
-                                    _cutLossController.text =
-                                        I18n.of(context).stepWidgetNotSetHint;
-                                  },
-                                  child: Text(
-                                    I18n.of(context).orderFormReset,
-                                    style: StyleFactory.subTitleStyle,
+                        Container(
+                          width: 250,
+                          child: Material(
+                            child: Container(
+                              color: Colors.white,
+                              child: CupertinoSegmentedControl(
+                                children: {
+                                  0: Container(
+                                    height: 35,
+                                    child: Text(
+                                      I18n.of(context).pnlAmendByPrice,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: currentSegment == 0
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    alignment: Alignment.center,
                                   ),
-                                )
-                              ],
+                                  1: Container(
+                                    height: 35,
+                                    child: Text(
+                                      I18n.of(context).pnlAmendByPercentage,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: currentSegment == 1
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    alignment: Alignment.center,
+                                  ),
+                                },
+                                onValueChanged: onValueChanged,
+                                groupValue: currentSegment,
+                                selectedColor:
+                                    Palette.invitePromotionBadgeColor,
+                                borderColor: Palette.separatorColor,
+                              ),
                             ),
-                            SizedBox(
-                                width: 150,
-                                child: Material(
-                                  child: IStep(
-                                    text: _cutLossController,
-                                    plusOnTap: () {
-                                      model.increaseCutLoss(
-                                          order: widget._order);
-                                      model.setCutLossInputCorectness(true);
-                                      _cutLossController.text =
-                                          model.cutLoss.toStringAsFixed(0);
-                                    },
-                                    minusOnTap: () {
-                                      model.decreaseCutLoss(
-                                          order: widget._order);
-                                      model.setCutLossInputCorectness(true);
-                                      _cutLossController.text =
-                                          model.cutLoss.toStringAsFixed(0);
-                                    },
-                                    onChange: (value) {
-                                      if (value.isNotEmpty &&
-                                          (double.tryParse(value) == null ||
-                                              double.tryParse(value) < 0)) {
-                                        model.setCutLossInputCorectness(false);
-                                      } else {
-                                        model.setCutLossInputCorectness(true);
-                                        model.changeCutLoss(
-                                            cutLoss: value.isEmpty
-                                                ? null
-                                                : double.parse(value) > 100
-                                                    ? 100
-                                                    : double.parse(value),
-                                            order: widget._order);
-                                        if (double.parse(value) > 100) {
-                                          _cutLossController.text = "100";
-                                        }
-                                      }
-                                    },
-                                  ),
-                                ))
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text(
-                            "≈ ${model.cutLossPx.toStringAsFixed(4)}",
-                            style: StyleFactory.cellDescLabel,
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
+                        Container(
+                          height: 0.5,
+                          color: Palette.separatorColor,
                         ),
-                        Offstage(
-                            offstage: model.isCutLossInputCorrect &&
-                                model.isTakeProfitInputCorrect,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                    I18n.of(context)
-                                        .orderFormInputPositiveNumberError,
-                                    style: StyleFactory.smallButtonTitleStyle),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                              ],
-                            )),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        currentSegment == 0
+                            ? RevisePxWidget(
+                                order: widget._order,
+                                pnlViewModel: model,
+                                takeProfitPxController: _takeProfitPxController,
+                                takeProfitController: _takeProfitController,
+                                cutLossController: _cutLossController,
+                                cutLossPxController: _cutLossPxController)
+                            : ReviseWidget(
+                                order: widget._order,
+                                pnlViewModel: model,
+                                takeProfitController: _takeProfitController,
+                                takeProfitPxController: _takeProfitPxController,
+                                cutLossController: _cutLossController,
+                                cutLossPxController: _cutLossPxController,
+                              ),
                         ButtonTheme(
                           minWidth: double.infinity,
                           height: 44,
                           child: WidgetFactory.button(
                               data: I18n.of(context).confirm,
                               color: (model.isCutLossInputCorrect &&
-                                      model.isTakeProfitInputCorrect)
+                                      model.isTakeProfitInputCorrect &&
+                                      model.isCutLossCorrect)
                                   ? Palette.redOrange
                                   : Palette.subTitleColor,
                               onPressed: (model.isCutLossInputCorrect &&
-                                      model.isTakeProfitInputCorrect)
-                                  ? () async {
-                                      if ((model.takeProfit != null &&
-                                              model.pnlPercent >
-                                                  model.takeProfit &&
-                                              widget._order.pnl +
-                                                      widget._order.commission +
-                                                      widget._order
-                                                          .accruedInterest >
-                                                  0) ||
-                                          (model.cutLoss != null &&
-                                              model.pnlPercent >
-                                                  model.cutLoss &&
-                                              widget._order.pnl +
-                                                      widget._order.commission +
-                                                      widget._order
-                                                          .accruedInterest <
-                                                  0)) {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return DialogFactory
-                                                  .normalConfirmDialog(context,
-                                                      title: I18n.of(context)
-                                                          .remider,
-                                                      content: I18n.of(context)
-                                                          .triggerCloseContent,
-                                                      onConfirmPressed: () {
-                                                _onClickSubmit(
-                                                    context: context,
-                                                    model: model);
-                                              });
-                                            });
-                                      } else {
-                                        _onClickSubmit(
-                                            context: context, model: model);
-                                      }
+                                      model.isTakeProfitInputCorrect &&
+                                      model.isCutLossCorrect)
+                                  ? () {
+                                      onClickConfirm(model: model);
                                     }
                                   : () {}),
                         )
@@ -333,6 +213,41 @@ class _PnlFormState extends State<PnlForm> {
     );
   }
 
+  onClickConfirm({PnlViewModel model}) {
+    bool isPercentShouldShowDialog = (model.takeProfit != null &&
+            ((model.pnlPercent > model.takeProfit &&
+                    widget._order.pnl +
+                            widget._order.commission +
+                            widget._order.accruedInterest >
+                        0) ||
+                model.takeProfit < 0)) ||
+        (model.cutLoss != null &&
+            ((model.pnlPercent > model.cutLoss &&
+                    widget._order.pnl +
+                            widget._order.commission +
+                            widget._order.accruedInterest <
+                        0) ||
+                (model.cutLoss < 0)));
+    if ((isPercentShouldShowDialog)) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return DialogFactory.normalConfirmDialog(context,
+                title: I18n.of(context).remider,
+                content: I18n.of(context).triggerCloseContent,
+                onConfirmPressed: () {
+              Navigator.of(context).pop(true);
+            });
+          }).then((onValue) {
+        if (onValue) {
+          _onClickSubmit(context: context, model: model);
+        }
+      });
+    } else {
+      _onClickSubmit(context: context, model: model);
+    }
+  }
+
   callAmend(
     BuildContext context,
     PnlViewModel model,
@@ -340,7 +255,7 @@ class _PnlFormState extends State<PnlForm> {
     try {
       showLoading(context);
       PostOrderResponseModel postOrderResponseModel =
-          await model.amend(widget._order, false);
+          await model.amend(widget._order, false, currentSegment == 0);
       Navigator.of(context).pop();
       if (postOrderResponseModel.status == "Failed") {
         showNotification(context, true, postOrderResponseModel.errorMesage);

@@ -1,4 +1,6 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/Input_editor_formatter.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IStep extends StatelessWidget {
@@ -22,7 +24,7 @@ class IStep extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
           border: Border.all(color: Palette.separatorColor, width: 0.5),
-          borderRadius: BorderRadius.circular(2)),
+          borderRadius: BorderRadius.circular(5)),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -30,6 +32,9 @@ class IStep extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 10),
               child: TextField(
+                inputFormatters: [
+                  WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
+                ],
                 controller: this.text,
                 keyboardType: TextInputType.numberWithOptions(
                     decimal: true, signed: false),
@@ -50,23 +55,30 @@ class IStep extends StatelessWidget {
                 children: <Widget>[
                   VerticalDivider(
                     color: Palette.separatorColor,
-                    indent: 6,
-                    endIndent: 6,
-                    width: 0.5,
+                    width: 1,
                   ),
-                  // Text("份",
-                  //     style:
-                  //         StyleFactory.investmentAmountStyle),
                   GestureDetector(
                       child: Container(
                         padding: EdgeInsets.only(left: 5, right: 5),
-                        child: SvgPicture.asset(R.resAssetsIconsIcReduce2),
+                        child: SvgPicture.asset(
+                          R.resAssetsIconsIcReduce2,
+                          color: Palette.invitePromotionBadgeColor,
+                        ),
                       ),
                       onTap: minusOnTap),
+                  VerticalDivider(
+                    color: Palette.separatorColor,
+                    indent: 6,
+                    endIndent: 6,
+                    width: 1,
+                  ),
                   GestureDetector(
                       child: Container(
                         padding: EdgeInsets.only(left: 5, right: 5),
-                        child: SvgPicture.asset(R.resAssetsIconsIcAdd2),
+                        child: SvgPicture.asset(
+                          R.resAssetsIconsIcAdd2,
+                          color: Palette.invitePromotionBadgeColor,
+                        ),
                       ),
                       onTap: plusOnTap),
                 ],

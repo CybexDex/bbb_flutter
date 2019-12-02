@@ -34,7 +34,7 @@ class DialogFactory {
           : <Widget>[
               CupertinoDialogAction(
                 onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
+                  Navigator.of(context, rootNavigator: true).pop(false);
                 },
                 child: Text(I18n.of(context).dialogCancelButton,
                     style: StyleFactory.dialogButtonFontStyle),
@@ -334,17 +334,38 @@ class DialogFactory {
   static Widget closeOutConfirmDialog(BuildContext context,
       {String value, String pnl, TextEditingController controller}) {
     return CupertinoAlertDialog(
-      title: Text(I18n.of(context).closeOut),
-      content: Column(
-        children: <Widget>[
-          Text(I18n.of(context).dialogSellContent),
-          SizedBox(height: 1),
-          Text(value + AssetName.USDT),
-          SizedBox(height: 1),
-          Text(I18n.of(context).pnl),
-          SizedBox(height: 1),
-          Text(pnl + AssetName.USDT),
-        ],
+      title: Text(I18n.of(context).closeOut,
+          style: TextStyle(
+            color: Palette.titleColor,
+            fontSize: ScreenUtil.getInstance().setSp(16),
+            fontWeight: FontWeight.w600,
+            fontStyle: FontStyle.normal,
+          )),
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              I18n.of(context).dialogSellContent,
+              style: StyleFactory.dialogContentStyle,
+            ),
+            SizedBox(height: 5),
+            Text(value + AssetName.USDT,
+                style: StyleFactory.dialogContentTitleStyle),
+            SizedBox(height: 8),
+            pnl != null
+                ? Text(I18n.of(context).pnl,
+                    style: StyleFactory.dialogContentStyle)
+                : Container(),
+            SizedBox(height: 5),
+            pnl != null
+                ? Text(
+                    pnl + AssetName.USDT,
+                    style: StyleFactory.dialogContentTitleStyle,
+                  )
+                : Container(),
+          ],
+        ),
       ),
       actions: <Widget>[
         CupertinoDialogAction(

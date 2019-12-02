@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/screen/allOrders/all_orders.dart';
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
@@ -33,6 +34,7 @@ class RoutePaths {
   static const String Share = "Share";
   static const String Help = "Help";
   static const String Forum = "Forum";
+  static const String AllOrders = "AllOrders";
 }
 
 class Routes {
@@ -77,6 +79,8 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => SharePage());
       case RoutePaths.Forum:
         return CupertinoPageRoute(builder: (_) => ForumHome());
+      case RoutePaths.AllOrders:
+        return CupertinoPageRoute(builder: (_) => AllOrdersPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

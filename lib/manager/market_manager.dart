@@ -6,6 +6,7 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
+import 'package:bbb_flutter/models/response/websocket_nx_daily_px_response.dart';
 import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -24,6 +25,8 @@ class MarketManager {
       BehaviorSubject<WebSocketPNLResponse>();
   BehaviorSubject<List<TickerData>> _priceController =
       BehaviorSubject<List<TickerData>>();
+  BehaviorSubject<WebSocketNXDailyPxResponse> dailyPxTicker =
+      BehaviorSubject<WebSocketNXDailyPxResponse>();
   IOWebSocketChannel _channel;
 
   BBBAPI _api;
@@ -57,6 +60,8 @@ class MarketManager {
         type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE)));
     send(jsonEncode(WebSocketRequestEntity(
         topic: WebsocketRequestTopic.PNL, type: "subscribe")));
+    send(jsonEncode(WebSocketRequestEntity(
+        topic: WebsocketRequestTopic.NX_DAILYPX, type: "subscribe")));
   }
 
   loadMarketHistory(
@@ -133,6 +138,10 @@ class MarketManager {
     } else if (response.contains(WebsocketRequestTopic.PNL)) {
       var pnlResponse = WebSocketPNLResponse.fromJson(json.decode(response));
       pnlTicker.add(pnlResponse);
+    } else if (response.contains(WebsocketRequestTopic.NX_DAILYPX)) {
+      var nxDailyResponse =
+          WebSocketNXDailyPxResponse.fromJson(json.decode(response));
+      dailyPxTicker.add(nxDailyResponse);
     }
   }
 

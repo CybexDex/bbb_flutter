@@ -185,6 +185,7 @@ class BBBAPIProvider extends BBBAPI {
   Future<TestAccountResponseModel> getTestAccount(
       {bool bonusEvent, String accountName}) async {
     Dio singleDio = Dio();
+    setupProxy(singleDio);
     if (_pref.getEnvType() == EnvType.Pro) {
       singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
     } else if (_pref.getEnvType() == EnvType.Uat) {

@@ -14,6 +14,7 @@ class Palette {
   static const inviteAddButtonColor = const Color(0xfff5ca20);
   static const inviteAddButtonColorTwo = const Color(0xfff29208);
   static const inviteStepRoundColor = const Color(0xfffccc3b);
+  static const seperateOrBackgroundGreyColor = const Color(0xfff6f6f6);
 
   static const buttonPrimaryColor = const Color(0xffffffff);
   static const pagePrimaryColor = const Color(0xffffffff);

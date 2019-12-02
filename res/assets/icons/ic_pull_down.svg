@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="206" height="50" viewBox="0 0 206 50">
+    <defs>
+        <linearGradient id="a" x1="0%" y1="49.598%" y2="49.598%">
+            <stop offset="0%" stop-color="#FFDA62" stop-opacity=".5"/>
+            <stop offset="50.216%" stop-color="#FFBA02"/>
+            <stop offset="100%" stop-color="#FFDA62" stop-opacity=".5"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path fill="url(#a)" d="M0 .073h210c-15.654-.764-33.411 4.45-53.27 15.644C133.228 29.514 128.947 50 105 50c-26.953 0-26.953-20.486-51.257-34.283C37.541 6.518 19.626 1.304 0 .073z"/>
+        <text fill="#282C35" font-family="PingFangSC-Semibold, PingFang SC" font-size="18" font-weight="500">
+            <tspan x="69" y="22">下拉收起</tspan>
+        </text>
+        <path fill="#282C35" d="M97.707 31.007l7.778 7.78 7.778-7.78a1 1 0 0 1 1.415 1.414l-8.486 8.486a1 1 0 0 1-1.414 0l-8.485-8.486a1 1 0 0 1 1.414-1.414zm14.344-2.798a.714.714 0 0 1 0 1.01l-6.06 6.061a.714.714 0 0 1-1.01 0l-6.062-6.06a.714.714 0 0 1 1.01-1.01l5.556 5.556 5.556-5.557a.714.714 0 0 1 1.01 0z"/>
+    </g>
+</svg>

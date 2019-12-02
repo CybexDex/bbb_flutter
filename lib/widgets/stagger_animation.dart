@@ -2,12 +2,10 @@ import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../r.dart';
 
 class StaggerAnimation extends StatelessWidget {
-  StaggerAnimation({Key key, this.controller, this.accountName, this.pnl})
+  StaggerAnimation(
+      {Key key, this.controller, this.accountName, this.pnl, this.isUp})
       :
 
         // Each animation defined here transforms its value during the subset
@@ -39,6 +37,7 @@ class StaggerAnimation extends StatelessWidget {
   final Animation<Offset> move;
   final double pnl;
   final String accountName;
+  final bool isUp;
 
   // This function is called each time the controller "ticks" a new frame.
   // When it runs, all of the animation's values will have been
@@ -51,44 +50,43 @@ class StaggerAnimation extends StatelessWidget {
         child: SlideTransition(
           position: move,
           child: Container(
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: 10, top: 4, bottom: 4, left: 10),
             decoration: BoxDecoration(
-                color: Palette.veryLightPink,
+                color: Colors.black.withOpacity(0.5),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Row(
               children: <Widget>[
-                Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: 22,
-                      height: 22,
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.all(Radius.circular(45))),
-                    ),
-                    Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            color: Palette.veryLightPink,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(45))),
-                        child: SvgPicture.asset(R.resAssetsIconsIcNews)),
-                  ],
+                // Stack(
+                //   alignment: Alignment.center,
+                //   children: <Widget>[
+                //     Container(
+                //       width: 22,
+                //       height: 22,
+                //       decoration: BoxDecoration(
+                //           color: Colors.black.withOpacity(0.5),
+                //           borderRadius: BorderRadius.all(Radius.circular(45))),
+                //     ),
+                //     Container(
+                //         width: 20,
+                //         height: 20,
+                //         decoration: BoxDecoration(
+                //             color: Colors.black.withOpacity(0.5),
+                //             borderRadius:
+                //                 BorderRadius.all(Radius.circular(45))),
+                //         child: SvgPicture.asset(R.resAssetsIconsIcNews)),
+                //   ],
+                // ),
+                Container(
+                  child: Text("${getEllipsisName(value: accountName)} 盈利  ",
+                      style: StyleFactory.pnlBroadCastStyle),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 7),
-                  child: Container(
-                    child: Text(
-                      "${getEllipsisName(value: accountName)} 盈利  ",
-                      style: StyleFactory.subTitleStyle,
-                    ),
-                  ),
-                ),
-                Text(
-                  "${pnl.toStringAsFixed(4)} USDT",
-                  style: StyleFactory.buyUpText,
+                Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                      color: isUp ? Palette.redOrange : Palette.shamrockGreen,
+                      borderRadius: BorderRadius.all(Radius.circular(45))),
+                  child: Text("${pnl.toStringAsFixed(4)} USDT",
+                      style: StyleFactory.pnlBroadCastStyle),
                 )
               ],
             ),

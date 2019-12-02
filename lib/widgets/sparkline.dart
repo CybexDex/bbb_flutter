@@ -294,22 +294,22 @@ class Sparkline extends StatelessWidget {
             );
           }),
         ),
-        percentage.nPercentage == 0 && percentage.xPercentage == 0
-            ? Container()
-            : Container(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Container(
-                      child: CustomPaint(
-                        size: Size.infinite,
-                        painter: _PercentageBarPainter(
-                            context: context,
-                            percentage: percentage.nPercentage),
-                      ),
-                    );
-                  },
-                ),
-              )
+        // percentage.nPercentage == 0 && percentage.xPercentage == 0
+        //     ? Container()
+        //     : Container(
+        //         child: LayoutBuilder(
+        //           builder: (context, constraints) {
+        //             return Container(
+        //               child: CustomPaint(
+        //                 size: Size.infinite,
+        //                 painter: _PercentageBarPainter(
+        //                     context: context,
+        //                     percentage: percentage.nPercentage),
+        //               ),
+        //             );
+        //           },
+        //         ),
+        //       )
       ],
     );
   }
@@ -516,19 +516,31 @@ class _PercentageBarPainter extends CustomPainter {
       ..layout();
 
     upTextPainter.paint(canvas, Offset(0, 0));
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, upTextPainter.height, 4, size.height * 2 / 3),
-            Radius.circular(2)),
-        downBarPainter);
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, upTextPainter.height, 4,
-                size.height * 2 / 3 * (percentage / 100)),
-            Radius.circular(2)),
-        upBarPainter);
+    Path path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width * (percentage / 100), 0)
+      ..lineTo(size.width * (percentage / 100) - 2, 4)
+      ..lineTo(0, 4)
+      ..close();
+    Path downPath = Path()
+      ..moveTo(size.width, 0)
+      ..lineTo(size.width * (percentage / 100) + 4, 0)
+      ..lineTo(size.width * (percentage / 100) + 2, 4)
+      ..lineTo(size.width, 4)
+      ..close();
+    canvas.drawPath(path, upBarPainter);
+    canvas.drawPath(downPath, downBarPainter);
+    // canvas.drawRRect(
+    //     RRect.fromRectAndRadius(
+    //         Rect.fromLTWH(0, size.height, size.width, 4), Radius.circular(0)),
+    //     downBarPainter);
+    // canvas.drawRRect(
+    //     RRect.fromRectAndRadius(
+    //         Rect.fromLTWH(0, size.height, size.width * (percentage / 100), 4),
+    //         Radius.circular(0)),
+    //     upBarPainter);
     downTextPainter.paint(
-        canvas, Offset(0, upTextPainter.height + size.height * 2 / 3));
+        canvas, Offset(size.width - downTextPainter.width, 0));
   }
 
   @override

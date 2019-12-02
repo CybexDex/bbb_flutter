@@ -48,7 +48,7 @@ void main() async {
                 resource.add(
                     "/// ![](http://127.0.0.1:$preview_server_port/$path)");
                 resource.add("static final String $varName = '$path';");
-                newLines.add('    - $path');
+                newLines.add('        - $path');
               }
             }
           }

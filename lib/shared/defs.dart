@@ -33,6 +33,7 @@ class WebsocketRequestTopic {
   static const FAIRPRICE = "FAIRPRICE";
   static const PNL = "PNL";
   static const NX_PERCENTAGE = "NX_PERCENTAGE";
+  static const NX_DAILYPX = "NX_DAILYPX";
 }
 
 class NetworkConnection {

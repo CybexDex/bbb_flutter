@@ -109,119 +109,132 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                   data, trade.orderForm, trade.contract.strikeLevel);
             }
 
-            return Column(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: order != null
-                      ? DefaultTabController(
-                          length: 4,
-                          child: TabBar(
-                            isScrollable: true,
-                            labelStyle: StyleFactory.buySellExplainText,
-                            indicatorWeight: 0.5,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            indicatorColor: Palette.subTitleColor,
-                            unselectedLabelColor: Palette.descColor,
-                            labelColor: Palette.subTitleColor,
-                            tabs: [
-                              Tab(
-                                text: I18n.of(context).oneMin,
+            return Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 22,
+                    alignment: Alignment.topLeft,
+                    child: order != null
+                        ? DefaultTabController(
+                            length: 4,
+                            child: TabBar(
+                              isScrollable: true,
+                              labelStyle: StyleFactory.buySellExplainText,
+                              indicatorWeight: 0.5,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              indicatorColor: Palette.subTitleColor,
+                              unselectedLabelColor: Palette.descColor,
+                              labelColor: Palette.subTitleColor,
+                              indicator: UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                    color: Palette.invitePromotionBadgeColor,
+                                    width: 2),
+                                insets: EdgeInsets.fromLTRB(0, 0.0, 0, 3),
                               ),
-                              Tab(text: I18n.of(context).fiveMin),
-                              Tab(
-                                text: I18n.of(context).oneHour,
-                              ),
-                              Tab(
-                                text: I18n.of(context).oneDay,
-                              ),
-                            ],
-                            onTap: (index) {
-                              switch (index) {
-                                case 0:
-                                  model.changeDuration(MarketDuration.oneMin);
-                                  break;
-                                case 1:
-                                  model.changeDuration(MarketDuration.fiveMin);
-                                  break;
-                                case 2:
-                                  model.changeDuration(MarketDuration.oneHour);
-                                  break;
-                                case 3:
-                                  model.changeDuration(MarketDuration.oneDay);
-                                  break;
-                                default:
-                                  model.changeDuration(MarketDuration.oneMin);
-                              }
-                            },
-                          ),
-                        )
-                      : Container(),
-                ),
-                Flexible(
-                  child: Container(
-                      height: double.infinity,
-                      margin: EdgeInsets.only(top: 1, left: 0, right: 0),
-                      child: GestureDetector(
-                        onPanStart: (details) {
-                          model.lastOffset = details.globalPosition;
-                        },
-                        onPanUpdate: (details) {
-                          double gap =
-                              details.globalPosition.dx - model.lastOffset.dx;
-
-                          double timeOffset = 30 *
-                              marketDurationSecondMap[model.marketDuration] *
-                              gap /
-                              ScreenUtil.screenWidthDp;
-                          model.lastOffset = details.globalPosition;
-
-                          var start = model.startTime
-                              .subtract(Duration(seconds: timeOffset.toInt()));
-                          var end = model.endTime
-                              .subtract(Duration(seconds: timeOffset.toInt()));
-                          if (end.compareTo(getCorrectTime().add(Duration(
-                                  seconds: 10 *
-                                      marketDurationSecondMap[
-                                          model.marketDuration]))) >
-                              0) {
-                            return;
-                          }
-                          if (start.compareTo(data.first.time) <= 0) {
-                            return;
-                          }
-                          model.changeScope(start, end);
-                        },
-                        child: Sparkline(
-                          percentage: percentage,
-                          dateFormat: model.dateFormat,
-                          data: klines,
-                          suppleData: model.suppleData,
-                          startTime: model.startTime,
-                          endTime: model.endTime,
-                          lineColor: Palette.darkSkyBlue,
-                          timeLineGap: Duration(
-                              seconds: 5 *
-                                  marketDurationSecondMap[
-                                      model.marketDuration]),
-                          lineWidth: 1,
-                          gridLineWidth: 0.5,
-                          width: widget.width,
-                          fillGradient: LinearGradient(
-                              colors: [
-                                Palette.lineGradintColorStart,
-                                Palette.lineGradientColorEnd
+                              tabs: [
+                                Tab(
+                                  text: I18n.of(context).oneMin,
+                                ),
+                                Tab(text: I18n.of(context).fiveMin),
+                                Tab(
+                                  text: I18n.of(context).oneHour,
+                                ),
+                                Tab(
+                                  text: I18n.of(context).oneDay,
+                                ),
                               ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter),
-                          gridLineColor: Palette.veryLightPinkTwo,
-                          pointSize: 8.0,
-                          pointColor: Palette.darkSkyBlue,
-                          repaint: model,
-                        ),
-                      )),
-                )
-              ],
+                              onTap: (index) {
+                                switch (index) {
+                                  case 0:
+                                    model.changeDuration(MarketDuration.oneMin);
+                                    break;
+                                  case 1:
+                                    model
+                                        .changeDuration(MarketDuration.fiveMin);
+                                    break;
+                                  case 2:
+                                    model
+                                        .changeDuration(MarketDuration.oneHour);
+                                    break;
+                                  case 3:
+                                    model.changeDuration(MarketDuration.oneDay);
+                                    break;
+                                  default:
+                                    model.changeDuration(MarketDuration.oneMin);
+                                }
+                              },
+                            ),
+                          )
+                        : Container(),
+                  ),
+                  Flexible(
+                    flex: 20,
+                    child: Container(
+                        height: double.infinity,
+                        margin: EdgeInsets.only(top: 1, left: 0, right: 0),
+                        child: GestureDetector(
+                          onPanStart: (details) {
+                            model.lastOffset = details.globalPosition;
+                          },
+                          onPanUpdate: (details) {
+                            double gap =
+                                details.globalPosition.dx - model.lastOffset.dx;
+
+                            double timeOffset = 30 *
+                                marketDurationSecondMap[model.marketDuration] *
+                                gap /
+                                ScreenUtil.screenWidthDp;
+                            model.lastOffset = details.globalPosition;
+
+                            var start = model.startTime.subtract(
+                                Duration(seconds: timeOffset.toInt()));
+                            var end = model.endTime.subtract(
+                                Duration(seconds: timeOffset.toInt()));
+                            if (end.compareTo(getCorrectTime().add(Duration(
+                                    seconds: 10 *
+                                        marketDurationSecondMap[
+                                            model.marketDuration]))) >
+                                0) {
+                              return;
+                            }
+                            if (start.compareTo(data.first.time) <= 0) {
+                              return;
+                            }
+                            model.changeScope(start, end);
+                          },
+                          child: Sparkline(
+                            percentage: percentage,
+                            dateFormat: model.dateFormat,
+                            data: klines,
+                            suppleData: model.suppleData,
+                            startTime: model.startTime,
+                            endTime: model.endTime,
+                            lineColor: Palette.darkSkyBlue,
+                            timeLineGap: Duration(
+                                seconds: 5 *
+                                    marketDurationSecondMap[
+                                        model.marketDuration]),
+                            lineWidth: 1,
+                            gridLineWidth: 0.5,
+                            width: widget.width,
+                            fillGradient: LinearGradient(
+                                colors: [
+                                  Palette.lineGradintColorStart,
+                                  Palette.lineGradientColorEnd
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter),
+                            gridLineColor: Palette.veryLightPinkTwo,
+                            pointSize: 8.0,
+                            pointColor: Palette.darkSkyBlue,
+                            repaint: model,
+                          ),
+                        )),
+                  ),
+                ],
+              ),
             );
           },
         );

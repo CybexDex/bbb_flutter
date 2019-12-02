@@ -56,7 +56,14 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                   child: Center(
                     child: Text(
                       I18n.of(context).topUp,
-                      style: StyleFactory.navButtonTitleStyle,
+                      style: TextStyle(
+                        fontFamily: 'PingFangSC',
+                        color: Color(0xffffa700),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
+                      ),
                       textScaleFactor: 1,
                     ),
                   ),
@@ -124,13 +131,16 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                             ignoring: showDropdownMenuHeight != 0,
                             child: SafeArea(
                                 child: Container(
-                              margin: Dimen.pageMargin,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 10, bottom: 10),
+                                  Container(
+                                    color: Colors.white,
+                                    padding: EdgeInsets.only(
+                                        top: 10,
+                                        bottom: 10,
+                                        right: 15,
+                                        left: 15),
                                     child: Consumer2<TickerData,
                                         RefContractResponseModel>(
                                       builder:
@@ -186,143 +196,84 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                             builder: (context) =>
                                                 mtm.lastTicker.stream)
                                       ],
-                                      child: MarketView(
-                                        isTrade: true,
-                                        width: ScreenUtil.screenWidthDp - 40,
-                                        mtm: mtm,
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 10),
+                                        child: MarketView(
+                                          isTrade: true,
+                                          width: ScreenUtil.screenWidthDp - 40,
+                                          mtm: mtm,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Container(
+                                    color: Colors.white,
+                                    padding: EdgeInsets.only(bottom: 12),
                                     margin:
-                                        EdgeInsets.only(bottom: 15, top: 20),
+                                        EdgeInsets.only(bottom: 10, top: 10),
                                     child: OrderFormWidget(
-                                        contract: params.contract),
+                                        contract: model.contract),
                                   ),
-                                  Divider(color: Palette.separatorColor),
                                   Container(
-                                    margin: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .padding
-                                            .bottom),
-                                    height: 60,
-                                    child: BuyOrSellBottom(
-                                        totalAmount:
-                                            model.orderForm.totalAmount.amount,
-                                        button: model.orderForm.isUp
-                                            ? WidgetFactory.button(
-                                                topPadding: 8,
-                                                bottomPadding: 8,
-                                                data: I18n.of(context).buyUp,
-                                                color: model.isSatisfied
-                                                    ? Palette.redOrange
-                                                    : Palette.subTitleColor,
-                                                onPressed: model.isSatisfied
-                                                    ? () async {
-                                                        if (locator
-                                                                    .get<
-                                                                        UserManager>()
-                                                                    .user
-                                                                    .testAccountResponseModel ==
-                                                                null &&
-                                                            model
-                                                                    .orderForm
-                                                                    .cybBalance
-                                                                    .quantity <
-                                                                (AssetDef
-                                                                        .CYB_TRANSFER
-                                                                        .amount /
-                                                                    100000)) {
-                                                          showNotification(
-                                                              context,
-                                                              true,
-                                                              I18n.of(context)
-                                                                  .noFeeError);
-                                                        } else {
-                                                          model.saveOrder();
-                                                          TextEditingController
-                                                              passwordEditor =
-                                                              TextEditingController();
-                                                          showDialog(
-                                                              context: context,
-                                                              barrierDismissible:
-                                                                  true,
-                                                              builder:
-                                                                  (context) {
-                                                                return DialogFactory
-                                                                    .confirmDialog(
-                                                                        context,
-                                                                        model:
-                                                                            model,
-                                                                        controller:
-                                                                            passwordEditor);
-                                                              }).then((value) async {
-                                                            if (value) {
-                                                              callPostOrder(
-                                                                  context,
-                                                                  model);
-                                                            }
-                                                          });
+                                      color: Colors.white,
+                                      margin: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .padding
+                                              .bottom),
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: BuyOrSellBottom(
+                                          totalAmount: model
+                                              .orderForm.totalAmount.amount,
+                                          button: model.orderForm.isUp
+                                              ? GestureDetector(
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding: EdgeInsets.only(
+                                                        top: 12, bottom: 12),
+                                                    child: new Text(
+                                                      I18n.of(context).buyUp,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.white),
+                                                    ),
+                                                    width: 130,
+                                                    color: model.isSatisfied
+                                                        ? Palette.redOrange
+                                                        : Palette.subTitleColor,
+                                                  ),
+                                                  onTap: model.isSatisfied
+                                                      ? () async {
+                                                          onConfirmClicked(
+                                                              model: model);
                                                         }
-                                                      }
-                                                    : () {})
-                                            : WidgetFactory.button(
-                                                topPadding: 8,
-                                                bottomPadding: 8,
-                                                data: I18n.of(context).buyDown,
-                                                color: model.isSatisfied
-                                                    ? Palette.shamrockGreen
-                                                    : Palette.subTitleColor,
-                                                onPressed: model.isSatisfied
-                                                    ? () async {
-                                                        if (locator
-                                                                    .get<
-                                                                        UserManager>()
-                                                                    .user
-                                                                    .testAccountResponseModel ==
-                                                                null &&
-                                                            model
-                                                                    .orderForm
-                                                                    .cybBalance
-                                                                    .quantity <
-                                                                (AssetDef
-                                                                        .CYB_TRANSFER
-                                                                        .amount /
-                                                                    100000)) {
-                                                          showNotification(
-                                                              context,
-                                                              true,
-                                                              I18n.of(context)
-                                                                  .noFeeError);
-                                                        } else {
-                                                          model.saveOrder();
-                                                          TextEditingController
-                                                              passwordEditor =
-                                                              TextEditingController();
-                                                          showDialog(
-                                                              context: context,
-                                                              barrierDismissible:
-                                                                  true,
-                                                              builder:
-                                                                  (context) {
-                                                                return DialogFactory
-                                                                    .confirmDialog(
-                                                                        context,
-                                                                        model:
-                                                                            model,
-                                                                        controller:
-                                                                            passwordEditor);
-                                                              }).then((value) async {
-                                                            if (value) {
-                                                              callPostOrder(
-                                                                  context,
-                                                                  model);
-                                                            }
-                                                          });
+                                                      : () {})
+                                              : GestureDetector(
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    padding: EdgeInsets.only(
+                                                        top: 12, bottom: 12),
+                                                    child: new Text(
+                                                      I18n.of(context).buyDown,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color: Colors.white),
+                                                    ),
+                                                    width: 130,
+                                                    color: model.isSatisfied
+                                                        ? Palette.shamrockGreen
+                                                        : Palette.subTitleColor,
+                                                  ),
+                                                  onTap: model.isSatisfied
+                                                      ? () async {
+                                                          onConfirmClicked(
+                                                              model: model);
                                                         }
-                                                      }
-                                                    : () {})),
-                                  ),
+                                                      : () {},
+                                                ))),
                                 ],
                               ),
                             )),
@@ -340,6 +291,59 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
             )),
       ),
     );
+  }
+
+  onConfirmClicked({TradeViewModel model}) {
+    if (locator.get<UserManager>().user.testAccountResponseModel == null &&
+        model.orderForm.cybBalance.quantity <
+            (AssetDef.CYB_TRANSFER.amount / 100000)) {
+      showNotification(context, true, I18n.of(context).noFeeError);
+    } else {
+      bool shouldShowAlertBuyUp = model.orderForm.isUp &&
+          ((model.orderForm.takeProfitPx != null &&
+                  model.orderForm.takeProfitPx != 0 &&
+                  model.orderForm.takeProfitPx < model.currentTicker.value) ||
+              (model.orderForm.cutoffPx != null &&
+                  (model.orderForm.cutoffPx > model.currentTicker.value)));
+
+      bool shouldShowAlertBuyDown = !model.orderForm.isUp &&
+          ((model.orderForm.takeProfitPx != null &&
+                  model.orderForm.takeProfitPx != 0 &&
+                  model.orderForm.takeProfitPx > model.currentTicker.value) ||
+              (model.orderForm.cutoffPx != null &&
+                  (model.orderForm.cutoffPx < model.currentTicker.value)));
+
+      if (shouldShowAlertBuyUp || shouldShowAlertBuyDown) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return DialogFactory.normalConfirmDialog(context,
+                  title: I18n.of(context).remider,
+                  content: I18n.of(context).triggerCloseContent,
+                  onConfirmPressed: () {
+                _onDialogConfirmClicked(model: model);
+              });
+            });
+      } else {
+        _onDialogConfirmClicked(model: model);
+      }
+    }
+  }
+
+  _onDialogConfirmClicked({TradeViewModel model}) {
+    model.saveOrder();
+    TextEditingController passwordEditor = TextEditingController();
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return DialogFactory.confirmDialog(context,
+              model: model, controller: passwordEditor);
+        }).then((value) async {
+      if (value) {
+        callPostOrder(context, model);
+      }
+    });
   }
 
   callPostOrder(BuildContext context, TradeViewModel model) async {

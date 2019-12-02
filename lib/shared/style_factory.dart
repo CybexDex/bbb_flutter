@@ -97,6 +97,13 @@ class StyleFactory {
       fontStyle: FontStyle.normal,
       fontSize: Dimen.middleLabelFontSize);
 
+  static var orderFormValueStyle = TextStyle(
+      decoration: TextDecoration.none,
+      color: Palette.titleColor,
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      fontSize: Dimen.largeLabelFontSize);
+
   static var cellBoldTitleStyle = TextStyle(
       decoration: TextDecoration.none,
       color: Palette.titleColor,
@@ -261,8 +268,8 @@ class StyleFactory {
       fontWeight: FontWeight.w500,
       fontStyle: FontStyle.normal,
       fontSize: Dimen.smallLabelFontSize);
-  //Forum
 
+  //Forum
   static var forumTitleFontStyle = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.forumItemTitleColor,
@@ -284,6 +291,15 @@ class StyleFactory {
     fontFamily: 'PingFangSC',
     color: Palette.forumItemContentColor.withOpacity(0.6),
     fontSize: Dimen.forumLableFontSize,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
+  //pnl broadcast style
+  static var pnlBroadCastStyle = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Colors.white,
+    fontSize: Dimen.smallLabelFontSize,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );

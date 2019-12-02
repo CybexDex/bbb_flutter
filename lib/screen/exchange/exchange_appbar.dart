@@ -17,7 +17,11 @@ AppBar exchangeAppBar() {
                       child: Padding(
                         padding: EdgeInsets.only(right: 20),
                         child: Center(
-                            child: SvgPicture.asset(R.resAssetsIconsIcService)),
+                            child: SvgPicture.asset(
+                          R.resAssetsIconsIcService,
+                          width: 24,
+                          height: 20,
+                        )),
                       ),
                       onTap: () {
                         Navigator.of(context).pushNamed(RoutePaths.Feedback);
@@ -60,8 +64,8 @@ AppBar exchangeAppBar() {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text("试玩 BTC/USDT", style: StyleFactory.title),
-                  Text("${ticker.value.toStringAsFixed(4)}",
-                      style: StyleFactory.subTitleStyle)
+                  // Text("${ticker.value.toStringAsFixed(4)}",
+                  //     style: StyleFactory.subTitleStyle)
                 ],
               )
             : Column(
@@ -72,8 +76,8 @@ AppBar exchangeAppBar() {
                           ? "奖励 BTC/USDT"
                           : "BTC/USDT",
                       style: StyleFactory.title),
-                  Text("${ticker.value.toStringAsFixed(4)}",
-                      style: StyleFactory.subTitleStyle)
+                  // Text("${ticker.value.toStringAsFixed(4)}",
+                  //     style: StyleFactory.subTitleStyle)
                 ],
               );
       },
