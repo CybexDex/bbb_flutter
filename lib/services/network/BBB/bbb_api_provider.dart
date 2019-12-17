@@ -9,6 +9,7 @@ import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
+import 'package:bbb_flutter/models/response/ranking_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -73,6 +74,19 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
+  Future<PositionsResponseModel> getPositionsTestAccount({String name}) async {
+    Dio singleDio = Dio();
+    setupProxy(singleDio);
+    if (_pref.getEnvType() == EnvType.Pro) {
+      singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
+    } else if (_pref.getEnvType() == EnvType.Uat) {
+      singleDio.options.baseUrl = NetworkConnection.UAT_TESTNET;
+    }
+    var response = await singleDio.get('/position?accountName=$name');
+    return Future.value(PositionsResponseModel.fromJson(response.data));
+  }
+
+  @override
   Future<List<OrderResponseModel>> getOrders(String name,
       {List<OrderStatus> status, String startTime, String endTime}) async {
     var params = {
@@ -113,6 +127,20 @@ class BBBAPIProvider extends BBBAPI {
       return FundRecordModel.fromJson(data);
     }).toList();
     return model;
+  }
+
+  @override
+  Future<List<RankingResponse>> getRankings({int indicator}) async {
+    var response =
+        await dio.get("/ranking", queryParameters: {"indicator": indicator});
+    var responseData = response.data as List;
+    if (responseData == null) {
+      return Future.value([]);
+    }
+    List<RankingResponse> model = responseData.map((data) {
+      return RankingResponse.fromJson(data);
+    }).toList();
+    return Future.value(model);
   }
 
   //assetName=BXBT&interval=1m&startTime=1561453047&endTime=1561453347

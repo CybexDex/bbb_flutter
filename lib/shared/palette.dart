@@ -40,4 +40,14 @@ class Palette {
   //Forum
   static const forumItemTitleColor = const Color(0xff282c35);
   static const forumItemContentColor = const Color(0xff6f7072);
+
+  //BottomNavigation
+  static const bottomNavLabelUnselectedColor = const Color(0xffafb5bd);
+  static const bottomNavLabelSelectedColor = const Color(0xff282c35);
+
+  //New design color collection
+  static const appBlack = const Color(0xff282c35);
+  static const appGrey = const Color(0xff6f7072);
+  static const appYellowOrange = const Color(0xffffa700);
+  static const appDividerBackgroudGreyColor = const Color(0xfff7f7f7);
 }

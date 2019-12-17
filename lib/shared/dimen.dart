@@ -30,4 +30,11 @@ class Dimen {
   static double forumTitleFontSize = ScreenUtil.getInstance().setSp(15.0);
   static double forumContentFontSize = ScreenUtil.getInstance().setSp(14.0);
   static double forumLableFontSize = ScreenUtil.getInstance().setSp(12.0);
+
+  //new design standard
+  static double fontSize12 = ScreenUtil.getInstance().setSp(12.0);
+  static double fontSize14 = ScreenUtil.getInstance().setSp(14.0);
+  static double fontSize15 = ScreenUtil.getInstance().setSp(15.0);
+  static double fontSize18 = ScreenUtil.getInstance().setSp(18.0);
+  static double fontSize26 = ScreenUtil.getInstance().setSp(26.0);
 }

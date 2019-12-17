@@ -3,7 +3,9 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,7 +35,7 @@ showLoading(BuildContext context, {bool isBarrierDismissible}) {
       return Center(
         child: SpinKitWave(
           color: Palette.redOrange,
-          size: 50,
+          size: 30,
         ),
       );
     },
@@ -93,4 +95,33 @@ launchURL({String url}) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+Widget showFlashBar(BuildContext context, bool isFaild,
+    {String content, Function callback}) {
+  return Flushbar(
+    flushbarStyle: FlushbarStyle.FLOATING,
+    flushbarPosition: FlushbarPosition.TOP,
+    icon: isFaild
+        ? Image.asset(R.resAssetsIconsIcFail)
+        : Image.asset(R.resAssetsIconsIcSuccess),
+    messageText: Text(
+      content,
+      style: StyleNewFactory.black15,
+    ),
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    boxShadows: [StyleFactory.shadow],
+    margin: EdgeInsets.all(8),
+    duration: Duration(seconds: 3),
+    onStatusChanged: (status) {
+      if (status == FlushbarStatus.DISMISSED) {
+        if (callback != null) {
+          callback();
+        } else {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      } else if (status == FlushbarStatus.SHOWING) {}
+    },
+  )..show(context);
 }

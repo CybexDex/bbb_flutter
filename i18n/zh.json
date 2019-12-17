@@ -205,5 +205,14 @@
 	"news": "资讯",
 	"forum_create": "原创: ",
 	"forum_author": "作者: ",
-	"forum_source": "来源: "
+	"forum_source": "来源: ",
+	"home_astrology": "运势占星",
+	"home_today_luck": "今日运程",
+	"home_week_luck": "本周运程",
+	"home_single_order_ranking": "单笔收益排行",
+	"home_total_order_ranking": "总收益排行",
+	"account_login_regiter": "登录/注册",
+	"account_my_asset": "我的资产",
+	"account_reward_amount": "奖励金:  ",
+	"account_to_use_reward": "去使用"
 }

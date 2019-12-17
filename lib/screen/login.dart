@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -167,6 +168,16 @@ class _LoginState extends State<LoginPage> {
                                                     _accountNameController.text,
                                                 password:
                                                     _passwordController.text)) {
+                                              userLocator.fetchBalances(
+                                                  name: _accountNameController
+                                                      .text);
+                                              locator
+                                                  .get<AccountViewModel>()
+                                                  .checkRewardAccount(
+                                                      accountName:
+                                                          _accountNameController
+                                                              .text,
+                                                      bonusEvent: true);
                                               Navigator.of(context).popUntil(
                                                   (route) => route.isFirst);
                                             } else {

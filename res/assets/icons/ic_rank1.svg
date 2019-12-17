@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="51" viewBox="0 0 41 51">
+    <defs>
+        <path id="a" d="M7.677 1.624L19 8.162v22H7z"/>
+        <linearGradient id="b" x1="50%" x2="50%" y1="18.411%" y2="100%">
+            <stop offset="0%" stop-color="#FFF57D"/>
+            <stop offset="100%" stop-color="#FFF8A4" stop-opacity=".504"/>
+        </linearGradient>
+        <path id="d" d="M7.677 1.624L19 8.162v22H7z"/>
+        <linearGradient id="f" x1="50%" x2="50%" y1="0%" y2="57.682%">
+            <stop offset="0%" stop-color="#FFA800"/>
+            <stop offset="100%" stop-color="#FFB900" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="g" x1="50%" x2="50%" y1="0%" y2="75.332%">
+            <stop offset="0%" stop-color="#FFF991"/>
+            <stop offset="100%" stop-color="#FFE829" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" transform="translate(-1 -6)">
+        <mask id="c" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <use fill="#FF7036" transform="rotate(-30 13 15.893)" xlink:href="#a"/>
+        <path fill="url(#b)" d="M13-3h4v43h-4z" mask="url(#c)" transform="rotate(-30 15 18.5)"/>
+        <g transform="matrix(-1 0 0 1 43 0)">
+            <mask id="e" fill="#fff">
+                <use xlink:href="#d"/>
+            </mask>
+            <use fill="#FF7036" transform="rotate(-30 13 15.893)" xlink:href="#d"/>
+            <path fill="url(#b)" d="M13-3h4v43h-4z" mask="url(#e)" transform="rotate(-30 15 18.5)"/>
+        </g>
+        <circle cx="22" cy="37" r="20" fill="#FFD500"/>
+        <circle cx="22" cy="37" r="18" fill="#FFB900"/>
+        <circle cx="22" cy="37" r="18" fill="url(#f)"/>
+        <circle cx="22" cy="37" r="15" fill="#FFE829"/>
+        <circle cx="22" cy="37" r="15" fill="url(#g)"/>
+        <text fill="#FF6C00" font-family="PingFangSC-Semibold, PingFang SC" font-size="26" font-weight="500" letter-spacing=".765">
+            <tspan x="16" y="46">1</tspan>
+        </text>
+    </g>
+</svg>

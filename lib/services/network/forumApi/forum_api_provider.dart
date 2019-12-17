@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
@@ -69,9 +71,24 @@ class ForumApiProvider extends ForumApi {
   }
 
   @override
+  Future<ForumResponse<BannerResponse>> getBanners({int pg, int siz}) async {
+    var response = await dio
+        .get("/list/prod/bbb/banner", queryParameters: {"pg": pg, "siz": siz});
+    var responseData = json.decode(response.data);
+    return Future.value(ForumResponse.fromJson(responseData));
+  }
+
+  @override
   Future<AstrologyHeaderResult> getAstrologyHeader() async {
     var response = await dio.get("/item/prod/astrology/header");
     var responseData = json.decode(response.data);
     return Future.value(AstrologyHeaderResult.fromJson(responseData));
+  }
+
+  @override
+  Future<AstrologyPredictResponse> getAstrologyPredict() async {
+    var response = await dio.get("/item/prod/bbb/astrology");
+    var responseData = json.decode(response.data);
+    return Future.value(AstrologyPredictResponse.fromJson(responseData));
   }
 }

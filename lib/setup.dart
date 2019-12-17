@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
 import 'package:bbb_flutter/env.dart';
+import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -22,6 +23,7 @@ import 'package:bbb_flutter/services/network/node/node_api.dart';
 import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
+import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:dio/dio.dart';
@@ -31,9 +33,13 @@ import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:package_info/package_info.dart';
 
+import 'screen/home/home_view_model.dart';
+import 'services/network/zendesk/zendesk_api.dart';
+
 GetIt locator = GetIt();
 List<SingleChildCloneableWidget> providers = [];
 final globalKey = GlobalKey();
+GlobalKey navGlobaykey = GlobalKey();
 final flutterWebViewPlugin = FlutterWebviewPlugin();
 
 class SimpleLogPrinter extends LogPrinter {
@@ -88,11 +94,21 @@ setupLocator() async {
       NodeApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ForumApi>(
       ForumApiProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ZendeskApi>(ZendeskApiProvider());
 
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),
       pref: locator<SharedPref>(),
       user: loadUserFromCache(locator<SharedPref>())));
+
+  locator.registerLazySingleton(() => HomeViewModel(
+      bbbapi: locator.get(),
+      forumApi: locator.get(),
+      configureApi: locator.get(),
+      zendeskApi: locator.get()));
+
+  locator.registerLazySingleton(
+      () => AccountViewModel(bbbapi: locator.get(), gatewayApi: locator.get()));
 
   locator.registerFactory(() => TradeViewModel(
       api: locator<BBBAPI>(),
@@ -131,7 +147,7 @@ setupProviders() {
 }
 
 setupProxy(Dio dio) {
-  return;
+  // return;
   if (buildMode == BuildMode.release || Platform.isAndroid) {
     return;
   }

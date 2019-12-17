@@ -48,6 +48,7 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text("涨跌幅",
                         style: TextStyle(

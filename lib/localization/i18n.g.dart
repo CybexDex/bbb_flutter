@@ -30,8 +30,8 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageStartOnlyLetter =
-      'register_error_message_start_only_letter';
+  static final String registerErrorMessageShouldNotContainContinuesDash =
+      'register_error_message_should_not_contain_continues_dash';
 
   static final String transfer = 'transfer';
 
@@ -171,13 +171,13 @@ class _$Keys {
   static final String registerErrorMessageContainLowercase =
       'register_error_message_contain_lowercase';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerErrorMessageStartOnlyLetter =
+      'register_error_message_start_only_letter';
 
   static final String registerErrorMessageShortNameLength =
       'register_error_message_short_name_length';
 
-  static final String registerErrorMessageShouldNotContainContinuesDash =
-      'register_error_message_should_not_contain_continues_dash';
+  static final String assetCat = 'asset_cat';
 
   static final String registerErrorMessageDashEnd =
       'register_error_message_dash_end';
@@ -321,7 +321,7 @@ class _$Keys {
 
   static final String transferTo = 'transfer_to';
 
-  static final String forumSource = 'forum_source';
+  static final String transferFrom = 'transfer_from';
 
   static final String transferAmount = 'transfer_amount';
 
@@ -334,8 +334,7 @@ class _$Keys {
   static final String transferErrorMessageCybNotEnough =
       'transfer_error_message_cyb_not_enough';
 
-  static final String transferErrorMessageBbbNotEnough =
-      'transfer_error_message_bbb_not_enough';
+  static final String accountToUseReward = 'account_to_use_reward';
 
   static final String transferNow = 'transfer_now';
 
@@ -461,7 +460,26 @@ class _$Keys {
 
   static final String forumAuthor = 'forum_author';
 
-  static final String transferFrom = 'transfer_from';
+  static final String forumSource = 'forum_source';
+
+  static final String homeAstrology = 'home_astrology';
+
+  static final String homeTodayLuck = 'home_today_luck';
+
+  static final String homeWeekLuck = 'home_week_luck';
+
+  static final String homeSingleOrderRanking = 'home_single_order_ranking';
+
+  static final String homeTotalOrderRanking = 'home_total_order_ranking';
+
+  static final String accountLoginRegiter = 'account_login_regiter';
+
+  static final String accountMyAsset = 'account_my_asset';
+
+  static final String accountRewardAmount = 'account_reward_amount';
+
+  static final String transferErrorMessageBbbNotEnough =
+      'transfer_error_message_bbb_not_enough';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -482,8 +500,8 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageStartOnlyLetter =>
-      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
+  String get registerErrorMessageShouldNotContainContinuesDash =>
+      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -555,11 +573,11 @@ abstract class _$I18nHelper {
   String get dialogCheckPassword => this._translate(_$Keys.dialogCheckPassword);
   String get registerErrorMessageContainLowercase =>
       this._translate(_$Keys.registerErrorMessageContainLowercase);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerErrorMessageStartOnlyLetter =>
+      this._translate(_$Keys.registerErrorMessageStartOnlyLetter);
   String get registerErrorMessageShortNameLength =>
       this._translate(_$Keys.registerErrorMessageShortNameLength);
-  String get registerErrorMessageShouldNotContainContinuesDash =>
-      this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get registerErrorMessageDashEnd =>
       this._translate(_$Keys.registerErrorMessageDashEnd);
   String get registerErrorMessageOnlyContainLetter =>
@@ -642,7 +660,7 @@ abstract class _$I18nHelper {
   String get transferCybexAccount =>
       this._translate(_$Keys.transferCybexAccount);
   String get transferTo => this._translate(_$Keys.transferTo);
-  String get forumSource => this._translate(_$Keys.forumSource);
+  String get transferFrom => this._translate(_$Keys.transferFrom);
   String get transferAmount => this._translate(_$Keys.transferAmount);
   String get transferAvailableAmount =>
       this._translate(_$Keys.transferAvailableAmount);
@@ -650,8 +668,7 @@ abstract class _$I18nHelper {
   String get transferAll => this._translate(_$Keys.transferAll);
   String get transferErrorMessageCybNotEnough =>
       this._translate(_$Keys.transferErrorMessageCybNotEnough);
-  String get transferErrorMessageBbbNotEnough =>
-      this._translate(_$Keys.transferErrorMessageBbbNotEnough);
+  String get accountToUseReward => this._translate(_$Keys.accountToUseReward);
   String get transferNow => this._translate(_$Keys.transferNow);
   String get noFeeError => this._translate(_$Keys.noFeeError);
   String get savePhotoSuccess => this._translate(_$Keys.savePhotoSuccess);
@@ -717,5 +734,17 @@ abstract class _$I18nHelper {
   String get news => this._translate(_$Keys.news);
   String get forumCreate => this._translate(_$Keys.forumCreate);
   String get forumAuthor => this._translate(_$Keys.forumAuthor);
-  String get transferFrom => this._translate(_$Keys.transferFrom);
+  String get forumSource => this._translate(_$Keys.forumSource);
+  String get homeAstrology => this._translate(_$Keys.homeAstrology);
+  String get homeTodayLuck => this._translate(_$Keys.homeTodayLuck);
+  String get homeWeekLuck => this._translate(_$Keys.homeWeekLuck);
+  String get homeSingleOrderRanking =>
+      this._translate(_$Keys.homeSingleOrderRanking);
+  String get homeTotalOrderRanking =>
+      this._translate(_$Keys.homeTotalOrderRanking);
+  String get accountLoginRegiter => this._translate(_$Keys.accountLoginRegiter);
+  String get accountMyAsset => this._translate(_$Keys.accountMyAsset);
+  String get accountRewardAmount => this._translate(_$Keys.accountRewardAmount);
+  String get transferErrorMessageBbbNotEnough =>
+      this._translate(_$Keys.transferErrorMessageBbbNotEnough);
 }

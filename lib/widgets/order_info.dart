@@ -5,7 +5,6 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
-import 'package:bbb_flutter/widgets/pnl_form.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
@@ -496,19 +495,19 @@ class OrderInfo extends StatelessWidget {
   //   ).then((v) {});
   // }
 
-  Widget _buildMaterialDialogTransitions(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Widget child) {
-    return SlideTransition(
-      position: CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOut,
-      ).drive(Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)),
-      child: child,
-    );
-  }
+  // Widget _buildMaterialDialogTransitions(
+  //     BuildContext context,
+  //     Animation<double> animation,
+  //     Animation<double> secondaryAnimation,
+  //     Widget child) {
+  //   return SlideTransition(
+  //     position: CurvedAnimation(
+  //       parent: animation,
+  //       curve: Curves.easeOut,
+  //     ).drive(Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)),
+  //     child: child,
+  //   );
+  // }
 
   callAmend(BuildContext context) async {
     PnlViewModel pnlViewModel = PnlViewModel(

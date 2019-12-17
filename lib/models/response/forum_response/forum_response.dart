@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bbb_flutter/helper/utils.dart';
+import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
@@ -27,6 +28,8 @@ class ForumResponse<T> {
             item = NewsResult.fromJson(item);
           } else if (T == BlockchainVip) {
             item = BlockchainVip.fromJson(item);
+          } else if (T == BannerResponse) {
+            item = BannerResponse.fromJson(item);
           }
           result.add(item);
         }

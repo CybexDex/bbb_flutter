@@ -98,6 +98,9 @@ class _RegisterState extends State<RegisterPage> {
           name: _accountNameController.text,
           password: _passwordController.text)) {
         await checkAdd(context, activityTypes[ActivityType.register]);
+        await locator
+            .get<UserManager>()
+            .fetchBalances(name: _accountNameController.text);
         Navigator.of(context).popUntil((route) => route.isFirst);
       } else {
         setState(() {

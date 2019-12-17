@@ -38,7 +38,7 @@ class ExchangePage extends StatefulWidget {
 }
 
 class _ExchangePageState extends State<ExchangePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin<ExchangePage> {
   AnimationController _animationController;
   bool isExpandOpen = false;
 

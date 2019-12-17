@@ -39,7 +39,6 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
   @override
   void initState() {
     super.initState();
-    // _testNewsData();
     _loadList(isRefresh: true, pg: 0, siz: 10);
   }
 

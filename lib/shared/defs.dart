@@ -79,3 +79,7 @@ class ForumConnection {
   static const PRO_NODE = "https://guests-cfg.cybex.io";
   static const UAT_NODE = "";
 }
+
+class ZenDeskConnection {
+  static const PRO_NODE = "https://bbb2019.zendesk.com";
+}

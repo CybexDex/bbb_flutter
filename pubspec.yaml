@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 1.0.7+1
+version: 1.0.8+1
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -55,7 +55,7 @@ dependencies:
     webview_flutter: ^0.3.11+3
     flutter_webview_plugin: ^0.3.8
     image_gallery_saver: ^1.1.0
-    permission_handler: "^3.2.0"
+    permission_handler: "^4.0.0"
     catcher: ^0.2.3
     package_info: ^0.4.0+6
     connectivity: ^0.4.4
@@ -63,6 +63,10 @@ dependencies:
     flutter_umeng_analytics: ^0.0.2
     badges: ^1.1.0
     flutter_dash: ^0.0.1
+    marquee: ^1.3.1
+    extended_nested_scroll_view: ^0.3.8
+    flushbar: ^1.9.1
+
 
 dev_dependencies:
     flutter_test:
@@ -78,8 +82,15 @@ flutter:
         - i18n/
         # assets begin
         # res/assets/icons/*
+        - res/assets/icons/ic_rank_2.svg
+        - res/assets/icons/ic_rank_3.svg
         - res/assets/icons/ic_visibility.svg
+        - res/assets/icons/ic_account_unselected.svg
+        - res/assets/icons/ic_eye_open.svg
+        - res/assets/icons/ic_home_selected.svg
         - res/assets/icons/ic_revise_yellow.svg
+        - res/assets/icons/ic_home_background.png
+        - res/assets/icons/ic_account_header_background.svg
         - res/assets/icons/ic_news.svg
         - res/assets/icons/icTop2.png
         - res/assets/icons/icTop3.png
@@ -88,47 +99,64 @@ flutter:
         - res/assets/icons/icTop1.png
         - res/assets/icons/ic_no_stoke.svg
         - res/assets/icons/icAdd.png
+        - res/assets/icons/ic_home_astrology_left.svg
         - res/assets/icons/icReduce.png
+        - res/assets/icons/ic_transaction_selected.svg
         - res/assets/icons/icFail.png
         - res/assets/icons/ic_pull_down.svg
         - res/assets/icons/icDownGreen14.png
+        - res/assets/icons/ic_account_selected.svg
+        - res/assets/icons/ic_setting.svg
         - res/assets/icons/icDropdown.png
+        - res/assets/icons/ic_transfer_new.svg
         - res/assets/icons/icPerson.png
         - res/assets/icons/icWarn.png
         - res/assets/icons/icChange.png
         - res/assets/icons/icUpRed14.png
         - res/assets/icons/icSuccess.png
         - res/assets/icons/icPassword.png
+        - res/assets/icons/ic_forum_unselected.svg
         - res/assets/icons/icEmpty.png
+        - res/assets/icons/ic_rank1.svg
         - res/assets/icons/icTabDeposit.png
         - res/assets/icons/icFallGreen.png
         - res/assets/icons/icTime.png
         - res/assets/icons/ic_title_line.svg
         - res/assets/icons/ic_withdraw.svg
         - res/assets/icons/icNotifyBack.png
+        - res/assets/icons/ic_click_try_new.svg
         - res/assets/icons/ic_rewoard.svg
         - res/assets/icons/content_copy.svg
         - res/assets/icons/ic_exchange_records.svg
         - res/assets/icons/icSwitch.png
         - res/assets/icons/ic_deposit.svg
         - res/assets/icons/ic_reward_account.svg
+        - res/assets/icons/ic_transaction_unselected.svg
         - res/assets/icons/ic_reduce_2.svg
+        - res/assets/icons/ic_home_astrology_right.svg
         - res/assets/icons/icAccount.png
         - res/assets/icons/ic_no_orders.svg
         - res/assets/icons/icRiseRed18.png
         - res/assets/icons/share.png
         - res/assets/icons/icRevise.png
+        - res/assets/icons/ic_withdraw_new.svg
         - res/assets/icons/icCode.png
         - res/assets/icons/ic_help.svg
+        - res/assets/icons/ic_home_unselected.svg
         - res/assets/icons/ic_send.svg
         - res/assets/icons/ic_pull_up.svg
+        - res/assets/icons/ic_forum_selected.svg
         - res/assets/icons/icUser.png
         - res/assets/icons/icHand.png
         - res/assets/icons/icUsdt.png
         - res/assets/icons/imgBanner.png
+        - res/assets/icons/ic_account_avatar_new.svg
         - res/assets/icons/ic_invite.svg
+        - res/assets/icons/ic_eye_close.svg
         - res/assets/icons/ic_service.svg
+        - res/assets/icons/ic_home_marquee.svg
         - res/assets/icons/mask.png
+        - res/assets/icons/ic_deposit_new.svg
         - res/assets/icons/icTabArrow.png
         - res/assets/icons/ic_wdrecords.svg
         - res/assets/icons/icTabWithdraw.png

@@ -73,7 +73,6 @@ class _AstrologyWidget extends State<AstrologyPage>
     super.initState();
     _loadHeader();
     _loadList(isRefresh: true, pg: 0, siz: 10);
-    // _testNewsData();
   }
 
   @override

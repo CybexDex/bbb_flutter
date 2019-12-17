@@ -12,6 +12,7 @@ import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -93,6 +94,7 @@ class UserManager extends BaseModel {
         fetchBalances(name: user.name);
         locator.get<MarketManager>().cancelAndRemoveData();
         locator.get<MarketManager>().loadAllData("BXBT");
+        locator.get<HomeViewModel>().getRankingList();
         notifyListeners();
         return true;
       } catch (error) {
@@ -246,6 +248,7 @@ class UserManager extends BaseModel {
       _pref.removeRewardAccount();
     }
     user.testAccountResponseModel = null;
+    await locator<BBBAPI>().setTestNet(isTestNet: false);
     if (user.account != null) {
       user.loginType = LoginType.cloud;
       _pref.saveLoginType(loginType: LoginType.cloud);
@@ -259,7 +262,7 @@ class UserManager extends BaseModel {
       _pref.removeUserName();
       user.balances = null;
     }
-    await locator<BBBAPI>().setTestNet(isTestNet: false);
+    locator.get<HomeViewModel>().getRankingList();
     locator.get<RefManager>().refreshRefData();
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);

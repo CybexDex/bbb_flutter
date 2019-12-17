@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="51" viewBox="0 0 41 51">
+    <defs>
+        <path id="a" d="M7.677 1.624L19 8.162v22H7z"/>
+        <linearGradient id="b" x1="50%" x2="50%" y1="18.411%" y2="100%">
+            <stop offset="0%" stop-color="#C5C5C5"/>
+            <stop offset="100%" stop-color="#CECECE"/>
+        </linearGradient>
+        <path id="d" d="M7.677 1.624L19 8.162v22H7z"/>
+        <linearGradient id="e" x1="50%" x2="50%" y1="18.411%" y2="100%">
+            <stop offset="0%" stop-color="#C6C6C6"/>
+            <stop offset="100%" stop-color="#D3D3D3" stop-opacity=".504"/>
+        </linearGradient>
+        <linearGradient id="g" x1="50%" x2="50%" y1=".219%" y2="57.682%">
+            <stop offset="0%" stop-color="#B5B5B5"/>
+            <stop offset="100%" stop-color="#A8A8A8" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="h" x1="50%" x2="50%" y1="0%" y2="75.332%">
+            <stop offset="0%" stop-color="#FFF"/>
+            <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd" transform="translate(-1 -6)">
+        <mask id="c" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <use fill="#E1E1E1" transform="rotate(-30 13 15.893)" xlink:href="#a"/>
+        <path fill="url(#b)" d="M13-3h4v43h-4z" mask="url(#c)" transform="rotate(-30 15 18.5)"/>
+        <g transform="matrix(-1 0 0 1 43 0)">
+            <mask id="f" fill="#fff">
+                <use xlink:href="#d"/>
+            </mask>
+            <use fill="#E1E1E1" transform="rotate(-30 13 15.893)" xlink:href="#d"/>
+            <path fill="url(#e)" d="M13-3h4v43h-4z" mask="url(#f)" transform="rotate(-30 15 18.5)"/>
+        </g>
+        <circle cx="22" cy="37" r="20" fill="#D0D0D0"/>
+        <circle cx="22" cy="37" r="18" fill="#BCBCBB"/>
+        <circle cx="22" cy="37" r="18" fill="url(#g)"/>
+        <circle cx="22" cy="37" r="15" fill="#E5E4E4"/>
+        <circle cx="22" cy="37" r="15" fill="url(#h)"/>
+        <text fill="#8F8E94" font-family="PingFangSC-Semibold, PingFang SC" font-size="26" font-weight="500" letter-spacing=".765">
+            <tspan x="14" y="46">2</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,15 +1,16 @@
 import 'package:bbb_flutter/screen/allOrders/all_orders.dart';
 import 'package:bbb_flutter/screen/deposit.dart';
-import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
 import 'package:bbb_flutter/screen/help_center.dart';
+import 'package:bbb_flutter/screen/homeNav.dart';
 import 'package:bbb_flutter/screen/invite_page.dart';
 import 'package:bbb_flutter/screen/login.dart';
 import 'package:bbb_flutter/screen/order_record_detail.dart';
 import 'package:bbb_flutter/screen/order_records.dart';
 import 'package:bbb_flutter/screen/register.dart';
+import 'package:bbb_flutter/screen/setting_page.dart';
 import 'package:bbb_flutter/screen/share_page.dart';
 import 'package:bbb_flutter/screen/trade.dart';
 import 'package:bbb_flutter/screen/transfer_page.dart';
@@ -35,6 +36,7 @@ class RoutePaths {
   static const String Help = "Help";
   static const String Forum = "Forum";
   static const String AllOrders = "AllOrders";
+  static const String Setting = "Setting";
 }
 
 class Routes {
@@ -45,7 +47,7 @@ class Routes {
             builder: (context) {
               ScreenUtil.instance = ScreenUtil(width: 375, height: 667)
                 ..init(context);
-              return ExchangePage(title: '.BXBT');
+              return MainPage();
             },
             settings: RouteSettings(isInitialRoute: true));
       case RoutePaths.Login:
@@ -81,6 +83,8 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => ForumHome());
       case RoutePaths.AllOrders:
         return CupertinoPageRoute(builder: (_) => AllOrdersPage());
+      case RoutePaths.Setting:
+        return CupertinoPageRoute(builder: (_) => SettingWiget());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
