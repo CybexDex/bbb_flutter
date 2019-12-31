@@ -83,3 +83,7 @@ class ForumConnection {
 class ZenDeskConnection {
   static const PRO_NODE = "https://bbb2019.zendesk.com";
 }
+
+class GuessUpDownUrl {
+  static const URL = "https://nxapi.cybex.io/v1/newyearguess/?name=";
+}

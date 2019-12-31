@@ -1,16 +1,10 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/request/register_request_model.dart';
-import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
-import 'package:bbb_flutter/models/response/register_response_model.dart';
-import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
-import 'package:bbb_flutter/shared/types.dart';
-import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
+import 'package:bbb_flutter/logic/register_vm.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
@@ -24,558 +18,397 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
   final _accountNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordConfirmController = TextEditingController();
   final _pinCodeController = TextEditingController();
-  bool _errorMessageVisibility = false;
-  bool _isButtonEnabled = false;
-  bool _isAccountNamePassChecker = false;
-  bool _isPasswordPassChecker = false;
-  bool _isPasswordConfirmChecker = false;
-  bool _passwordObscureText = true;
-  bool _passwordConfirmObscureText = true;
-  String _capid;
-
-  String _errorMessage = "";
-  Timer timer;
-  Widget _widget = Text(
-    "获取验证码",
-    style: StyleFactory.pinCodeText,
-  );
-
-  displaySvg() {
-    getSvg();
-    if (timer != null) {
-      timer.cancel();
-    }
-    timer = Timer.periodic(Duration(minutes: 5), (timer) {
-      getSvg();
-    });
-  }
-
-  getSvg() {
-    Future<FaucetCaptchaResponseModel> response =
-        locator<FaucetAPI>().getCaptcha();
-    response.then((FaucetCaptchaResponseModel model) {
-      String rawSvg = model.data;
-      _capid = model.id;
-
-      setState(() {
-        _widget = SvgPicture.string(
-          rawSvg,
-        );
-      });
-    });
-  }
-
-  _processRegister() async {
-    RegisterRequestModel requestModel =
-        RegisterRequestModel(cap: Cap(), account: Account());
-    String keys = await CybexFlutterPlugin.getUserKeyWith(
-        _accountNameController.text, _passwordController.text);
-    var jsonKeys = json.decode(keys);
-    requestModel.account.activeKey = jsonKeys["active-key"]["public_key"];
-    requestModel.account.ownerKey = jsonKeys["owner-key"]["public_key"];
-    requestModel.account.memoKey = jsonKeys["memo-key"]["public_key"];
-
-    requestModel.account.name = _accountNameController.text;
-    requestModel.cap.id = _capid;
-    requestModel.cap.captcha = _pinCodeController.text;
-    RegisterRequestResponse registerRequestResponse = await locator
-        .get<FaucetAPI>()
-        .register(registerRequestModel: requestModel);
-    if (registerRequestResponse.error != null) {
-      setState(() {
-        _errorMessageVisibility = true;
-        _errorMessage = registerRequestResponse.error;
-        Navigator.of(context).pop();
-      });
-    } else if (registerRequestResponse.error == null &&
-        registerRequestResponse != null) {
-      if (await locator.get<UserManager>().loginWith(
-          name: _accountNameController.text,
-          password: _passwordController.text)) {
-        await checkAdd(context, activityTypes[ActivityType.register]);
-        await locator
-            .get<UserManager>()
-            .fetchBalances(name: _accountNameController.text);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      } else {
-        setState(() {
-          _errorMessage = "Network status error";
-          _errorMessageVisibility = true;
-          Navigator.of(context).pop();
-        });
-      }
-    } else {
-      setState(() {
-        _errorMessage = "Network status error";
-        _errorMessageVisibility = true;
-        Navigator.of(context).pop();
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
   }
 
-  _checkAccountName(String accountName) async {
-    if (accountName.isEmpty) {
-      setState(() {
-        _errorMessage = "请输入账号";
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (!accountName.startsWith(RegExp("[a-zA-Z]"))) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageStartOnlyLetter;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (!RegExp("^[a-z0-9-]+\$").hasMatch(accountName)) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageContainLowercase;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (accountName.length < 3) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageShortNameLength;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (accountName.contains("--")) {
-      setState(() {
-        _errorMessage =
-            I18n.of(context).registerErrorMessageShouldNotContainContinuesDash;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (accountName.endsWith("-")) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageDashEnd;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (RegExp("^[a-z]+\$").hasMatch(accountName)) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageOnlyContainLetter;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else if (accountName.length >= 63) {
-      setState(() {
-        _errorMessage = I18n.of(context).registerErrorMessageTooLong;
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-      });
-    } else {
-      await _processAccountCheck(accountName);
-    }
-    _setButtonState(_isAccountNamePassChecker &&
-        _isPasswordPassChecker &&
-        _isPasswordConfirmChecker &&
-        _pinCodeController.text.isNotEmpty);
-  }
-
-  _checkPassword(String password) {
-    if (password.isEmpty) {
-      _checkPasswordConfirmation(_passwordConfirmController.text);
-    } else if (!RegExp(
-            "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{12,}")
-        .hasMatch(password)) {
-      if (_accountNameController.text.isEmpty || _isAccountNamePassChecker) {
-        setState(() {
-          _errorMessageVisibility = true;
-          _errorMessage = I18n.of(context).registerErrorMessagePasswordChecker;
-          _isPasswordPassChecker = false;
-        });
-      }
-    } else {
-      setState(() {
-        _errorMessageVisibility = false;
-        _isPasswordPassChecker = true;
-        _checkPasswordConfirmation(_passwordConfirmController.text);
-      });
-    }
-    _setButtonState(_isAccountNamePassChecker &&
-        _isPasswordPassChecker &&
-        _isPasswordConfirmChecker &&
-        _pinCodeController.text.isNotEmpty);
-  }
-
-  _checkPasswordConfirmation(String confirmPassword) {
-    if (!_isPasswordPassChecker || confirmPassword.isEmpty) {
-      return;
-    }
-    if (_passwordController.text != confirmPassword) {
-      if ((_accountNameController.text.isEmpty || _isAccountNamePassChecker) &&
-          (_isPasswordPassChecker || _passwordController.text.isEmpty)) {
-        setState(() {
-          _errorMessageVisibility = true;
-          _errorMessage = I18n.of(context).registerErrorMessagePasswordConfirm;
-        });
-        _isPasswordConfirmChecker = false;
-      }
-    } else {
-      if (confirmPassword.isNotEmpty) {
-        setState(() {
-          _isPasswordConfirmChecker = true;
-          _errorMessageVisibility = false;
-        });
-      }
-    }
-
-    _setButtonState(_isAccountNamePassChecker &&
-        _isPasswordPassChecker &&
-        _isPasswordConfirmChecker &&
-        _pinCodeController.text.isNotEmpty);
-  }
-
-  _processAccountCheck(String accountName) async {
-    if (await locator.get<UserManager>().checkAccount(name: accountName)) {
-      setState(() {
-        _errorMessageVisibility = true;
-        _isAccountNamePassChecker = false;
-        _errorMessage =
-            I18n.of(context).registerErrorMessageAccountHasAlreadyExist;
-      });
-    } else {
-      setState(() {
-        _errorMessageVisibility = false;
-        _isAccountNamePassChecker = true;
-        _errorMessage = "";
-      });
-    }
-  }
-
-  _setButtonState(bool isEnabled) {
-    setState(() {
-      _isButtonEnabled = isEnabled;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(
-              color: Palette.backButtonColor, //change your color here
-            ),
-            centerTitle: true,
-            title: Text(I18n.of(context).register, style: StyleFactory.title),
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            elevation: 0,
-          ),
-          body: SingleChildScrollView(
+    return BaseWidget<RegisterViewModel>(
+      model: RegisterViewModel(
+          bbbapi: locator.get(),
+          faucetAPI: locator.get(),
+          userManager: locator.get(),
+          buildContext: context),
+      builder: (context, registerViewModel, child) {
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+          child: Scaffold(
+              body: SingleChildScrollView(
             child: SafeArea(
                 child: Container(
-              margin: Dimen.pageMargin,
-              child: Form(
-                  key: _formKey,
-                  child: Column(
+              margin: EdgeInsets.only(left: 50, right: 50, top: 45, bottom: 58),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(
-                            width: double.infinity,
-                            decoration:
-                                DecorationFactory.cornerShadowDecoration,
-                            height: 333,
-                            margin: EdgeInsets.only(top: 20),
-                            child: Column(
-                              children: <Widget>[
-                                Padding(padding: EdgeInsets.only(top: 29)),
-                                Expanded(
-                                    child: ListView(
-                                        padding: EdgeInsets.only(
-                                            left: 20, right: 20),
-                                        children: <Widget>[
-                                      Column(children: <Widget>[
-                                        Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                                I18n.of(context).register,
-                                                style: StyleFactory.title)),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Visibility(
-                                            visible: !_errorMessageVisibility,
-                                            child: Text(
-                                              I18n.of(context).welcomeRegister,
-                                              style:
-                                                  StyleFactory.cellTitleStyle,
-                                            ),
-                                            replacement: Text(_errorMessage,
-                                                style: StyleFactory
-                                                    .errorMessageText),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 22,
-                                        ),
-                                        TextField(
-                                          controller: _accountNameController,
-                                          onChanged: (value) {
-                                            _checkAccountName(value);
-                                          },
-                                          autocorrect: false,
-                                          decoration: InputDecoration(
-                                              hintText: I18n.of(context)
-                                                  .accountNameHint,
-                                              hintStyle: StyleFactory.hintStyle,
-                                              icon: Image.asset(
-                                                  R.resAssetsIconsIcUser),
-                                              border: InputBorder.none),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: Palette
-                                                          .separatorColor,
-                                                      width: 0.5))),
-                                        )
-                                      ]),
-                                      Column(
-                                        children: <Widget>[
-                                          TextFormField(
-                                            controller: _passwordController,
-                                            onChanged: (value) {
-                                              _checkPassword(value);
-                                            },
-                                            obscureText: _passwordObscureText,
-                                            decoration: InputDecoration(
-                                                hintText: I18n.of(context)
-                                                    .passwordConfirm,
-                                                hintStyle:
-                                                    StyleFactory.hintStyle,
-                                                icon: Image.asset(
-                                                    R.resAssetsIconsIcPassword),
-                                                suffixIcon: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      _passwordObscureText =
-                                                          !_passwordObscureText;
-                                                    });
-                                                  },
-                                                  child: Icon(
-                                                      _passwordObscureText
-                                                          ? Icons.visibility_off
-                                                          : Icons.visibility),
-                                                ),
-                                                border: InputBorder.none),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        color: Palette
-                                                            .separatorColor,
-                                                        width: 0.5))),
-                                          )
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          TextFormField(
-                                            controller:
-                                                _passwordConfirmController,
-                                            onChanged: (value) {
-                                              _checkPasswordConfirmation(value);
-                                            },
-                                            obscureText:
-                                                _passwordConfirmObscureText,
-                                            decoration: InputDecoration(
-                                                hintText: I18n.of(context)
-                                                    .passwordConfirmHint,
-                                                hintStyle:
-                                                    StyleFactory.hintStyle,
-                                                icon: Image.asset(
-                                                    R.resAssetsIconsIcPassword),
-                                                suffixIcon: GestureDetector(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      _passwordConfirmObscureText =
-                                                          !_passwordConfirmObscureText;
-                                                    });
-                                                  },
-                                                  child: Icon(
-                                                      _passwordConfirmObscureText
-                                                          ? Icons.visibility_off
-                                                          : Icons.visibility),
-                                                ),
-                                                border: InputBorder.none),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        color: Palette
-                                                            .separatorColor,
-                                                        width: 0.5))),
-                                          )
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Row(
-                                            children: <Widget>[
-                                              Flexible(
-                                                child: TextFormField(
-                                                  controller:
-                                                      _pinCodeController,
-                                                  onChanged: (value) {
-                                                    _setButtonState(
-                                                        _isAccountNamePassChecker &&
-                                                            _isPasswordPassChecker &&
-                                                            _isPasswordConfirmChecker &&
-                                                            value.isNotEmpty);
-                                                  },
-                                                  decoration: InputDecoration(
-                                                      hintText: I18n.of(context)
-                                                          .pinCodeHint,
-                                                      hintStyle: StyleFactory
-                                                          .hintStyle,
-                                                      icon: Image.asset(R
-                                                          .resAssetsIconsIcCode),
-                                                      border: InputBorder.none),
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                child: _widget,
-                                                onTap: () {
-                                                  displaySvg();
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        color: Palette
-                                                            .separatorColor,
-                                                        width: 0.5))),
-                                          )
-                                        ],
-                                      ),
-                                    ]))
-                              ],
+                      SvgPicture.asset(
+                        R.resAssetsIconsBbblog,
+                        width: 38,
+                        height: 26,
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Icon(
+                          Icons.close,
+                          color: Palette.appGrey.withOpacity(0.3),
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(top: 44),
+                      child: Text(I18n.of(context).welcomeRegister,
+                          style: StyleNewFactory.black26)),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      I18n.of(context).loginProtectPassword,
+                      style: TextStyle(
+                        color: Palette.appGrey.withOpacity(0.6),
+                        fontSize: Dimen.fontSize12,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+
+                  TextField(
+                    autocorrect: false,
+                    controller: _accountNameController,
+                    onChanged: (value) {
+                      registerViewModel.checkAccountName(
+                          value, _pinCodeController.text);
+                    },
+                    decoration: InputDecoration(
+                      hintText: I18n.of(context).accountName,
+                      hintStyle: TextStyle(
+                        color: Palette.appGrey.withOpacity(0.6),
+                        fontSize: Dimen.fontSize15,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          _accountNameController.clear();
+                        },
+                        child: Icon(
+                          Icons.cancel,
+                          color: Palette.appGrey.withOpacity(0.3),
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  TextField(
+                    obscureText: registerViewModel.passwordObscureText,
+                    enableInteractiveSelection: true,
+                    controller: _passwordController,
+                    onChanged: (value) {
+                      registerViewModel.checkPassword(
+                          value,
+                          _passwordConfirmController.text,
+                          _accountNameController.text,
+                          _pinCodeController.text);
+                    },
+                    decoration: InputDecoration(
+                      hintText: I18n.of(context).password,
+                      hintStyle: TextStyle(
+                        color: Palette.appGrey.withOpacity(0.6),
+                        fontSize: Dimen.fontSize15,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                      suffixIcon: SizedBox(
+                        width: 96,
+                        child: Row(
+                          children: <Widget>[
+                            IconButton(
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 0),
+                              onPressed: registerViewModel.setPasswordObscure,
+                              icon: Icon(
+                                registerViewModel.passwordObscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              color: Palette.appGrey.withOpacity(0.3),
                             ),
-                          ),
-                          Container(
-                              alignment: Alignment.bottomCenter,
-                              margin: EdgeInsets.only(top: 325),
-                              child: ButtonTheme(
-                                minWidth: 200,
-                                child: WidgetFactory.button(
-                                    onPressed: _isButtonEnabled
-                                        ? () async {
-                                            showLoading(context);
-                                            await _processRegister();
-                                          }
-                                        : () {},
-                                    color: _isButtonEnabled
-                                        ? Palette.redOrange
-                                        : Palette.subTitleColor,
-                                    data: I18n.of(context).register),
-                              ))
-                        ],
+                            IconButton(
+                              onPressed: () {
+                                _passwordController.clear();
+                              },
+                              icon: Icon(Icons.cancel),
+                              color: Palette.appGrey.withOpacity(0.3),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 32,
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 18,
+                  ),
+
+                  TextField(
+                    obscureText: registerViewModel.passwordConfirmObscureText,
+                    enableInteractiveSelection: true,
+                    controller: _passwordConfirmController,
+                    onChanged: (value) {
+                      registerViewModel.checkPasswordConfirmation(
+                          value,
+                          _passwordController.text,
+                          _accountNameController.text,
+                          _pinCodeController.text);
+                    },
+                    decoration: InputDecoration(
+                      hintText: I18n.of(context).passwordConfirm,
+                      hintStyle: TextStyle(
+                        color: Palette.appGrey.withOpacity(0.6),
+                        fontSize: Dimen.fontSize15,
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
                       ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Palette.appGrey.withOpacity(0.1))),
+                      suffixIcon: SizedBox(
+                        width: 96,
+                        child: Row(
+                          children: <Widget>[
+                            IconButton(
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 0),
+                              onPressed:
+                                  registerViewModel.setPasswordConfirmObscure,
+                              icon: Icon(
+                                registerViewModel.passwordConfirmObscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                              color: Palette.appGrey.withOpacity(0.3),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _passwordConfirmController.clear();
+                              },
+                              icon: Icon(Icons.cancel),
+                              color: Palette.appGrey.withOpacity(0.3),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Column(
+                    children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Image.asset(R.resAssetsIconsIcWarn),
-                          SizedBox(
-                            width: 5,
+                          Flexible(
+                            child: TextFormField(
+                              controller: _pinCodeController,
+                              onChanged: registerViewModel.checkPinCode,
+                              decoration: InputDecoration(
+                                hintText: I18n.of(context).pinCode,
+                                hintStyle: TextStyle(
+                                  color: Palette.appGrey.withOpacity(0.6),
+                                  fontSize: Dimen.fontSize15,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0,
+                                ),
+                                border: InputBorder.none,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    _pinCodeController.clear();
+                                  },
+                                  icon: Icon(Icons.cancel),
+                                  color: Palette.appGrey.withOpacity(0.3),
+                                ),
+                              ),
+                            ),
                           ),
-                          Text(
-                            I18n.of(context).registerWarningText,
-                            style: StyleFactory.subTitleStyle,
+                          GestureDetector(
+                            child: registerViewModel.rawSvg != null
+                                ? Column(
+                                    children: <Widget>[
+                                      SvgPicture.string(
+                                        registerViewModel.rawSvg,
+                                        width: 45,
+                                        height: 25,
+                                      ),
+                                      Text(
+                                          I18n.of(context)
+                                              .registerChangePinCode,
+                                          style: StyleNewFactory.grey9)
+                                    ],
+                                  )
+                                : registerViewModel.showPinCodeLoading
+                                    ? SpinKitCircle(
+                                        size: 24,
+                                        color: Palette.appYellowOrange,
+                                      )
+                                    : Text(
+                                        I18n.of(context).registerGetPinCode,
+                                        style: StyleFactory.pinCodeText,
+                                      ),
+                            onTap: registerViewModel.displaySvg,
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 48,
-                      ),
-                      GestureDetector(
-                        child: Container(
-                            alignment: Alignment.center,
-                            width: 200,
-                            margin: EdgeInsets.only(top: 20),
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Palette.redOrange),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0) //
-                                      ),
-                            ),
-                            child: Text(
-                              I18n.of(context).clickToTry,
-                              style: StyleFactory.buyUpOrderInfo,
-                            )),
-                        onTap: () async {
-                          if (await locator
-                              .get<UserManager>()
-                              .loginWithPrivateKey(bonusEvent: false)) {
-                            showNotification(
-                                context, false, I18n.of(context).changeToTryEnv,
-                                callback: () {
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
-                            });
-                          } else {
-                            showNotification(
-                                context, true, I18n.of(context).changeToTryEnv,
-                                callback: () {
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
-                            });
-                          }
-                        },
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      GestureDetector(
-                        child: RichText(
-                            text: new TextSpan(children: [
-                          new TextSpan(
-                              style: StyleFactory.hintStyle,
-                              text: I18n.of(context).alreadyRegister),
-                          new TextSpan(
-                              style: StyleFactory.hyperText,
-                              text: I18n.of(context).registerGoToLogIn)
-                        ])),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Palette.separatorColor,
+                                    width: 0.5))),
                       )
                     ],
-                  )),
+                  ),
+
+                  Visibility(
+                    visible: registerViewModel.errorMessageVisibility,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Image.asset(R.resAssetsIconsIcWarn),
+                          Flexible(
+                            child: Text(
+                              registerViewModel.errorMessage,
+                              style: StyleFactory.errorMessageText,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                      alignment: Alignment.bottomCenter,
+                      margin: EdgeInsets.only(top: 28),
+                      child: ButtonTheme(
+                        minWidth: double.infinity,
+                        child: WidgetFactory.button(
+                            onPressed: registerViewModel.isButtonEnabled
+                                ? () async {
+                                    showLoading(context);
+                                    await registerViewModel.processRegister(
+                                        accountName:
+                                            _accountNameController.text,
+                                        password: _passwordController.text,
+                                        pinCode: _pinCodeController.text);
+                                  }
+                                : () {},
+                            color: registerViewModel.isButtonEnabled
+                                ? Palette.redOrange
+                                : Palette.appGrey.withOpacity(0.2),
+                            data: I18n.of(context).register),
+                      )),
+                  // GestureDetector(
+                  //   child: Container(
+                  //       alignment: Alignment.center,
+                  //       width: 200,
+                  //       margin: EdgeInsets.only(top: 20),
+                  //       padding: EdgeInsets.all(10),
+                  //       decoration: BoxDecoration(
+                  //         border: Border.all(color: Palette.redOrange),
+                  //         borderRadius: BorderRadius.all(Radius.circular(4.0) //
+                  //             ),
+                  //       ),
+                  //       child: Text(
+                  //         I18n.of(context).clickToTry,
+                  //         style: StyleFactory.buyUpOrderInfo,
+                  //       )),
+                  //   onTap: () async {
+                  //     if (await locator
+                  //         .get<UserManager>()
+                  //         .loginWithPrivateKey(bonusEvent: false)) {
+                  //       showNotification(
+                  //           context, false, I18n.of(context).changeToTryEnv,
+                  //           callback: () {
+                  //         Navigator.of(context)
+                  //             .popUntil((route) => route.isFirst);
+                  //       });
+                  //     } else {
+                  //       showNotification(
+                  //           context, true, I18n.of(context).changeToTryEnv,
+                  //           callback: () {
+                  //         Navigator.of(context)
+                  //             .popUntil((route) => route.isFirst);
+                  //       });
+                  //     }
+                  //   },
+                  // ),
+                  SizedBox(
+                    height: 35,
+                  ),
+                  GestureDetector(
+                    child: RichText(
+                        text: new TextSpan(children: [
+                      new TextSpan(
+                          style: TextStyle(
+                            color: Palette.appGrey.withOpacity(0.6),
+                            fontSize: Dimen.fontSize15,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0,
+                          ),
+                          text: I18n.of(context).alreadyRegister),
+                      new TextSpan(
+                          style: StyleNewFactory.yellowOrange15,
+                          text: I18n.of(context).logIn)
+                    ])),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
             )),
           )),
+        );
+      },
     );
   }
 
   @override
   void dispose() {
-    if (timer != null) {
-      timer.cancel();
-    }
     disposeController();
     super.dispose();
   }

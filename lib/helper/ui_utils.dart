@@ -1,11 +1,20 @@
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/pnl_form.dart';
+import 'package:flutter_svg/svg.dart';
 
 Widget getPnlIcon(bool isN) {
   return isN
-      ? Image.asset(R.resAssetsIconsIcUpRed14)
-      : Image.asset(R.resAssetsIconsIcDownGreen14);
+      ? SvgPicture.asset(
+          R.resAssetsIconsIcMarketUp,
+          width: 22,
+          height: 16,
+        )
+      : SvgPicture.asset(
+          R.resAssetsIconsIcMarketDown,
+          width: 22,
+          height: 16,
+        );
 }
 
 openDialog(BuildContext context, OrderResponseModel model) {
@@ -39,5 +48,15 @@ Widget _buildMaterialDialogTransitions(
       curve: Curves.easeOut,
     ).drive(Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)),
     child: child,
+  );
+}
+
+headerBuild(int month) {
+  return Container(
+    height: 30,
+    alignment: Alignment.centerLeft,
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    color: Palette.appDividerBackgroudGreyColor,
+    child: Text("$month月份"),
   );
 }

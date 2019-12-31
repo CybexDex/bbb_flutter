@@ -29,6 +29,7 @@ class WidgetFactory {
             borderRadius: BorderRadius.circular(Dimen.corner)),
         onPressed: onPressed,
         color: color,
+        elevation: 0.0,
         textColor: Colors.white,
         child: WidgetFactory.buttonTopBottomPadding(
             Text(data, style: StyleFactory.buttonTitleStyle),

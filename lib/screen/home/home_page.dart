@@ -1,4 +1,7 @@
+import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/home/banner_widget.dart';
 import 'package:bbb_flutter/screen/home/home_app_bar.dart';
 import 'package:bbb_flutter/screen/home/home_ranking_item_builder.dart';
@@ -11,6 +14,7 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:oktoast/oktoast.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -19,9 +23,20 @@ class HomePage extends StatefulWidget {
   State createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  int _currentTabIndex = 0;
+  TabController _tabController;
   @override
   void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.index.toDouble() == _tabController.animation.value) {
+        setState(() {
+          _currentTabIndex = _tabController.index;
+        });
+      }
+    });
     super.initState();
   }
 
@@ -34,7 +49,8 @@ class _HomePageState extends State<HomePage> {
         homeViewMode.getRankingList();
         homeViewMode.startLoop();
         homeViewMode.getZendeskAdvertise();
-        homeViewMode.getAstrologyPredict();
+        homeViewMode.getGatewayInfo(assetName: AssetName.USDTERC20);
+        // homeViewMode.getAstrologyPredict();
       },
       builder: (context, homeViewModel, child) {
         return Scaffold(
@@ -66,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                                         height: 20,
                                       ),
                                       Container(
-                                        height: 25,
+                                        height: 30,
                                         margin: EdgeInsets.only(left: 6),
                                         child: homeViewModel
                                                 .zendeskAdvertise.isEmpty
@@ -74,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                                             : CarouselSlider(
                                                 scrollPhysics:
                                                     NeverScrollableScrollPhysics(),
-                                                aspectRatio: 12 / 1,
+                                                aspectRatio: 10 / 1,
                                                 scrollDirection: Axis.vertical,
                                                 autoPlay: true,
                                                 items: homeViewModel
@@ -101,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         style: StyleNewFactory
-                                                            .grey12),
+                                                            .grey15),
                                                   );
                                                 }).toList(),
                                               ),
@@ -114,113 +130,68 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SliverToBoxAdapter(
                         child: Container(
-                          color: Colors.white,
-                          margin: EdgeInsets.only(top: 10),
                           padding: EdgeInsets.only(
                               right: 15, left: 15, top: 12, bottom: 12),
                           child: Column(
                             children: <Widget>[
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  I18n.of(context).homeAstrology,
-                                  style: StyleNewFactory.black18,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  final BottomNavigationBar navigationBar =
-                                      navGlobaykey.currentWidget;
-                                  navigationBar.onTap(2);
-                                },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Expanded(
+                              // Container(
+                              //   alignment: Alignment.centerLeft,
+                              //   child: Text(
+                              //     I18n.of(context).homeAstrology,
+                              //     style: StyleNewFactory.black18,
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          homeViewModel.checkGuess(context),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Stack(
                                           children: <Widget>[
-                                            SvgPicture.asset(
-                                                R
-                                                    .resAssetsIconsIcHomeAstrologyLeft,
-                                                width: ScreenUtil.getInstance()
-                                                    .setWidth(167),
-                                                height: 70),
                                             Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 13, top: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                      I18n.of(context)
-                                                          .homeTodayLuck,
-                                                      style: StyleNewFactory
-                                                          .white18),
-                                                  Text(
-                                                      homeViewModel
-                                                              .astrologyPredictResponse
-                                                              ?.result
-                                                              ?.number1 ??
-                                                          "",
-                                                      style: StyleNewFactory
-                                                          .white14)
-                                                ],
+                                              width: double.infinity,
+                                              child: SvgPicture.asset(
+                                                R.resAssetsIconsIcGuessUpDown,
+                                                fit: BoxFit.fill,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          homeViewModel.checkDeposit(context),
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: Stack(
                                           children: <Widget>[
-                                            SvgPicture.asset(
-                                                R
-                                                    .resAssetsIconsIcHomeAstrologyRight,
-                                                width: ScreenUtil.getInstance()
-                                                    .setWidth(167),
-                                                height: 70),
                                             Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 13, top: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                      I18n.of(context)
-                                                          .homeWeekLuck,
-                                                      style: StyleNewFactory
-                                                          .white18),
-                                                  Text(
-                                                      homeViewModel
-                                                              .astrologyPredictResponse
-                                                              ?.result
-                                                              ?.number2 ??
-                                                          "",
-                                                      style: StyleNewFactory
-                                                          .white14)
-                                                ],
+                                              width: double.infinity,
+                                              child: SvgPicture.asset(
+                                                R.resAssetsIconsIcHomeDeposit,
+                                                fit: BoxFit.fill,
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -228,78 +199,99 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ];
                   },
-                  body: DefaultTabController(
-                    length: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          color: Colors.white,
-                          width: ScreenUtil.screenWidthDp,
-                          child: TabBar(
-                            isScrollable: true,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            labelColor: Palette.appBlack,
-                            unselectedLabelColor: Color(0xff6f7072),
-                            labelStyle: StyleNewFactory.black15,
-                            unselectedLabelStyle: StyleNewFactory.grey15,
-                            indicator: UnderlineTabIndicator(
-                              borderSide: BorderSide(
-                                  color: Palette.invitePromotionBadgeColor,
-                                  width: 2),
-                              insets: EdgeInsets.fromLTRB(0, 0.0, 0, 8),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        color: Colors.white,
+                        width: ScreenUtil.screenWidthDp,
+                        child: TabBar(
+                          isScrollable: true,
+                          controller: _tabController,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          labelColor: Palette.appBlack,
+                          unselectedLabelColor: Palette.appGrey,
+                          labelStyle: StyleNewFactory.black15,
+                          unselectedLabelStyle: StyleNewFactory.grey15,
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                                color: Palette.invitePromotionBadgeColor,
+                                width: 2),
+                            insets: EdgeInsets.fromLTRB(0, 0.0, 0, 8),
+                          ),
+                          onTap: (index) {},
+                          tabs: <Widget>[
+                            Tab(
+                              child: Badge(
+                                showBadge: _currentTabIndex == 0,
+                                position:
+                                    BadgePosition.topRight(top: 5, right: -22),
+                                badgeColor: Palette.appYellowOrange,
+                                badgeContent:
+                                    Text("24H", style: StyleNewFactory.white9),
+                                shape: BadgeShape.square,
+                                padding: EdgeInsets.all(1),
+                                child: Text(
+                                    I18n.of(context).homeSingleOrderRanking),
+                              ),
                             ),
-                            tabs: <Widget>[
-                              Tab(
-                                  text:
-                                      I18n.of(context).homeSingleOrderRanking),
-                              Tab(
-                                text: I18n.of(context).homeTotalOrderRanking,
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            children: <Widget>[
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: 11,
-                                itemBuilder: (context, index) {
-                                  return HomeRankingItem(
-                                    index: index,
-                                    rankingResponse: (index == 0 ||
-                                            index >=
-                                                homeViewModel
-                                                        .rankingsTotal.length +
-                                                    1)
-                                        ? null
-                                        : homeViewModel
-                                            .rankingsTotal[index - 1],
-                                  );
-                                },
+                            Tab(
+                              child: Badge(
+                                showBadge: _currentTabIndex == 1,
+                                position:
+                                    BadgePosition.topRight(top: 5, right: -22),
+                                badgeColor: Palette.appYellowOrange,
+                                badgeContent:
+                                    Text("24H", style: StyleNewFactory.white9),
+                                shape: BadgeShape.square,
+                                padding: EdgeInsets.all(1),
+                                child: Text(
+                                    I18n.of(context).homeTotalOrderRanking),
                               ),
-                              ListView.builder(
-                                itemCount: 11,
-                                itemBuilder: (context, index) {
-                                  return HomeRankingItem(
-                                    index: index,
-                                    rankingResponse: (index == 0 ||
-                                            index >=
-                                                homeViewModel.rankingsPerorder
-                                                        .length +
-                                                    1)
-                                        ? null
-                                        : homeViewModel
-                                            .rankingsPerorder[index - 1],
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 11,
+                              itemBuilder: (context, index) {
+                                return HomeRankingItem(
+                                  index: index,
+                                  rankingResponse: (index == 0 ||
+                                          index >=
+                                              homeViewModel
+                                                      .rankingsTotal.length +
+                                                  1)
+                                      ? null
+                                      : homeViewModel.rankingsTotal[index - 1],
+                                );
+                              },
+                            ),
+                            ListView.builder(
+                              itemCount: 11,
+                              itemBuilder: (context, index) {
+                                return HomeRankingItem(
+                                  index: index,
+                                  rankingResponse: (index == 0 ||
+                                          index >=
+                                              homeViewModel
+                                                      .rankingsPerorder.length +
+                                                  1)
+                                      ? null
+                                      : homeViewModel
+                                          .rankingsPerorder[index - 1],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   )),
             ],
           ),

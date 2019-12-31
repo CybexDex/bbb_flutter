@@ -131,8 +131,10 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<RankingResponse>> getRankings({int indicator}) async {
-    var response =
-        await dio.get("/ranking", queryParameters: {"indicator": indicator});
+    Dio localDio = Dio();
+    localDio.options.baseUrl = NetworkConnection.PRO_STANDARD;
+    var response = await localDio
+        .get("/ranking", queryParameters: {"indicator": indicator});
     var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);

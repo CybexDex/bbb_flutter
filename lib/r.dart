@@ -1,6 +1,8 @@
 class R {
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_rank_2.svg)
   static final String resAssetsIconsIcRank2 = 'res/assets/icons/ic_rank_2.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_market_up.svg)
+  static final String resAssetsIconsIcMarketUp = 'res/assets/icons/ic_market_up.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_rank_3.svg)
   static final String resAssetsIconsIcRank3 = 'res/assets/icons/ic_rank_3.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_visibility.svg)
@@ -49,6 +51,8 @@ class R {
   static final String resAssetsIconsIcAccountSelected = 'res/assets/icons/ic_account_selected.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_setting.svg)
   static final String resAssetsIconsIcSetting = 'res/assets/icons/ic_setting.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/bbblog.svg)
+  static final String resAssetsIconsBbblog = 'res/assets/icons/bbblog.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icDropdown.png)
   static final String resAssetsIconsIcDropdown = 'res/assets/icons/icDropdown.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_transfer_new.svg)
@@ -93,6 +97,8 @@ class R {
   static final String resAssetsIconsIcExchangeRecords = 'res/assets/icons/ic_exchange_records.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icSwitch.png)
   static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_deposit.svg)
+  static final String resAssetsIconsIcHomeDeposit = 'res/assets/icons/ic_home_deposit.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_deposit.svg)
   static final String resAssetsIconsIcDeposit = 'res/assets/icons/ic_deposit.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_reward_account.svg)
@@ -139,6 +145,8 @@ class R {
   static final String resAssetsIconsIcAccountAvatarNew = 'res/assets/icons/ic_account_avatar_new.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_invite.svg)
   static final String resAssetsIconsIcInvite = 'res/assets/icons/ic_invite.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_guess_up_down.svg)
+  static final String resAssetsIconsIcGuessUpDown = 'res/assets/icons/ic_guess_up_down.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_eye_close.svg)
   static final String resAssetsIconsIcEyeClose = 'res/assets/icons/ic_eye_close.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_service.svg)
@@ -163,4 +171,6 @@ class R {
   static final String resAssetsIconsIcTry = 'res/assets/icons/ic_try.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_adds_cancel.svg)
   static final String resAssetsIconsIcAddsCancel = 'res/assets/icons/ic_adds_cancel.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_market_down.svg)
+  static final String resAssetsIconsIcMarketDown = 'res/assets/icons/ic_market_down.svg';
 }

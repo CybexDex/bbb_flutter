@@ -4,6 +4,15 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/widgets.dart';
 
 class StyleNewFactory {
+  static var grey9 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appGrey.withOpacity(0.6),
+    fontSize: Dimen.fontSize9,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
   static var grey12 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appGrey,
@@ -26,6 +35,14 @@ class StyleNewFactory {
     fontFamily: 'PingFangSC',
     color: Palette.appGrey,
     fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
+  static var appCellTitleLightGrey14 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appCellTitlelightGrey,
+    fontSize: Dimen.fontSize14,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
@@ -54,10 +71,10 @@ class StyleNewFactory {
     fontStyle: FontStyle.normal,
   );
 
-  static var white18 = TextStyle(
+  static var white9 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Colors.white,
-    fontSize: Dimen.fontSize18,
+    fontSize: Dimen.fontSize9,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
@@ -70,6 +87,14 @@ class StyleNewFactory {
     fontStyle: FontStyle.normal,
   );
 
+  static var white18 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Colors.white,
+    fontSize: Dimen.fontSize18,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
   static var yellowOrange18 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appYellowOrange,
@@ -77,5 +102,32 @@ class StyleNewFactory {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     letterSpacing: 0,
+  );
+
+  static var yellowOrange15 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appYellowOrange.withOpacity(0.6),
+    fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static var green15 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appGreen,
+    fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 1.5,
+  );
+
+  static var red15 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appRed,
+    fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 1.5,
   );
 }

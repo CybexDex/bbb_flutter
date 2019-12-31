@@ -10,7 +10,6 @@ import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/screen/exchange/drawer.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_appbar.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_header.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
@@ -69,7 +68,7 @@ class _ExchangePageState extends State<ExchangePage>
           return Scaffold(
               key: globalKey,
               resizeToAvoidBottomPadding: false,
-              drawer: user.user.logined ? UserDrawer() : null,
+              // drawer: user.user.logined ? UserDrawer() : null,
               appBar: exchangeAppBar(),
               body: SafeArea(
                   left: false,
@@ -172,10 +171,7 @@ class _ExchangePageState extends State<ExchangePage>
                                                     .toastNoContract);
                                             return;
                                           }
-                                          if (locator
-                                              .get<UserManager>()
-                                              .user
-                                              .logined) {
+                                          if (user.user.logined) {
                                             Navigator.pushNamed(
                                                     context, RoutePaths.Trade,
                                                     arguments: RouteParamsOfTrade(
@@ -220,10 +216,7 @@ class _ExchangePageState extends State<ExchangePage>
                                                     .toastNoContract);
                                             return;
                                           }
-                                          if (locator
-                                              .get<UserManager>()
-                                              .user
-                                              .logined) {
+                                          if (user.user.logined) {
                                             Navigator.pushNamed(
                                                     context, RoutePaths.Trade,
                                                     arguments: RouteParamsOfTrade(

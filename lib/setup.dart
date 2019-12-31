@@ -105,7 +105,9 @@ setupLocator() async {
       bbbapi: locator.get(),
       forumApi: locator.get(),
       configureApi: locator.get(),
-      zendeskApi: locator.get()));
+      zendeskApi: locator.get(),
+      gatewayApi: locator.get(),
+      userManager: locator.get()));
 
   locator.registerLazySingleton(
       () => AccountViewModel(bbbapi: locator.get(), gatewayApi: locator.get()));
@@ -147,7 +149,7 @@ setupProviders() {
 }
 
 setupProxy(Dio dio) {
-  // return;
+  return;
   if (buildMode == BuildMode.release || Platform.isAndroid) {
     return;
   }

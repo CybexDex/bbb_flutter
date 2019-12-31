@@ -240,7 +240,7 @@ class _AccountPageState extends State<AccountPage> {
                             : ListTile(
                                 contentPadding: EdgeInsets.all(0),
                                 title: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
                                       I18n.of(context).accountRewardAmount,
@@ -252,7 +252,7 @@ class _AccountPageState extends State<AccountPage> {
                                             .toStringAsFixed(4),
                                         style: StyleNewFactory.yellowOrange18),
                                     Text(
-                                      AssetName.USDT,
+                                      "  ${AssetName.USDT}",
                                       style: StyleNewFactory.grey12,
                                     )
                                   ],

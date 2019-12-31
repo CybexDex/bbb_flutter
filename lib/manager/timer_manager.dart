@@ -25,10 +25,8 @@ class TimerManager {
   }
 
   rankingUpdateStart() {
-    print("bb");
     Timer.periodic(Duration(hours: 1), (t) {
       _rankingUpdate.add(Ticker(t.tick));
-      print("aa");
     });
   }
 }

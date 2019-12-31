@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/models/response/ranking_response_model.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -21,39 +22,15 @@ class HomeRankingItem extends StatelessWidget {
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: Text("排名",
-                  style: TextStyle(
-                    fontFamily: 'PingFangSC',
-                    color: Palette.appGrey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 1.6,
-                  )),
+              child: Text("排名", style: StyleNewFactory.grey12),
             ),
             Expanded(
               flex: 2,
-              child: Text("用户",
-                  style: TextStyle(
-                    fontFamily: 'PingFangSC',
-                    color: Palette.appGrey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 1.6,
-                  )),
+              child: Text("用户", style: StyleNewFactory.grey12),
             ),
             Container(
               padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-              child: Text("收益",
-                  style: TextStyle(
-                    fontFamily: 'PingFangSC',
-                    color: Palette.appGrey,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 1.6,
-                  )),
+              child: Text("收益", style: StyleNewFactory.grey12),
             )
           ],
         ),
@@ -75,26 +52,19 @@ class HomeRankingItem extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(getEllipsisName(value: _rankingResponse?.name) ?? "--",
-                style: TextStyle(
-                  fontFamily: 'PingFangSC',
-                  color: Palette.appGrey,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 1,
-                )),
+                style: StyleNewFactory.grey14),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
             decoration: BoxDecoration(
-                color: Color(0xffafb5bd).withOpacity(0.2),
+                color: Palette.appYellowOrange,
                 borderRadius: BorderRadius.circular(4)),
             child: Text(
                 _rankingResponse == null
                     ? "--"
                     : "${(_rankingResponse.pnlRatio * 100).toStringAsFixed(2)} %",
                 style: TextStyle(
-                  color: Palette.appGrey,
+                  color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,

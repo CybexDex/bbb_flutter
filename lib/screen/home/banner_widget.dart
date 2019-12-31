@@ -1,6 +1,8 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/shared/palette.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,8 +25,8 @@ class BannerState extends State<BannerWidget> {
       children: <Widget>[
         CarouselSlider(
             viewportFraction: 0.92,
-            aspectRatio: 320 / 165,
             autoPlay: widget.items.length > 1,
+            aspectRatio: 300 / 145,
             reverse: false,
             enlargeCenterPage: true,
             enableInfiniteScroll: widget.items.length > 1,
@@ -38,24 +40,30 @@ class BannerState extends State<BannerWidget> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
-                      child: GestureDetector(
-                          onTap: () {
-                            if (i.link == null ||
-                                i.link.isEmpty ||
-                                i.link == "empty") {
-                              return;
-                            }
-                            if (i.link.contains(HTTPString)) {
-                              launchURL(url: Uri.encodeFull(i.link));
-                            } else {
-                              Navigator.of(context).pushNamed(i.link);
-                            }
-                          },
-                          child: Image.network(
-                            i.image,
-                            fit: BoxFit.fill,
-                          )));
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          color: Color(0xffe2e2e2),
+                          blurRadius: 6,
+                          offset: Offset(0, 3))
+                    ], borderRadius: BorderRadius.circular(10)),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (i.link == null ||
+                              i.link.isEmpty ||
+                              i.link == "empty") {
+                            return;
+                          }
+                          if (i.link.contains(HTTPString)) {
+                            launchURL(url: Uri.encodeFull(i.link));
+                          } else {
+                            Navigator.of(context).pushNamed(i.link);
+                          }
+                        },
+                        child: Image.network(
+                          i.image,
+                        )),
+                  );
                 },
               );
             }).toList()),
@@ -68,12 +76,13 @@ class BannerState extends State<BannerWidget> {
                     i,
                     _current == i
                         ? Container(
-                            margin: EdgeInsets.fromLTRB(2.5, 10, 2.5, 0),
+                            margin: EdgeInsets.symmetric(horizontal: 2.5),
                             width: 10,
                             height: 3,
-                            decoration: BoxDecoration(color: Color(0xffffbd00)))
+                            decoration:
+                                BoxDecoration(color: Palette.appYellowOrange))
                         : new Container(
-                            margin: EdgeInsets.fromLTRB(2.5, 10, 2.5, 0),
+                            margin: EdgeInsets.symmetric(horizontal: 2.5),
                             width: 4,
                             height: 3,
                             decoration: new BoxDecoration(

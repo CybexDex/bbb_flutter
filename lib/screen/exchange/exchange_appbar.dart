@@ -4,7 +4,6 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 AppBar exchangeAppBar() {
   return AppBar(
@@ -33,26 +32,26 @@ AppBar exchangeAppBar() {
                       },
                     )),
     ],
-    leading: Consumer<UserManager>(
-      builder: (context, bloc, child) => GestureDetector(
-        child: !bloc.user.logined
-            ? child
-            : Padding(
-                padding: EdgeInsets.all(16),
-                child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
-                    fit: BoxFit.contain, height: 20, width: 20),
-              ),
-        onTap: () {
-          if (bloc.user.logined) {
-            bloc.fetchBalances(name: bloc.user.name);
-            Scaffold.of(context).openDrawer();
-          } else {
-            Navigator.of(context).pushNamed(RoutePaths.Login);
-          }
-        },
-      ),
-      child: Image.asset(R.resAssetsIconsIcPerson),
-    ),
+    // leading: Consumer<UserManager>(
+    //   builder: (context, bloc, child) => GestureDetector(
+    //     child: !bloc.user.logined
+    //         ? child
+    //         : Padding(
+    //             padding: EdgeInsets.all(16),
+    //             child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
+    //                 fit: BoxFit.contain, height: 20, width: 20),
+    //           ),
+    //     onTap: () {
+    //       if (bloc.user.logined) {
+    //         bloc.fetchBalances(name: bloc.user.name);
+    //         Scaffold.of(context).openDrawer();
+    //       } else {
+    //         Navigator.of(context).pushNamed(RoutePaths.Login);
+    //       }
+    //     },
+    //   ),
+    //   child: Image.asset(R.resAssetsIconsIcPerson),
+    // ),
     centerTitle: true,
     title: Consumer2<UserManager, TickerData>(
       builder: (context, bloc, ticker, child) {

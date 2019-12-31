@@ -15,7 +15,7 @@ class AccountViewModel extends BaseModel {
   bool depositAvailable = true;
   bool hasBonus = false;
   bool showAmount = true;
-  Position bounusAccountBalance;
+  Position bounusAccountBalance = Position(quantity: 0);
 
   AccountViewModel({BBBAPI bbbapi, GatewayApi gatewayApi})
       : _bbbapi = bbbapi,

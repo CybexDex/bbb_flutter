@@ -81,7 +81,9 @@ class MarketManager {
     }).toList();
 
     _priceController.add(data);
-    lastTicker.add(data.last);
+    if (data.isNotEmpty) {
+      lastTicker.add(data.last);
+    }
   }
 
 // send(jsonEncode(

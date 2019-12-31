@@ -5,8 +5,10 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/order_record_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,6 +21,7 @@ class OrderRecordDetail extends StatelessWidget {
     Contract currentContract = getCorrespondContract(
         orderResponse: params.orderResponseModel, refContract: refData);
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Palette.backButtonColor, //change your color here
@@ -30,12 +33,9 @@ class OrderRecordDetail extends StatelessWidget {
           brightness: Brightness.light,
           elevation: 0,
         ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: OrderRecordDetailInfo(
-            model: params.orderResponseModel,
-            contract: currentContract,
-          ),
+        body: OrderRecordDetailInfo(
+          model: params.orderResponseModel,
+          contract: currentContract,
         ));
   }
 
@@ -177,70 +177,38 @@ class OrderRecordDetailInfo extends StatelessWidget {
         orderBoughtContractPx: _model.boughtContractPx);
     _itemBuilder(title, index) {
       if (index == 0) {
-        return OrderRecordDetailHeader(model: _model, contract: _contract);
+        return Container(
+            color: Palette.appDividerBackgroudGreyColor,
+            padding: EdgeInsets.only(bottom: 10, top: 10),
+            child: OrderRecordItem(model: _model));
       }
       return ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            title,
-            style: TextStyle(
-                color: Color(0xff666666),
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                fontSize: 14.0),
-          ),
+          contentPadding: EdgeInsets.only(right: 15, left: 15),
+          title: Text(title, style: StyleNewFactory.grey15),
           trailing: Builder(builder: (context) {
             switch (index) {
               case 1:
                 return Text(_model.boughtPx.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 2:
                 return Text(_model.soldPx.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 3:
                 return Text(invest.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 4:
                 return Text(
                     "${_contract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - _contract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (_contract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 5:
                 return Text(_model.commission.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 6:
                 return Text(_model.accruedInterest.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 7:
                 return Text(_model.pnl.toStringAsFixed(4),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
 
               case 8:
                 return Text(
@@ -250,11 +218,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                             "(" +
                             takeprofit.toStringAsFixed(0) +
                             "%)",
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 9:
                 return Text(
                     _model.cutLossPx == _contract.strikeLevel
@@ -263,57 +227,42 @@ class OrderRecordDetailInfo extends StatelessWidget {
                             "(" +
                             cutLoss.toStringAsFixed(0) +
                             "%)",
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 10:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.createTime).toLocal()),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 11:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.settleTime).toLocal()),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
               case 12:
                 return Text(closeResonCN(_model.closeReason),
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                    style: StyleNewFactory.black15);
 
               default:
-                return Text("text",
-                    style: TextStyle(
-                        color: Color(0xff333333),
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 14.0));
+                return Text("text", style: StyleNewFactory.black15);
             }
           }));
     }
 
     return ListView.separated(
       itemBuilder: (BuildContext build, int position) {
-        return _itemBuilder(this.titles[position], position);
+        return Container(
+          color: Colors.white,
+          child: _itemBuilder(this.titles[position], position),
+        );
       },
       separatorBuilder: (BuildContext build, int position) {
         if (position != 0) {
-          return Divider(
-            height: 1,
-            color: Color(0xffdddddd),
+          return Padding(
+            padding: const EdgeInsets.only(right: 15.0, left: 15),
+            child: Divider(
+              height: 1,
+              color: Palette.separatorColor,
+            ),
           );
         }
         return Container();
