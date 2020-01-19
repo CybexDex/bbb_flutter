@@ -7,8 +7,6 @@ import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:dio/dio.dart';
 
-import '../../../setup.dart';
-
 class ConfiguireApiProvider extends ConfigureApi {
   Dio dio = Dio();
   SharedPref _pref;
@@ -18,7 +16,6 @@ class ConfiguireApiProvider extends ConfigureApi {
     _dispatchNode();
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
-    setupProxy(dio);
   }
 
   @override

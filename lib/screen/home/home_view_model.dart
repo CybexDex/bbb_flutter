@@ -22,7 +22,6 @@ import '../../setup.dart';
 
 class HomeViewModel extends BaseModel {
   BBBAPI _bbbapi;
-  ConfigureApi _configureApi;
   ForumApi _forumApi;
   ZendeskApi _zendeskApi;
   GatewayApi _gatewayApi;
@@ -42,7 +41,6 @@ class HomeViewModel extends BaseModel {
       GatewayApi gatewayApi,
       UserManager userManager}) {
     _bbbapi = bbbapi;
-    _configureApi = configureApi;
     _forumApi = forumApi;
     _zendeskApi = zendeskApi;
     _gatewayApi = gatewayApi;

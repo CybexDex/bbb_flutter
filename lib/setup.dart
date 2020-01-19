@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
-import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
@@ -24,9 +21,7 @@ import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
-import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -130,6 +125,7 @@ setupProviders() {
       value: locator.get<UserManager>(),
     ),
     StreamProvider(builder: (context) => locator.get<MarketManager>().prices),
+    StreamProvider(builder: (context) => locator.get<MarketManager>().kline),
     StreamProvider(
         builder: (context) => locator.get<MarketManager>().lastTicker.stream),
     StreamProvider(
@@ -146,25 +142,4 @@ setupProviders() {
     StreamProvider(
         builder: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
   ];
-}
-
-setupProxy(Dio dio) {
-  return;
-  if (buildMode == BuildMode.release || Platform.isAndroid) {
-    return;
-  }
-  String proxy = Platform.isAndroid ? '0.0.0.0:8888' : 'localhost:8888';
-
-  (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-      (client) {
-    // Hook into the findProxy callback to set the client's proxy.
-    client.findProxy = (url) {
-      return 'PROXY $proxy';
-    };
-
-    // This is a workaround to allow Charles to receive
-    // SSL payloads when your app is running on Android.
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => Platform.isAndroid;
-  };
 }

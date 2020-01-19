@@ -13,9 +13,27 @@ class StyleNewFactory {
     letterSpacing: 0,
   );
 
+  static var grey10 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appGrey,
+    fontSize: Dimen.fontSize10,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
   static var grey12 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appGrey,
+    fontSize: Dimen.fontSize12,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static var grey12Opacity60 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appGrey.withOpacity(0.6),
     fontSize: Dimen.fontSize12,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
@@ -43,6 +61,14 @@ class StyleNewFactory {
     fontFamily: 'PingFangSC',
     color: Palette.appCellTitlelightGrey,
     fontSize: Dimen.fontSize14,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
+  static var black10 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appBlack,
+    fontSize: Dimen.fontSize10,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );

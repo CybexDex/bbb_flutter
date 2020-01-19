@@ -16,10 +16,8 @@ class TimerManager {
   BehaviorSubject<Ticker> _tick = BehaviorSubject<Ticker>();
   BehaviorSubject<Ticker> _rankingUpdate = BehaviorSubject<Ticker>();
 
-  Timer _timer;
-
   start() {
-    _timer = Timer.periodic(Duration(seconds: Time_GAP_SECONDS), (t) {
+    Timer.periodic(Duration(seconds: Time_GAP_SECONDS), (t) {
       _tick.add(Ticker(t.tick));
     });
   }

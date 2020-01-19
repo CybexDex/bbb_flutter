@@ -1,7 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/home/banner_widget.dart';
 import 'package:bbb_flutter/screen/home/home_app_bar.dart';
 import 'package:bbb_flutter/screen/home/home_ranking_item_builder.dart';
@@ -14,7 +12,6 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:oktoast/oktoast.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);

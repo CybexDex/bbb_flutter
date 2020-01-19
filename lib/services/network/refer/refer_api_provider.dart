@@ -10,8 +10,6 @@ import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:dio/dio.dart';
 
-import '../../../setup.dart';
-
 class ReferApiProvider extends ReferApi {
   Dio dio = Dio();
   SharedPref _pref;
@@ -21,7 +19,6 @@ class ReferApiProvider extends ReferApi {
     _dispatchNode();
     dio.options.connectTimeout = 15000; //5s
     dio.options.receiveTimeout = 13000;
-    setupProxy(dio);
   }
 
   _dispatchNode() {

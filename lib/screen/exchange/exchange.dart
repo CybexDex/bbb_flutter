@@ -13,6 +13,7 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_appbar.dart';
 import 'package:bbb_flutter/screen/exchange/exchange_header.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
@@ -20,7 +21,6 @@ import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:bbb_flutter/widgets/percentage_bar_painter.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/widgets/stagger_animation.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -145,7 +145,8 @@ class _ExchangePageState extends State<ExchangePage>
                       Visibility(
                         visible: !isExpandOpen,
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.only(
+                              right: 20, left: 20, bottom: 15, top: 15),
                           color: Colors.white,
                           child: Row(
                             children: <Widget>[
@@ -155,6 +156,8 @@ class _ExchangePageState extends State<ExchangePage>
                                     builder: (context) => WidgetFactory.button(
                                         data: I18n.of(context).buyUp,
                                         color: Palette.redOrange,
+                                        topPadding: 10.0,
+                                        bottomPadding: 10.0,
                                         onPressed: () {
                                           if (locator
                                                       .get<RefManager>()
@@ -200,6 +203,8 @@ class _ExchangePageState extends State<ExchangePage>
                                     builder: (context) => WidgetFactory.button(
                                         data: I18n.of(context).buyDown,
                                         color: Palette.shamrockGreen,
+                                        topPadding: 10.0,
+                                        bottomPadding: 10.0,
                                         onPressed: () {
                                           if (locator
                                                       .get<RefManager>()
@@ -265,20 +270,13 @@ class _ExchangePageState extends State<ExchangePage>
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 12, bottom: 12),
+                              padding: EdgeInsets.only(top: 8, bottom: 8),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text("总盈亏(USDT)：",
-                                      style: TextStyle(
-                                        fontFamily: 'PingFangSC',
-                                        color: Color(0xff6f7072),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FontStyle.normal,
-                                        letterSpacing: 0,
-                                      )),
+                                      style: StyleNewFactory.grey14),
                                   Consumer<OrderViewModel>(
                                     builder: (context, model, child) {
                                       return Text(
@@ -312,14 +310,13 @@ class _ExchangePageState extends State<ExchangePage>
                             if (!userMg.user.logined ||
                                 data.orders.isEmpty ||
                                 locator.get<MarketManager>().lastTicker.value ==
-                                    null) {
+                                    null ||
+                                locator.get<RefManager>().lastData == null) {
                               return child;
                             }
                             return _newStockWidget(context, data);
                           },
-                          child: Container(
-                              margin: EdgeInsets.only(bottom: 40),
-                              child: _emptyStockWidget()),
+                          child: Container(child: _emptyStockWidget()),
                         ),
                       ),
                     ],
@@ -359,13 +356,14 @@ class _ExchangePageState extends State<ExchangePage>
   Widget _emptyStockWidget() {
     return Builder(
         builder: (context) => Container(
-              height: 200,
-              child: Center(
+              height: ScreenUtil.getInstance().setHeight(200),
+              child: Align(
+                  alignment: Alignment.center,
                   child: SvgPicture.asset(
-                R.resAssetsIconsIcNoStoke,
-                width: 113,
-                height: 118,
-              )),
+                    R.resAssetsIconsIcNoStoke,
+                    width: 113,
+                    height: 118,
+                  )),
             ));
   }
 
@@ -375,7 +373,7 @@ class _ExchangePageState extends State<ExchangePage>
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(right: 15, left: 15, top: 12, bottom: 12),
+            padding: EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -386,13 +384,7 @@ class _ExchangePageState extends State<ExchangePage>
                   child: Row(
                     children: <Widget>[
                       Text(I18n.of(context).holdAll,
-                          style: TextStyle(
-                            fontFamily: 'PingFangSC',
-                            color: Color(0xff282c35),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.normal,
-                          )),
+                          style: StyleNewFactory.black15),
                       SizedBox(
                         width: 10,
                       ),
@@ -413,13 +405,7 @@ class _ExchangePageState extends State<ExchangePage>
                       Container(
                         padding: EdgeInsets.only(right: 9),
                         child: Text(I18n.of(context).resetPnl,
-                            style: TextStyle(
-                              fontFamily: 'PingFangSC',
-                              color: Color(0xff282c35),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.normal,
-                            )),
+                            style: StyleNewFactory.black15),
                       ),
                       SvgPicture.asset(
                         R.resAssetsIconsIcReviseYellow,
@@ -433,7 +419,7 @@ class _ExchangePageState extends State<ExchangePage>
             ),
           ),
           Container(
-              height: 200,
+              height: ScreenUtil.getInstance().setHeight(190),
               width: ScreenUtil.screenWidth,
               color: Colors.white,
               child: OrderInfo(
@@ -445,55 +431,55 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-  Widget _stockWidget(BuildContext context, OrderViewModel bloc) {
-    return Column(children: [
-      CarouselSlider(
-          viewportFraction: 0.92,
-          aspectRatio: 335 / 200,
-          autoPlay: false,
-          reverse: false,
-          enableInfiniteScroll: false,
-          enlargeCenterPage: true,
-          onPageChanged: (index) {
-            bloc.index = index;
-            bloc.setBusy(false);
-          },
-          items: bloc.orders.map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                    decoration: DecorationFactory.cornerShadowDecoration,
-                    margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
-                    padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
-                    width: ScreenUtil.screenWidth,
-                    child: OrderInfo(model: i));
-              },
-            );
-          }).toList()),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: bloc.orders
-            .asMap()
-            .map((i, element) {
-              return MapEntry(
-                  i,
-                  Container(
-                    width: 8.0,
-                    height: 8.0,
-                    margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: bloc.index == i
-                            ? Palette.redOrange
-                            : Palette.hintTitleColor),
-                  ));
-            })
-            .values
-            .toList(),
-      ),
-      SizedBox(
-        height: 10,
-      )
-    ]);
-  }
+  // Widget _stockWidget(BuildContext context, OrderViewModel bloc) {
+  //   return Column(children: [
+  //     CarouselSlider(
+  //         viewportFraction: 0.92,
+  //         aspectRatio: 335 / 200,
+  //         autoPlay: false,
+  //         reverse: false,
+  //         enableInfiniteScroll: false,
+  //         enlargeCenterPage: true,
+  //         onPageChanged: (index) {
+  //           bloc.index = index;
+  //           bloc.setBusy(false);
+  //         },
+  //         items: bloc.orders.map((i) {
+  //           return Builder(
+  //             builder: (BuildContext context) {
+  //               return Container(
+  //                   decoration: DecorationFactory.cornerShadowDecoration,
+  //                   margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
+  //                   padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
+  //                   width: ScreenUtil.screenWidth,
+  //                   child: OrderInfo(model: i));
+  //             },
+  //           );
+  //         }).toList()),
+  //     Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: bloc.orders
+  //           .asMap()
+  //           .map((i, element) {
+  //             return MapEntry(
+  //                 i,
+  //                 Container(
+  //                   width: 8.0,
+  //                   height: 8.0,
+  //                   margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+  //                   decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: bloc.index == i
+  //                           ? Palette.redOrange
+  //                           : Palette.hintTitleColor),
+  //                 ));
+  //           })
+  //           .values
+  //           .toList(),
+  //     ),
+  //     SizedBox(
+  //       height: 10,
+  //     )
+  //   ]);
+  // }
 }

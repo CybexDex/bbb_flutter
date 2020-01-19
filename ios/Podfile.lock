@@ -13,9 +13,12 @@ PODS:
     - Flutter
   - flutter_mailer (0.0.1):
     - Flutter
-  - flutter_umeng_analytics (0.0.1):
+  - flutter_umplus (0.0.1):
     - Flutter
-    - UMengAnalytics-NO-IDFA
+    - UMCAnalytics
+    - UMCCommon
+    - UMCCommonLog
+    - UMCErrorCatch
   - flutter_webview_plugin (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -37,7 +40,12 @@ PODS:
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
-  - UMengAnalytics-NO-IDFA (4.2.5)
+  - UMCAnalytics (6.0.5):
+    - UMCCommon
+  - UMCCommon (2.1.0)
+  - UMCCommonLog (1.0.0)
+  - UMCErrorCatch (1.0.0):
+    - UMCCommon
   - url_launcher (0.0.1):
     - Flutter
   - webview_flutter (0.0.1):
@@ -51,7 +59,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
-  - flutter_umeng_analytics (from `.symlinks/plugins/flutter_umeng_analytics/ios`)
+  - flutter_umplus (from `.symlinks/plugins/flutter_umplus/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
@@ -67,7 +75,10 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - FMDB
     - Reachability
-    - UMengAnalytics-NO-IDFA
+    - UMCAnalytics
+    - UMCCommon
+    - UMCCommonLog
+    - UMCErrorCatch
 
 EXTERNAL SOURCES:
   catcher:
@@ -84,8 +95,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_mailer:
     :path: ".symlinks/plugins/flutter_mailer/ios"
-  flutter_umeng_analytics:
-    :path: ".symlinks/plugins/flutter_umeng_analytics/ios"
+  flutter_umplus:
+    :path: ".symlinks/plugins/flutter_umplus/ios"
   flutter_webview_plugin:
     :path: ".symlinks/plugins/flutter_webview_plugin/ios"
   fluttertoast:
@@ -115,7 +126,7 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
-  flutter_umeng_analytics: 75b4569c5f0740bf86665e1b5ac3c8a79cf9c933
+  flutter_umplus: be1f2b751dd6110757509fa57c1ffb12edb1c2b2
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -126,7 +137,10 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
-  UMengAnalytics-NO-IDFA: 16666e32edce5be44ae5b14aaaa7f3582e09d6ab
+  UMCAnalytics: 045be2cd1ec05aa95ad62405a850757f932e2d59
+  UMCCommon: c9637200488c482b30cdebebb0bd595b9adf0847
+  UMCCommonLog: 05a2d5de21858e3d870551562cff405c1366d244
+  UMCErrorCatch: 51f1b68f920233e90a3fa6d51f0456174507ec78
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 

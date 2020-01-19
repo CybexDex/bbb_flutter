@@ -240,7 +240,7 @@ class _TransferState extends State<TransferPage> {
                                     ? () async {
                                         if (model.transferForm.cybBalance
                                                 .quantity <
-                                            (AssetDef.CYB_TRANSFER.amount /
+                                            (AssetDef.cybTransfer.amount /
                                                 100000)) {
                                           showNotification(context, true,
                                               I18n.of(context).noFeeError);

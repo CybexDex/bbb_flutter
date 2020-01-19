@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/models/response/websocket_nx_daily_px_response.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 
@@ -50,14 +51,8 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text("涨跌幅",
-                        style: TextStyle(
-                          fontFamily: 'PingFangSC',
-                          color: Color(0xff6f7072).withOpacity(0.6),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: FontStyle.normal,
-                        )),
+                    Text(I18n.of(context).exchangeChangeRatio,
+                        style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
@@ -70,7 +65,7 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                           color: percentage >= 0
                               ? Palette.redOrange
                               : Palette.shamrockGreen,
-                          fontSize: 10,
+                          fontSize: Dimen.fontSize10,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
                         ))
@@ -78,48 +73,24 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text("24h最高",
-                        style: TextStyle(
-                          fontFamily: 'PingFangSC',
-                          color: Color(0xff6f7072).withOpacity(0.6),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: FontStyle.normal,
-                        )),
+                    Text(I18n.of(context).exchange24High,
+                        style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(dailyPx?.highPx?.toStringAsFixed(4) ?? "--",
-                        style: TextStyle(
-                          fontFamily: 'PingFangSC',
-                          color: Color(0xff6f7072),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ))
+                    Text(dailyPx?.highPx?.toStringAsFixed(2) ?? "--",
+                        style: StyleNewFactory.grey10)
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Text("24h最低",
-                        style: TextStyle(
-                          fontFamily: 'PingFangSC',
-                          color: Color(0xff6f7072).withOpacity(0.6),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: FontStyle.normal,
-                        )),
+                    Text(I18n.of(context).exchange24Low,
+                        style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(dailyPx?.lowPx?.toStringAsFixed(4) ?? "--",
-                        style: TextStyle(
-                          fontFamily: 'PingFangSC',
-                          color: Color(0xff6f7072),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ))
+                    Text(dailyPx?.lowPx?.toStringAsFixed(2) ?? "--",
+                        style: StyleNewFactory.grey10)
                   ],
                 )
               ],

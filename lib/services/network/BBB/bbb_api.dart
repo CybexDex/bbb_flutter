@@ -12,6 +12,7 @@ import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
 
 abstract class BBBAPI {
   setTestNet({bool isTestNet});
@@ -23,6 +24,11 @@ abstract class BBBAPI {
       {List<OrderStatus> status, String startTime, String endTime});
   Future<AccountResponseModel> getAccount({String name});
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
+      {String startTime,
+      String endTime,
+      String asset,
+      MarketDuration duration});
+  Future<List<KLineEntity>> getMarketHistoryCandle(
       {String startTime,
       String endTime,
       String asset,

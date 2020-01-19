@@ -248,7 +248,7 @@ class _WithdrawState extends State<WithdrawPage> {
                                   model.verifyAddressResponseModel != null
                               ? () async {
                                   if (model.withdrawForm.cybBalance.quantity <
-                                      (AssetDef.CYB_TRANSFER.amount / 100000)) {
+                                      (AssetDef.cybTransfer.amount / 100000)) {
                                     showNotification(context, true,
                                         I18n.of(context).noFeeError);
                                   } else {

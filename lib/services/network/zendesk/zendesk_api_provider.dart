@@ -3,8 +3,6 @@ import 'package:bbb_flutter/services/network/zendesk/zendesk_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:dio/dio.dart';
 
-import '../../../setup.dart';
-
 class ZendeskApiProvider extends ZendeskApi {
   Dio dio = Dio();
 
@@ -12,7 +10,6 @@ class ZendeskApiProvider extends ZendeskApi {
     _dispatchNode();
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
-    setupProxy(dio);
   }
 
   _dispatchNode() {

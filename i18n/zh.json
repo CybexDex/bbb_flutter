@@ -121,6 +121,7 @@
 	"click_to_try": "点击试玩",
 	"click_to_quit": "退出试玩",
 	"share": "分享",
+	"line": "分时",
 	"one_min": "1分钟",
 	"five_min": "5分钟",
 	"one_day": "1天",
@@ -218,8 +219,15 @@
 	"home_week_luck": "本周运程",
 	"home_single_order_ranking": "单笔收益排行",
 	"home_total_order_ranking": "总收益排行",
+	"nav_home": "首页",
+	"nav_transaction": "交易",
+	"nav_forum": "社区",
+	"nav_account": "我的",
 	"account_login_regiter": "登录/注册",
 	"account_my_asset": "我的资产",
 	"account_reward_amount": "奖励金:  ",
-	"account_to_use_reward": "去使用"
+	"account_to_use_reward": "去使用",
+	"exchange_change_ratio": "涨跌幅",
+	"exchange_24_high": "24h最高",
+	"exchange_24_low": "24h最低"
 }

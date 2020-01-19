@@ -13,9 +13,9 @@ import 'package:bbb_flutter/models/response/ranking_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
-import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 
@@ -28,7 +28,6 @@ class BBBAPIProvider extends BBBAPI {
     _dispatchNode();
     dio.options.connectTimeout = 15000;
     dio.options.receiveTimeout = 13000;
-    setupProxy(dio);
   }
 
   @override
@@ -76,7 +75,6 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<PositionsResponseModel> getPositionsTestAccount({String name}) async {
     Dio singleDio = Dio();
-    setupProxy(singleDio);
     if (_pref.getEnvType() == EnvType.Pro) {
       singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
     } else if (_pref.getEnvType() == EnvType.Uat) {
@@ -163,6 +161,29 @@ class BBBAPIProvider extends BBBAPI {
     return Future.value(model);
   }
 
+  Future<List<KLineEntity>> getMarketHistoryCandle(
+      {String startTime,
+      String endTime,
+      String asset,
+      MarketDuration duration}) async {
+    var response = await dio.get(
+        '/klines?assetName=$asset&interval=${marketDurationMap[duration]}&startTime=$startTime&endTime=$endTime&limit=300');
+    var responseData = response.data as List;
+    List<KLineEntity> model = responseData.map((value) {
+      if (value[3] < value[4] / 3) {
+        value[3] = value[4];
+      }
+      return KLineEntity.fromCustom(
+          open: double.parse(value[1].toString()),
+          high: double.parse(value[2].toString()),
+          low: double.parse(value[3].toString()),
+          close: double.parse(value[4].toString()),
+          vol: 10000,
+          id: value[0]);
+    }).toList();
+    return Future.value(model);
+  }
+
   @override
   Future<DepositResponseModel> getDeposit({String name, String asset}) async {
     var response = await dio.get('/depositAddress',
@@ -215,7 +236,6 @@ class BBBAPIProvider extends BBBAPI {
   Future<TestAccountResponseModel> getTestAccount(
       {bool bonusEvent, String accountName}) async {
     Dio singleDio = Dio();
-    setupProxy(singleDio);
     if (_pref.getEnvType() == EnvType.Pro) {
       singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
     } else if (_pref.getEnvType() == EnvType.Uat) {

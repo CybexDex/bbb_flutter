@@ -474,81 +474,6 @@ class _CartesianPainter extends CustomPainter {
   }
 }
 
-class _PercentageBarPainter extends CustomPainter {
-  final double percentage;
-  final BuildContext context;
-  _PercentageBarPainter({@required this.percentage, @required this.context});
-  @override
-  void paint(dui.Canvas canvas, Size size) {
-    var downBarPainter = Paint()
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.fill
-      ..color = Palette.shamrockGreen;
-
-    var upBarPainter = Paint()
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.fill
-      ..color = Palette.redOrange;
-    var upTextPainter = TextPainter(
-        text: new TextSpan(
-            text: percentage.toStringAsFixed(0) +
-                "%" +
-                I18n.of(context).percentageUp,
-            style: TextStyle(
-                color: Palette.redOrange,
-                fontSize: 11.0,
-                fontWeight: FontWeight.normal)),
-        textDirection: TextDirection.ltr)
-      ..layout();
-
-    var downTextPainter = TextPainter(
-        text: new TextSpan(
-            text: (100 - percentage.round()).toStringAsFixed(0) +
-                "%" +
-                I18n.of(context).percentageDown,
-            style: TextStyle(
-                color: Palette.shamrockGreen,
-                fontSize: 11.0,
-                fontWeight: FontWeight.normal)),
-        textDirection: TextDirection.ltr)
-      ..layout();
-
-    upTextPainter.paint(canvas, Offset(0, 0));
-    Path path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width * (percentage / 100), 0)
-      ..lineTo(size.width * (percentage / 100) - 2, 4)
-      ..lineTo(0, 4)
-      ..close();
-    Path downPath = Path()
-      ..moveTo(size.width, 0)
-      ..lineTo(size.width * (percentage / 100) + 4, 0)
-      ..lineTo(size.width * (percentage / 100) + 2, 4)
-      ..lineTo(size.width, 4)
-      ..close();
-    canvas.drawPath(path, upBarPainter);
-    canvas.drawPath(downPath, downBarPainter);
-    // canvas.drawRRect(
-    //     RRect.fromRectAndRadius(
-    //         Rect.fromLTWH(0, size.height, size.width, 4), Radius.circular(0)),
-    //     downBarPainter);
-    // canvas.drawRRect(
-    //     RRect.fromRectAndRadius(
-    //         Rect.fromLTWH(0, size.height, size.width * (percentage / 100), 4),
-    //         Radius.circular(0)),
-    //     upBarPainter);
-    downTextPainter.paint(
-        canvas, Offset(size.width - downTextPainter.width, 0));
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
 class _TimeSharePainter extends CustomPainter {
   List<TickerData> data;
   final DateTime startTime;
@@ -604,7 +529,7 @@ class _TimeSharePainter extends CustomPainter {
     Offset startPoint, endPoint;
     final Path path = Path();
 
-    double lX = 0.0, lY = 0.0;
+    // double lX = 0.0, lY = 0.0;
 
     for (int i = 0; i < data.length; i++) {
       var seconds = data[i].time.difference(realStartTime).inSeconds;
@@ -621,22 +546,22 @@ class _TimeSharePainter extends CustomPainter {
         // double py = y;
 
         /// previous spot
-        double p0x = getPixelX(
-            data[i - 1].time.difference(realStartTime).inSeconds, size);
-        double p0y = getPixelY(data[i - 1].value, size);
+        // double p0x = getPixelX(
+        //     data[i - 1].time.difference(realStartTime).inSeconds, size);
+        // double p0y = getPixelY(data[i - 1].value, size);
 
         // double x1 = p0x + lX;
         // double y1 = p0y + lY;
 
         /// next point
-        int nextIndex = i + 1 < data.length ? i + 1 : i;
-        double p1x = getPixelX(
-            data[nextIndex].time.difference(realStartTime).inSeconds, size);
-        double p1y = getPixelY(data[nextIndex].value, size);
+        // int nextIndex = i + 1 < data.length ? i + 1 : i;
+        // double p1x = getPixelX(
+        //     data[nextIndex].time.difference(realStartTime).inSeconds, size);
+        // double p1y = getPixelY(data[nextIndex].value, size);
 
-        double smoothness = 0.3; //0 - 1
-        lX = ((p1x - p0x) / 2) * smoothness;
-        lY = ((p1y - p0y) / 2) * smoothness;
+        // double smoothness = 0.3; //0 - 1
+        // lX = ((p1x - p0x) / 2) * smoothness;
+        // lY = ((p1y - p0y) / 2) * smoothness;
         // double x2 = px - lX;
         // double y2 = py - lY;
 

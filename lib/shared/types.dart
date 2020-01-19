@@ -19,14 +19,16 @@ const Map<LockTimeType, int> UnlockTimes = {
   LockTimeType.high: 3600,
 };
 
-enum MarketDuration { oneMin, fiveMin, oneHour, oneDay }
+enum MarketDuration { line, oneMin, fiveMin, oneHour, oneDay }
 const Map<MarketDuration, String> marketDurationMap = {
+  MarketDuration.line: "1m",
   MarketDuration.oneMin: "1m",
   MarketDuration.fiveMin: "5m",
   MarketDuration.oneHour: '1h',
   MarketDuration.oneDay: "1d",
 };
 const Map<MarketDuration, int> marketDurationSecondMap = {
+  MarketDuration.line: 60,
   MarketDuration.oneMin: 60,
   MarketDuration.fiveMin: 300,
   MarketDuration.oneHour: 3600,

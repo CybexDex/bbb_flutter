@@ -14,7 +14,6 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
 class RegisterViewModel extends BaseModel {
-  BBBAPI _bbbapi;
   UserManager _userManager;
   FaucetAPI _faucetAPI;
   BuildContext _buildContext;
@@ -37,8 +36,7 @@ class RegisterViewModel extends BaseModel {
       UserManager userManager,
       FaucetAPI faucetAPI,
       BuildContext buildContext})
-      : _bbbapi = bbbapi,
-        _userManager = userManager,
+      : _userManager = userManager,
         _faucetAPI = faucetAPI,
         _buildContext = buildContext;
 

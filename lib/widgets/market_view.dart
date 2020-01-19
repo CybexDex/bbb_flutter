@@ -1,4 +1,3 @@
-import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
@@ -7,9 +6,12 @@ import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'k_line/k_chart_widget.dart';
 
 class MarketView extends StatefulWidget {
   final double width;
@@ -26,7 +28,7 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
   var initModel;
   @override
   void initState() {
-    initModel = MarketViewModel(mtm: widget.mtm);
+    initModel = MarketViewModel(mtm: widget.mtm, bbbapi: locator.get());
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -65,29 +67,31 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
       order = Provider.of<OrderViewModel>(context);
     }
 
-    return Consumer3<List<TickerData>, TickerData, WebSocketPercentageResponse>(
-      builder: (context, data, last, percentage, child) {
+    return Consumer4<List<TickerData>, TickerData, WebSocketPercentageResponse,
+        List<KLineEntity>>(
+      builder: (context, data, last, percentage, kline, child) {
         if (data == null || percentage == null) {
           return SpinKitWave(
             color: Palette.redOrange,
             size: 20,
           );
         }
-        var klines = data;
-        if (!isAllEmpty(data) && (data.last.time.minute == last.time.minute)) {
-          klines.removeLast();
-          klines.add(last);
-        } else {
-          if (last != null) {
-            klines.add(last);
-          }
-        }
-        // locator.get<Logger>().finest(last.value);
+        // var klines = data;
+        // if (!isAllEmpty(data) && (data.last.time.minute == last.time.minute)) {
+        //   klines.removeLast();
+        //   klines.add(last);
+        // } else {
+        //   if (last != null) {
+        //     klines.add(last);
+        //   }
+        // }
+        // print(data.last.value);
+        // print("kline${klines.last.value}");
 
         return BaseWidget<MarketViewModel>(
           model: initModel,
           onModelReady: (model) {
-            model.changeDuration(MarketDuration.oneMin);
+            // model.changeDuration(MarketDuration.oneMin);
             model.seedToCurrent();
           },
           builder: (context, model, child) {
@@ -118,7 +122,7 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                     alignment: Alignment.topLeft,
                     child: order != null
                         ? DefaultTabController(
-                            length: 4,
+                            length: 5,
                             child: TabBar(
                               isScrollable: true,
                               labelStyle: StyleFactory.buySellExplainText,
@@ -135,6 +139,9 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                               ),
                               tabs: [
                                 Tab(
+                                  text: I18n.of(context).line,
+                                ),
+                                Tab(
                                   text: I18n.of(context).oneMin,
                                 ),
                                 Tab(text: I18n.of(context).fiveMin),
@@ -148,21 +155,24 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                               onTap: (index) {
                                 switch (index) {
                                   case 0:
-                                    model.changeDuration(MarketDuration.oneMin);
+                                    model.changeDuration(MarketDuration.line);
                                     break;
                                   case 1:
-                                    model
-                                        .changeDuration(MarketDuration.fiveMin);
+                                    model.changeDuration(MarketDuration.oneMin);
                                     break;
                                   case 2:
                                     model
-                                        .changeDuration(MarketDuration.oneHour);
+                                        .changeDuration(MarketDuration.fiveMin);
                                     break;
                                   case 3:
+                                    model
+                                        .changeDuration(MarketDuration.oneHour);
+                                    break;
+                                  case 4:
                                     model.changeDuration(MarketDuration.oneDay);
                                     break;
                                   default:
-                                    model.changeDuration(MarketDuration.oneMin);
+                                    model.changeDuration(MarketDuration.line);
                                 }
                               },
                             ),
@@ -174,64 +184,80 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                     child: Container(
                         height: double.infinity,
                         margin: EdgeInsets.only(top: 1, left: 0, right: 0),
-                        child: GestureDetector(
-                          onPanStart: (details) {
-                            model.lastOffset = details.globalPosition;
-                          },
-                          onPanUpdate: (details) {
-                            double gap =
-                                details.globalPosition.dx - model.lastOffset.dx;
+                        child: model.isline
+                            ? GestureDetector(
+                                onPanStart: (details) {
+                                  model.lastOffset = details.globalPosition;
+                                },
+                                onPanUpdate: (details) {
+                                  double gap = details.globalPosition.dx -
+                                      model.lastOffset.dx;
 
-                            double timeOffset = 30 *
-                                marketDurationSecondMap[model.marketDuration] *
-                                gap /
-                                ScreenUtil.screenWidthDp;
-                            model.lastOffset = details.globalPosition;
+                                  double timeOffset = 30 *
+                                      marketDurationSecondMap[
+                                          model.marketDuration] *
+                                      gap /
+                                      ScreenUtil.screenWidthDp;
+                                  model.lastOffset = details.globalPosition;
 
-                            var start = model.startTime.subtract(
-                                Duration(seconds: timeOffset.toInt()));
-                            var end = model.endTime.subtract(
-                                Duration(seconds: timeOffset.toInt()));
-                            if (end.compareTo(getCorrectTime().add(Duration(
-                                    seconds: 10 *
-                                        marketDurationSecondMap[
-                                            model.marketDuration]))) >
-                                0) {
-                              return;
-                            }
-                            if (start.compareTo(data.first.time) <= 0) {
-                              return;
-                            }
-                            model.changeScope(start, end);
-                          },
-                          child: Sparkline(
-                            percentage: percentage,
-                            dateFormat: model.dateFormat,
-                            data: klines,
-                            suppleData: model.suppleData,
-                            startTime: model.startTime,
-                            endTime: model.endTime,
-                            lineColor: Palette.darkSkyBlue,
-                            timeLineGap: Duration(
-                                seconds: 5 *
-                                    marketDurationSecondMap[
-                                        model.marketDuration]),
-                            lineWidth: 1,
-                            gridLineWidth: 0.5,
-                            width: widget.width,
-                            fillGradient: LinearGradient(
-                                colors: [
-                                  Palette.lineGradintColorStart,
-                                  Palette.lineGradientColorEnd
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter),
-                            gridLineColor: Palette.veryLightPinkTwo,
-                            pointSize: 8.0,
-                            pointColor: Palette.darkSkyBlue,
-                            repaint: model,
-                          ),
-                        )),
+                                  var start = model.startTime.subtract(
+                                      Duration(seconds: timeOffset.toInt()));
+                                  var end = model.endTime.subtract(
+                                      Duration(seconds: timeOffset.toInt()));
+                                  if (end.compareTo(getCorrectTime().add(
+                                          Duration(
+                                              seconds: 10 *
+                                                  marketDurationSecondMap[
+                                                      model.marketDuration]))) >
+                                      0) {
+                                    return;
+                                  }
+                                  if (start.compareTo(data.first.time) <= 0) {
+                                    return;
+                                  }
+                                  model.changeScope(start, end);
+                                },
+                                child: Sparkline(
+                                  percentage: percentage,
+                                  dateFormat: model.dateFormat,
+                                  data: data,
+                                  suppleData: model.suppleData,
+                                  startTime: model.startTime,
+                                  endTime: model.endTime,
+                                  lineColor: Palette.darkSkyBlue,
+                                  timeLineGap: Duration(
+                                      seconds: 5 *
+                                          marketDurationSecondMap[
+                                              model.marketDuration]),
+                                  lineWidth: 1,
+                                  gridLineWidth: 0.5,
+                                  width: widget.width,
+                                  fillGradient: LinearGradient(
+                                      colors: [
+                                        Palette.lineGradintColorStart,
+                                        Palette.lineGradientColorEnd
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter),
+                                  gridLineColor: Palette.veryLightPinkTwo,
+                                  pointSize: 8.0,
+                                  pointColor: Palette.darkSkyBlue,
+                                  repaint: model,
+                                ),
+                              )
+                            : kline == null || kline.isEmpty
+                                ? SpinKitWave(
+                                    color: Palette.redOrange,
+                                    size: 20,
+                                  )
+                                : KChartWidget(
+                                    kline,
+                                    isLine: false,
+                                    mainState: MainState.MA,
+                                    secondaryState: SecondaryState.NONE,
+                                    volState: VolState.NONE,
+                                    fractionDigits: 4,
+                                  )),
                   ),
                 ],
               ),

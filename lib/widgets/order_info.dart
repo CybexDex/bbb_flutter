@@ -5,6 +5,7 @@ import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
@@ -49,10 +50,8 @@ class OrderInfo extends StatelessWidget {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(right: 4),
-                            child: Text(
-                              _model.contractId,
-                              style: StyleFactory.cellTitleStyle,
-                            ),
+                            child: Text(_model.contractId,
+                                style: StyleNewFactory.grey12),
                           ),
                           getUpOrDownIcon(
                               orderResponse: _model,
@@ -61,9 +60,8 @@ class OrderInfo extends StatelessWidget {
                             width: 25,
                           ),
                           Text(
-                            "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
-                            style: StyleFactory.cellDescLabel,
-                          ),
+                              "${I18n.of(context).actLevel}${currentContract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - currentContract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (currentContract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
+                              style: StyleNewFactory.grey12),
                           SizedBox(
                             width: 5,
                           ),
@@ -71,11 +69,10 @@ class OrderInfo extends StatelessWidget {
                               child: Align(
                                   alignment: Alignment.centerRight,
                                   child: Text(
-                                    DateFormat("MM/dd HH:mm").format(
-                                        DateTime.parse(_model.createTime)
-                                            .toLocal()),
-                                    style: StyleFactory.transferStyleTitle,
-                                  ))),
+                                      DateFormat("MM/dd HH:mm").format(
+                                          DateTime.parse(_model.createTime)
+                                              .toLocal()),
+                                      style: StyleNewFactory.grey12))),
                         ],
                       ),
                     ),
@@ -93,30 +90,26 @@ class OrderInfo extends StatelessWidget {
                                   flex: 23,
                                   child: Container(),
                                 ),
-                                Text(
-                                  I18n.of(context).openPositionPrice,
-                                  style: StyleFactory.cellDescLabel,
-                                ),
+                                Text(I18n.of(context).openPositionPrice,
+                                    style: StyleNewFactory.grey12Opacity60),
                                 Expanded(
                                   child: Container(),
                                   flex: 5,
                                 ),
                                 Text(
                                   _model.boughtPx.toStringAsFixed(4),
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(flex: 15, child: Container()),
-                                Text(
-                                  I18n.of(context).forceClosePrice,
-                                  style: StyleFactory.cellDescLabel,
-                                ),
+                                Text(I18n.of(context).forceClosePrice,
+                                    style: StyleNewFactory.grey12Opacity60),
                                 Expanded(
                                   child: Container(),
                                   flex: 5,
                                 ),
                                 Text(
                                   _model.forceClosePx.toStringAsFixed(4),
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(
                                   flex: 23,
@@ -132,32 +125,29 @@ class OrderInfo extends StatelessWidget {
                                   child: Container(),
                                 ),
                                 Text(
-                                  "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
-                                  style: StyleFactory.cellDescLabel,
-                                ),
+                                    "${I18n.of(context).invest}/${I18n.of(context).investAmountOrderInfo}",
+                                    style: StyleNewFactory.grey12Opacity60),
                                 Expanded(
                                   child: Container(),
                                   flex: 5,
                                 ),
                                 Text(
                                   "${invest.toStringAsFixed(4)}/${_model.qtyContract.toStringAsFixed(0)}",
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(
                                   child: Container(),
                                   flex: 15,
                                 ),
-                                Text(
-                                  I18n.of(context).fee,
-                                  style: StyleFactory.cellDescLabel,
-                                ),
+                                Text(I18n.of(context).fee,
+                                    style: StyleNewFactory.grey12Opacity60),
                                 Expanded(
                                   child: Container(),
                                   flex: 5,
                                 ),
                                 Text(
                                   _model.commission.toStringAsFixed(4),
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(
                                   flex: 23,
@@ -173,14 +163,14 @@ class OrderInfo extends StatelessWidget {
                                   child: Container(),
                                 ),
                                 Text(I18n.of(context).accruedInterest,
-                                    style: StyleFactory.cellDescLabel),
+                                    style: StyleNewFactory.grey12Opacity60),
                                 Expanded(
                                   child: Container(),
                                   flex: 5,
                                 ),
                                 Text(
                                   _model.accruedInterest.toStringAsFixed(4),
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(
                                   child: Container(),
@@ -188,7 +178,7 @@ class OrderInfo extends StatelessWidget {
                                 ),
                                 Text(
                                   "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
-                                  style: StyleFactory.cellDescLabel,
+                                  style: StyleNewFactory.grey12Opacity60,
                                 ),
                                 Expanded(
                                   child: Container(),
@@ -196,7 +186,7 @@ class OrderInfo extends StatelessWidget {
                                 ),
                                 Text(
                                   "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
-                                  style: StyleFactory.orderFormValueStyle,
+                                  style: StyleNewFactory.grey15,
                                 ),
                                 Expanded(
                                   flex: 23,
@@ -293,13 +283,7 @@ class OrderInfo extends StatelessWidget {
                             child: Row(
                               children: <Widget>[
                                 Text(I18n.of(context).futureProfit,
-                                    style: TextStyle(
-                                      fontFamily: 'PingFangSC',
-                                      color: Color(0xff6f7072),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FontStyle.normal,
-                                    )),
+                                    style: StyleNewFactory.grey14),
                                 Row(
                                   children: <Widget>[
                                     Text(
@@ -369,13 +353,7 @@ class OrderInfo extends StatelessWidget {
                                 Row(
                                   children: <Widget>[
                                     Text("${I18n.of(context).futureProfit} ",
-                                        style: TextStyle(
-                                          fontFamily: 'PingFangSC',
-                                          color: Color(0xff6f7072),
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          fontStyle: FontStyle.normal,
-                                        )),
+                                        style: StyleNewFactory.grey14),
                                     Text(
                                       (_model.pnl +
                                                   _model.commission +

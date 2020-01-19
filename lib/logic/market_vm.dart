@@ -5,8 +5,11 @@ import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
+import 'package:bbb_flutter/widgets/k_line/utils/data_util.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 
 class MarketViewModel extends BaseModel {
@@ -17,13 +20,17 @@ class MarketViewModel extends BaseModel {
   DateTime endTime;
 
   Offset lastOffset;
-  MarketDuration marketDuration = MarketDuration.oneMin;
+  MarketDuration marketDuration = MarketDuration.line;
   MarketManager _mtm;
+  BBBAPI _bbbapi;
   MarketManager get mtm => _mtm;
   bool moving = false;
+  List<KLineEntity> candleData = [];
+  bool isline = true;
 
-  MarketViewModel({@required MarketManager mtm}) {
+  MarketViewModel({@required MarketManager mtm, BBBAPI bbbapi}) {
     _mtm = mtm;
+    _bbbapi = bbbapi;
   }
 
   seedToCurrent() {
@@ -43,11 +50,28 @@ class MarketViewModel extends BaseModel {
 
   changeDuration(MarketDuration marketDuration) {
     _mtm.cleanData();
-    _mtm.cancelAndRemoveData();
     _mtm.loadAllData("BXBT", marketDuration: marketDuration);
-    this.marketDuration = marketDuration;
-    seedToCurrent();
-    setDateFormat(marketDuration);
+    if (marketDuration == MarketDuration.line) {
+      this.marketDuration = marketDuration;
+      seedToCurrent();
+      setDateFormat(marketDuration);
+      isline = true;
+    } else {
+      isline = false;
+    }
+    setBusy(false);
+  }
+
+  getCandle(MarketDuration marketDuration, bool isline) async {
+    int now = getNowEpochSeconds();
+    candleData = await _bbbapi.getMarketHistoryCandle(
+        startTime:
+            (now - 300 * marketDurationSecondMap[marketDuration]).toString(),
+        endTime: now.toString(),
+        asset: "BXBT",
+        duration: marketDuration);
+    DataUtil.calculate(candleData);
+    this.isline = isline;
     setBusy(false);
   }
 

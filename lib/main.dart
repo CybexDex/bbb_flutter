@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_flipperkit/flutter_flipperkit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_umeng_analytics/flutter_umeng_analytics.dart';
+import 'package:flutter_umplus/flutter_umplus.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -37,11 +37,11 @@ main() async {
     SystemUiOverlayStyle systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    UMengAnalytics.init('5d8097684ca3578029000341',
-        policy: Policy.BATCH, encrypt: true, reportCrash: false);
+    FlutterUmplus.init('5d8097684ca3578029000341',
+        reportCrash: false, logEnable: true, encrypt: true);
   } else if (Platform.isIOS) {
-    UMengAnalytics.init('5d8098c90cafb277140006f7',
-        policy: Policy.BATCH, encrypt: true, reportCrash: false);
+    FlutterUmplus.init('5d8098c90cafb277140006f7',
+        reportCrash: false, logEnable: true, encrypt: true);
   }
 
   setupLog();
@@ -65,7 +65,7 @@ main() async {
   await locator.get<RefManager>().firstLoadData();
   locator
       .get<MarketManager>()
-      .loadAllData("BXBT", marketDuration: MarketDuration.oneMin);
+      .loadAllData("BXBT", marketDuration: MarketDuration.line);
 }
 
 class MyApp extends StatelessWidget {

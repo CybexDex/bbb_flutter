@@ -41,6 +41,12 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   }
 
   @override
+  void dispose() {
+    mtm.cancelAndRemoveData();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final RouteParamsOfTrade params = ModalRoute.of(context).settings.arguments;
     AppBar appBar = AppBar(
@@ -296,7 +302,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   onConfirmClicked({TradeViewModel model}) {
     if (locator.get<UserManager>().user.testAccountResponseModel == null &&
         model.orderForm.cybBalance.quantity <
-            (AssetDef.CYB_TRANSFER.amount / 100000)) {
+            (AssetDef.cybTransfer.amount / 100000)) {
       showNotification(context, true, I18n.of(context).noFeeError);
     } else {
       bool shouldShowAlertBuyUp = model.orderForm.isUp &&

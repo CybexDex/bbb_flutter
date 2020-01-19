@@ -1,6 +1,6 @@
 import 'dart:io';
 
-var preview_server_port = 2227;
+var previewServerPort = 2227;
 
 void main() async {
   bool working = false;
@@ -45,8 +45,8 @@ void main() async {
               }
               varName = varName.replaceAll('_', '');
               if (!varName.contains(".")) {
-                resource.add(
-                    "/// ![](http://127.0.0.1:$preview_server_port/$path)");
+                resource
+                    .add("/// ![](http://127.0.0.1:$previewServerPort/$path)");
                 resource.add("static final String $varName = '$path';");
                 newLines.add('        - $path');
               }
@@ -81,8 +81,8 @@ void main() async {
 
   var ser;
   try {
-    ser = await HttpServer.bind('127.0.0.1', preview_server_port);
-    print('成功启动图片预览服务器于本机<$preview_server_port>端口');
+    ser = await HttpServer.bind('127.0.0.1', previewServerPort);
+    print('成功启动图片预览服务器于本机<$previewServerPort>端口');
     ser.listen(
       (req) {
         var index = req.uri.path.lastIndexOf('.');

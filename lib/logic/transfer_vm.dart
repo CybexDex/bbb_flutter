@@ -125,7 +125,7 @@ class TransferViewModel extends BaseModel {
     comm.refBlockId = refData.refBlockId;
 
     comm.txExpiration = expir + 5 * 60;
-    comm.fee = AssetDef.CYB_TRANSFER;
+    comm.fee = AssetDef.cybTransfer;
     comm.from = suffixId(locator.get<SharedPref>().getTestNet()
         ? _um.user.testAccountResponseModel.accountId
         : _um.user.account.id);

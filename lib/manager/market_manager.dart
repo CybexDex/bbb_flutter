@@ -7,17 +7,21 @@ import 'package:bbb_flutter/models/request/web_socket_request_entity.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/web_socket_n_x_price_response_entity.dart';
 import 'package:bbb_flutter/models/response/websocket_nx_daily_px_response.dart';
+import 'package:bbb_flutter/models/response/websocket_nx_k_line_response_entity.dart';
 import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
+import 'package:bbb_flutter/widgets/k_line/utils/data_util.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 
 class MarketManager {
   Stream<List<TickerData>> get prices => _priceController.stream;
+  Stream<List<KLineEntity>> get kline => _kLine.stream;
   BehaviorSubject<TickerData> lastTicker = BehaviorSubject<TickerData>();
   BehaviorSubject<WebSocketPercentageResponse> percentageTicker =
       BehaviorSubject<WebSocketPercentageResponse>();
@@ -25,6 +29,8 @@ class MarketManager {
       BehaviorSubject<WebSocketPNLResponse>();
   BehaviorSubject<List<TickerData>> _priceController =
       BehaviorSubject<List<TickerData>>();
+  BehaviorSubject<List<KLineEntity>> _kLine =
+      BehaviorSubject<List<KLineEntity>>();
   BehaviorSubject<WebSocketNXDailyPxResponse> dailyPxTicker =
       BehaviorSubject<WebSocketNXDailyPxResponse>();
   IOWebSocketChannel _channel;
@@ -37,7 +43,7 @@ class MarketManager {
         _sharedPref = sharedPref;
 
   String _assetName;
-  MarketDuration _marketDuration = MarketDuration.oneMin;
+  MarketDuration _marketDuration = MarketDuration.line;
 
   loadAllData(String assetName, {MarketDuration marketDuration}) async {
     _assetName = assetName ?? _assetName;
@@ -54,14 +60,19 @@ class MarketManager {
         marketDuration: _marketDuration);
     initCommunication();
     send(jsonEncode(WebSocketRequestEntity(
-            type: "subscribe", topic: "FAIRPRICE.$_assetName"))
-        .toString());
-    send(jsonEncode(WebSocketRequestEntity(
         type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE)));
     send(jsonEncode(WebSocketRequestEntity(
         topic: WebsocketRequestTopic.PNL, type: "subscribe")));
     send(jsonEncode(WebSocketRequestEntity(
         topic: WebsocketRequestTopic.NX_DAILYPX, type: "subscribe")));
+    send(jsonEncode(WebSocketRequestEntity(
+        type: "subscribe", topic: "FAIRPRICE.$_assetName")));
+    if (_marketDuration != MarketDuration.line) {
+      send(jsonEncode(WebSocketRequestEntity(
+          topic:
+              "${WebsocketRequestTopic.NX_KLINE}.${marketDurationSecondMap[_marketDuration]}",
+          type: "subscribe")));
+    }
   }
 
   loadMarketHistory(
@@ -69,26 +80,35 @@ class MarketManager {
       String endTime,
       String asset,
       MarketDuration marketDuration}) async {
-    List<MarketHistoryResponseModel> _list = await _api.getMarketHistory(
-        startTime: startTime,
-        endTime: endTime,
-        asset: asset,
-        duration: marketDuration);
-    List<TickerData> data = _list.map((marketHistoryResponseModel) {
-      var tickerData = TickerData(marketHistoryResponseModel.px,
-          DateTime.fromMicrosecondsSinceEpoch(marketHistoryResponseModel.xts));
-      return tickerData;
-    }).toList();
+    if (marketDuration == MarketDuration.line) {
+      List<MarketHistoryResponseModel> _list = await _api.getMarketHistory(
+          startTime: startTime,
+          endTime: endTime,
+          asset: asset,
+          duration: marketDuration);
+      List<TickerData> data = _list.map((marketHistoryResponseModel) {
+        var tickerData = TickerData(
+            marketHistoryResponseModel.px,
+            DateTime.fromMicrosecondsSinceEpoch(
+                marketHistoryResponseModel.xts));
+        return tickerData;
+      }).toList();
 
-    _priceController.add(data);
-    if (data.isNotEmpty) {
-      lastTicker.add(data.last);
+      _priceController.add(data);
+      if (data.isNotEmpty) {
+        lastTicker.add(data.last);
+      }
+    } else {
+      List<KLineEntity> list = await _api.getMarketHistoryCandle(
+          startTime: startTime,
+          endTime: endTime,
+          asset: asset,
+          duration: marketDuration);
+      DataUtil.calculate(list);
+      _kLine.add(list);
     }
   }
 
-// send(jsonEncode(
-//             WebSocketRequestEntity(type: "subscribe", topic: "FAIRPRICE.BXBT"))
-//         .toString());
   initCommunication() {
     reset();
 
@@ -132,6 +152,34 @@ class MarketManager {
           _priceController.value.removeRange(0, 200);
         }
         _priceController.add(_priceController.value.toList());
+      } else if (phase == 0) {
+        _priceController.value.removeLast();
+        _priceController.value.add(t);
+        _priceController.add(_priceController.value.toList());
+      }
+    } else if (response.contains(WebsocketRequestTopic.NX_KLINE)) {
+      var kLineResponse =
+          WebsocketNxKLineResponseEntity.fromJson(json.decode(response));
+      var kLineEntity = KLineEntity.fromCustom(
+          open: kLineResponse.open,
+          high: kLineResponse.high,
+          low: kLineResponse.low,
+          close: kLineResponse.close,
+          vol: 10000,
+          id: kLineResponse.start);
+      if (isAllEmpty(_kLine.value)) {
+        _kLine.value.add(kLineEntity);
+        _kLine.add(_kLine.value.toList());
+        return;
+      }
+      var diff = (_kLine.value.last.id - kLineResponse.start).abs();
+      if (diff < kLineResponse.interval) {
+        _kLine.value.last = kLineEntity;
+        DataUtil.updateLastData(_kLine.value);
+        _kLine.add(_kLine.value.toList());
+      } else {
+        DataUtil.addLastData(_kLine.value, kLineEntity);
+        _kLine.add(_kLine.value.toList());
       }
     } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE)) {
       var percentageResponse =
@@ -154,6 +202,9 @@ class MarketManager {
   cleanData() {
     if (!isAllEmpty(_priceController.value)) {
       _priceController.value.clear();
+    }
+    if (!isAllEmpty(_kLine.value)) {
+      _kLine.value.clear();
     }
   }
 

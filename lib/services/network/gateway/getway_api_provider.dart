@@ -5,7 +5,6 @@ import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:dio/dio.dart';
 
-import '../../../setup.dart';
 import 'getway_api.dart';
 
 class GatewayAPIProvider extends GatewayApi {
@@ -17,7 +16,6 @@ class GatewayAPIProvider extends GatewayApi {
     _dispatchNode();
     dio.options.connectTimeout = 15000; //5s
     dio.options.receiveTimeout = 13000;
-    setupProxy(dio);
   }
 
   @override

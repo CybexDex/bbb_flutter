@@ -3,6 +3,7 @@ import 'package:bbb_flutter/screen/account/account_page.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/home/home_page.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -31,6 +32,8 @@ class _MainState extends State<MainPage> {
           backgroundColor: Colors.white,
           selectedItemColor: Palette.bottomNavLabelSelectedColor,
           unselectedItemColor: Palette.bottomNavLabelUnselectedColor,
+          selectedLabelStyle: StyleNewFactory.black10,
+          unselectedLabelStyle: StyleNewFactory.grey10,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: onTabTapped,
@@ -38,53 +41,53 @@ class _MainState extends State<MainPage> {
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 R.resAssetsIconsIcHomeUnselected,
-                width: 28,
-                height: 28,
+                width: ScreenUtil.getInstance().setWidth(24),
+                height: ScreenUtil.getInstance().setHeight(24),
               ),
               activeIcon: SvgPicture.asset(
                 R.resAssetsIconsIcHomeSelected,
-                width: 28,
-                height: 28,
+                width: ScreenUtil.getInstance().setWidth(24),
+                height: ScreenUtil.getInstance().setHeight(24),
               ),
-              title: new Text('首页'),
+              title: new Text(I18n.of(context).navHome),
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 R.resAssetsIconsIcTransactionUnselected,
-                width: 28,
-                height: 28,
+                width: ScreenUtil.getInstance().setWidth(24),
+                height: ScreenUtil.getInstance().setHeight(24),
               ),
               activeIcon: SvgPicture.asset(
                 R.resAssetsIconsIcTransactionSelected,
-                width: 28,
-                height: 28,
+                width: ScreenUtil.getInstance().setWidth(24),
+                height: ScreenUtil.getInstance().setHeight(24),
               ),
-              title: new Text('交易'),
+              title: new Text(I18n.of(context).navTransaction),
             ),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   R.resAssetsIconsIcForumUnselected,
-                  width: 28,
-                  height: 28,
+                  width: ScreenUtil.getInstance().setWidth(24),
+                  height: ScreenUtil.getInstance().setHeight(24),
                 ),
                 activeIcon: SvgPicture.asset(
                   R.resAssetsIconsIcForumSelected,
-                  width: 28,
-                  height: 28,
+                  width: ScreenUtil.getInstance().setWidth(24),
+                  height: ScreenUtil.getInstance().setHeight(24),
                 ),
-                title: Text('社区')),
+                title: Text(I18n.of(context).navForum)),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   R.resAssetsIconsIcAccountUnselected,
-                  width: 28,
-                  height: 28,
+                  width: ScreenUtil.getInstance().setWidth(24),
+                  height: ScreenUtil.getInstance().setHeight(24),
                 ),
                 activeIcon: SvgPicture.asset(
                   R.resAssetsIconsIcAccountSelected,
-                  width: 28,
-                  height: 28,
+                  width: ScreenUtil.getInstance().setWidth(24),
+                  height: ScreenUtil.getInstance().setHeight(24),
                 ),
-                title: Text('我的'))
+                title: Text(I18n.of(context).navAccount))
           ],
         ),
         body: IndexedStack(
