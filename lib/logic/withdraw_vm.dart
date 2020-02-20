@@ -6,14 +6,17 @@ import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
+import 'package:bbb_flutter/models/entity/available_assets.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/models/form/withdraw_form_model.dart';
 import 'package:bbb_flutter/models/request/post_withdraw_request_model.dart';
+import 'package:bbb_flutter/models/response/account_response_model.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/gateway_verifyaddress_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -21,7 +24,6 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:cybex_flutter_plugin/order.dart';
-import 'package:logger/logger.dart';
 
 class WithdrawViewModel extends BaseModel {
   WithdrawViewModel(
@@ -42,6 +44,8 @@ class WithdrawViewModel extends BaseModel {
   VerifyAddressResponseModel verifyAddressResponseModel;
   WithdrawForm withdrawForm;
   PostWithdrawRequestModel withdrawRequestModel;
+  AccountResponseModel adminAccount;
+  AccountResponseModel gatewayAccount;
 
   BBBAPI _api;
   GatewayApi _gatewayApi;
@@ -50,20 +54,22 @@ class WithdrawViewModel extends BaseModel {
 
   initForm() {
     withdrawForm = WithdrawForm(
-        totalAmount: Asset(amount: 0, symbol: "USDT"),
+        totalAmount: Asset(amount: 0),
         balance: Position(quantity: 0),
         address: "");
     gatewayAssetResponseModel = GatewayAssetResponseModel(
         minWithdraw: 0, withdrawSwitch: false, withdrawFee: "0.0");
     getAsset();
     getCurrentBalance();
+    getMemoKey();
   }
 
   void fetchBalances() {
     withdrawForm.balance =
-        _um.fetchPositionFrom(AssetName.NXUSDT) ?? Position(quantity: 0);
-    withdrawForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB) ??
-        Position(assetName: AssetName.CYB, quantity: 0);
+        _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ??
+            Position(quantity: 0);
+    withdrawForm.cybBalance =
+        _um.fetchPositionFrom(AssetId.CYB) ?? Position(quantity: 0);
   }
 
   void getCurrentBalance() async {
@@ -71,6 +77,13 @@ class WithdrawViewModel extends BaseModel {
     fetchBalances();
     setButtonAvailable();
     setBusy(false);
+  }
+
+  void getMemoKey() async {
+    adminAccount = await _api.getAccount(
+        name: _refm.refDataControllerNew.value.adminAccountId);
+    gatewayAccount = await _api.getAccount(
+        name: _refm.refDataControllerNew.value.gatewayAccountId);
   }
 
   void getAsset() async {
@@ -113,23 +126,26 @@ class WithdrawViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postWithdraw() async {
-    final refData = _refm.lastData;
-
-    var withdraw = PostWithdrawRequestModel();
+    final refData = _refm.refDataControllerNew.value;
     commission = getCommission(refData);
 
-    withdraw.transfer = commission;
+    Map<String, dynamic> transaction =
+        await CybexFlutterPlugin.transferOperation(commission);
+    Map<String, dynamic> request = {"transaction": transaction};
+    printWrapped(transaction.toString());
 
-    withdraw.transfer = await CybexFlutterPlugin.transferOperation(commission);
-    withdraw.transactionType = "NxWithdraw";
-    withdraw.memo = withdrawForm.address;
+    try {
+      PostOrderResponseModel res = await _api.postWithdraw(withdraw: request);
+      print(res);
+      return Future.value(res);
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 
-    locator.get<Logger>().i(withdraw.toRawJson());
-
-    PostOrderResponseModel res = await _api.postWithdraw(withdraw: withdraw);
-    locator.get<Logger>().w(res.toRawJson());
-
-    return Future.value(res);
+  void printWrapped(String text) {
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 
 //  void saveOrder() {
@@ -143,33 +159,33 @@ class WithdrawViewModel extends BaseModel {
 //    commission = getCommission(refData, contract);
 //  }
 
-  Commission getCommission(RefContractResponseModel refData) {
+  Commission getCommission(RefDataResponse refData) {
+    AccountKeysEntity keys = locator.get<SharedPref>().getAccountKeys();
     WithdrawForm form = withdrawForm;
-    AvailableAsset quoteAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == AssetName.NXUSDT;
-        })
-        .toList()
-        .first;
+    AvailableAsset quoteAsset = AvailableAsset(
+        assetId: refData.bbbAssetId, precision: refData.bbbAssetPrecision);
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
     Commission comm = Commission();
     comm.chainid = refData.chainId;
-    comm.refBlockNum = refData.refBlockNum;
-    comm.refBlockPrefix = refData.refBlockPrefix;
-    comm.refBlockId = refData.refBlockId;
+    comm.refBlockNum = refData.blockNum;
+    comm.refBlockId = refData.blockId;
 
     comm.txExpiration = expir + 5 * 60;
     comm.fee = AssetDef.cybTransfer;
-    comm.from = suffixId(locator.get<SharedPref>().getTestNet()
-        ? _um.user.testAccountResponseModel.accountId
-        : _um.user.account.id);
-    comm.to = suffixId(refData.accountKeysEntityOperator.accountId);
+    comm.from = suffixId(_um.user.account.id);
+    comm.to = suffixId(refData.adminAccountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),
         amount:
             (form.totalAmount.amount * pow(10, quoteAsset.precision)).toInt());
-
+    comm.isTwo = true;
+    comm.fromMemoKey = keys.activeKey.publicKey;
+    comm.toMemoKey = adminAccount.options.memoKey;
+    comm.gatewayMemoKey = gatewayAccount.options.memoKey;
+    comm.gatewayAssetId = suffixId(refData.gatewayAccountId);
+    comm.memo = withdrawForm.address;
+    comm.assetId = suffixId(refData.bbbAssetId);
     return comm;
   }
 }

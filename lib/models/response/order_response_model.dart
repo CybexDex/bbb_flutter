@@ -1,10 +1,11 @@
 import 'dart:convert' show json;
+
 import 'package:bbb_flutter/helper/utils.dart';
 
 class OrderResponseModel {
   String accountName;
   String status;
-  String buyOrderTxId;
+  int buyOrderTxId;
   String contractId;
   double latestContractPx;
   double pnl;
@@ -16,6 +17,7 @@ class OrderResponseModel {
   double qtyContract;
   double commission;
   double accruedInterest;
+  double strikePx;
   double boughtPx;
   double boughtContractPx;
   double boughtNotional;
@@ -43,6 +45,7 @@ class OrderResponseModel {
     this.qtyContract,
     this.commission,
     this.accruedInterest,
+    this.strikePx,
     this.boughtPx,
     this.boughtContractPx,
     this.boughtNotional,
@@ -60,58 +63,60 @@ class OrderResponseModel {
       ? null
       : OrderResponseModel(
           accountName: convertValueByType(jsonRes['accountName'], String,
-              stack: "Test-accountName"),
+              stack: "Root-accountName"),
           status: convertValueByType(jsonRes['status'], String,
-              stack: "Test-status"),
-          buyOrderTxId: convertValueByType(jsonRes['buyOrderTxId'], String,
-              stack: "Test-buyOrderTxId"),
+              stack: "Root-status"),
+          buyOrderTxId: convertValueByType(jsonRes['buyOrderTxId'], int,
+              stack: "Root-buyOrderTxId"),
           contractId: convertValueByType(jsonRes['contractId'], String,
-              stack: "Test-contractId"),
+              stack: "Root-contractId"),
           latestContractPx: convertValueByType(
               jsonRes['latestContractPx'], double,
-              stack: "Test-latestContractPx"),
-          pnl: convertValueByType(jsonRes['pnl'], double, stack: "Test-pnl"),
+              stack: "Root-latestContractPx"),
+          pnl: convertValueByType(jsonRes['pnl'], double, stack: "Root-pnl"),
           underlyingSpotPx: convertValueByType(
               jsonRes['underlyingSpotPx'], double,
-              stack: "Test-underlyingSpotPx"),
+              stack: "Root-underlyingSpotPx"),
           cutLossPx: convertValueByType(jsonRes['cutLossPx'], double,
-              stack: "Test-cutLossPx"),
+              stack: "Root-cutLossPx"),
           takeProfitPx: convertValueByType(jsonRes['takeProfitPx'], double,
-              stack: "Test-takeProfitPx"),
+              stack: "Root-takeProfitPx"),
           forceClosePx: convertValueByType(jsonRes['forceClosePx'], double,
-              stack: "Test-forceClosePx"),
+              stack: "Root-forceClosePx"),
           expiration: convertValueByType(jsonRes['expiration'], String,
-              stack: "Test-expiration"),
+              stack: "Root-expiration"),
           qtyContract: convertValueByType(jsonRes['qtyContract'], double,
-              stack: "Test-qtyContract"),
+              stack: "Root-qtyContract"),
           commission: convertValueByType(jsonRes['commission'], double,
-              stack: "Test-commission"),
+              stack: "Root-commission"),
           accruedInterest: convertValueByType(
               jsonRes['accruedInterest'], double,
-              stack: "Test-accruedInterest"),
+              stack: "Root-accruedInterest"),
+          strikePx: convertValueByType(jsonRes['strikePx'], double,
+              stack: "Root-boughtPx"),
           boughtPx: convertValueByType(jsonRes['boughtPx'], double,
-              stack: "Test-boughtPx"),
+              stack: "Root-boughtPx"),
           boughtContractPx: convertValueByType(
               jsonRes['boughtContractPx'], double,
-              stack: "Test-boughtContractPx"),
+              stack: "Root-boughtContractPx"),
           boughtNotional: convertValueByType(jsonRes['boughtNotional'], double,
-              stack: "Test-boughtNotional"),
+              stack: "Root-boughtNotional"),
           soldPx: convertValueByType(jsonRes['soldPx'], double,
-              stack: "Test-soldPx"),
+              stack: "Root-soldPx"),
           soldContractPx: convertValueByType(jsonRes['soldContractPx'], double,
-              stack: "Test-soldContractPx"),
+              stack: "Root-soldContractPx"),
           soldNotional: convertValueByType(jsonRes['soldNotional'], double,
-              stack: "Test-soldNotional"),
+              stack: "Root-soldNotional"),
           closeReason: convertValueByType(jsonRes['closeReason'], String,
-              stack: "Test-closeReason"),
+              stack: "Root-closeReason"),
           settleTime: convertValueByType(jsonRes['settleTime'], String,
-              stack: "Test-settleTime"),
+              stack: "Root-settleTime"),
           createTime: convertValueByType(jsonRes['createTime'], String,
-              stack: "Test-createTime"),
+              stack: "Root-createTime"),
           lastUpdateTime: convertValueByType(jsonRes['lastUpdateTime'], String,
-              stack: "Test-lastUpdateTime"),
+              stack: "Root-lastUpdateTime"),
           details: convertValueByType(jsonRes['details'], String,
-              stack: "Test-details"),
+              stack: "Root-details"),
         );
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +134,7 @@ class OrderResponseModel {
         'qtyContract': qtyContract,
         'commission': commission,
         'accruedInterest': accruedInterest,
+        'strikePx': strikePx,
         'boughtPx': boughtPx,
         'boughtContractPx': boughtContractPx,
         'boughtNotional': boughtNotional,

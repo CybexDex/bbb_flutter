@@ -1,66 +1,90 @@
-import 'dart:convert';
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
 
 class AmendOrderRequestModel {
-  String transactionType;
-  String seller;
-  String refBuyOrderTxId;
+  Data data;
   String signature;
-  String takeProfitPx;
-  String cutLossPx;
-  String execNowPx;
-  int expiration;
-  int amendCreationTime;
 
-  AmendOrderRequestModel(
-      {this.transactionType,
-      this.seller,
-      this.refBuyOrderTxId,
-      this.signature,
-      this.takeProfitPx,
-      this.cutLossPx,
-      this.execNowPx,
-      this.expiration,
-      this.amendCreationTime});
+  AmendOrderRequestModel({
+    this.data,
+    this.signature,
+  });
 
-  AmendOrderRequestModel.fromJson(Map<String, dynamic> json) {
-    transactionType = json['transactionType'];
-    seller = json['seller'];
-    refBuyOrderTxId = json['refBuyOrderTxId'];
-    signature = json['signature'];
-    takeProfitPx = json['takeProfitPx'];
-    cutLossPx = json['cutLossPx'];
-    execNowPx = json['execNowPx'];
-    expiration = json['expiration'];
-    amendCreationTime = json['amendCreationTime'];
+  factory AmendOrderRequestModel.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : AmendOrderRequestModel(
+          data: Data.fromJson(jsonRes['data']),
+          signature: convertValueByType(jsonRes['signature'], String,
+              stack: "Root-signature"),
+        );
+
+  Map<String, dynamic> toJson() => {
+        'data': data,
+        'signature': signature,
+      };
+
+  Map<String, dynamic> toCloseJson() => {
+        'data': data.toCloseJson(),
+        'signature': signature,
+      };
+  @override
+  String toString() {
+    return json.encode(this);
   }
+}
 
-  String toStreamString() {
-    StringBuffer buff = StringBuffer();
-    buff.write(refBuyOrderTxId);
-    buff.write(cutLossPx);
-    buff.write(takeProfitPx);
-    buff.write(execNowPx);
-    buff.write(expiration);
-    buff.write(seller);
-    buff.write(amendCreationTime);
+class Data {
+  String action;
+  String user;
+  int orderId;
+  String takeProfitPrice;
+  String cutlossPrice;
+  int timeout;
 
-    return buff.toString();
-  }
+  Data({
+    this.action,
+    this.user,
+    this.orderId,
+    this.takeProfitPrice,
+    this.cutlossPrice,
+    this.timeout,
+  });
 
-  String toRawJson() => json.encode(toJson());
+  factory Data.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : Data(
+          action: convertValueByType(jsonRes['action'], String,
+              stack: "Data-action"),
+          user: convertValueByType(jsonRes['user'], String, stack: "Data-user"),
+          orderId: convertValueByType(jsonRes['order_id'], int,
+              stack: "Data-order_id"),
+          takeProfitPrice: convertValueByType(
+              jsonRes['take_profit_price'], String,
+              stack: "Data-take_profit_price"),
+          cutlossPrice: convertValueByType(jsonRes['cutloss_price'], String,
+              stack: "Data-cutloss_price"),
+          timeout: convertValueByType(jsonRes['timeout'], int,
+              stack: "Data-timeout"),
+        );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['transactionType'] = this.transactionType;
-    data['seller'] = this.seller;
-    data['refBuyOrderTxId'] = this.refBuyOrderTxId;
-    data['signature'] = this.signature;
-    data['takeProfitPx'] = this.takeProfitPx;
-    data['cutLossPx'] = this.cutLossPx;
-    data['execNowPx'] = this.execNowPx;
-    data['expiration'] = this.expiration;
-    data['amendCreationTime'] = this.amendCreationTime;
+  Map<String, dynamic> toJson() => {
+        'action': action,
+        'user': user,
+        'order_id': orderId,
+        'take_profit_price': takeProfitPrice,
+        'cutloss_price': cutlossPrice,
+        'timeout': timeout,
+      };
 
-    return data;
+  Map<String, dynamic> toCloseJson() => {
+        'action': action,
+        'user': user,
+        'order_id': orderId,
+        'timeout': timeout,
+      };
+  @override
+  String toString() {
+    return json.encode(this);
   }
 }

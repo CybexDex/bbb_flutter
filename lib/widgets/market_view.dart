@@ -3,12 +3,10 @@ import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
-import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
-import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'k_line/k_chart_widget.dart';
@@ -67,10 +65,9 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
       order = Provider.of<OrderViewModel>(context);
     }
 
-    return Consumer4<List<TickerData>, TickerData, WebSocketPercentageResponse,
-        List<KLineEntity>>(
-      builder: (context, data, last, percentage, kline, child) {
-        if (data == null || percentage == null) {
+    return Consumer3<List<TickerData>, TickerData, List<KLineEntity>>(
+      builder: (context, data, last, kline, child) {
+        if (data == null) {
           return SpinKitWave(
             color: Palette.redOrange,
             size: 20,
@@ -98,13 +95,9 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
             if (order != null) {
               final orderModel = order.getCurrentOrder();
               if (orderModel != null) {
-                final contract = locator
-                    .get<RefManager>()
-                    .getContractFromId(orderModel.contractId);
-
-                model.supplyDataWithTrade(data, order, contract);
+                model.supplyDataWithTrade(data, order, true);
               } else {
-                model.supplyDataWithTrade(data, order, null);
+                model.supplyDataWithTrade(data, order, false);
               }
             }
 
@@ -158,18 +151,28 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                                     model.changeDuration(MarketDuration.line);
                                     break;
                                   case 1:
-                                    model.changeDuration(MarketDuration.oneMin);
+                                    model.changeDuration(MarketDuration.oneMin,
+                                        time:
+                                            last.time.millisecondsSinceEpoch ~/
+                                                1000);
                                     break;
                                   case 2:
-                                    model
-                                        .changeDuration(MarketDuration.fiveMin);
+                                    model.changeDuration(MarketDuration.fiveMin,
+                                        time:
+                                            last.time.millisecondsSinceEpoch ~/
+                                                1000);
                                     break;
                                   case 3:
-                                    model
-                                        .changeDuration(MarketDuration.oneHour);
+                                    model.changeDuration(MarketDuration.oneHour,
+                                        time:
+                                            last.time.millisecondsSinceEpoch ~/
+                                                1000);
                                     break;
                                   case 4:
-                                    model.changeDuration(MarketDuration.oneDay);
+                                    model.changeDuration(MarketDuration.oneDay,
+                                        time:
+                                            last.time.millisecondsSinceEpoch ~/
+                                                1000);
                                     break;
                                   default:
                                     model.changeDuration(MarketDuration.line);
@@ -218,7 +221,6 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                                   model.changeScope(start, end);
                                 },
                                 child: Sparkline(
-                                  percentage: percentage,
                                   dateFormat: model.dateFormat,
                                   data: data,
                                   suppleData: model.suppleData,

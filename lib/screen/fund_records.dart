@@ -39,14 +39,14 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
         .then((d) {
       data = d
           .where((f) =>
-              fundTypeMap[f.type] == FundType.userDepositExtern ||
-              fundTypeMap[f.type] == FundType.userWithdrawExtern)
+              fundTypeMap[f.subtype] == FundType.userDepositExtern ||
+              fundTypeMap[f.subtype] == FundType.userWithdrawExtern)
           .toList();
       depositData = d
-          .where((f) => fundTypeMap[f.type] == FundType.userDepositExtern)
+          .where((f) => fundTypeMap[f.subtype] == FundType.userDepositExtern)
           .toList();
       withdrawalData = d
-          .where((f) => fundTypeMap[f.type] == FundType.userWithdrawExtern)
+          .where((f) => fundTypeMap[f.subtype] == FundType.userWithdrawExtern)
           .toList();
       _constructMap(data, dataMap);
       _constructMap(depositData, depositMap);
@@ -61,13 +61,13 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
     int count = 0;
     for (int i = 0; i < list.length; i++) {
       if (list.length == 1) {
-        var month = list[i].lastUpdateTime.toLocal().month;
+        var month = DateTime.parse(list[i].time).toLocal().month;
         map.putIfAbsent(month, () => list);
         break;
       }
       if (i == 0) continue;
-      var current = list[i].lastUpdateTime.toLocal().month;
-      var prev = list[i - 1].lastUpdateTime.toLocal().month;
+      var current = DateTime.parse(list[i].time).toLocal().month;
+      var prev = DateTime.parse(list[i - 1].time).toLocal().month;
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;

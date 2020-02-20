@@ -12,6 +12,11 @@ class AssetName {
   static const USDTERC20 = "USDTERC20";
 }
 
+class AssetId {
+  static const USDT = "1.3.27";
+  static const CYB = "1.3.0";
+}
+
 class MethodName {
   static const TOTAL_TRANSFER = "get_total_transfer";
   static const TOP_LIST = "get_top10_transfer_by_from_asset_human";
@@ -31,8 +36,8 @@ const ReferAction = "cybexbbb";
 
 class WebsocketRequestTopic {
   static const FAIRPRICE = "FAIRPRICE";
-  static const PNL = "PNL";
-  static const NX_PERCENTAGE = "NX_PERCENTAGE";
+  static const PNL_MAIN = "PNL.main";
+  static const NX_PERCENTAGE_MAIN = "NX_PERCENTAGE.main";
   static const NX_DAILYPX = "NX_DAILYPX";
   static const NX_KLINE = "KLINE";
 }
@@ -44,8 +49,13 @@ class NetworkConnection {
   static const UAT_TESTNET = "https://nxtestnetuat.cybex.io/v1";
 }
 
+class BBBApiConnection {
+  static const PRO = "https://bbb-new.cybex.io";
+  static const PRO_TEST = "https://bbb-test-new.cybex.io";
+}
+
 class GatewayConnection {
-  static const PRO_GATEWAY = "https://bbb-gateway.cybex.io";
+  static const PRO_GATEWAY = "https://bbbnew-gateway.cybex.io";
   static const UAT_GATEWAY = "https://uat-bbb.cybex.io";
 }
 
@@ -55,10 +65,10 @@ class FaucetConnection {
 }
 
 class WebSocketConnection {
-  static const PRO_WEBSOCKET = "wss://nxmdp.cybex.io";
+  static const PRO_WEBSOCKET = "wss://bbb-new.cybex.io/mdp";
   static const PRO_TEST_WEBSOCKET = "wss://nxmdp-tn.cybex.io";
   static const UAT_TEST_WEBSOCKET = "wss://nxmdptest-tn.cybex.io";
-  static const UAT_WEBSOCKET = "wss://nxmdptest.cybex.io";
+  static const UAT_WEBSOCKET = "wss://bbb-test-new.cybex.io/mdp";
 }
 
 class ReferSystemConnection {

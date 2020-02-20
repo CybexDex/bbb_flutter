@@ -42,11 +42,10 @@ class _WithdrawState extends State<WithdrawPage> {
           model.initForm();
           _amountController.addListener(() {
             if (_amountController.text.length > 0) {
-              Asset asset = Asset(
-                  amount: double.parse(_amountController.text), symbol: "USDT");
+              Asset asset = Asset(amount: double.parse(_amountController.text));
               model.setTotalAmount(asset);
             } else {
-              model.setTotalAmount(Asset(amount: 0, symbol: "USDT"));
+              model.setTotalAmount(Asset(amount: 0));
             }
           });
           _addressFocusNode.addListener(() {
@@ -292,8 +291,8 @@ class _WithdrawState extends State<WithdrawPage> {
     try {
       PostOrderResponseModel responseModel = await model.postWithdraw();
       Navigator.of(context).pop();
-      if (responseModel.status == "Failed") {
-        showNotification(context, true, responseModel.errorMesage);
+      if (responseModel.code != 0) {
+        showNotification(context, true, responseModel.msg);
       } else {
         showNotification(context, false, I18n.of(context).successToast);
         model.getCurrentBalance();

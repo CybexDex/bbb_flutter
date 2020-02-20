@@ -54,8 +54,8 @@ class OrderRecordItem extends StatelessWidget {
                     style: StyleNewFactory.appCellTitleLightGrey14,
                   ),
                   Text(
-                    DateFormat("MM-dd HH:mm:ss").format(
-                        DateTime.parse(_model.lastUpdateTime).toLocal()),
+                    DateFormat("MM-dd HH:mm:ss")
+                        .format(DateTime.parse(_model.settleTime).toLocal()),
                     style: StyleNewFactory.grey14,
                   )
                 ],
@@ -84,12 +84,8 @@ class OrderRecordItem extends StatelessWidget {
                     style: StyleNewFactory.appCellTitleLightGrey14,
                   ),
                   Text(
-                    (_model.pnl + _model.commission + _model.accruedInterest)
-                        .toStringAsFixed(4),
-                    style: (_model.pnl +
-                                _model.commission +
-                                _model.accruedInterest) >
-                            0
+                    (_model.pnl).toStringAsFixed(4),
+                    style: (_model.pnl) > 0
                         ? StyleNewFactory.red15
                         : StyleNewFactory.green15,
                   )

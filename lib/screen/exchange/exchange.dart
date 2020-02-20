@@ -4,7 +4,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/models/response/websocket_pnl_response.dart';
@@ -63,7 +63,7 @@ class _ExchangePageState extends State<ExchangePage>
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        builder: (_) => locator.get<OrderViewModel>(),
+        create: (_) => locator.get<OrderViewModel>(),
         child: Consumer<UserManager>(builder: (context, user, child) {
           return Scaffold(
               key: globalKey,
@@ -305,13 +305,17 @@ class _ExchangePageState extends State<ExchangePage>
                       Visibility(
                         visible: isExpandOpen,
                         child: Consumer4<UserManager, OrderViewModel,
-                            RefContractResponseModel, TickerData>(
+                            ContractResponse, TickerData>(
                           builder: (context, userMg, data, ref, __, child) {
                             if (!userMg.user.logined ||
                                 data.orders.isEmpty ||
                                 locator.get<MarketManager>().lastTicker.value ==
                                     null ||
-                                locator.get<RefManager>().lastData == null) {
+                                locator
+                                        .get<RefManager>()
+                                        .refDataControllerNew
+                                        .value ==
+                                    null) {
                               return child;
                             }
                             return _newStockWidget(context, data);

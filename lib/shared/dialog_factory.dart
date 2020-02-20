@@ -322,7 +322,7 @@ class DialogFactory {
                       .get<UserManager>()
                       .user
                       .testAccountResponseModel
-                      .privateKey);
+                      .privkey);
                 }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }
@@ -400,7 +400,7 @@ class DialogFactory {
                       .get<UserManager>()
                       .user
                       .testAccountResponseModel
-                      .privateKey);
+                      .privkey);
                 }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }

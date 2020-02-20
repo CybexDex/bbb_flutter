@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BitShareCoordinator.h</key>
 		<data>
-		5Apj1nCT7vtM6g7Jl++BXjGsESs=
+		ZK9Zvgjk32lKpRnEQ68Vp72q+48=
 		</data>
 		<key>Headers/NXSig.h</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		5+mxdu4Mb6GTVefDbLiCEfFL2bs=
+		lewkkyFRFoye32hLyXYTSWi013Y=
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		8a0Lf+wosPwwSZ0EblVqDnIZZ2w=
+		Hh06YZo0AFfMgxq67SkEX0nSbzc=
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		8a0Lf+wosPwwSZ0EblVqDnIZZ2w=
+		Hh06YZo0AFfMgxq67SkEX0nSbzc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -455,7 +455,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lLXHGeB610XVpHvLiruV3auUcsPqPDdBLqHkbWllXWk=
+			3//4xTesnACtE2tnAu/j5OTJo/skkIprnPACzfGEzGs=
 			</data>
 		</dict>
 		<key>Headers/NXSig.h</key>
@@ -497,7 +497,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			a+EAzQCS/zuP43dz7lG4oOJgutKrEDOVz/Vsn3+7APs=
+			aRrgR0Sv5+C7wYsF5e++CsvglNu9SnJGEw/i9P7cT94=
 			</data>
 		</dict>
 		<key>Modules/cybex_ios_core_cpp.swiftmodule/x86_64.swiftdoc</key>
@@ -518,7 +518,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			a+EAzQCS/zuP43dz7lG4oOJgutKrEDOVz/Vsn3+7APs=
+			aRrgR0Sv5+C7wYsF5e++CsvglNu9SnJGEw/i9P7cT94=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

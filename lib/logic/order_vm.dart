@@ -33,7 +33,7 @@ class OrderViewModel extends BaseModel {
     _getOrdersCallback = () {
       getOrders();
     };
-    _refSub = rm.data.listen((data) {
+    _refSub = rm.contractController.stream.listen((data) {
       getOrders();
     });
     um.removeListener(_getOrdersCallback);
@@ -62,9 +62,7 @@ class OrderViewModel extends BaseModel {
   void calculateTotalPnl() {
     totlaPnl = 0;
     for (OrderResponseModel orderResponseModel in orders) {
-      totlaPnl += (orderResponseModel.pnl +
-          orderResponseModel.commission +
-          orderResponseModel.accruedInterest);
+      totlaPnl += (orderResponseModel.pnl);
     }
   }
 
@@ -110,9 +108,7 @@ class OrderViewModel extends BaseModel {
     for (int i = 0; i < orders.length; i++) {
       if (selectedOrders[i].isSelected) {
         selectedTotalCount++;
-        selectedTotalPnl += double.parse(
-            (orders[i].pnl + orders[i].commission + orders[i].accruedInterest)
-                .toStringAsFixed(4));
+        selectedTotalPnl += double.parse((orders[i].pnl).toStringAsFixed(4));
       }
     }
     setBusy(false);
@@ -143,5 +139,5 @@ class OrderViewModel extends BaseModel {
 
 class SelectedItem {
   bool isSelected;
-  String buyOrderTxId;
+  int buyOrderTxId;
 }

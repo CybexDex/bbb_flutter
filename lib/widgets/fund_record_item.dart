@@ -14,8 +14,7 @@ class FundRecordItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDeposit = fundTypeMap[_model.type] == FundType.userDepositExtern;
-
+    bool isDeposit = fundTypeMap[_model.subtype] == FundType.userDepositExtern;
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
@@ -37,8 +36,7 @@ class FundRecordItem extends StatelessWidget {
                     Text(AssetName.USDT, style: StyleNewFactory.grey14)
                   ],
                 ),
-                Text(
-                    "${double.parse(_model.amount).toStringAsFixed(4)} ${AssetName.USDT}",
+                Text("${_model.amount} ${AssetName.USDT}",
                     style: StyleNewFactory.black15)
               ],
             ),
@@ -51,7 +49,7 @@ class FundRecordItem extends StatelessWidget {
               children: <Widget>[
                 Text(
                   DateFormat("yyyy-MM-dd    HH:mm:ss")
-                      .format(_model.lastUpdateTime.toLocal()),
+                      .format(DateTime.parse(_model.time).toLocal()),
                   style: StyleNewFactory.appCellTitleLightGrey14,
                 ),
                 Row(
@@ -67,18 +65,19 @@ class FundRecordItem extends StatelessWidget {
                     SizedBox(
                       width: 15,
                     ),
-                    Text(fundStatusCN(_model.status),
-                        style:
-                            _model.status == fundStatusMap[FundStatus.completed]
-                                ? StyleNewFactory.green15
-                                : StyleNewFactory.black15),
+                    // Text(fundStatusCN(_model.status),
+                    //     style:
+                    //         _model.status == fundStatusMap[FundStatus.completed]
+                    //             ? StyleNewFactory.green15
+                    //             : StyleNewFactory.black15),
                   ],
                 ),
               ],
             ),
           ),
           Text(
-            "${I18n.of(context).address} ${_model.address}",
+            "${_model.custom.replaceAll(RegExp(r'[{\"}]'), "")}",
+            // "${I18n.of(context).address} ${_model.address}",
             style: StyleNewFactory.grey12,
           ),
         ],

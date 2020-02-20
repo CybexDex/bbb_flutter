@@ -62,3 +62,30 @@ String getEllipsisName({String value, int precision}) {
 
   return value;
 }
+
+String getQueryStringFromJson(Map<String, dynamic> json, List<String> keys) {
+  String result = "";
+  for (String key in keys) {
+    result += "$key=${json[key]}&";
+  }
+  return result.substring(0, result.length - 1);
+}
+
+dynamic convertJson(Map<String, dynamic> json) {
+  List<dynamic> contracts = [];
+  List<String> keys = json["keys"] is List ? [] : null;
+  if (keys != null) {
+    for (var item in json["keys"]) {
+      keys.add(item);
+    }
+  }
+  for (var item in json["data"]) {
+    Map<String, dynamic> contract = {};
+    for (int i = 0; i < keys.length; i++) {
+      contract[keys[i]] = item[i];
+    }
+    contracts.add(contract);
+  }
+  var newJson = {"contract": contracts};
+  return newJson;
+}

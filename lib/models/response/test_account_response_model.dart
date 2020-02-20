@@ -3,46 +3,29 @@ import 'dart:convert' show json;
 import 'package:bbb_flutter/helper/utils.dart';
 
 class TestAccountResponseModel {
-  String accountName;
-  String accountId;
-  int accountType;
-  String privateKey;
-  String cybexAccount;
-  int expiration;
+  int code;
+  String name;
+  String privkey;
 
   TestAccountResponseModel({
-    this.accountName,
-    this.accountId,
-    this.accountType,
-    this.privateKey,
-    this.cybexAccount,
-    this.expiration,
+    this.code,
+    this.name,
+    this.privkey,
   });
 
   factory TestAccountResponseModel.fromJson(jsonRes) => jsonRes == null
       ? null
       : TestAccountResponseModel(
-          accountName: convertValueByType(jsonRes['accountName'], String,
-              stack: "Root-accountName"),
-          accountId: convertValueByType(jsonRes['accountId'], String,
-              stack: "Root-accountId"),
-          accountType: convertValueByType(jsonRes['accountType'], int,
-              stack: "Root-accountType"),
-          privateKey: convertValueByType(jsonRes['privateKey'], String,
-              stack: "Root-privateKey"),
-          cybexAccount: convertValueByType(jsonRes['cybexAccount'], String,
-              stack: "Root-cybexAccount"),
-          expiration: convertValueByType(jsonRes['expiration'], int,
-              stack: "Root-expiration"),
+          code: convertValueByType(jsonRes['code'], int, stack: "Root-code"),
+          name: convertValueByType(jsonRes['name'], String, stack: "Root-name"),
+          privkey: convertValueByType(jsonRes['privkey'], String,
+              stack: "Root-privkey"),
         );
 
   Map<String, dynamic> toJson() => {
-        'accountName': accountName,
-        'accountId': accountId,
-        'accountType': accountType,
-        'privateKey': privateKey,
-        'cybexAccount': cybexAccount,
-        'expiration': expiration,
+        'code': code,
+        'name': name,
+        'privkey': privkey,
       };
   @override
   String toString() {

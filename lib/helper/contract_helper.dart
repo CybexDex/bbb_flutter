@@ -1,4 +1,4 @@
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 
 class ContractHelper {
   static List<List<Contract>> productsFromContracts(List<Contract> contracts) {

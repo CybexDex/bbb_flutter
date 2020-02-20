@@ -6,12 +6,12 @@ import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/entity/available_assets.dart';
 import 'package:bbb_flutter/models/request/node_request_model.dart';
 import 'package:bbb_flutter/models/request/post_ref_request_model.dart';
 import 'package:bbb_flutter/models/response/node_response_model.dart';
 import 'package:bbb_flutter/models/response/node_top_list_response_model.dart';
 import 'package:bbb_flutter/models/response/query_ref_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/models/response/refer_top_list_response.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
 import 'package:bbb_flutter/services/network/node/node_api.dart';
@@ -118,12 +118,9 @@ class InviteViewModel extends BaseModel {
   // }
 
   Future getTotalTransfer() async {
-    AvailableAsset rebateAsset = _ref.lastData.availableAssets
-        .where((availabeAsset) {
-          return availabeAsset.assetName == AssetName.NXUSDT;
-        })
-        .toList()
-        .first;
+    AvailableAsset rebateAsset = AvailableAsset(
+        assetId: _ref.refDataControllerNew.value.bbbAssetId,
+        precision: _ref.refDataControllerNew.value.bbbAssetPrecision);
     List<String> params = [
       AccountID.REFER_REBATE_ACCOUNT_ID,
       _um.user.account.id,

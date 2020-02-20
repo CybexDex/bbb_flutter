@@ -1,5 +1,5 @@
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 
@@ -71,18 +71,18 @@ enum FundType {
   userWithdrawCybex
 }
 const Map<String, FundType> fundTypeMap = {
-  "USER_DEPOSIT_EXTERN":
+  "gateway_deposit":
       FundType.userDepositExtern, //user deposits USDT from outside
 
-  "USER_WITHDRAWAL_EXTERN":
+  "gateway_withdraw":
       FundType.userWithdrawExtern, //user withdraws USDT to outside
 
   "ADMIN_ADJUST": FundType.adminAdjust, // admin fixes balance issue
 
-  "USER_DEPOSIT_CYBEX":
+  "transfer_in":
       FundType.userDepositCybex, // user deposits USDT from its cybex wallet
 
-  "USER_WITHDRAWAL_CYBEX":
+  "transfer_out":
       FundType.userWithdrawCybex, //user withdraws USDT to its cybex wallet
 };
 
@@ -107,9 +107,10 @@ String fundStatusCN(String status) {
 
 String closeResonCN(String status) {
   var map = {
-    "USER_CLOSE_TIME_OVER": I18n.of(globalKey.currentContext).userCloseOut,
-    "CUT_LOSS": I18n.of(globalKey.currentContext).cutLossCloseOut,
-    "TAKE_PROFIT": I18n.of(globalKey.currentContext).takeProfitCloseOut,
+    "USER": I18n.of(globalKey.currentContext).userCloseOut,
+    "CUTLOSS": I18n.of(globalKey.currentContext).cutLossCloseOut,
+    "TAKEPROFIT": I18n.of(globalKey.currentContext).takeProfitCloseOut,
+    "TIMEOVER": I18n.of(globalKey.currentContext).timeOverCloseOut,
   };
 
   return map[status];

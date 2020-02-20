@@ -124,22 +124,25 @@ setupProviders() {
     ChangeNotifierProvider.value(
       value: locator.get<UserManager>(),
     ),
-    StreamProvider(builder: (context) => locator.get<MarketManager>().prices),
-    StreamProvider(builder: (context) => locator.get<MarketManager>().kline),
+    StreamProvider(create: (context) => locator.get<MarketManager>().prices),
+    StreamProvider(create: (context) => locator.get<MarketManager>().kline),
     StreamProvider(
-        builder: (context) => locator.get<MarketManager>().lastTicker.stream),
+        create: (context) => locator.get<MarketManager>().lastTicker.stream),
     StreamProvider(
-        builder: (context) =>
+        create: (context) =>
             locator.get<MarketManager>().percentageTicker.stream),
     StreamProvider(
-        builder: (context) => locator.get<MarketManager>().pnlTicker.stream),
+        create: (context) => locator.get<MarketManager>().pnlTicker.stream),
     StreamProvider(
-      builder: (context) => locator.get<RefManager>().data,
+        create: (context) =>
+            locator.get<RefManager>().refDataControllerNew.stream),
+    StreamProvider(
+        create: (context) =>
+            locator.get<RefManager>().contractController.stream),
+    StreamProvider(
+      create: (context) => locator.get<TimerManager>().tick,
     ),
     StreamProvider(
-      builder: (context) => locator.get<TimerManager>().tick,
-    ),
-    StreamProvider(
-        builder: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
+        create: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
   ];
 }

@@ -51,7 +51,7 @@ class HomeRankingItem extends StatelessWidget {
                     )),
           Expanded(
             flex: 2,
-            child: Text(getEllipsisName(value: _rankingResponse?.name) ?? "--",
+            child: Text(getEllipsisName(value: _rankingResponse?.user) ?? "--",
                 style: StyleNewFactory.grey14),
           ),
           Container(

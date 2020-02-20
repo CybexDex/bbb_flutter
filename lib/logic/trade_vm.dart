@@ -4,21 +4,23 @@ import 'dart:math';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/asset_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/entity/available_assets.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
-import 'package:bbb_flutter/models/request/post_order_request_model.dart';
+import 'package:bbb_flutter/models/request/open_order_request.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:cybex_flutter_plugin/order.dart';
-import 'package:logger/logger.dart';
 
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
@@ -32,7 +34,7 @@ class TradeViewModel extends BaseModel {
   var ticker;
   var currentTicker;
   Contract saveContract;
-  PostOrderRequestModel order;
+  OpenOrderRequest order;
   Order buyOrder;
   Commission commission;
   double actLevel = 0;
@@ -59,7 +61,7 @@ class TradeViewModel extends BaseModel {
     isSatisfied = true;
     currentTicker = _mtm.lastTicker.value;
 
-    _refSub = _refm.data.listen((onData) {
+    _refSub = _refm.contractController.stream.listen((onData) {
       updateAmountAndFee();
     });
 
@@ -81,13 +83,12 @@ class TradeViewModel extends BaseModel {
         investAmount: 1,
         showCutoff: false,
         showProfit: false,
-        totalAmount: Asset(amount: 0, symbol: AssetName.USDT),
-        cybBalance: Position(assetName: AssetName.CYB, quantity: 0),
-        fee: Asset(amount: 0, symbol: AssetName.USDT));
+        totalAmount: Asset(amount: 0),
+        cybBalance: Position(quantity: 0),
+        fee: Asset(amount: 0));
   }
 
   updateCurrentContract(bool isUp, String contractId) {
-    print("ddd");
     if (isUp) {
       _refm.changeUpContractId(contractId);
     } else {
@@ -119,15 +120,17 @@ class TradeViewModel extends BaseModel {
         contract.conversionRate.abs() *
         contract.commissionRate;
 
-    orderForm.fee = Asset(amount: commiDouble, symbol: contract.quoteAsset);
+    orderForm.fee = Asset(amount: commiDouble);
     double totalAmount = orderForm.investAmount * amount;
 
-    orderForm.totalAmount =
-        Asset(amount: totalAmount + commiDouble, symbol: contract.quoteAsset);
+    orderForm.totalAmount = Asset(amount: totalAmount + commiDouble);
     if (orderForm.investAmount > contract.availableInventory ||
-        _um.fetchPositionFrom(AssetName.NXUSDT) == null ||
+        _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ==
+            null ||
         orderForm.totalAmount.amount >
-            _um.fetchPositionFrom(AssetName.NXUSDT).quantity ||
+            _um
+                .fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId)
+                .quantity ||
         orderForm.investAmount > contract.maxOrderQty ||
         orderForm.totalAmount.amount <= double.minPositive ||
         !isTakeProfitInputCorrect ||
@@ -275,7 +278,7 @@ class TradeViewModel extends BaseModel {
   void increaseCutLossPx() {
     if (orderForm.cutoffPx == null) {
       orderForm.showCutoff = true;
-      orderForm.cutoffPx = contract.strikeLevel + 1;
+      orderForm.cutoffPx = contract.strikeLevel.toDouble() + 1;
       isCutLossInputCorrect = true;
     } else {
       orderForm.cutoffPx += 1;
@@ -288,7 +291,7 @@ class TradeViewModel extends BaseModel {
   void decreaseCutLossPx() {
     if (orderForm.cutoffPx == null) {
       orderForm.showCutoff = true;
-      orderForm.cutoffPx = contract.strikeLevel - 1;
+      orderForm.cutoffPx = contract.strikeLevel.toDouble() - 1;
       isCutLossInputCorrect = true;
     } else {
       if (orderForm.cutoffPx.round() > 0) {
@@ -330,11 +333,12 @@ class TradeViewModel extends BaseModel {
     return _refm.downContract;
   }
 
-  fetchPostion({String name}) async {
+  fetchPostion() async {
     await _um.fetchBalances(name: _um.user.name);
-    usdtBalance = _um.fetchPositionFrom(name);
-    orderForm.cybBalance = _um.fetchPositionFrom(AssetName.CYB) ??
-        Position(assetName: AssetName.CYB, quantity: 0);
+    usdtBalance =
+        _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId);
+    orderForm.cybBalance =
+        _um.fetchPositionFrom(AssetId.CYB) ?? Position(quantity: 0);
     setBusy(false);
   }
 
@@ -354,46 +358,48 @@ class TradeViewModel extends BaseModel {
   }
 
   Future<PostOrderResponseModel> postOrder() async {
-    order.buyOrder = buyOrder;
-    order.commission = commission;
-
-    order.underlyingSpotPx = ticker.value.toString();
-    order.contractId = saveContract.contractId;
-    order.expiration = _um.user.testAccountResponseModel != null &&
-            _um.user.testAccountResponseModel.accountType >= 1
-        ? _um.user.testAccountResponseModel.expiration
-        : 0;
-    order.takeProfitPx = orderForm.takeProfitPx == null
+    if (_um.user.testAccountResponseModel != null) {
+      CybexFlutterPlugin.setDefaultPrivKey(
+          _um.user.testAccountResponseModel.privkey);
+    }
+    int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+    order.data.action = locator.get<SharedPref>().getAction();
+    order.data.user = _um.user.testAccountResponseModel != null
+        ? _um.user.testAccountResponseModel.name
+        : _um.user.account.name;
+    order.data.contract = saveContract.contractId;
+    order.data.takeProfitPrice = orderForm.takeProfitPx == null
         ? "0"
         : orderForm.takeProfitPx.toStringAsFixed(4);
-    // : OrderCalculate.takeProfitPx(orderForm.takeProfit, ticker.value,
-    //         saveContract.strikeLevel, orderForm.isUp)
-    //     .toStringAsFixed(4);
-    order.cutLossPx = orderForm.cutoffPx == null
+
+    order.data.cutlossPrice = orderForm.cutoffPx == null
         ? saveContract.strikeLevel.toStringAsFixed(4)
         : orderForm.cutoffPx.toStringAsFixed(4);
-    // : OrderCalculate.cutLossPx(orderForm.cutoff, ticker.value,
-    //         saveContract.strikeLevel, orderForm.isUp)
-    //     .toStringAsFixed(4);
 
-    order.buyOrder =
-        await CybexFlutterPlugin.limitOrderCreateOperation(buyOrder, true);
+    order.data.quantity = orderForm.investAmount;
+    order.data.paid = locator.get<SharedPref>().getAction() == "main"
+        ? (commission.amount.amount /
+                pow(10, _refm.refDataControllerNew.value.bbbAssetPrecision))
+            .toString()
+        : (orderForm.totalAmount.amount - orderForm.fee.amount)
+            .toStringAsFixed(4);
+    order.data.timeout = expir + 5 * 60;
 
-    if (_um.user.testAccountResponseModel != null) {
-      await CybexFlutterPlugin.setDefaultPrivKey(
-          _um.user.testAccountResponseModel.privateKey);
+    var data = order.data.toJson();
+    String sig = await CybexFlutterPlugin.signMessageOperation(
+        getQueryStringFromJson(data, data.keys.toList()..sort()));
+    order.signature =
+        sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
+    var orderRequest = order.toJson();
+    if (locator.get<SharedPref>().getAction() == "main") {
+      Map<String, dynamic> transaction =
+          await CybexFlutterPlugin.transferOperation(commission);
+      orderRequest["transaction"] = transaction;
     }
-
-    order.commission = await CybexFlutterPlugin.transferOperation(commission);
-
-    order.buyOrderTxId = order.buyOrder.transactionid;
-    locator.get<Logger>().i(order.toRawJson());
-    print(order.cutLossPx);
-
-    PostOrderResponseModel res = await _api.postOrder(order: order);
-    locator.get<Logger>().w(res.toRawJson());
-
-    return res;
+    print(orderRequest);
+    PostOrderResponseModel result =
+        await _api.postOrder(requestOrder: orderRequest);
+    return result;
   }
 
   void saveOrder() {
@@ -401,80 +407,75 @@ class TradeViewModel extends BaseModel {
     saveContract =
         orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
-    final refData = _refm.lastData;
+    final refData = _refm.refDataControllerNew.value;
 
-    order = PostOrderRequestModel();
-    buyOrder = getBuyOrder(refData, contract);
+    order = OpenOrderRequest(data: Data());
     commission = getCommission(refData, contract);
   }
 
-  Order getBuyOrder(RefContractResponseModel refData, Contract contract) {
+  // Order getBuyOrder(RefContractResponseModel refData, Contract contract) {
+  //   OrderForm form = orderForm;
+  //   AvailableAsset quoteAsset = refData.availableAssets
+  //       .where((asset) {
+  //         return asset.assetName == contract.quoteAsset;
+  //       })
+  //       .toList()
+  //       .first;
+
+  //   AvailableAsset baseAsset = refData.availableAssets
+  //       .where((asset) {
+  //         return asset.assetName == contract.assetName;
+  //       })
+  //       .toList()
+  //       .first;
+
+  //   int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+  //   var amount = (form.totalAmount.amount - form.fee.amount) *
+  //       pow(10, quoteAsset.precision);
+  //   AmountToSell buyAmount = AmountToSell(
+  //       amount: amount.toInt(), assetId: suffixId(quoteAsset.assetId));
+
+  //   Order order = Order();
+  //   order.chainid = refData.chainId;
+  //   order.refBlockNum = refData.refBlockNum;
+  //   order.refBlockPrefix = refData.refBlockPrefix;
+  //   order.refBlockId = refData.refBlockId;
+  //   order.fee = AssetDef.cyb;
+  //   order.seller = suffixId(locator.get<SharedPref>().getTestNet()
+  //       ? _um.user.testAccountResponseModel.accountId
+  //       : _um.user.account.id);
+  //   order.amountToSell = buyAmount;
+  //   order.minToReceive = AmountToSell(
+  //       amount: form.investAmount, assetId: suffixId(baseAsset.assetId));
+  //   order.fillOrKill = 1;
+  //   order.txExpiration = expir + 5 * 60;
+  //   order.expiration = expir + 5 * 60;
+  //   return order;
+  // }
+
+  Commission getCommission(RefDataResponse refData, Contract contract) {
     OrderForm form = orderForm;
-    AvailableAsset quoteAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == contract.quoteAsset;
-        })
-        .toList()
-        .first;
-
-    AvailableAsset baseAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == contract.assetName;
-        })
-        .toList()
-        .first;
-
-    int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
-    var amount = (form.totalAmount.amount - form.fee.amount) *
-        pow(10, quoteAsset.precision);
-    AmountToSell buyAmount = AmountToSell(
-        amount: amount.toInt(), assetId: suffixId(quoteAsset.assetId));
-
-    Order order = Order();
-    order.chainid = refData.chainId;
-    order.refBlockNum = refData.refBlockNum;
-    order.refBlockPrefix = refData.refBlockPrefix;
-    order.refBlockId = refData.refBlockId;
-    order.fee = AssetDef.cyb;
-    order.seller = suffixId(locator.get<SharedPref>().getTestNet()
-        ? _um.user.testAccountResponseModel.accountId
-        : _um.user.account.id);
-    order.amountToSell = buyAmount;
-    order.minToReceive = AmountToSell(
-        amount: form.investAmount, assetId: suffixId(baseAsset.assetId));
-    order.fillOrKill = 1;
-    order.txExpiration = expir + 5 * 60;
-    order.expiration = expir + 5 * 60;
-    return order;
-  }
-
-  Commission getCommission(
-      RefContractResponseModel refData, Contract contract) {
-    OrderForm form = orderForm;
-    AvailableAsset quoteAsset = refData.availableAssets
-        .where((asset) {
-          return asset.assetName == contract.quoteAsset;
-        })
-        .toList()
-        .first;
+    AvailableAsset quoteAsset = AvailableAsset(
+        assetId: refData.bbbAssetId, precision: refData.bbbAssetPrecision);
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
     Commission comm = Commission();
     comm.chainid = refData.chainId;
-    comm.refBlockNum = refData.refBlockNum;
-    comm.refBlockPrefix = refData.refBlockPrefix;
-    comm.refBlockId = refData.refBlockId;
+    comm.refBlockNum = refData.blockNum;
+    comm.refBlockId = refData.blockId;
 
     comm.txExpiration = expir + 5 * 60;
     comm.fee = AssetDef.cybTransfer;
-    comm.from = suffixId(locator.get<SharedPref>().getTestNet()
-        ? _um.user.testAccountResponseModel.accountId
+    comm.from = suffixId(locator.get<SharedPref>().getAction() == "test"
+        ? _um.user.testAccountResponseModel.name
         : _um.user.account.id);
-    comm.to = suffixId(refData.accountKeysEntityOperator.accountId);
+    comm.to = suffixId(refData.adminAccountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),
-        amount: (form.fee.amount * pow(10, quoteAsset.precision)).toInt());
-
+        amount: ((form.totalAmount.amount - form.fee.amount) *
+                pow(10, quoteAsset.precision))
+            .toInt());
+    comm.isTwo = false;
     return comm;
   }
 }

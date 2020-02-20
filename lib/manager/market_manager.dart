@@ -45,7 +45,8 @@ class MarketManager {
   String _assetName;
   MarketDuration _marketDuration = MarketDuration.line;
 
-  loadAllData(String assetName, {MarketDuration marketDuration}) async {
+  loadAllData(String assetName,
+      {MarketDuration marketDuration, int time}) async {
     _assetName = assetName ?? _assetName;
     _marketDuration = marketDuration ?? _marketDuration;
     if (isAllEmpty(_assetName)) {
@@ -55,14 +56,14 @@ class MarketManager {
     await loadMarketHistory(
         startTime:
             (now - 300 * marketDurationSecondMap[_marketDuration]).toString(),
-        endTime: now.toString(),
+        endTime: time != null ? time.toString() : now.toString(),
         asset: _assetName,
         marketDuration: _marketDuration);
     initCommunication();
     send(jsonEncode(WebSocketRequestEntity(
-        type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE)));
+        type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE_MAIN)));
     send(jsonEncode(WebSocketRequestEntity(
-        topic: WebsocketRequestTopic.PNL, type: "subscribe")));
+        topic: WebsocketRequestTopic.PNL_MAIN, type: "subscribe")));
     send(jsonEncode(WebSocketRequestEntity(
         topic: WebsocketRequestTopic.NX_DAILYPX, type: "subscribe")));
     send(jsonEncode(WebSocketRequestEntity(
@@ -93,7 +94,6 @@ class MarketManager {
                 marketHistoryResponseModel.xts));
         return tickerData;
       }).toList();
-
       _priceController.add(data);
       if (data.isNotEmpty) {
         lastTicker.add(data.last);
@@ -181,11 +181,11 @@ class MarketManager {
         DataUtil.addLastData(_kLine.value, kLineEntity);
         _kLine.add(_kLine.value.toList());
       }
-    } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE)) {
+    } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE_MAIN)) {
       var percentageResponse =
           WebSocketPercentageResponse.fromJson(json.decode(response));
       percentageTicker.add(percentageResponse);
-    } else if (response.contains(WebsocketRequestTopic.PNL)) {
+    } else if (response.contains(WebsocketRequestTopic.PNL_MAIN)) {
       var pnlResponse = WebSocketPNLResponse.fromJson(json.decode(response));
       pnlTicker.add(pnlResponse);
     } else if (response.contains(WebsocketRequestTopic.NX_DAILYPX)) {

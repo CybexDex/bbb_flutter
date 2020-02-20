@@ -30,6 +30,22 @@ class SharedPref {
     await _prefs.remove('bbb.username');
   }
 
+  String getAction() {
+    var value = _prefs.getString("bbb.action");
+    if (value != null) {
+      return value;
+    }
+    return "main";
+  }
+
+  saveAction({String action}) async {
+    await _prefs.setString('bbb.action', action);
+  }
+
+  removeAction() async {
+    await _prefs.remove('bbb.action');
+  }
+
   AccountResponseModel getAccount() {
     final value = _prefs.getString("bbb.account");
     if (value != null) {

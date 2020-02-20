@@ -36,12 +36,14 @@ class UserManager extends BaseModel {
 
   ///AssetName.CYB
 
-  Position fetchPositionFrom(String name) {
-    if (user.balances == null || user.balances.positions.length == 0) {
+  Position fetchPositionFrom(String assetId) {
+    if (user.balances == null ||
+        user.balances.positions.length == 0 ||
+        assetId == null) {
       return null;
     }
     List<Position> positions = user.balances.positions.where((position) {
-      return position.assetName == name;
+      return position.assetId == assetId;
     }).toList();
     return positions.isEmpty ? null : positions.first;
   }
@@ -72,29 +74,38 @@ class UserManager extends BaseModel {
 
   Future<bool> loginWithPrivateKey(
       {bool bonusEvent, String accountName}) async {
-    TestAccountResponseModel testAccount = bonusEvent
-        ? await _api.getTestAccount(
-            bonusEvent: bonusEvent, accountName: accountName)
-        : (_pref.getTestAccount() ??
-            await _api.getTestAccount(
-                bonusEvent: bonusEvent, accountName: accountName));
+    TestAccountResponseModel testAccount = _pref.getTestAccount() ??
+        await _api.getTestAccount(
+            bonusEvent: bonusEvent, accountName: accountName);
     if (testAccount != null) {
       try {
-        await locator.get<BBBAPI>().setTestNet(isTestNet: true);
+        await locator.get<BBBAPI>().setAction(action: "test");
+        await locator.get<RefManager>().updateRefData();
+        await locator.get<RefManager>().updateContract();
+        locator.get<RefManager>().updateUpContractId();
+        locator.get<RefManager>().updateDownContractId();
+        await fetchBalances(name: testAccount.name);
+        if (user.balances.positions
+                .firstWhere((position) =>
+                    position.assetId ==
+                    locator
+                        .get<RefManager>()
+                        .refDataControllerNew
+                        .value
+                        ?.bbbAssetId)
+                .quantity ==
+            null) {
+          testAccount = await _api.getTestAccount(
+              bonusEvent: bonusEvent, accountName: accountName);
+          await fetchBalances(name: testAccount.name);
+        }
         await unlockWithPrivKey(testAccount: testAccount);
         user.testAccountResponseModel = testAccount;
-        user.loginType =
-            testAccount.accountType >= 1 ? LoginType.reward : LoginType.test;
-        user.name = testAccount.accountName;
+        user.loginType = LoginType.test;
+        user.name = testAccount.name;
         _pref.saveLoginType(loginType: user.loginType);
-        testAccount.accountType >= 1
-            ? _pref.saveRewardAccount(testAccount: testAccount)
-            : _pref.saveTestAccount(testAccount: testAccount);
+        _pref.saveTestAccount(testAccount: testAccount);
         _pref.saveUserName(name: user.name);
-        fetchBalances(name: user.name);
-        locator.get<MarketManager>().cancelAndRemoveData();
-        locator.get<MarketManager>().loadAllData("BXBT");
-        locator.get<HomeViewModel>().getRankingList();
         notifyListeners();
         return true;
       } catch (error) {
@@ -104,9 +115,22 @@ class UserManager extends BaseModel {
     return false;
   }
 
+  Future<bool> loginReward({String action}) async {
+    await locator.get<BBBAPI>().setAction(action: action);
+    await locator.get<RefManager>().updateRefData();
+    await locator.get<RefManager>().updateContract();
+    locator.get<RefManager>().updateUpContractId();
+    locator.get<RefManager>().updateDownContractId();
+    user.loginType = LoginType.reward;
+    _pref.saveLoginType(loginType: user.loginType);
+    fetchBalances(name: user.name);
+    notifyListeners();
+    return true;
+  }
+
   unlockWithPrivKey({TestAccountResponseModel testAccount}) async {
     try {
-      await CybexFlutterPlugin.setDefaultPrivKey(testAccount.privateKey);
+      await CybexFlutterPlugin.setDefaultPrivKey(testAccount.privkey);
     } catch (error) {
       throw error.toString();
     }
@@ -159,8 +183,16 @@ class UserManager extends BaseModel {
   }
 
   getDepositAddress({String name, String asset}) async {
-    DepositResponseModel deposit =
-        await _api.getDeposit(name: name, asset: asset);
+    String expiration =
+        (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000).toString();
+    String sig =
+        await CybexFlutterPlugin.signMessageOperation(expiration + name);
+    sig = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
+    String authorization = "bearer $expiration.$name.$sig";
+    DepositResponseModel deposit = await locator
+        .get<GatewayApi>()
+        .getDepositAddress(
+            user: name, asset: asset, authorization: authorization);
     if (deposit != null) {
       user.deposit = deposit;
       notifyListeners();
@@ -244,11 +276,12 @@ class UserManager extends BaseModel {
   }
 
   logoutTestAccount() async {
-    if (user.testAccountResponseModel.accountType >= 1) {
-      _pref.removeRewardAccount();
-    }
     user.testAccountResponseModel = null;
-    await locator<BBBAPI>().setTestNet(isTestNet: false);
+    await locator<BBBAPI>().setAction(action: "main");
+    await locator.get<RefManager>().updateRefData();
+    await locator.get<RefManager>().updateContract();
+    locator.get<RefManager>().updateUpContractId();
+    locator.get<RefManager>().updateDownContractId();
     if (user.account != null) {
       user.loginType = LoginType.cloud;
       _pref.saveLoginType(loginType: LoginType.cloud);
@@ -263,9 +296,21 @@ class UserManager extends BaseModel {
       user.balances = null;
     }
     locator.get<HomeViewModel>().getRankingList();
-    locator.get<RefManager>().refreshRefData();
-    locator.get<MarketManager>().cancelAndRemoveData();
-    locator.get<MarketManager>().loadAllData(null);
+    notifyListeners();
+  }
+
+  logOutRewardAccount() async {
+    await locator<BBBAPI>().setAction(action: "main");
+    locator.get<HomeViewModel>().getRankingList();
+    await locator.get<RefManager>().updateRefData();
+    await locator.get<RefManager>().updateContract();
+    locator.get<RefManager>().updateUpContractId();
+    locator.get<RefManager>().updateDownContractId();
+    user.loginType = LoginType.cloud;
+    _pref.saveLoginType(loginType: LoginType.cloud);
+    user.name = user.account.name;
+    _pref.saveUserName(name: user.account.name);
+    fetchBalances(name: user.name);
     notifyListeners();
   }
 

@@ -4,7 +4,6 @@ import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -48,9 +47,9 @@ class MarketViewModel extends BaseModel {
     setBusy(false);
   }
 
-  changeDuration(MarketDuration marketDuration) {
+  changeDuration(MarketDuration marketDuration, {int time}) {
     _mtm.cleanData();
-    _mtm.loadAllData("BXBT", marketDuration: marketDuration);
+    _mtm.loadAllData("BXBT", marketDuration: marketDuration, time: time);
     if (marketDuration == MarketDuration.line) {
       this.marketDuration = marketDuration;
       seedToCurrent();
@@ -83,8 +82,7 @@ class MarketViewModel extends BaseModel {
     }
   }
 
-  supplyDataWithTrade(
-      List<TickerData> data, OrderViewModel vm, Contract contract) {
+  supplyDataWithTrade(List<TickerData> data, OrderViewModel vm, bool isOrder) {
     final order = vm.getCurrentOrder();
     if (order != null && data != null && data.isNotEmpty) {
       suppleData = SuppleData(
@@ -93,19 +91,17 @@ class MarketViewModel extends BaseModel {
           takeProfit: order.takeProfitPx,
           cutOff: order.cutLossPx,
           underOrder: order.boughtPx + order.commission);
-      if (contract != null &&
-          contract.conversionRate > double.minPositive &&
+      if (isOrder &&
+          order.contractId.contains("N") &&
           (data.last.value > order.takeProfitPx ||
               data.last.value < order.cutLossPx) &&
-          (order.takeProfitPx != 0 &&
-              order.cutLossPx != contract.strikeLevel)) {
+          (order.takeProfitPx != 0 && order.cutLossPx != order.strikePx)) {
         vm.getOrders();
-      } else if (contract != null &&
-          contract.conversionRate < 0 &&
+      } else if (isOrder &&
+          order.contractId.contains("X") &&
           (data.last.value < order.takeProfitPx ||
               data.last.value > order.cutLossPx) &&
-          (order.takeProfitPx != 0 &&
-              order.cutLossPx != contract.strikeLevel)) {
+          (order.takeProfitPx != 0 && order.cutLossPx != order.strikePx)) {
         vm.getOrders();
       }
     } else {

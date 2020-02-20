@@ -4,8 +4,8 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -111,10 +111,10 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
       elevation: 0,
     );
     return ChangeNotifierProvider(
-      builder: (context) {
+      create: (context) {
         var vm = locator<TradeViewModel>();
         vm.initForm(params.isUp);
-        vm.fetchPostion(name: AssetName.NXUSDT);
+        vm.fetchPostion();
         return vm;
       },
       child: GestureDetector(
@@ -147,8 +147,8 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                         bottom: 10,
                                         right: 15,
                                         left: 15),
-                                    child: Consumer2<TickerData,
-                                        RefContractResponseModel>(
+                                    child:
+                                        Consumer2<TickerData, ContractResponse>(
                                       builder:
                                           (context, current, refdata, child) {
                                         Contract refreshContract =
@@ -197,9 +197,9 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                     child: MultiProvider(
                                       providers: [
                                         StreamProvider(
-                                            builder: (context) => mtm.prices),
+                                            create: (context) => mtm.prices),
                                         StreamProvider(
-                                            builder: (context) =>
+                                            create: (context) =>
                                                 mtm.lastTicker.stream)
                                       ],
                                       child: Container(
@@ -300,7 +300,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   }
 
   onConfirmClicked({TradeViewModel model}) {
-    if (locator.get<UserManager>().user.testAccountResponseModel == null &&
+    if (locator.get<UserManager>().user.loginType == LoginType.cloud &&
         model.orderForm.cybBalance.quantity <
             (AssetDef.cybTransfer.amount / 100000)) {
       showNotification(context, true, I18n.of(context).noFeeError);
@@ -357,10 +357,10 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
     try {
       PostOrderResponseModel postOrderResponseModel = await model.postOrder();
       Navigator.of(context).pop();
-      if (postOrderResponseModel.status == "Failed") {
-        showNotification(context, true, postOrderResponseModel.errorMesage);
+      if (postOrderResponseModel.code != 0) {
+        showNotification(context, true, postOrderResponseModel.msg);
       } else {
-        await model.fetchPostion(name: AssetName.NXUSDT);
+        await model.fetchPostion();
         showNotification(context, false, I18n.of(context).successToast,
             callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);

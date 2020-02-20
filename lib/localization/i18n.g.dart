@@ -30,8 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerErrorMessageOnlyContainLetter =
-      'register_error_message_only_contain_letter';
+  static final String registerWarningText = 'register_warning_text';
 
   static final String transfer = 'transfer';
 
@@ -191,7 +190,8 @@ class _$Keys {
   static final String registerErrorMessageDashEnd =
       'register_error_message_dash_end';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerErrorMessageOnlyContainLetter =
+      'register_error_message_only_contain_letter';
 
   static final String registerErrorMessageAccountHasAlreadyExist =
       'register_error_message_account_has_already_exist';
@@ -205,7 +205,7 @@ class _$Keys {
   static final String registerErrorMessageTooLong =
       'register_error_message_too_long';
 
-  static final String registerWarningText = 'register_warning_text';
+  static final String assetCat = 'asset_cat';
 
   static final String accountLogInError = 'account_log_in_error';
 
@@ -252,6 +252,8 @@ class _$Keys {
   static final String cutLossCloseOut = 'cut_loss_close_out';
 
   static final String userCloseOut = 'user_close_out';
+
+  static final String timeOverCloseOut = 'time_over_close_out';
 
   static final String inviteFriend = 'invite_friend';
 
@@ -355,7 +357,7 @@ class _$Keys {
 
   static final String noFeeError = 'no_fee_error';
 
-  static final String exchange24Low = 'exchange_24_low';
+  static final String savePhotoSuccess = 'save_photo_success';
 
   static final String savePhotoFail = 'save_photo_fail';
 
@@ -371,7 +373,7 @@ class _$Keys {
 
   static final String helpCenter = 'help_center';
 
-  static final String rewardAccount = 'reward_account';
+  static final String exchange24Low = 'exchange_24_low';
 
   static final String quitReward = 'quit_reward';
 
@@ -407,13 +409,29 @@ class _$Keys {
 
   static final String suspend = 'suspend';
 
+  static final String error1000 = 'error_1000';
+
   static final String error1001 = 'error_1001';
 
   static final String error1002 = 'error_1002';
 
+  static final String error1003 = 'error_1003';
+
   static final String error1004 = 'error_1004';
 
   static final String error1005 = 'error_1005';
+
+  static final String error1006 = 'error_1006';
+
+  static final String error1007 = 'error_1007';
+
+  static final String error1008 = 'error_1008';
+
+  static final String error1009 = 'error_1009';
+
+  static final String error1010 = 'error_1010';
+
+  static final String error1011 = 'error_1011';
 
   static final String error1013 = 'error_1013';
 
@@ -465,6 +483,16 @@ class _$Keys {
 
   static final String error1038 = 'error_1038';
 
+  static final String error4000 = 'error_4000';
+
+  static final String error4001 = 'error_4001';
+
+  static final String error4002 = 'error_4002';
+
+  static final String error4003 = 'error_4003';
+
+  static final String error4004 = 'error_4004';
+
   static final String forum = 'forum';
 
   static final String astrology = 'astrology';
@@ -509,7 +537,7 @@ class _$Keys {
 
   static final String exchange24High = 'exchange_24_high';
 
-  static final String savePhotoSuccess = 'save_photo_success';
+  static final String rewardAccount = 'reward_account';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -530,8 +558,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerErrorMessageOnlyContainLetter =>
-      this._translate(_$Keys.registerErrorMessageOnlyContainLetter);
+  String get registerWarningText => this._translate(_$Keys.registerWarningText);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -617,7 +644,8 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.registerErrorMessageShouldNotContainContinuesDash);
   String get registerErrorMessageDashEnd =>
       this._translate(_$Keys.registerErrorMessageDashEnd);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerErrorMessageOnlyContainLetter =>
+      this._translate(_$Keys.registerErrorMessageOnlyContainLetter);
   String get registerErrorMessageAccountHasAlreadyExist =>
       this._translate(_$Keys.registerErrorMessageAccountHasAlreadyExist);
   String get registerErrorMessagePasswordChecker =>
@@ -626,7 +654,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.registerErrorMessagePasswordConfirm);
   String get registerErrorMessageTooLong =>
       this._translate(_$Keys.registerErrorMessageTooLong);
-  String get registerWarningText => this._translate(_$Keys.registerWarningText);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get accountLogInError => this._translate(_$Keys.accountLogInError);
   String get accountLogOut => this._translate(_$Keys.accountLogOut);
   String get updatedDate => this._translate(_$Keys.updatedDate);
@@ -651,6 +679,7 @@ abstract class _$I18nHelper {
   String get takeProfitCloseOut => this._translate(_$Keys.takeProfitCloseOut);
   String get cutLossCloseOut => this._translate(_$Keys.cutLossCloseOut);
   String get userCloseOut => this._translate(_$Keys.userCloseOut);
+  String get timeOverCloseOut => this._translate(_$Keys.timeOverCloseOut);
   String get inviteFriend => this._translate(_$Keys.inviteFriend);
   String get inviteTopRank => this._translate(_$Keys.inviteTopRank);
   String get inviteReward => this._translate(_$Keys.inviteReward);
@@ -711,7 +740,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.transferErrorMessageBbbNotEnough);
   String get transferNow => this._translate(_$Keys.transferNow);
   String get noFeeError => this._translate(_$Keys.noFeeError);
-  String get exchange24Low => this._translate(_$Keys.exchange24Low);
+  String get savePhotoSuccess => this._translate(_$Keys.savePhotoSuccess);
   String get savePhotoFail => this._translate(_$Keys.savePhotoFail);
   String get requestPermissionTitle =>
       this._translate(_$Keys.requestPermissionTitle);
@@ -721,7 +750,7 @@ abstract class _$I18nHelper {
   String get profitAndLoss => this._translate(_$Keys.profitAndLoss);
   String get toastNoContract => this._translate(_$Keys.toastNoContract);
   String get helpCenter => this._translate(_$Keys.helpCenter);
-  String get rewardAccount => this._translate(_$Keys.rewardAccount);
+  String get exchange24Low => this._translate(_$Keys.exchange24Low);
   String get quitReward => this._translate(_$Keys.quitReward);
   String get changeToReward => this._translate(_$Keys.changeToReward);
   String get depositParagraph => this._translate(_$Keys.depositParagraph);
@@ -740,10 +769,18 @@ abstract class _$I18nHelper {
   String get connectToMobile => this._translate(_$Keys.connectToMobile);
   String get noConnection => this._translate(_$Keys.noConnection);
   String get suspend => this._translate(_$Keys.suspend);
+  String get error1000 => this._translate(_$Keys.error1000);
   String get error1001 => this._translate(_$Keys.error1001);
   String get error1002 => this._translate(_$Keys.error1002);
+  String get error1003 => this._translate(_$Keys.error1003);
   String get error1004 => this._translate(_$Keys.error1004);
   String get error1005 => this._translate(_$Keys.error1005);
+  String get error1006 => this._translate(_$Keys.error1006);
+  String get error1007 => this._translate(_$Keys.error1007);
+  String get error1008 => this._translate(_$Keys.error1008);
+  String get error1009 => this._translate(_$Keys.error1009);
+  String get error1010 => this._translate(_$Keys.error1010);
+  String get error1011 => this._translate(_$Keys.error1011);
   String get error1013 => this._translate(_$Keys.error1013);
   String get error1014 => this._translate(_$Keys.error1014);
   String get error1016 => this._translate(_$Keys.error1016);
@@ -769,6 +806,11 @@ abstract class _$I18nHelper {
   String get error1036 => this._translate(_$Keys.error1036);
   String get error1037 => this._translate(_$Keys.error1037);
   String get error1038 => this._translate(_$Keys.error1038);
+  String get error4000 => this._translate(_$Keys.error4000);
+  String get error4001 => this._translate(_$Keys.error4001);
+  String get error4002 => this._translate(_$Keys.error4002);
+  String get error4003 => this._translate(_$Keys.error4003);
+  String get error4004 => this._translate(_$Keys.error4004);
   String get forum => this._translate(_$Keys.forum);
   String get astrology => this._translate(_$Keys.astrology);
   String get blockchainVip => this._translate(_$Keys.blockchainVip);
@@ -793,5 +835,5 @@ abstract class _$I18nHelper {
   String get accountToUseReward => this._translate(_$Keys.accountToUseReward);
   String get exchangeChangeRatio => this._translate(_$Keys.exchangeChangeRatio);
   String get exchange24High => this._translate(_$Keys.exchange24High);
-  String get savePhotoSuccess => this._translate(_$Keys.savePhotoSuccess);
+  String get rewardAccount => this._translate(_$Keys.rewardAccount);
 }

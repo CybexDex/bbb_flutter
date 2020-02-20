@@ -1,61 +1,67 @@
-import 'dart:convert';
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
 
 class PositionsResponseModel {
   String accountName;
   List<Position> positions;
-  DateTime time;
 
   PositionsResponseModel({
     this.accountName,
     this.positions,
-    this.time,
   });
 
-  factory PositionsResponseModel.fromRawJson(String str) =>
-      PositionsResponseModel.fromJson(json.decode(str));
+  factory PositionsResponseModel.fromJson(jsonRes) {
+    if (jsonRes == null) return null;
 
-  String toRawJson() => json.encode(toJson());
-
-  factory PositionsResponseModel.fromJson(Map<String, dynamic> json) =>
-      new PositionsResponseModel(
-        accountName: json["accountName"],
-        positions: new List<Position>.from(
-            json["positions"].map((x) => Position.fromJson(x))),
-        time: DateTime.parse(json["time"]),
-      );
+    List<Position> positions = jsonRes['positions'] is List ? [] : null;
+    if (positions != null) {
+      for (var item in jsonRes['positions']) {
+        if (item != null) {
+          positions.add(Position.fromJson(item));
+        }
+      }
+    }
+    return PositionsResponseModel(
+      accountName: convertValueByType(jsonRes['accountName'], String,
+          stack: "Root-accountName"),
+      positions: positions,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "accountName": accountName,
-        "positions": new List<dynamic>.from(positions.map((x) => x.toJson())),
-        "time": time.toIso8601String(),
+        'accountName': accountName,
+        'positions': positions,
       };
+  @override
+  String toString() {
+    return json.encode(this);
+  }
 }
 
 class Position {
-  String assetName;
   String assetId;
   double quantity;
 
   Position({
-    this.assetName,
     this.assetId,
     this.quantity,
   });
 
-  factory Position.fromRawJson(String str) =>
-      Position.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Position.fromJson(Map<String, dynamic> json) => new Position(
-        assetName: json["assetName"],
-        assetId: json["assetId"],
-        quantity: json["quantity"].toDouble(),
-      );
+  factory Position.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : Position(
+          assetId: convertValueByType(jsonRes['assetId'], String,
+              stack: "Positions-assetId"),
+          quantity: jsonRes['quantity'],
+        );
 
   Map<String, dynamic> toJson() => {
-        "assetName": assetName,
-        "assetId": assetId,
-        "quantity": quantity,
+        'assetId': assetId,
+        'quantity': quantity,
       };
+  @override
+  String toString() {
+    return json.encode(this);
+  }
 }

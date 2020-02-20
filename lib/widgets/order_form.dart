@@ -1,6 +1,6 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'istep.dart';
 
@@ -30,7 +30,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<TradeViewModel, UserManager, RefContractResponseModel>(
+    return Consumer3<TradeViewModel, UserManager, ContractResponse>(
         builder: (context, model, userModel, refData, child) {
       Contract refreshContract = model.contract;
       return Container(

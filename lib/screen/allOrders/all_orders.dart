@@ -236,7 +236,7 @@ class AllOrderState extends State<AllOrdersPage> {
       Navigator.of(context).pop();
 
       for (var i in postOrderResponseList) {
-        if (i.status == "Failed") {
+        if (i.code != 0) {
           failCount++;
         } else {
           sucessCount++;

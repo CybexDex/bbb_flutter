@@ -1,11 +1,11 @@
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
-import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
-import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class AccountViewModel extends BaseModel {
@@ -16,6 +16,7 @@ class AccountViewModel extends BaseModel {
   bool hasBonus = false;
   bool showAmount = true;
   Position bounusAccountBalance = Position(quantity: 0);
+  String action;
 
   AccountViewModel({BBBAPI bbbapi, GatewayApi gatewayApi})
       : _bbbapi = bbbapi,
@@ -38,14 +39,24 @@ class AccountViewModel extends BaseModel {
   }
 
   checkRewardAccount({String accountName, bool bonusEvent}) async {
-    TestAccountResponseModel testAccount = await _bbbapi.getTestAccount(
-        accountName: accountName, bonusEvent: bonusEvent);
-    hasBonus = testAccount != null;
-    if (hasBonus) {
-      PositionsResponseModel positionsResponseModel =
-          await _bbbapi.getPositionsTestAccount(name: testAccount.accountName);
-      bounusAccountBalance =
-          _fetchPositionFrom(AssetName.NXUSDT, positionsResponseModel);
+    await locator.get<RefManager>().getActions();
+    action = locator
+        .get<RefManager>()
+        .actions
+        .firstWhere((i) => i.name.contains("reward"), orElse: () => null)
+        ?.name;
+    if (action == null) {
+      hasBonus = false;
+    } else {
+      PositionsResponseModel testAccountPosition =
+          await _bbbapi.getPositions(name: accountName, injectAction: action);
+      RefDataResponse refDataResponse =
+          await _bbbapi.getRefDataNew(injectAction: action);
+      hasBonus = testAccountPosition.positions.first.quantity != null;
+      if (hasBonus) {
+        bounusAccountBalance =
+            _fetchPositionFrom(refDataResponse.bbbAssetId, testAccountPosition);
+      }
     }
     setBusy(false);
   }
@@ -56,14 +67,14 @@ class AccountViewModel extends BaseModel {
   }
 
   Position _fetchPositionFrom(
-      String name, PositionsResponseModel positionsResponseModel) {
+      String assetid, PositionsResponseModel positionsResponseModel) {
     if (positionsResponseModel == null ||
         positionsResponseModel.positions.length == 0) {
       return null;
     }
     List<Position> positions =
         positionsResponseModel.positions.where((position) {
-      return position.assetName == name;
+      return position.assetId == assetid;
     }).toList();
     return positions.isEmpty ? null : positions.first;
   }

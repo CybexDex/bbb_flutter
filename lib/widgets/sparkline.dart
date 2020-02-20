@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:ui' as dui;
 
 import 'package:bbb_flutter/helper/common_utils.dart';
-import 'package:bbb_flutter/models/response/websocket_percentage_response.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,6 @@ class Sparkline extends StatelessWidget {
     @required this.data,
     @required this.startTime,
     @required this.endTime,
-    @required this.percentage,
     this.startLineOfTime,
     this.suppleData,
     this.timeLineGap = const Duration(minutes: 5),
@@ -76,7 +74,6 @@ class Sparkline extends StatelessWidget {
         fontSize: 10.0,
         fontWeight: FontWeight.normal),
   })  : assert(data != null),
-        assert(percentage != null),
         assert(startTime != null),
         assert(endTime != null),
         assert(lineWidth != null),
@@ -91,7 +88,6 @@ class Sparkline extends StatelessWidget {
   DateTime endTime;
   DateTime startLineOfTime;
   SuppleData suppleData;
-  WebSocketPercentageResponse percentage;
 
   final Duration timeLineGap;
   final double marginSpace;

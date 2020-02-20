@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/transfer_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -192,16 +193,24 @@ class _TransferState extends State<TransferPage> {
                                             .orderFormInputPositiveNumberError,
                                         style: StyleFactory.errorMessageText);
                                   } else if (model.transferForm.totalAmount
-                                              .symbol ==
-                                          AssetName.USDT ||
+                                              .assetId ==
+                                          locator
+                                              .get<RefManager>()
+                                              .refDataControllerNew
+                                              .value
+                                              .cybexAssetId ||
                                       !model.transferForm.fromBBBToCybex) {
                                     return Text(
                                         I18n.of(context)
                                             .transferErrorMessageCybNotEnough,
                                         style: StyleFactory.errorMessageText);
                                   } else if (model.transferForm.totalAmount
-                                              .symbol ==
-                                          AssetName.NXUSDT ||
+                                              .assetId ==
+                                          locator
+                                              .get<RefManager>()
+                                              .refDataControllerNew
+                                              .value
+                                              .bbbAssetId ||
                                       model.transferForm.fromBBBToCybex) {
                                     return Text(
                                         I18n.of(context)
@@ -286,8 +295,8 @@ class _TransferState extends State<TransferPage> {
     try {
       PostOrderResponseModel responseModel = await model.postTransfer();
       Navigator.of(context).pop();
-      if (responseModel.status == "Failed") {
-        showNotification(context, true, responseModel.errorMesage);
+      if (responseModel.code != 0) {
+        showNotification(context, true, responseModel.msg);
       } else {
         showNotification(context, false, I18n.of(context).successToast);
         model.getCurrentBalance();

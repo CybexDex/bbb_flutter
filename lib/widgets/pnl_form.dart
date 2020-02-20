@@ -49,23 +49,21 @@ class _PnlFormState extends State<PnlForm> {
               mtm: locator.get(),
               refm: locator.get()),
           onModelReady: (model) {
-            final contract = model.currentContract(widget._order);
-
             model.takeProfit = widget._order.takeProfitPx == 0
                 ? null
                 : OrderCalculate.getTakeProfit(
                     widget._order.takeProfitPx,
                     widget._order.boughtPx,
-                    contract.strikeLevel,
-                    contract.conversionRate > 0);
+                    widget._order.strikePx,
+                    widget._order.contractId.contains("N"));
 
-            model.cutLoss = widget._order.cutLossPx == contract.strikeLevel
+            model.cutLoss = widget._order.cutLossPx == widget._order.strikePx
                 ? null
                 : OrderCalculate.getCutLoss(
                     widget._order.cutLossPx,
                     widget._order.boughtPx,
-                    contract.strikeLevel,
-                    contract.conversionRate > 0);
+                    widget._order.strikePx,
+                    widget._order.contractId.contains("N"));
             model.cutLossPx = widget._order.cutLossPx;
             model.takeProfitPx = widget._order.takeProfitPx;
 
@@ -73,12 +71,7 @@ class _PnlFormState extends State<PnlForm> {
                 orderQtyContract: widget._order.qtyContract,
                 orderBoughtContractPx: widget._order.boughtContractPx);
 
-            model.pnlPercent = (100 *
-                    ((widget._order.pnl +
-                            widget._order.commission +
-                            widget._order.accruedInterest) /
-                        invest))
-                .abs();
+            model.pnlPercent = (100 * ((widget._order.pnl) / invest)).abs();
 
             _cutLossController.text = model.cutLoss == null
                 ? I18n.of(context).stepWidgetNotSetHint
@@ -87,9 +80,10 @@ class _PnlFormState extends State<PnlForm> {
                 ? I18n.of(context).stepWidgetNotSetHint
                 : model.takeProfit.round().toStringAsFixed(0);
 
-            _cutLossPxController.text = model.cutLossPx == contract.strikeLevel
-                ? I18n.of(context).stepWidgetNotSetHint
-                : model.cutLossPx.round().toStringAsFixed(0);
+            _cutLossPxController.text =
+                model.cutLossPx == widget._order.strikePx
+                    ? I18n.of(context).stepWidgetNotSetHint
+                    : model.cutLossPx.round().toStringAsFixed(0);
             _takeProfitPxController.text = model.takeProfitPx == 0
                 ? I18n.of(context).stepWidgetNotSetHint
                 : model.takeProfitPx.round().toStringAsFixed(0);
@@ -215,18 +209,10 @@ class _PnlFormState extends State<PnlForm> {
 
   onClickConfirm({PnlViewModel model}) {
     bool isPercentShouldShowDialog = (model.takeProfit != null &&
-            ((model.pnlPercent > model.takeProfit &&
-                    widget._order.pnl +
-                            widget._order.commission +
-                            widget._order.accruedInterest >
-                        0) ||
+            ((model.pnlPercent > model.takeProfit && widget._order.pnl > 0) ||
                 model.takeProfit < 0)) ||
         (model.cutLoss != null &&
-            ((model.pnlPercent > model.cutLoss &&
-                    widget._order.pnl +
-                            widget._order.commission +
-                            widget._order.accruedInterest <
-                        0) ||
+            ((model.pnlPercent > model.cutLoss && widget._order.pnl < 0) ||
                 (model.cutLoss < 0)));
     if ((isPercentShouldShowDialog)) {
       showDialog(
@@ -240,25 +226,22 @@ class _PnlFormState extends State<PnlForm> {
             });
           }).then((onValue) {
         if (onValue) {
-          _onClickSubmit(context: context, model: model);
+          _onClickSubmit(context: context, model: model, execute: true);
         }
       });
     } else {
-      _onClickSubmit(context: context, model: model);
+      _onClickSubmit(context: context, model: model, execute: false);
     }
   }
 
-  callAmend(
-    BuildContext context,
-    PnlViewModel model,
-  ) async {
+  callAmend(BuildContext context, PnlViewModel model, {bool execute}) async {
     try {
       showLoading(context);
       PostOrderResponseModel postOrderResponseModel =
-          await model.amend(widget._order, false, currentSegment == 0);
+          await model.amend(widget._order, execute, currentSegment == 0);
       Navigator.of(context).pop();
-      if (postOrderResponseModel.status == "Failed") {
-        showNotification(context, true, postOrderResponseModel.errorMesage);
+      if (postOrderResponseModel.code != 0) {
+        showNotification(context, true, postOrderResponseModel.msg);
       } else {
         showNotification(context, false, I18n.of(context).successToast,
             callback: widget._callback);
@@ -269,7 +252,7 @@ class _PnlFormState extends State<PnlForm> {
     }
   }
 
-  _onClickSubmit({BuildContext context, PnlViewModel model}) {
+  _onClickSubmit({BuildContext context, PnlViewModel model, bool execute}) {
     TextEditingController controller = TextEditingController();
     if (locator.get<UserManager>().user.isLocked) {
       showDialog(
@@ -278,11 +261,11 @@ class _PnlFormState extends State<PnlForm> {
             return DialogFactory.unlockDialog(context, controller: controller);
           }).then((value) async {
         if (value) {
-          callAmend(context, model);
+          callAmend(context, model, execute: execute);
         }
       });
     } else {
-      callAmend(context, model);
+      callAmend(context, model, execute: execute);
     }
   }
 }

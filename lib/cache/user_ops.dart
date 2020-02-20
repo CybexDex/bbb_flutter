@@ -10,7 +10,7 @@ UserEntity loadUserFromCache(SharedPref pref) {
       loginType: pref.getLoginType(),
       permission: null,
       unlockType: UnlockType.cloud,
-      testAccountResponseModel: pref.getTestNet()
+      testAccountResponseModel: pref.getAction() == "test"
           ? pref.getLoginType() == LoginType.reward
               ? pref.getRewardAccount()
               : pref.getTestAccount()

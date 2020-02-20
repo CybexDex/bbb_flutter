@@ -28,7 +28,7 @@ class DataUtil {
       ma5 = data.ma5Price * 5;
       ma10 = data.ma10Price * 10;
       ma20 = data.ma20Price * 20;
-      ma30 = data.ma30Price * 30;
+      ma30 = data.ma30Price == 0 ? data.close * 30 : data.ma30Price * 30;
 //      ma60 = data.MA60Price * 60;
     }
     for (; i < dataList.length; i++) {
@@ -72,6 +72,9 @@ class DataUtil {
       } else {
         entity.ma30Price = 0;
       }
+      // print("$ma30 -------$i");
+      // print("${entity.ma30Price} --------$i");
+
 //      if (i == 59) {
 //        entity.MA60Price = ma60 / 60;
 //      } else if (i >= 60) {

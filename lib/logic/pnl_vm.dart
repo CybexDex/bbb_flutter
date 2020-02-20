@@ -1,14 +1,13 @@
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
-import 'package:bbb_flutter/helper/asset_utils.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:logger/logger.dart';
@@ -39,65 +38,55 @@ class PnlViewModel extends BaseModel {
     _refm = refm;
   }
 
-  Contract currentContract(OrderResponseModel order) {
-    return _refm.getContractFromId(order.contractId);
-  }
+  // Contract currentContract(OrderResponseModel order) {
+  //   return _refm.getContractFromId(order.contractId);
+  // }
 
   Future<PostOrderResponseModel> amend(
       OrderResponseModel order, bool execNow, bool amendByPrice) async {
     if (_um.user.testAccountResponseModel != null) {
       CybexFlutterPlugin.setDefaultPrivKey(
-          _um.user.testAccountResponseModel.privateKey);
+          _um.user.testAccountResponseModel.privkey);
     }
-    final ticker = _mtm.lastTicker.value;
-    int epochTime = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
-    final contract = currentContract(order);
+    int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
-    final model = AmendOrderRequestModel();
-    model.transactionType = "NxAmend";
-    if (!amendByPrice) {
-      model.cutLossPx = execNow
-          ? order.cutLossPx.toStringAsFixed(4)
-          : (cutLoss == null
-              ? contract.strikeLevel.toStringAsFixed(4)
-              : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
-                      contract.strikeLevel, contract.conversionRate > 0)
-                  .toStringAsFixed(4));
-      model.takeProfitPx = execNow
-          ? order.takeProfitPx.toStringAsFixed(4)
-          : (takeProfit == null
-              ? "0"
-              : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
-                      contract.strikeLevel, contract.conversionRate > 0)
-                  .toStringAsFixed(4));
-    } else {
-      model.cutLossPx = cutLossPx.toStringAsFixed(4);
-      model.takeProfitPx = takeProfitPx.toStringAsFixed(4);
+    final model = AmendOrderRequestModel(data: Data());
+    model.data.action = locator.get<SharedPref>().getAction();
+    model.data.user = _um.user.testAccountResponseModel != null
+        ? _um.user.testAccountResponseModel.name
+        : _um.user.account.name;
+    model.data.orderId = order.buyOrderTxId;
+    model.data.timeout = expir + 5 * 60;
+    if (!execNow) {
+      if (!amendByPrice) {
+        model.data.cutlossPrice = cutLoss == null
+            ? order.strikePx.toStringAsFixed(4)
+            : OrderCalculate.cutLossPx(cutLoss, order.boughtPx, order.strikePx,
+                    order.contractId.contains("N"))
+                .toStringAsFixed(4);
+        model.data.takeProfitPrice = takeProfit == null
+            ? "0"
+            : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
+                    order.strikePx, order.contractId.contains("N"))
+                .toStringAsFixed(4);
+      } else {
+        model.data.cutlossPrice = cutLossPx.toStringAsFixed(4);
+        model.data.takeProfitPrice = takeProfitPx.toStringAsFixed(4);
+      }
     }
-    model.seller = suffixId(locator.get<SharedPref>().getTestNet()
-        ? _um.user.testAccountResponseModel.accountId
-        : _um.user.account.id);
-    model.refBuyOrderTxId = order.buyOrderTxId;
-    model.execNowPx = ticker.value.toString();
-    model.expiration = execNow
-        ? epochTime
-        : (_um.user.testAccountResponseModel != null &&
-                _um.user.testAccountResponseModel.accountType >= 1
-            ? _um.user.testAccountResponseModel.expiration
-            : 0);
-    model.amendCreationTime = epochTime;
 
-    final sig =
-        await CybexFlutterPlugin.signMessageOperation(model.toStreamString());
-
-    model.signature = sig.replaceAll("\"", "");
-
-    print(model.toRawJson());
+    var data = execNow ? model.data.toCloseJson() : model.data.toJson();
+    String sig = await CybexFlutterPlugin.signMessageOperation(
+        getQueryStringFromJson(data, data.keys.toList()..sort()));
+    model.signature =
+        sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     try {
-      PostOrderResponseModel res = await _api.amendOrder(order: model);
-      locator.get<Logger>().w(res.toRawJson());
+      PostOrderResponseModel res =
+          await _api.amendOrder(order: model, exNow: execNow);
+      locator.get<Logger>().w(res);
       return res;
     } catch (error) {
+      print(error);
       return Future.error(error);
     }
   }
@@ -108,12 +97,8 @@ class PnlViewModel extends BaseModel {
     } else {
       takeProfit += 1;
     }
-    final contract = currentContract(order);
-    takeProfitPx = OrderCalculate.takeProfitPx(
-        takeProfit,
-        order.underlyingSpotPx,
-        contract.strikeLevel,
-        contract.conversionRate > 0);
+    takeProfitPx = OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -121,32 +106,26 @@ class PnlViewModel extends BaseModel {
     if (takeProfit.round() > 0) {
       takeProfit -= 1;
     }
-    final contract = currentContract(order);
     takeProfitPx = takeProfit == null
         ? 0
-        : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
+        : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
+            order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
   void changeTakeProfit({double profit, OrderResponseModel order}) {
     this.takeProfit = profit;
-    final contract = currentContract(order);
     takeProfitPx = profit == null
         ? 0
-        : OrderCalculate.takeProfitPx(takeProfit, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
+        : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
+            order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
   void increaseTakeProfitPx({OrderResponseModel order}) {
     takeProfitPx += 1;
-    final contract = currentContract(order);
-    takeProfit = OrderCalculate.getTakeProfit(
-        takeProfitPx,
-        order.underlyingSpotPx,
-        contract.strikeLevel,
-        contract.conversionRate > 0);
+    takeProfit = OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -154,21 +133,19 @@ class PnlViewModel extends BaseModel {
     if (takeProfitPx.round() > 0) {
       takeProfitPx -= 1;
     }
-    final contract = currentContract(order);
     takeProfit = takeProfitPx == 0
         ? null
-        : OrderCalculate.getTakeProfit(takeProfitPx, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
+        : OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
+            order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
   void changeTakeProfitPx({double profitPrice, OrderResponseModel order}) {
     this.takeProfitPx = profitPrice ?? 0;
-    final contract = currentContract(order);
     takeProfit = takeProfitPx == 0
         ? null
-        : OrderCalculate.getTakeProfit(takeProfitPx, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
+        : OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
+            order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -180,10 +157,9 @@ class PnlViewModel extends BaseModel {
         cutLoss += 1;
       }
     }
-    final contract = currentContract(order);
-    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
-        contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
@@ -195,21 +171,19 @@ class PnlViewModel extends BaseModel {
         cutLoss -= 1;
       }
     }
-    final contract = currentContract(order);
-    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
-        contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
   void changeCutLoss({double cutLoss, OrderResponseModel order}) {
     this.cutLoss = cutLoss;
-    final contract = currentContract(order);
     cutLossPx = cutLoss == null
-        ? contract.strikeLevel
-        : OrderCalculate.cutLossPx(cutLoss, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+        ? order.strikePx
+        : OrderCalculate.cutLossPx(cutLoss, order.boughtPx, order.strikePx,
+            order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
@@ -219,10 +193,9 @@ class PnlViewModel extends BaseModel {
     } else {
       cutLossPx += 1;
     }
-    final contract = currentContract(order);
-    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.underlyingSpotPx,
-        contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
@@ -234,27 +207,25 @@ class PnlViewModel extends BaseModel {
         cutLossPx -= 1;
       }
     }
-    final contract = currentContract(order);
-    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.underlyingSpotPx,
-        contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.boughtPx,
+        order.strikePx, order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
   void changeCutLossPx({double cutLossPx, OrderResponseModel order}) {
-    final contract = currentContract(order);
-    this.cutLossPx = cutLossPx ?? contract.strikeLevel;
-    cutLoss = this.cutLossPx == contract.strikeLevel
+    this.cutLossPx = cutLossPx ?? order.strikePx;
+    cutLoss = this.cutLossPx == order.strikePx
         ? (cutLossPx == null ? null : 100)
-        : OrderCalculate.getCutLoss(this.cutLossPx, order.underlyingSpotPx,
-            contract.strikeLevel, contract.conversionRate > 0);
-    checkIfCutLossCorrect(contract);
+        : OrderCalculate.getCutLoss(this.cutLossPx, order.boughtPx,
+            order.strikePx, order.contractId.contains("N"));
+    checkIfCutLossCorrect(order);
     setBusy(false);
   }
 
-  void checkIfCutLossCorrect(Contract contract) {
-    if ((contract.conversionRate > 0 && cutLossPx < contract.strikeLevel) ||
-        (contract.conversionRate < 0 && cutLossPx > contract.strikeLevel)) {
+  void checkIfCutLossCorrect(OrderResponseModel order) {
+    if ((order.contractId.contains("N") && cutLossPx < order.strikePx) ||
+        (order.contractId.contains("X") && cutLossPx > order.strikePx)) {
       isCutLossCorrect = false;
     } else {
       isCutLossCorrect = true;

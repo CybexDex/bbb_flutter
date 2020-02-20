@@ -87,20 +87,31 @@ class _SettingState extends State<SettingWiget> {
                       onTap: () {
                         if (userManager.user.testAccountResponseModel != null) {
                           showFlashBar(context, false,
-                              content:
-                                  userManager.user.loginType == LoginType.reward
-                                      ? I18n.of(context).quitReward
-                                      : I18n.of(context).changeFromTryEnv,
+                              content: I18n.of(context).changeFromTryEnv,
                               callback: () async {
                             await userManager.logoutTestAccount();
                             locator.get<AccountViewModel>().checkRewardAccount(
                                 accountName: userManager.user.name,
                                 bonusEvent: true);
-                            Navigator.pop(context);
+                            Navigator.of(context).maybePop();
                           });
                         } else {
-                          userManager.logout();
-                          Navigator.pop(context);
+                          if (userManager.user.loginType == LoginType.reward) {
+                            showFlashBar(context, false,
+                                content: I18n.of(context).quitReward,
+                                callback: () async {
+                              await userManager.logOutRewardAccount();
+                              locator
+                                  .get<AccountViewModel>()
+                                  .checkRewardAccount(
+                                      accountName: userManager.user.name,
+                                      bonusEvent: true);
+                              Navigator.of(context).maybePop();
+                            });
+                          } else {
+                            userManager.logout();
+                            Navigator.pop(context);
+                          }
                         }
                       },
                       child: Container(
@@ -110,14 +121,14 @@ class _SettingState extends State<SettingWiget> {
                           child: Center(
                             child: userManager.user.testAccountResponseModel !=
                                     null
-                                ? (userManager.user.loginType ==
+                                ? Text(I18n.of(context).clickToQuit,
+                                    style: StyleNewFactory.yellowOrange18)
+                                : (userManager.user.loginType ==
                                         LoginType.reward
                                     ? Text(I18n.of(context).quitReward,
                                         style: StyleNewFactory.yellowOrange18)
-                                    : Text(I18n.of(context).clickToQuit,
-                                        style: StyleNewFactory.yellowOrange18))
-                                : Text(I18n.of(context).logout,
-                                    style: StyleNewFactory.yellowOrange18),
+                                    : Text(I18n.of(context).logout,
+                                        style: StyleNewFactory.yellowOrange18)),
                           ),
                           decoration: new BoxDecoration(
                               border: Border.all(

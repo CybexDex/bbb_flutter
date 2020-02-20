@@ -1,59 +1,57 @@
 import 'dart:convert';
 
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
+
 class FundRecordModel {
   String accountName;
-  String txId;
-  String type;
-  String status;
-  String debugStatus;
-  String address;
-  String assetName;
-  String assetId;
-  String amount;
-  DateTime lastUpdateTime;
+  String action;
+  String direction;
+  String subtype;
+  double amount;
+  String time;
+  String custom;
 
   FundRecordModel({
     this.accountName,
-    this.txId,
-    this.type,
-    this.status,
-    this.debugStatus,
-    this.address,
-    this.assetName,
-    this.assetId,
+    this.action,
+    this.direction,
+    this.subtype,
     this.amount,
-    this.lastUpdateTime,
+    this.time,
+    this.custom,
   });
 
-  factory FundRecordModel.fromRawJson(String str) =>
-      FundRecordModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory FundRecordModel.fromJson(Map<String, dynamic> json) =>
-      new FundRecordModel(
-        accountName: json["accountName"],
-        txId: json["txId"],
-        type: json["type"],
-        status: json["status"],
-        debugStatus: json["debugStatus"],
-        address: json["address"],
-        assetName: json["assetName"],
-        assetId: json["assetId"],
-        amount: json["amount"],
-        lastUpdateTime: DateTime.parse(json["lastUpdateTime"]),
-      );
+  factory FundRecordModel.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : FundRecordModel(
+          accountName: convertValueByType(jsonRes['accountName'], String,
+              stack: "Root-accountName"),
+          action: convertValueByType(jsonRes['action'], String,
+              stack: "Root-action"),
+          direction: convertValueByType(jsonRes['direction'], String,
+              stack: "Root-direction"),
+          subtype: convertValueByType(jsonRes['subtype'], String,
+              stack: "Root-subtype"),
+          amount: convertValueByType(jsonRes['amount'], double,
+              stack: "Root-amount"),
+          time: convertValueByType(jsonRes['time'], String, stack: "Root-time"),
+          custom: convertValueByType(jsonRes['custom'], String,
+              stack: "Root-custom"),
+        );
 
   Map<String, dynamic> toJson() => {
-        "accountName": accountName,
-        "txId": txId,
-        "type": type,
-        "status": status,
-        "debugStatus": debugStatus,
-        "address": address,
-        "assetName": assetName,
-        "assetId": assetId,
-        "amount": amount,
-        "lastUpdateTime": lastUpdateTime.toIso8601String(),
+        'accountName': accountName,
+        'action': action,
+        'direction': direction,
+        'subtype': subtype,
+        'amount': amount,
+        'time': time,
+        'custom': custom,
       };
+  @override
+  String toString() {
+    return json.encode(this);
+  }
 }

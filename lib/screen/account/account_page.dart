@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
@@ -52,10 +53,11 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      builder: (context) => _accountViewModel,
+      create: (context) => _accountViewModel,
       child: Consumer2<UserManager, AccountViewModel>(
         builder: (context, userManager, accountVm, child) {
-          Position amount = userManager.fetchPositionFrom(AssetName.NXUSDT);
+          Position amount = userManager.fetchPositionFrom(
+              locator.get<RefManager>().refDataControllerNew.value?.bbbAssetId);
           return Scaffold(
             backgroundColor: Palette.appDividerBackgroudGreyColor,
             appBar: AppBar(
@@ -161,7 +163,7 @@ class _AccountPageState extends State<AccountPage> {
                                     children: <Widget>[
                                       accountVm.showAmount
                                           ? Text(
-                                              amount == null
+                                              amount?.quantity == null
                                                   ? "--"
                                                   : "${floor(amount.quantity, 4)}",
                                               style: StyleNewFactory.black26,
@@ -201,12 +203,14 @@ class _AccountPageState extends State<AccountPage> {
                                       showLoading(context);
                                       if (await userManager.loginWithPrivateKey(
                                           bonusEvent: false)) {
-                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
                                         showFlashBar(context, false,
                                             content: I18n.of(context)
                                                 .changeToTryEnv);
                                       } else {
-                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
                                         showFlashBar(context, false,
                                             content: I18n.of(context)
                                                 .changeToTryEnv);
@@ -231,7 +235,7 @@ class _AccountPageState extends State<AccountPage> {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.only(top: 10),
                                 child: Text(
-                                    "活动结束时间: ${DateFormat("yyyy/MM/dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(userManager.user.testAccountResponseModel.expiration * 1000))}",
+                                    "活动结束时间: ${_accountViewModel.action != null ? DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(locator.get<RefManager>().actions.where((value) => value.name.contains("reward")).toList().first.stop)) : "--"}",
                                     style: StyleNewFactory.grey15))
                             : Container(),
                         userManager.user.loginType != LoginType.cloud ||
@@ -248,8 +252,12 @@ class _AccountPageState extends State<AccountPage> {
                                     ),
                                     Text(
                                         _accountViewModel
-                                            .bounusAccountBalance.quantity
-                                            .toStringAsFixed(4),
+                                                    .bounusAccountBalance ==
+                                                null
+                                            ? "--"
+                                            : _accountViewModel
+                                                .bounusAccountBalance.quantity
+                                                .toStringAsFixed(4),
                                         style: StyleNewFactory.yellowOrange18),
                                     Text(
                                       "  ${AssetName.USDT}",
@@ -260,15 +268,23 @@ class _AccountPageState extends State<AccountPage> {
                                 trailing: GestureDetector(
                                   onTap: () async {
                                     showLoading(context);
-                                    if (await userManager.loginWithPrivateKey(
-                                        bonusEvent: true,
-                                        accountName: userManager.user.name)) {
-                                      Navigator.of(context).pop();
+                                    if (await userManager.loginReward(
+                                        action: locator
+                                            .get<RefManager>()
+                                            .actions
+                                            .where((i) =>
+                                                i.name.contains("reward"))
+                                            .toList()
+                                            .first
+                                            .name)) {
+                                      Navigator.of(context)
+                                          .popUntil((route) => route.isFirst);
                                       showFlashBar(context, false,
                                           content:
                                               I18n.of(context).changeToReward);
                                     } else {
-                                      Navigator.of(context).pop();
+                                      Navigator.of(context)
+                                          .popUntil((route) => route.isFirst);
                                       showFlashBar(context, true,
                                           content:
                                               I18n.of(context).changeToReward);
@@ -290,7 +306,8 @@ class _AccountPageState extends State<AccountPage> {
                           thickness: 1,
                           height: 1,
                         ),
-                        userManager.user.testAccountResponseModel == null
+                        userManager.user.loginType == LoginType.cloud ||
+                                userManager.user.loginType == LoginType.none
                             ? Padding(
                                 padding:
                                     const EdgeInsets.fromLTRB(21, 17, 21, 12),
@@ -427,7 +444,8 @@ class _AccountPageState extends State<AccountPage> {
                           thickness: 1,
                           height: 1,
                         ),
-                        userManager.user.testAccountResponseModel == null
+                        userManager.user.loginType == LoginType.cloud ||
+                                userManager.user.loginType == LoginType.none
                             ? ListTile(
                                 trailing: Icon(Icons.keyboard_arrow_right),
                                 title: Text(
@@ -462,7 +480,8 @@ class _AccountPageState extends State<AccountPage> {
                           thickness: 10,
                           height: 1,
                         ),
-                        userManager.user.testAccountResponseModel == null
+                        userManager.user.loginType == LoginType.cloud ||
+                                userManager.user.loginType == LoginType.none
                             ? ListTile(
                                 trailing: Icon(Icons.keyboard_arrow_right),
                                 title: Row(

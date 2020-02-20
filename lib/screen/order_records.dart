@@ -56,13 +56,13 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
     int count = 0;
     for (int i = 0; i < list.length; i++) {
       if (list.length == 1) {
-        var month = DateTime.parse(list[i].lastUpdateTime).toLocal().month;
+        var month = DateTime.parse(list[i].settleTime).toLocal().month;
         map.putIfAbsent(month, () => list);
         break;
       }
       if (i == 0) continue;
-      var current = DateTime.parse(list[i].lastUpdateTime).toLocal().month;
-      var prev = DateTime.parse(list[i - 1].lastUpdateTime).toLocal().month;
+      var current = DateTime.parse(list[i].settleTime).toLocal().month;
+      var prev = DateTime.parse(list[i - 1].settleTime).toLocal().month;
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;

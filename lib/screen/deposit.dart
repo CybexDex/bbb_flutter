@@ -15,9 +15,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
-class DepositPage extends StatelessWidget {
+class DepositPage extends StatefulWidget {
   DepositPage({Key key}) : super(key: key);
 
+  @override
+  _DepositPageState createState() => _DepositPageState();
+}
+
+class _DepositPageState extends State<DepositPage> {
   final GlobalKey _globalKey = GlobalKey();
 
   _capturePng() async {
@@ -55,10 +60,33 @@ class DepositPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    TextEditingController controller = TextEditingController();
     var _bloc = locator<UserManager>();
-    _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
 
+    if (locator.get<UserManager>().user.isLocked) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return DialogFactory.unlockDialog(context,
+                  controller: controller);
+            }).then((value) async {
+          if (value) {
+            _bloc.getDepositAddress(
+                name: _bloc.user.name, asset: AssetName.USDTERC20);
+          }
+        });
+      });
+    } else {
+      _bloc.getDepositAddress(
+          name: _bloc.user.name, asset: AssetName.USDTERC20);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(

@@ -38,6 +38,7 @@ class UserEntity {
   }
 
   bool get isLocked {
-    return keys == null && loginType == LoginType.cloud;
+    return keys == null &&
+        (loginType == LoginType.cloud || loginType == LoginType.reward);
   }
 }

@@ -1,9 +1,8 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/localization/i18n.dart';
-import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
-import 'package:bbb_flutter/models/response/ref_contract_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -17,9 +16,6 @@ class OrderRecordDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final RouteParamsOfTransactionRecords params =
         ModalRoute.of(context).settings.arguments;
-    RefContractResponseModel refData = locator<RefManager>().lastData;
-    Contract currentContract = getCorrespondContract(
-        orderResponse: params.orderResponseModel, refContract: refData);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -35,17 +31,15 @@ class OrderRecordDetail extends StatelessWidget {
         ),
         body: OrderRecordDetailInfo(
           model: params.orderResponseModel,
-          contract: currentContract,
         ));
   }
 
   Contract getCorrespondContract(
-      {OrderResponseModel orderResponse,
-      RefContractResponseModel refContract}) {
-    if (refContract == null) {
+      {OrderResponseModel orderResponse, ContractResponse contractResponse}) {
+    if (contractResponse == null) {
       return null;
     }
-    for (Contract refContractResponseContract in refContract.contract) {
+    for (Contract refContractResponseContract in contractResponse.contract) {
       if (orderResponse.contractId == refContractResponseContract.contractId) {
         return refContractResponseContract;
       }
@@ -57,11 +51,8 @@ class OrderRecordDetail extends StatelessWidget {
 
 class OrderRecordDetailHeader extends StatelessWidget {
   final OrderResponseModel _model;
-  final Contract _contract;
-  OrderRecordDetailHeader(
-      {Key key, OrderResponseModel model, Contract contract})
+  OrderRecordDetailHeader({Key key, OrderResponseModel model})
       : _model = model,
-        _contract = contract,
         super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -102,13 +93,8 @@ class OrderRecordDetailHeader extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                    (_model.pnl + _model.commission + _model.accruedInterest)
-                        .toStringAsFixed(4),
-                    style: (_model.pnl +
-                                _model.commission +
-                                _model.accruedInterest) >
-                            0
+                Text((_model.pnl).toStringAsFixed(4),
+                    style: (_model.pnl) > 0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w600,
@@ -120,10 +106,7 @@ class OrderRecordDetailHeader extends StatelessWidget {
                             fontStyle: FontStyle.normal,
                             fontSize: Dimen.hugLabelFontSize)),
                 Text("   USDT",
-                    style: (_model.pnl +
-                                _model.commission +
-                                _model.accruedInterest) >
-                            0
+                    style: (_model.pnl) > 0
                         ? TextStyle(
                             color: Palette.redOrange,
                             fontWeight: FontWeight.w400,
@@ -161,17 +144,15 @@ class OrderRecordDetailInfo extends StatelessWidget {
   ];
 
   final OrderResponseModel _model;
-  final Contract _contract;
-  OrderRecordDetailInfo({Key key, OrderResponseModel model, Contract contract})
+  OrderRecordDetailInfo({Key key, OrderResponseModel model})
       : _model = model,
-        _contract = contract,
         super(key: key);
   @override
   Widget build(BuildContext context) {
     double takeprofit = OrderCalculate.getTakeProfit(_model.takeProfitPx,
-        _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
+        _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
     double cutLoss = OrderCalculate.getCutLoss(_model.cutLossPx,
-        _model.boughtPx, _contract.strikeLevel, _contract.conversionRate > 0);
+        _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
     double invest = OrderCalculate.calculateInvest(
         orderQtyContract: _model.qtyContract,
         orderBoughtContractPx: _model.boughtContractPx);
@@ -198,7 +179,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                     style: StyleNewFactory.black15);
               case 4:
                 return Text(
-                    "${_contract.conversionRate > 0 ? (_model.boughtPx / (_model.boughtPx - _contract.strikeLevel)).toStringAsFixed(1) : (_model.boughtPx / (_contract.strikeLevel - _model.boughtPx)).toStringAsFixed(1)}",
+                    "${_model.contractId.contains("N") ? (_model.boughtPx / (_model.boughtPx - _model.strikePx)).toStringAsFixed(1) : (_model.boughtPx / (_model.strikePx - _model.boughtPx)).toStringAsFixed(1)}",
                     style: StyleNewFactory.black15);
               case 5:
                 return Text(_model.commission.toStringAsFixed(4),
@@ -207,7 +188,9 @@ class OrderRecordDetailInfo extends StatelessWidget {
                 return Text(_model.accruedInterest.toStringAsFixed(4),
                     style: StyleNewFactory.black15);
               case 7:
-                return Text(_model.pnl.toStringAsFixed(4),
+                return Text(
+                    (_model.pnl - _model.commission - _model.accruedInterest)
+                        .toStringAsFixed(4),
                     style: StyleNewFactory.black15);
 
               case 8:
@@ -221,7 +204,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                     style: StyleNewFactory.black15);
               case 9:
                 return Text(
-                    _model.cutLossPx == _contract.strikeLevel
+                    _model.cutLossPx == _model.strikePx
                         ? I18n.of(context).stepWidgetNotSetHint
                         : _model.cutLossPx.toStringAsFixed(4) +
                             "(" +

@@ -57,12 +57,13 @@ main() async {
 
   Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
   // runApp(MyApp());
+  await locator.get<RefManager>().getActions();
+  await locator.get<RefManager>().firstLoadData();
   if (locator.get<UserManager>().user.logined) {
     locator
         .get<UserManager>()
         .fetchBalances(name: locator.get<UserManager>().user.name);
   }
-  await locator.get<RefManager>().firstLoadData();
   locator
       .get<MarketManager>()
       .loadAllData("BXBT", marketDuration: MarketDuration.line);

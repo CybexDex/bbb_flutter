@@ -30,7 +30,7 @@ class OrderForm {
 
 class Asset {
   double amount = 0;
-  String symbol;
+  String assetId;
 
-  Asset({this.amount, this.symbol});
+  Asset({this.amount, this.assetId});
 }

@@ -19,7 +19,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
-import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 
 class UserDrawer extends StatefulWidget {
@@ -206,11 +205,11 @@ class _UserDrawerState extends State<UserDrawer> {
                         )
                       ],
                     ),
-                    userMg.user.loginType == LoginType.reward
-                        ? Text(
-                            "活动结束时间: ${DateFormat("yyyy/MM/dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(userMg.user.testAccountResponseModel.expiration * 1000))}",
-                            style: StyleFactory.cellDescLabel)
-                        : Container(),
+                    // userMg.user.loginType == LoginType.reward
+                    //     ? Text(
+                    //         "活动结束时间: ${DateFormat("yyyy/MM/dd HH:mm").format(DateTime.fromMillisecondsSinceEpoch(userMg.user.testAccountResponseModel.expiration * 1000))}",
+                    //         style: StyleFactory.cellDescLabel)
+                    //     : Container(),
                     SizedBox(
                       height: 24,
                     ),
