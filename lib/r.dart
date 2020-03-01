@@ -99,6 +99,8 @@ class R {
   static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_deposit.svg)
   static final String resAssetsIconsIcHomeDeposit = 'res/assets/icons/ic_home_deposit.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/empty_order_logo.svg)
+  static final String resAssetsIconsEmptyOrderLogo = 'res/assets/icons/empty_order_logo.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_deposit.svg)
   static final String resAssetsIconsIcDeposit = 'res/assets/icons/ic_deposit.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_reward_account.svg)

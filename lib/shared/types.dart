@@ -7,9 +7,13 @@ enum BuildMode { release, debug, profile }
 
 enum UnlockType { none, cloud, key }
 
-enum EnvType { Pro, Uat }
+enum EnvType { Pro, Test, Dev }
 
-const Map<EnvType, String> envMap = {EnvType.Pro: "pro", EnvType.Uat: "uat"};
+const Map<EnvType, String> envMap = {
+  EnvType.Pro: "pro",
+  EnvType.Test: "test",
+  EnvType.Dev: "dev"
+};
 
 enum LockTimeType { lower, middle, high }
 
@@ -116,6 +120,17 @@ String closeResonCN(String status) {
   return map[status];
 }
 
+String limitOrderStatusResonCN(String status) {
+  var map = {
+    "CANCELED": I18n.of(globalKey.currentContext).limitOrderStatusCanceled,
+    "TRIGGERED": I18n.of(globalKey.currentContext).limitOrderStatusTriggered,
+    "FAILED": I18n.of(globalKey.currentContext).limitOrderStatusFailed,
+    "EXPIRED": I18n.of(globalKey.currentContext).limitOrderStatusExpired
+  };
+
+  return map[status];
+}
+
 ///Route Types
 class RouteParamsOfTrade {
   final Contract contract;
@@ -123,7 +138,7 @@ class RouteParamsOfTrade {
   final String title;
 
   RouteParamsOfTrade(
-      {@required this.contract, @required this.isUp, @required this.title});
+      {this.contract, @required this.isUp, @required this.title});
 }
 
 class RouteParamsOfTransactionRecords {

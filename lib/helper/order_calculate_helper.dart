@@ -30,6 +30,25 @@ class OrderCalculate {
     return (currentPx - strikeLevel) * conversionRate + 0.1;
   }
 
+  static double calculateLimitOrderOpenPrice(bool isUp,
+      double highestTriggerPrice, double lowestTriggerPrice, double strikePx) {
+    return isUp
+        ? ((highestTriggerPrice != 0
+                ? highestTriggerPrice
+                : lowestTriggerPrice) /
+            ((highestTriggerPrice != 0
+                    ? highestTriggerPrice
+                    : lowestTriggerPrice) -
+                strikePx))
+        : ((highestTriggerPrice != 0
+                ? highestTriggerPrice
+                : lowestTriggerPrice) /
+            (strikePx -
+                (highestTriggerPrice != 0
+                    ? highestTriggerPrice
+                    : lowestTriggerPrice)));
+  }
+
   static double takeProfitPx(
       double takeProfit, double basePx, double strikeLevel, bool isUp) {
     takeProfit = takeProfit.roundToDouble();

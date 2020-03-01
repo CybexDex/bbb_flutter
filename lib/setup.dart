@@ -3,6 +3,7 @@ import 'package:bbb_flutter/cache/user_ops.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/limit_order_manager.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
@@ -28,6 +29,7 @@ import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:package_info/package_info.dart';
 
+import 'logic/limit_order_vm.dart';
 import 'screen/home/home_view_model.dart';
 import 'services/network/zendesk/zendesk_api.dart';
 
@@ -113,7 +115,17 @@ setupLocator() async {
       refm: locator<RefManager>(),
       um: locator<UserManager>()));
 
+  locator.registerFactory(() => LimitOrderViewModel(
+      api: locator<BBBAPI>(),
+      mtm: locator<MarketManager>(),
+      refm: locator<RefManager>(),
+      um: locator<UserManager>()));
+
   locator.registerFactory(() => OrderViewModel(
+      api: locator<BBBAPI>(),
+      um: locator<UserManager>(),
+      rm: locator<RefManager>()));
+  locator.registerFactory(() => LimitOrderManager(
       api: locator<BBBAPI>(),
       um: locator<UserManager>(),
       rm: locator<RefManager>()));

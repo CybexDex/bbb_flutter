@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
+import 'package:bbb_flutter/models/form/limit_order_form_model.dart';
 import 'package:bbb_flutter/models/form/order_form_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -131,6 +132,19 @@ class MarketViewModel extends BaseModel {
           cutOff: order.cutoffPx == null ? strikeLevel : order.cutoffPx);
       // : OrderCalculate.cutLossPx(
       //     order.cutoff, current, strikeLevel, order.isUp));
+    }
+  }
+
+  supplyDataWithLimitOrder(List<TickerData> data, LimitOrderForm order) {
+    if (order != null && !isAllEmpty(data)) {
+      var current = data.last.value;
+      suppleData = SuppleData(
+          alwaysShow: true,
+          showCutoff: false,
+          showProfit: false,
+          current: current,
+          takeProfit: 0,
+          cutOff: 0);
     }
   }
 }

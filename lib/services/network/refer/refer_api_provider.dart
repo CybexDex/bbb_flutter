@@ -24,7 +24,7 @@ class ReferApiProvider extends ReferApi {
   _dispatchNode() {
     if (_pref.getEnvType() == EnvType.Pro) {
       dio.options.baseUrl = ReferSystemConnection.PRO_REFER;
-    } else if (_pref.getEnvType() == EnvType.Uat) {
+    } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = ReferSystemConnection.TEST_REFER;
     }
   }

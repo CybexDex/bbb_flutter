@@ -1,16 +1,11 @@
 import 'package:badges/badges.dart';
-import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
-import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
-import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
-import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -420,95 +415,95 @@ class _UserDrawerState extends State<UserDrawer> {
                               Navigator.pushNamed(context, RoutePaths.Forum);
                             },
                           ),
-                          false
-                              ? ListTile(
-                                  title: Text(
-                                    I18n.of(context).changeEnv,
-                                    style: StyleFactory.cellTitleStyle,
-                                  ),
-                                  trailing: GestureDetector(
-                                    child:
-                                        Image.asset(R.resAssetsIconsIcTabArrow),
-                                    onTap: () {},
-                                  ),
-                                  onTap: () {
-                                    showCupertinoModalPopup(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return CupertinoActionSheet(
-                                            title: Text(
-                                                I18n.of(context).chooseEnv),
-                                            message: Text(I18n.of(context)
-                                                .chooseEnvDetail),
-                                            actions: <Widget>[
-                                              CupertinoActionSheetAction(
-                                                child: Text("PRO"),
-                                                onPressed: () async {
-                                                  await locator
-                                                      .get<BBBAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Pro);
-                                                  await locator
-                                                      .get<GatewayApi>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Pro);
-                                                  await locator
-                                                      .get<FaucetAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Pro);
-                                                  await locator
-                                                      .get<ReferApi>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Pro);
-                                                  userMg.reload();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                isDestructiveAction: locator
-                                                        .get<SharedPref>()
-                                                        .getEnvType() ==
-                                                    EnvType.Pro,
-                                              ),
-                                              CupertinoActionSheetAction(
-                                                child: Text("UAT"),
-                                                onPressed: () async {
-                                                  await locator
-                                                      .get<BBBAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Uat);
-                                                  await locator
-                                                      .get<GatewayApi>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Uat);
-                                                  await locator
-                                                      .get<FaucetAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Uat);
-                                                  await locator
-                                                      .get<ReferApi>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Uat);
-                                                  userMg.reload();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                isDestructiveAction: locator
-                                                        .get<SharedPref>()
-                                                        .getEnvType() ==
-                                                    EnvType.Uat,
-                                              )
-                                            ],
-                                            cancelButton:
-                                                CupertinoActionSheetAction(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(I18n.of(context)
-                                                        .dialogCancelButton)),
-                                          );
-                                        });
-                                  },
-                                )
-                              : Container(),
+                          // false
+                          //     ? ListTile(
+                          //         title: Text(
+                          //           I18n.of(context).changeEnv,
+                          //           style: StyleFactory.cellTitleStyle,
+                          //         ),
+                          //         trailing: GestureDetector(
+                          //           child:
+                          //               Image.asset(R.resAssetsIconsIcTabArrow),
+                          //           onTap: () {},
+                          //         ),
+                          //         onTap: () {
+                          //           showCupertinoModalPopup(
+                          //               context: context,
+                          //               builder: (BuildContext context) {
+                          //                 return CupertinoActionSheet(
+                          //                   title: Text(
+                          //                       I18n.of(context).chooseEnv),
+                          //                   message: Text(I18n.of(context)
+                          //                       .chooseEnvDetail),
+                          //                   actions: <Widget>[
+                          //                     CupertinoActionSheetAction(
+                          //                       child: Text("PRO"),
+                          //                       onPressed: () async {
+                          //                         await locator
+                          //                             .get<BBBAPI>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Pro);
+                          //                         await locator
+                          //                             .get<GatewayApi>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Pro);
+                          //                         await locator
+                          //                             .get<FaucetAPI>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Pro);
+                          //                         await locator
+                          //                             .get<ReferApi>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Pro);
+                          //                         userMg.reload();
+                          //                         Navigator.of(context).pop();
+                          //                       },
+                          //                       isDestructiveAction: locator
+                          //                               .get<SharedPref>()
+                          //                               .getEnvType() ==
+                          //                           EnvType.Pro,
+                          //                     ),
+                          //                     CupertinoActionSheetAction(
+                          //                       child: Text("UAT"),
+                          //                       onPressed: () async {
+                          //                         await locator
+                          //                             .get<BBBAPI>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Uat);
+                          //                         await locator
+                          //                             .get<GatewayApi>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Uat);
+                          //                         await locator
+                          //                             .get<FaucetAPI>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Uat);
+                          //                         await locator
+                          //                             .get<ReferApi>()
+                          //                             .setEnvMode(
+                          //                                 envType: EnvType.Uat);
+                          //                         userMg.reload();
+                          //                         Navigator.of(context).pop();
+                          //                       },
+                          //                       isDestructiveAction: locator
+                          //                               .get<SharedPref>()
+                          //                               .getEnvType() ==
+                          //                           EnvType.Uat,
+                          //                     )
+                          //                   ],
+                          //                   cancelButton:
+                          //                       CupertinoActionSheetAction(
+                          //                           onPressed: () {
+                          //                             Navigator.of(context)
+                          //                                 .pop();
+                          //                           },
+                          //                           child: Text(I18n.of(context)
+                          //                               .dialogCancelButton)),
+                          //                 );
+                          //               });
+                          //         },
+                          //       )
+                          //     : Container(),
                           userMg.user.name == null
                               ? Container()
                               : ListTile(

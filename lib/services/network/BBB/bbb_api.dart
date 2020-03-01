@@ -4,6 +4,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/action_response.d
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
+import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
@@ -21,13 +22,15 @@ abstract class BBBAPI {
   setAction({String action});
   Future<RefContractResponseModel> getRefData({List<ContractStatus> status});
   Future<RefDataResponse> getRefDataNew({String injectAction});
-  Future<ContractResponse> getContract();
+  Future<ContractResponse> getContract({String active});
   Future<ActionResponse> getActions();
   Future<PositionsResponseModel> getPositions(
       {String name, String injectAction});
   Future<PositionsResponseModel> getPositionsTestAccount({String name});
   Future<List<OrderResponseModel>> getOrders(String name,
       {List<OrderStatus> status, String startTime, String endTime});
+  Future<List<LimitOrderResponse>> getLimitOrders(String name,
+      {String startTime, String endTime, String active});
   Future<AccountResponseModel> getAccount({String name});
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
       {String startTime,
@@ -49,6 +52,10 @@ abstract class BBBAPI {
 
   ///post
   Future<PostOrderResponseModel> postOrder({Map<String, dynamic> requestOrder});
+  Future<PostOrderResponseModel> postLimitOrder(
+      {Map<String, dynamic> requestLimitOrder});
+  Future<PostOrderResponseModel> postCancelLimitOrder(
+      {Map<String, dynamic> requestCancelLimitOrder});
   Future<PostOrderResponseModel> amendOrder(
       {AmendOrderRequestModel order, bool exNow});
   Future<PostOrderResponseModel> postWithdraw({Map<String, dynamic> withdraw});

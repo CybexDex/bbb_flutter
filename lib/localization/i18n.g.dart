@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String registerWarningText = 'register_warning_text';
+  static final String updatedDate = 'updated_date';
 
   static final String transfer = 'transfer';
 
@@ -111,6 +111,8 @@ class _$Keys {
   static final String pnlAmendByPrice = 'pnl_amend_by_price';
 
   static final String holdAll = 'hold_all';
+
+  static final String limitOpenAll = 'limit_open_all';
 
   static final String resetPnl = 'reset_pnl';
 
@@ -205,13 +207,13 @@ class _$Keys {
   static final String registerErrorMessageTooLong =
       'register_error_message_too_long';
 
-  static final String assetCat = 'asset_cat';
+  static final String registerWarningText = 'register_warning_text';
 
   static final String accountLogInError = 'account_log_in_error';
 
   static final String accountLogOut = 'account_log_out';
 
-  static final String updatedDate = 'updated_date';
+  static final String assetCat = 'asset_cat';
 
   static final String address = 'address';
 
@@ -373,7 +375,7 @@ class _$Keys {
 
   static final String helpCenter = 'help_center';
 
-  static final String exchange24Low = 'exchange_24_low';
+  static final String rewardAccount = 'reward_account';
 
   static final String quitReward = 'quit_reward';
 
@@ -391,7 +393,7 @@ class _$Keys {
 
   static final String triggerCloseContent = 'trigger_close_content';
 
-  static final String pnl = 'pnl';
+  static final String limitOrderCancelButton = 'limit_order_cancel_button';
 
   static final String percentageUp = 'percentage_up';
 
@@ -537,7 +539,34 @@ class _$Keys {
 
   static final String exchange24High = 'exchange_24_high';
 
-  static final String rewardAccount = 'reward_account';
+  static final String exchange24Low = 'exchange_24_low';
+
+  static final String limitOrder = 'limit_order';
+
+  static final String marketOrder = 'market_order';
+
+  static final String limitOrderEmpty = 'limit_order_empty';
+
+  static final String limitOrderPrice = 'limit_order_price';
+
+  static final String limitOrderStatus = 'limit_order_status';
+
+  static final String limitOrderRecords = 'limit_order_records';
+
+  static final String limitOrderStatusCanceled = 'limit_order_status_canceled';
+
+  static final String limitOrderStatusTriggered =
+      'limit_order_status_triggered';
+
+  static final String limitOrderStatusFailed = 'limit_order_status_failed';
+
+  static final String limitOrderCancelSucess = 'limit_order_cancel_sucess';
+
+  static final String limitOrderCancelFailed = 'limit_order_cancel_failed';
+
+  static final String limitOrderStatusExpired = 'limit_order_status_expired';
+
+  static final String pnl = 'pnl';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -558,7 +587,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get registerWarningText => this._translate(_$Keys.registerWarningText);
+  String get updatedDate => this._translate(_$Keys.updatedDate);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -600,6 +629,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.pnlAmendByPercentage);
   String get pnlAmendByPrice => this._translate(_$Keys.pnlAmendByPrice);
   String get holdAll => this._translate(_$Keys.holdAll);
+  String get limitOpenAll => this._translate(_$Keys.limitOpenAll);
   String get resetPnl => this._translate(_$Keys.resetPnl);
   String get selectAll => this._translate(_$Keys.selectAll);
   String get logIn => this._translate(_$Keys.logIn);
@@ -654,10 +684,10 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.registerErrorMessagePasswordConfirm);
   String get registerErrorMessageTooLong =>
       this._translate(_$Keys.registerErrorMessageTooLong);
-  String get assetCat => this._translate(_$Keys.assetCat);
+  String get registerWarningText => this._translate(_$Keys.registerWarningText);
   String get accountLogInError => this._translate(_$Keys.accountLogInError);
   String get accountLogOut => this._translate(_$Keys.accountLogOut);
-  String get updatedDate => this._translate(_$Keys.updatedDate);
+  String get assetCat => this._translate(_$Keys.assetCat);
   String get address => this._translate(_$Keys.address);
   String get fundStatusInProgress =>
       this._translate(_$Keys.fundStatusInProgress);
@@ -750,7 +780,7 @@ abstract class _$I18nHelper {
   String get profitAndLoss => this._translate(_$Keys.profitAndLoss);
   String get toastNoContract => this._translate(_$Keys.toastNoContract);
   String get helpCenter => this._translate(_$Keys.helpCenter);
-  String get exchange24Low => this._translate(_$Keys.exchange24Low);
+  String get rewardAccount => this._translate(_$Keys.rewardAccount);
   String get quitReward => this._translate(_$Keys.quitReward);
   String get changeToReward => this._translate(_$Keys.changeToReward);
   String get depositParagraph => this._translate(_$Keys.depositParagraph);
@@ -759,7 +789,8 @@ abstract class _$I18nHelper {
   String get type => this._translate(_$Keys.type);
   String get version => this._translate(_$Keys.version);
   String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
-  String get pnl => this._translate(_$Keys.pnl);
+  String get limitOrderCancelButton =>
+      this._translate(_$Keys.limitOrderCancelButton);
   String get percentageUp => this._translate(_$Keys.percentageUp);
   String get percentageDown => this._translate(_$Keys.percentageDown);
   String get investAmountOrderInfo =>
@@ -835,5 +866,24 @@ abstract class _$I18nHelper {
   String get accountToUseReward => this._translate(_$Keys.accountToUseReward);
   String get exchangeChangeRatio => this._translate(_$Keys.exchangeChangeRatio);
   String get exchange24High => this._translate(_$Keys.exchange24High);
-  String get rewardAccount => this._translate(_$Keys.rewardAccount);
+  String get exchange24Low => this._translate(_$Keys.exchange24Low);
+  String get limitOrder => this._translate(_$Keys.limitOrder);
+  String get marketOrder => this._translate(_$Keys.marketOrder);
+  String get limitOrderEmpty => this._translate(_$Keys.limitOrderEmpty);
+  String get limitOrderPrice => this._translate(_$Keys.limitOrderPrice);
+  String get limitOrderStatus => this._translate(_$Keys.limitOrderStatus);
+  String get limitOrderRecords => this._translate(_$Keys.limitOrderRecords);
+  String get limitOrderStatusCanceled =>
+      this._translate(_$Keys.limitOrderStatusCanceled);
+  String get limitOrderStatusTriggered =>
+      this._translate(_$Keys.limitOrderStatusTriggered);
+  String get limitOrderStatusFailed =>
+      this._translate(_$Keys.limitOrderStatusFailed);
+  String get limitOrderCancelSucess =>
+      this._translate(_$Keys.limitOrderCancelSucess);
+  String get limitOrderCancelFailed =>
+      this._translate(_$Keys.limitOrderCancelFailed);
+  String get limitOrderStatusExpired =>
+      this._translate(_$Keys.limitOrderStatusExpired);
+  String get pnl => this._translate(_$Keys.pnl);
 }

@@ -111,16 +111,24 @@ class MarketManager {
 
   initCommunication() {
     reset();
+    if (_sharedPref.getEnvType() == EnvType.Pro) {
+      _channel = IOWebSocketChannel.connect(WebSocketConnection.PRO_WEBSOCKET);
+    } else if (_sharedPref.getEnvType() == EnvType.Test) {
+      _channel =
+          IOWebSocketChannel.connect(WebSocketConnection.PRO_TEST_WEBSOCKET);
+    } else if (_sharedPref.getEnvType() == EnvType.Dev) {
+      _channel = IOWebSocketChannel.connect(WebSocketConnection.DEV_WEBSOCKET);
+    }
 
-    _channel = _sharedPref.getEnvType() == EnvType.Pro
-        ? IOWebSocketChannel.connect(
-            _sharedPref.getTestNet()
-                ? WebSocketConnection.PRO_TEST_WEBSOCKET
-                : WebSocketConnection.PRO_WEBSOCKET,
-          )
-        : IOWebSocketChannel.connect(_sharedPref.getTestNet()
-            ? WebSocketConnection.UAT_TEST_WEBSOCKET
-            : WebSocketConnection.UAT_WEBSOCKET);
+    // _channel = _sharedPref.getEnvType() == EnvType.Pro
+    //     ? IOWebSocketChannel.connect(
+    //         _sharedPref.getTestNet()
+    //             ? WebSocketConnection.PRO_TEST_WEBSOCKET
+    //             : WebSocketConnection.PRO_WEBSOCKET,
+    //       )
+    //     : IOWebSocketChannel.connect(_sharedPref.getTestNet()
+    //         ? WebSocketConnection.UAT_TEST_WEBSOCKET
+    //         : WebSocketConnection.TEST_WEBSOCKET);
     _channel.stream.listen((onData) {
       dispatchMessage(onData);
     }, onError: (error) {

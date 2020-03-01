@@ -7,6 +7,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/action_response.d
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
+import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
@@ -31,8 +32,8 @@ class BBBAPIProvider extends BBBAPI {
     _pref = sharedPref;
     _dispatchNode();
     _dispatchNewNode();
-    dio.options.connectTimeout = 15000;
-    dio.options.receiveTimeout = 13000;
+    newDio.options.connectTimeout = 15000;
+    newDio.options.receiveTimeout = 13000;
   }
 
   @override
@@ -44,7 +45,7 @@ class BBBAPIProvider extends BBBAPI {
   @override
   setEnvMode({EnvType envType}) async {
     await _pref.saveEnvType(envType: envType);
-    _dispatchNode();
+    _dispatchNewNode();
   }
 
   @override
@@ -58,7 +59,7 @@ class BBBAPIProvider extends BBBAPI {
       dio.options.baseUrl = _pref.getTestNet()
           ? NetworkConnection.PRO_TESTNET
           : NetworkConnection.PRO_STANDARD;
-    } else if (_pref.getEnvType() == EnvType.Uat) {
+    } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = _pref.getTestNet()
           ? NetworkConnection.UAT_TESTNET
           : NetworkConnection.UAT_STANDARD;
@@ -66,7 +67,13 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   _dispatchNewNode() {
-    newDio.options.baseUrl = BBBApiConnection.PRO;
+    if (_pref.getEnvType() == EnvType.Pro) {
+      newDio.options.baseUrl = BBBApiConnection.PRO;
+    } else if (_pref.getEnvType() == EnvType.Test) {
+      newDio.options.baseUrl = BBBApiConnection.PRO_TEST;
+    } else if (_pref.getEnvType() == EnvType.Dev) {
+      newDio.options.baseUrl = BBBApiConnection.PRO_DEV;
+    }
     action = _pref.getAction();
   }
 
@@ -96,8 +103,10 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<ContractResponse> getContract() async {
-    var response = await newDio.get('/contracts?action=$action');
+  Future<ContractResponse> getContract({String active}) async {
+    var response = await newDio.get(active == null
+        ? '/contracts?action=$action'
+        : '/contracts?action=$action&active=$active');
     Map<String, dynamic> convertedResult = convertJson(response.data);
     return Future.value(ContractResponse.fromJson(convertedResult));
   }
@@ -115,7 +124,7 @@ class BBBAPIProvider extends BBBAPI {
     Dio singleDio = Dio();
     if (_pref.getEnvType() == EnvType.Pro) {
       singleDio.options.baseUrl = NetworkConnection.PRO_TESTNET;
-    } else if (_pref.getEnvType() == EnvType.Uat) {
+    } else if (_pref.getEnvType() == EnvType.Test) {
       singleDio.options.baseUrl = NetworkConnection.UAT_TESTNET;
     }
     var response = await singleDio.get('/position?accountName=$name');
@@ -147,6 +156,30 @@ class BBBAPIProvider extends BBBAPI {
     }
     List<OrderResponseModel> model =
         responseData.map((data) => OrderResponseModel.fromJson(data)).toList();
+
+    return Future.value(model);
+  }
+
+  @override
+  Future<List<LimitOrderResponse>> getLimitOrders(String name,
+      {String startTime, String endTime, String active}) async {
+    var params = {
+      "accountName": name,
+    };
+
+    if (startTime != null && endTime != null) {
+      params["begin"] = startTime;
+      params["end"] = endTime;
+    }
+    params["action"] = action;
+    params["active"] = active;
+    var response = await newDio.get('/limit_order', queryParameters: params);
+    var responseData = response.data as List;
+    if (responseData == null) {
+      return Future.value([]);
+    }
+    List<LimitOrderResponse> model =
+        responseData.map((data) => LimitOrderResponse.fromJson(data)).toList();
 
     return Future.value(model);
   }
@@ -249,6 +282,21 @@ class BBBAPIProvider extends BBBAPI {
   Future<PostOrderResponseModel> postOrder(
       {Map<String, dynamic> requestOrder}) async {
     var response = await newDio.post("/trade/order", data: requestOrder);
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
+  }
+
+  @override
+  Future<PostOrderResponseModel> postLimitOrder(
+      {Map<String, dynamic> requestLimitOrder}) async {
+    var response =
+        await newDio.post("/trade/limit/order", data: requestLimitOrder);
+    return Future.value(PostOrderResponseModel.fromJson(response.data));
+  }
+
+  Future<PostOrderResponseModel> postCancelLimitOrder(
+      {Map<String, dynamic> requestCancelLimitOrder}) async {
+    var response =
+        await newDio.post("/trade/limit/cancel", data: requestCancelLimitOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 

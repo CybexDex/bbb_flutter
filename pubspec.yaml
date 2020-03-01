@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 2.0.0+1
+version: 2.0.2+1
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -136,6 +136,7 @@ flutter:
         - res/assets/icons/ic_exchange_records.svg
         - res/assets/icons/icSwitch.png
         - res/assets/icons/ic_home_deposit.svg
+        - res/assets/icons/empty_order_logo.svg
         - res/assets/icons/ic_deposit.svg
         - res/assets/icons/ic_reward_account.svg
         - res/assets/icons/ic_transaction_unselected.svg

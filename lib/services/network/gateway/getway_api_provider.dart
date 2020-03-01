@@ -58,7 +58,7 @@ class GatewayAPIProvider extends GatewayApi {
   _dispatchNode() {
     if (_pref.getEnvType() == EnvType.Pro) {
       dio.options.baseUrl = GatewayConnection.PRO_GATEWAY;
-    } else if (_pref.getEnvType() == EnvType.Uat) {
+    } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = GatewayConnection.UAT_GATEWAY;
     }
   }

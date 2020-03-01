@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
 
 class SettingWiget extends StatefulWidget {
@@ -74,6 +78,86 @@ class _SettingState extends State<SettingWiget> {
                             ),
                             onTap: _checkConfiguretion,
                           ),
+                          BuildMode.debug == buildMode
+                              ? ListTile(
+                                  title: Text(
+                                    I18n.of(context).changeEnv,
+                                    style: StyleFactory.cellTitleStyle,
+                                  ),
+                                  trailing: GestureDetector(
+                                    child: Icon(Icons.keyboard_arrow_right),
+                                    onTap: () {},
+                                  ),
+                                  onTap: () {
+                                    showCupertinoModalPopup(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return CupertinoActionSheet(
+                                            title: Text(
+                                                I18n.of(context).chooseEnv),
+                                            message: Text(I18n.of(context)
+                                                .chooseEnvDetail),
+                                            actions: <Widget>[
+                                              CupertinoActionSheetAction(
+                                                child: Text("PRO"),
+                                                onPressed: () async {
+                                                  await locator
+                                                      .get<BBBAPI>()
+                                                      .setEnvMode(
+                                                          envType: EnvType.Pro);
+                                                  userManager.reload();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                isDestructiveAction: locator
+                                                        .get<SharedPref>()
+                                                        .getEnvType() ==
+                                                    EnvType.Pro,
+                                              ),
+                                              CupertinoActionSheetAction(
+                                                child: Text("TEST"),
+                                                onPressed: () async {
+                                                  await locator
+                                                      .get<BBBAPI>()
+                                                      .setEnvMode(
+                                                          envType:
+                                                              EnvType.Test);
+                                                  userManager.reload();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                isDestructiveAction: locator
+                                                        .get<SharedPref>()
+                                                        .getEnvType() ==
+                                                    EnvType.Test,
+                                              ),
+                                              CupertinoActionSheetAction(
+                                                child: Text("DEV"),
+                                                onPressed: () async {
+                                                  await locator
+                                                      .get<BBBAPI>()
+                                                      .setEnvMode(
+                                                          envType: EnvType.Dev);
+                                                  userManager.reload();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                isDestructiveAction: locator
+                                                        .get<SharedPref>()
+                                                        .getEnvType() ==
+                                                    EnvType.Dev,
+                                              )
+                                            ],
+                                            cancelButton:
+                                                CupertinoActionSheetAction(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text(I18n.of(context)
+                                                        .dialogCancelButton)),
+                                          );
+                                        });
+                                  },
+                                )
+                              : Container()
                         ],
                       ),
                     ),

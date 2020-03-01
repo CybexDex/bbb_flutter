@@ -16,7 +16,7 @@ void showNotification(BuildContext context, bool isFaild, String content,
       barrierDismissible: false,
       builder: (context) {
         Future.delayed(Duration(seconds: 3), () {
-          Navigator.of(context)?.pop();
+          Navigator.of(context)?.maybePop();
         });
         return isFaild
             ? DialogFactory.failDialog(context, content: content)

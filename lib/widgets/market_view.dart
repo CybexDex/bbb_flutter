@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/helper/time_duration_calculate_helper.dart';
+import 'package:bbb_flutter/logic/limit_order_vm.dart';
 import 'package:bbb_flutter/logic/market_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
@@ -58,11 +59,16 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     OrderViewModel order;
     TradeViewModel trade;
+    LimitOrderViewModel limitOrder;
 
-    if (widget.isTrade) {
-      trade = Provider.of<TradeViewModel>(context);
+    if (widget.isTrade != null) {
+      if (widget.isTrade) {
+        trade = Provider.of<TradeViewModel>(context);
+      } else {
+        order = Provider.of<OrderViewModel>(context);
+      }
     } else {
-      order = Provider.of<OrderViewModel>(context);
+      limitOrder = Provider.of<LimitOrderViewModel>(context);
     }
 
     return Consumer3<List<TickerData>, TickerData, List<KLineEntity>>(
@@ -104,6 +110,10 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
             if (trade != null) {
               model.supplyDataWithOrder(
                   data, trade.orderForm, trade.contract.strikeLevel);
+            }
+
+            if (limitOrder != null) {
+              model.supplyDataWithLimitOrder(data, limitOrder.orderForm);
             }
 
             return Container(

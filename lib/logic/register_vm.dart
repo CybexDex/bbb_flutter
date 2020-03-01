@@ -65,11 +65,18 @@ class RegisterViewModel extends BaseModel {
       Navigator.of(_buildContext).pop();
     } else if (registerRequestResponse.error == null &&
         registerRequestResponse != null) {
-      if (await _userManager.loginWith(name: accountName, password: password)) {
-        await checkAdd(_buildContext, activityTypes[ActivityType.register]);
-        await _userManager.fetchBalances(name: accountName);
-        Navigator.of(_buildContext).popUntil((route) => route.isFirst);
-      } else {
+      try {
+        if (await _userManager.loginWith(
+            name: accountName, password: password)) {
+          await checkAdd(_buildContext, activityTypes[ActivityType.register]);
+          await _userManager.fetchBalances(name: accountName);
+          Navigator.of(_buildContext).popUntil((route) => route.isFirst);
+        } else {
+          errorMessage = "注册失败请重试";
+          errorMessageVisibility = true;
+          Navigator.of(_buildContext).pop();
+        }
+      } catch (error) {
         errorMessage = "注册失败请重试";
         errorMessageVisibility = true;
         Navigator.of(_buildContext).pop();

@@ -139,6 +139,15 @@ class StyleNewFactory {
     letterSpacing: 0,
   );
 
+  static var yellowOrange12 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appYellowOrange.withOpacity(0.6),
+    fontSize: Dimen.fontSize12,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
   static var green15 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appGreen,

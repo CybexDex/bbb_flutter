@@ -89,6 +89,7 @@ class TradeViewModel extends BaseModel {
   }
 
   updateCurrentContract(bool isUp, String contractId) {
+    _refm.isIdSelectedByUser = true;
     if (isUp) {
       _refm.changeUpContractId(contractId);
     } else {
@@ -110,11 +111,10 @@ class TradeViewModel extends BaseModel {
         : (ticker.value /
             (_refm.currentDownContract.strikeLevel - ticker.value));
 
-    double extra = 0.1;
-
-    var amount =
-        (ticker.value - contract.strikeLevel) * contract.conversionRate + extra;
-
+    var amount = ((orderForm.isUp ? (ticker.value + 30) : (ticker.value - 30)) -
+                contract.strikeLevel)
+            .abs() *
+        contract.conversionRate.abs();
     double commiDouble = orderForm.investAmount *
         ticker.value *
         contract.conversionRate.abs() *
@@ -381,8 +381,7 @@ class TradeViewModel extends BaseModel {
         ? (commission.amount.amount /
                 pow(10, _refm.refDataControllerNew.value.bbbAssetPrecision))
             .toString()
-        : (orderForm.totalAmount.amount - orderForm.fee.amount)
-            .toStringAsFixed(4);
+        : (orderForm.totalAmount.amount).toStringAsFixed(4);
     order.data.timeout = expir + 5 * 60;
 
     var data = order.data.toJson();
@@ -464,7 +463,7 @@ class TradeViewModel extends BaseModel {
     comm.refBlockNum = refData.blockNum;
     comm.refBlockId = refData.blockId;
 
-    comm.txExpiration = expir + 5 * 60;
+    comm.txExpiration = expir + 12 * 60 * 60;
     comm.fee = AssetDef.cybTransfer;
     comm.from = suffixId(locator.get<SharedPref>().getAction() == "test"
         ? _um.user.testAccountResponseModel.name
@@ -472,8 +471,7 @@ class TradeViewModel extends BaseModel {
     comm.to = suffixId(refData.adminAccountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),
-        amount: ((form.totalAmount.amount - form.fee.amount) *
-                pow(10, quoteAsset.precision))
+        amount: ((form.totalAmount.amount) * pow(10, quoteAsset.precision))
             .toInt());
     comm.isTwo = false;
     return comm;

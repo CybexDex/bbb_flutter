@@ -9,28 +9,24 @@ AppBar exchangeAppBar() {
   return AppBar(
     actions: <Widget>[
       Consumer<UserManager>(
-          builder: (context, bloc, child) =>
-              bloc.user.loginType == LoginType.test
-                  ? Container()
-                  : GestureDetector(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Center(
-                            child: SvgPicture.asset(
-                          R.resAssetsIconsIcService,
-                          width: 24,
-                          height: 20,
-                        )),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(RoutePaths.Feedback);
-                        // if (bloc.user.logined) {
-                        //   Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                        // } else {
-                        //   Navigator.of(context).pushNamed(RoutePaths.Login);
-                        // }
-                      },
-                    )),
+          builder: (context, bloc, child) => GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Center(
+                      child: SvgPicture.asset(
+                    R.resAssetsIconsHoldAll,
+                    width: 24,
+                    height: 20,
+                  )),
+                ),
+                onTap: () {
+                  if (bloc.user.logined) {
+                    Navigator.of(context).pushNamed(RoutePaths.OrderHome);
+                  } else {
+                    Navigator.of(context).pushNamed(RoutePaths.Login);
+                  }
+                },
+              )),
     ],
     // leading: Consumer<UserManager>(
     //   builder: (context, bloc, child) => GestureDetector(

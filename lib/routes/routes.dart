@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/screen/allLimitOrders/all_limit_orders.dart';
 import 'package:bbb_flutter/screen/allOrders/all_orders.dart';
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
@@ -6,7 +7,10 @@ import 'package:bbb_flutter/screen/fund_records.dart';
 import 'package:bbb_flutter/screen/help_center.dart';
 import 'package:bbb_flutter/screen/homeNav.dart';
 import 'package:bbb_flutter/screen/invite_page.dart';
+import 'package:bbb_flutter/screen/limit_order/limit_order.dart';
+import 'package:bbb_flutter/screen/limit_order_records.dart';
 import 'package:bbb_flutter/screen/login.dart';
+import 'package:bbb_flutter/screen/order_home.dart';
 import 'package:bbb_flutter/screen/order_record_detail.dart';
 import 'package:bbb_flutter/screen/order_records.dart';
 import 'package:bbb_flutter/screen/register.dart';
@@ -27,6 +31,7 @@ class RoutePaths {
   static const String Deposit = 'deposit';
   static const String FundRecords = "FundRecords";
   static const String OrderRecords = "OrderRecords";
+  static const String LimitOrderRecords = "LimitOrderRecords";
   static const String Transfer = "Transfer";
   static const String Withdraw = "Withdraw";
   static const String OrderRecordDetail = "OrderRecordDetail";
@@ -36,7 +41,10 @@ class RoutePaths {
   static const String Help = "Help";
   static const String Forum = "Forum";
   static const String AllOrders = "AllOrders";
+  static const String AllLimitOrders = "AllLimitOrders";
+  static const String OrderHome = "OrderHome";
   static const String Setting = "Setting";
+  static const String LimitOrder = "LimitOrder";
 }
 
 class Routes {
@@ -60,6 +68,9 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => OrderRecordsWidget());
       case RoutePaths.FundRecords:
         return CupertinoPageRoute(builder: (_) => FundRecordsWidget());
+      case RoutePaths.LimitOrderRecords:
+        return CupertinoPageRoute(builder: (_) => LimitOrderRecordsPage());
+
       case RoutePaths.OrderRecordDetail:
         return CupertinoPageRoute(
             builder: (_) => OrderRecordDetail(), settings: settings);
@@ -83,8 +94,15 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => ForumHome());
       case RoutePaths.AllOrders:
         return CupertinoPageRoute(builder: (_) => AllOrdersPage());
+      case RoutePaths.AllLimitOrders:
+        return CupertinoPageRoute(builder: (_) => AllLimitOrderPage());
+      case RoutePaths.OrderHome:
+        return CupertinoPageRoute(builder: (_) => OrderHome());
       case RoutePaths.Setting:
         return CupertinoPageRoute(builder: (_) => SettingWiget());
+      case RoutePaths.LimitOrder:
+        return CupertinoPageRoute(
+            builder: (_) => LimitOrderPage(), settings: settings);
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

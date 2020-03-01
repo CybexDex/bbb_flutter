@@ -40,6 +40,7 @@
 	"pnl_amend_by_percentage": "按百分比设置",
 	"pnl_amend_by_price": "按价格设置",
 	"hold_all": "全部持仓",
+	"limit_open_all": "全部委托",
 	"reset_pnl": "重置盈损",
 	"select_all": "全选",
 	"log_in": "登录",
@@ -243,5 +244,18 @@
 	"account_to_use_reward": "去使用",
 	"exchange_change_ratio": "涨跌幅",
 	"exchange_24_high": "24h最高",
-	"exchange_24_low": "24h最低"
+	"exchange_24_low": "24h最低",
+	"limit_order": "限价单",
+	"market_order": "市价单",
+	"limit_order_empty": "暂无委托",
+	"limit_order_price": "预计买入价格",
+	"limit_order_status": "状态",
+	"limit_order_records": "历史委托",
+	"limit_order_status_canceled": "已撤单",
+	"limit_order_status_triggered": "已触发",
+	"limit_order_status_failed": "触发失败",
+	"limit_order_cancel_sucess": "撤单成功",
+	"limit_order_cancel_failed": "撤单失败",
+	"limit_order_status_expired": "已到期",
+	"limit_order_cancel_button": "撤单"
 }

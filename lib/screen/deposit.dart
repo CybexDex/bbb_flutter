@@ -102,6 +102,9 @@ class _DepositPageState extends State<DepositPage> {
           child: Container(
               margin: Dimen.pageMargin,
               child: Consumer<UserManager>(builder: (context, value, child) {
+                if (value.user.isLocked) {
+                  return Container();
+                }
                 if (value.user.deposit == null) {
                   return SpinKitWave(
                     color: Palette.redOrange,

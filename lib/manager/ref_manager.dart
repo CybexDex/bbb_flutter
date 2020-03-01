@@ -16,6 +16,8 @@ class RefManager {
   String _upcontractId;
   String _downcontractId;
   List<Action> actions;
+  ContractResponse allContracts;
+  bool isIdSelectedByUser = false;
 
   RefManager({BBBAPI api}) : _api = api;
 
@@ -34,36 +36,54 @@ class RefManager {
   }
 
   List<Contract> get upContract {
-    return contractController.value?.contract
-        ?.where((contract) {
-          return contract.conversionRate > 0 &&
-              contractStatusMap[ContractStatus.active] == contract.status;
-        })
-        ?.toList()
-        ?.reversed
-        ?.toList();
+    List<Contract> contractList =
+        contractController.value?.contract?.where((contract) {
+      return contract.contractId.contains("N") &&
+          contractStatusMap[ContractStatus.active] == contract.status;
+    })?.toList();
+    contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
+    return contractList;
   }
 
   List<Contract> get downContract {
-    return contractController.value?.contract?.where((contract) {
-      return contract.conversionRate < 0 &&
+    List<Contract> contractList =
+        contractController.value?.contract?.where((contract) {
+      return contract.contractId.contains("X") &&
           contractStatusMap[ContractStatus.active] == contract.status;
     })?.toList();
+    contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
+    return contractList;
+  }
+
+  List<Contract> get allUpContract {
+    List<Contract> contractList = allContracts.contract?.where((contract) {
+      return contract.contractId.contains("N");
+    })?.toList();
+    contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
+    return contractList;
+  }
+
+  List<Contract> get allDownContract {
+    List<Contract> contractList = allContracts.contract?.where((contract) {
+      return contract.contractId.contains("X");
+    })?.toList();
+    contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
+    return contractList;
   }
 
   Contract getContractFromId(String id) {
-    return contractController.value?.contract
-        ?.where((contract) {
-          return contract.contractId == id;
-        })
-        ?.toList()
-        ?.first;
+    return contractController.value?.contract?.firstWhere((contract) {
+      return contract.contractId == id;
+    }, orElse: () {
+      return null;
+    });
   }
 
   firstLoadData() async {
     await getActions();
     await updateRefData();
     await updateContract();
+    await getAllContracts();
     updateUpContractId();
     updateDownContractId();
     startLoop();
@@ -91,6 +111,11 @@ class RefManager {
     var timerManager = locator.get<TimerManager>();
     timerManager.tick.listen((_) {
       updateContract();
+      if (currentDownContract == null || currentUpContract == null) {
+        print("a");
+        updateUpContractId();
+        updateDownContractId();
+      }
     });
     timerManager.start();
     timerManager.refDataUpdate.listen((ticker) {
@@ -118,5 +143,10 @@ class RefManager {
   getActions() async {
     ActionResponse response = await _api.getActions();
     actions = response.action;
+  }
+
+  getAllContracts() async {
+    ContractResponse response = await _api.getContract(active: "0");
+    allContracts = response;
   }
 }

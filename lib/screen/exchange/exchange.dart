@@ -154,7 +154,7 @@ class _ExchangePageState extends State<ExchangePage>
                                   flex: 1,
                                   child: Builder(
                                     builder: (context) => WidgetFactory.button(
-                                        data: I18n.of(context).buyUp,
+                                        data: I18n.of(context).marketOrder,
                                         color: Palette.redOrange,
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
@@ -175,14 +175,30 @@ class _ExchangePageState extends State<ExchangePage>
                                             return;
                                           }
                                           if (user.user.logined) {
+                                            if (locator
+                                                        .get<RefManager>()
+                                                        .currentUpContract ==
+                                                    null ||
+                                                locator
+                                                        .get<RefManager>()
+                                                        .currentDownContract ==
+                                                    null ||
+                                                !locator
+                                                    .get<RefManager>()
+                                                    .isIdSelectedByUser) {
+                                              locator
+                                                  .get<RefManager>()
+                                                  .updateUpContractId();
+                                              locator
+                                                  .get<RefManager>()
+                                                  .updateDownContractId();
+                                            }
                                             Navigator.pushNamed(
                                                     context, RoutePaths.Trade,
-                                                    arguments: RouteParamsOfTrade(
-                                                        contract: locator
-                                                            .get<RefManager>()
-                                                            .currentUpContract,
-                                                        isUp: true,
-                                                        title: "ttes"))
+                                                    arguments:
+                                                        RouteParamsOfTrade(
+                                                            isUp: true,
+                                                            title: "ttes"))
                                                 .then((v) {
                                               Provider.of<OrderViewModel>(
                                                       context)
@@ -201,35 +217,18 @@ class _ExchangePageState extends State<ExchangePage>
                                   flex: 1,
                                   child: Builder(
                                     builder: (context) => WidgetFactory.button(
-                                        data: I18n.of(context).buyDown,
+                                        data: I18n.of(context).limitOrder,
                                         color: Palette.shamrockGreen,
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
                                         onPressed: () {
-                                          if (locator
-                                                      .get<RefManager>()
-                                                      .downContract ==
-                                                  null ||
-                                              locator
-                                                  .get<RefManager>()
-                                                  .downContract
-                                                  .isEmpty) {
-                                            showNotification(
-                                                context,
-                                                true,
-                                                I18n.of(context)
-                                                    .toastNoContract);
-                                            return;
-                                          }
                                           if (user.user.logined) {
-                                            Navigator.pushNamed(
-                                                    context, RoutePaths.Trade,
-                                                    arguments: RouteParamsOfTrade(
-                                                        contract: locator
-                                                            .get<RefManager>()
-                                                            .currentDownContract,
-                                                        isUp: false,
-                                                        title: "ttes"))
+                                            Navigator.pushNamed(context,
+                                                    RoutePaths.LimitOrder,
+                                                    arguments:
+                                                        RouteParamsOfTrade(
+                                                            isUp: true,
+                                                            title: "ttes"))
                                                 .then((v) {
                                               Provider.of<OrderViewModel>(
                                                       context)
@@ -379,27 +378,27 @@ class _ExchangePageState extends State<ExchangePage>
           Container(
             padding: EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, RoutePaths.AllOrders);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Text(I18n.of(context).holdAll,
-                          style: StyleNewFactory.black15),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      SvgPicture.asset(
-                        R.resAssetsIconsHoldAll,
-                        width: 14,
-                        height: 15,
-                      )
-                    ],
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.pushNamed(context, RoutePaths.AllLimitOrders);
+                //   },
+                //   child: Row(
+                //     children: <Widget>[
+                //       Text(I18n.of(context).holdAll,
+                //           style: StyleNewFactory.black15),
+                //       SizedBox(
+                //         width: 10,
+                //       ),
+                //       SvgPicture.asset(
+                //         R.resAssetsIconsHoldAll,
+                //         width: 14,
+                //         height: 15,
+                //       )
+                //     ],
+                //   ),
+                // ),
                 GestureDetector(
                   onTap: () {
                     openDialog(context, orderViewModel.orders[0]);

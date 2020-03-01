@@ -1,23 +1,21 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
-import 'package:bbb_flutter/helper/ui_utils.dart';
-import 'package:bbb_flutter/logic/order_vm.dart';
-import 'package:bbb_flutter/logic/pnl_vm.dart';
+import 'package:bbb_flutter/manager/limit_order_manager.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/empty_order.dart';
-import 'package:bbb_flutter/widgets/order_info.dart';
+import 'package:bbb_flutter/widgets/liimit_order_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
 
-class AllOrdersPage extends StatefulWidget {
+class AllLimitOrderPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new AllOrderState();
+  State<StatefulWidget> createState() => AllLimitOrderState();
 }
 
-class AllOrderState extends State<AllOrdersPage> {
+class AllLimitOrderState extends State<AllLimitOrderPage> {
   @override
   void initState() {
     super.initState();
@@ -27,26 +25,14 @@ class AllOrderState extends State<AllOrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseWidget<OrderViewModel>(
-      model: OrderViewModel(
+    return BaseWidget<LimitOrderManager>(
+      model: LimitOrderManager(
           api: locator.get(), um: locator.get(), rm: locator.get()),
       builder: (context, data, child) {
         return Scaffold(
-          // appBar: AppBar(
-          //   iconTheme: IconThemeData(
-          //     color: Palette.backButtonColor, //change your color here
-          //   ),
-          //   centerTitle: true,
-          //   title: Text(I18n.of(context).holdAll, style: StyleFactory.title),
-          //   backgroundColor: Colors.white,
-          //   brightness: Brightness.light,
-          //   elevation: 0,
-          // ),
           body: SafeArea(
             child: data.orders.isEmpty
-                ? EmptyOrder(
-                    isLimit: false,
-                  )
+                ? EmptyOrder(isLimit: true)
                 : Column(
                     children: <Widget>[
                       new Expanded(
@@ -64,54 +50,55 @@ class AllOrderState extends State<AllOrdersPage> {
                               activeColor: Palette.invitePromotionBadgeColor,
                               onChanged: (bool) {
                                 data.selectAll();
-                                data.calculateMoneyCount();
                               }),
                           Text("全选"),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
-                                Text(
-                                  "总收益:",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 12),
-                                ),
-                                Text(
-                                  data.selectedTotalPnl.toStringAsFixed(4),
-                                  style: TextStyle(
-                                    color: data.selectedTotalPnl > 0
-                                        ? Palette.redOrange
-                                        : Palette.shamrockGreen,
-                                    fontSize: 16,
-                                  ),
-                                ),
                                 GestureDetector(
                                   onTap: data.selectedTotalCount > 0
                                       ? () {
                                           TextEditingController controller =
                                               TextEditingController();
                                           showDialog(
-                                              barrierDismissible: false,
                                               context: context,
                                               builder: (context) {
                                                 return DialogFactory
-                                                    .closeOutConfirmDialog(
+                                                    .normalConfirmDialog(
                                                         context,
-                                                        value: data
-                                                            .selectedTotalPnl
-                                                            .toStringAsFixed(4),
-                                                        controller: controller);
-                                              }).then((value) async {
-                                            if (value != null && value) {
-                                              callAmendAll(data);
-                                            }
-                                          });
+                                                        title: I18n.of(context)
+                                                            .limitOrderCancelButton,
+                                                        content: "是否撤单",
+                                                        onConfirmPressed: () {
+                                                  if (locator
+                                                      .get<UserManager>()
+                                                      .user
+                                                      .isLocked) {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return DialogFactory
+                                                              .unlockDialog(
+                                                                  context,
+                                                                  controller:
+                                                                      controller);
+                                                        }).then((value) async {
+                                                      if (value) {
+                                                        cancelAll(data);
+                                                      }
+                                                    });
+                                                  } else {
+                                                    cancelAll(data);
+                                                  }
+                                                });
+                                              });
                                         }
                                       : () {},
                                   child: Container(
                                       alignment: Alignment.center,
                                       child: new Text(
-                                        "${I18n.of(context).closeOut}(${data.selectedTotalCount})",
+                                        "${I18n.of(context).limitOrderCancelButton}(${data.selectedTotalCount})",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       width: 130,
@@ -133,15 +120,15 @@ class AllOrderState extends State<AllOrdersPage> {
     );
   }
 
-  List<Widget> _itemView(OrderViewModel orderViewModel) {
+  List<Widget> _itemView(LimitOrderManager limitOrderManager) {
     List<Widget> listWidget = List();
-    for (var i = 0; i < orderViewModel.orders.length; i++) {
-      var item = orderViewModel.selectedOrders[i].isSelected;
+    for (var i = 0; i < limitOrderManager.orders.length; i++) {
+      var item = limitOrderManager.selectedOrders[i].isSelected;
       listWidget.add(new Container(
         color: Colors.white,
         margin: new EdgeInsets.only(top: 10),
         child: Column(
-          children: _itemViewChild(i, item, orderViewModel),
+          children: _itemViewChild(i, item, limitOrderManager),
         ),
       ));
     }
@@ -149,7 +136,7 @@ class AllOrderState extends State<AllOrdersPage> {
   }
 
   List<Widget> _itemViewChild(
-      int index, bool item, OrderViewModel orderViewModel) {
+      int index, bool item, LimitOrderManager orderViewModel) {
     var row = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -166,31 +153,6 @@ class AllOrderState extends State<AllOrdersPage> {
                 orderViewModel.calculateMoneyCount();
               }),
         ),
-        GestureDetector(
-          onTap: () {
-            openDialog(context, orderViewModel.orders[index]);
-          },
-          child: Row(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(right: 9),
-                child: Text(I18n.of(context).resetPnl,
-                    style: TextStyle(
-                      fontFamily: 'PingFangSC',
-                      color: Color(0xff282c35),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.normal,
-                    )),
-              ),
-              SvgPicture.asset(R.resAssetsIconsIcReviseYellow,
-                  width: 16, height: 16),
-              SizedBox(
-                width: 15,
-              ),
-            ],
-          ),
-        )
       ],
     );
     List<Widget> listWidget = List();
@@ -209,27 +171,22 @@ class AllOrderState extends State<AllOrdersPage> {
     listWidget.add(Container(
         height: 230,
         width: ScreenUtil.screenWidth,
-        child: OrderInfo(
+        child: LimitOrderInfo(
           model: orderViewModel.orders[index],
-          isAll: true,
         )));
     return listWidget;
   }
 
-  callAmendAll(OrderViewModel orderViewModel) async {
-    var pnl = PnlViewModel(
-        api: locator.get(),
-        um: locator.get(),
-        mtm: locator.get(),
-        refm: locator.get());
+  cancelAll(LimitOrderManager limitOrderManager) async {
     var failCount = 0;
     var sucessCount = 0;
     try {
       showLoading(context, isBarrierDismissible: false);
       List<Future<PostOrderResponseModel>> futures = [];
-      for (int i = 0; i < orderViewModel.orders.length; i++) {
-        if (orderViewModel.selectedOrders[i].isSelected) {
-          futures.add(pnl.amend(orderViewModel.orders[i], true, false));
+      for (int i = 0; i < limitOrderManager.orders.length; i++) {
+        if (limitOrderManager.selectedOrders[i].isSelected) {
+          futures
+              .add(limitOrderManager.cancelOrder(limitOrderManager.orders[i]));
         }
       }
       List<PostOrderResponseModel> postOrderResponseList =
@@ -244,18 +201,25 @@ class AllOrderState extends State<AllOrdersPage> {
         }
       }
       if (failCount != 0 && sucessCount != 0) {
-        showNotification(context, true, "部分平仓");
+        showNotification(context, true, "部分撤单");
       } else if (failCount == 0) {
-        showNotification(context, false,
-            I18n.of(context).closeOut + I18n.of(context).successToast);
+        showNotification(
+            context, false, I18n.of(context).limitOrderCancelSucess,
+            callback: () {
+          Navigator.of(context).pop();
+        });
       } else {
-        showNotification(context, true,
-            I18n.of(context).closeOut + I18n.of(context).failToast);
+        showNotification(context, true, I18n.of(context).limitOrderCancelFailed,
+            callback: () {
+          Navigator.of(context).pop();
+        });
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showNotification(context, true,
-          I18n.of(context).closeOut + I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).limitOrderCancelFailed,
+          callback: () {
+        Navigator.of(context).pop();
+      });
     }
   }
 }

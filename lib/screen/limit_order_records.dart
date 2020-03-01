@@ -2,39 +2,37 @@ import 'dart:collection';
 
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/order_response_model.dart';
-import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
-import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
 import 'package:bbb_flutter/widgets/empty_records.dart';
-import 'package:bbb_flutter/widgets/order_record_item.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
+import 'package:bbb_flutter/widgets/limit_order_record_item.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-class OrderRecordsWidget extends StatefulWidget {
-  const OrderRecordsWidget({Key key}) : super(key: key);
+class LimitOrderRecordsPage extends StatefulWidget {
+  const LimitOrderRecordsPage({Key key}) : super(key: key);
 
   @override
-  _OrderRecordsWidgetState createState() => _OrderRecordsWidgetState();
+  _LimitOrderRecordsState createState() => _LimitOrderRecordsState();
 }
 
-class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
-  List<OrderResponseModel> data = [];
-  List<OrderResponseModel> upData = [];
-  List<OrderResponseModel> downData = [];
-  LinkedHashMap<int, List<OrderResponseModel>> orderMap = LinkedHashMap();
-  LinkedHashMap<int, List<OrderResponseModel>> upOrderMap = LinkedHashMap();
-  LinkedHashMap<int, List<OrderResponseModel>> downOrderMap = LinkedHashMap();
+class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
+  List<LimitOrderResponse> data = [];
+  List<LimitOrderResponse> upData = [];
+  List<LimitOrderResponse> downData = [];
+  LinkedHashMap<int, List<LimitOrderResponse>> orderMap = LinkedHashMap();
+  LinkedHashMap<int, List<LimitOrderResponse>> upOrderMap = LinkedHashMap();
+  LinkedHashMap<int, List<LimitOrderResponse>> downOrderMap = LinkedHashMap();
 
   @override
   void initState() {
     final name = locator.get<UserManager>().user.name;
     locator
         .get<BBBAPI>()
-        .getOrders(name,
-            status: [OrderStatus.closed],
+        .getLimitOrders(name,
+            active: "0",
             startTime: (DateTime.now().subtract(Duration(days: 90)))
                 .toUtc()
                 .toIso8601String(),
@@ -52,17 +50,17 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
     super.initState();
   }
 
-  _constructMap(List<OrderResponseModel> list, var map) {
+  _constructMap(List<LimitOrderResponse> list, var map) {
     int count = 0;
     for (int i = 0; i < list.length; i++) {
       if (list.length == 1) {
-        var month = DateTime.parse(list[i].settleTime).toLocal().month;
+        var month = DateTime.parse(list[i].createTime).toLocal().month;
         map.putIfAbsent(month, () => list);
         break;
       }
       if (i == 0) continue;
-      var current = DateTime.parse(list[i].settleTime).toLocal().month;
-      var prev = DateTime.parse(list[i - 1].settleTime).toLocal().month;
+      var current = DateTime.parse(list[i].createTime).toLocal().month;
+      var prev = DateTime.parse(list[i - 1].createTime).toLocal().month;
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;
@@ -85,13 +83,8 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                 (context, i) => Column(
                   children: <Widget>[
                     InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail,
-                            arguments: RouteParamsOfTransactionRecords(
-                                orderResponseModel: value[i]));
-                      },
-                      child: OrderRecordItem(
+                      onTap: () {},
+                      child: LimitOrderRecordItem(
                         model: value[i],
                       ),
                     ),
@@ -121,7 +114,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title: Text(I18n.of(context).transactionRecords,
+          title: Text(I18n.of(context).limitOrderRecords,
               style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
@@ -184,31 +177,6 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                       : CustomScrollView(
                           slivers: _buildSlivers(upOrderMap),
                         )),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 20),
-              //   child: upData.length == 0
-              //       ? EmptyRecords()
-              //       : ListView.separated(
-              //           separatorBuilder: (context, index) => Divider(
-              //             height: 1,
-              //             color: Palette.separatorColor,
-              //           ),
-              //           itemCount: upData.length,
-              //           itemBuilder: (context, index) {
-              //             return InkWell(
-              //               onTap: () {
-              //                 Navigator.pushNamed(
-              //                     context, RoutePaths.OrderRecordDetail,
-              //                     arguments: RouteParamsOfTransactionRecords(
-              //                         orderResponseModel: upData[index]));
-              //               },
-              //               child: OrderRecordItem(
-              //                 model: upData[index],
-              //               ),
-              //             );
-              //           },
-              //         ),
-              // ),
               Container(
                   child: downData.length == 0
                       ? EmptyRecords()

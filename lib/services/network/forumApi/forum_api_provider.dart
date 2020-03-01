@@ -27,7 +27,7 @@ class ForumApiProvider extends ForumApi {
   _dispatchNode() {
     if (_pref.getEnvType() == EnvType.Pro) {
       dio.options.baseUrl = ForumConnection.PRO_NODE;
-    } else if (_pref.getEnvType() == EnvType.Uat) {
+    } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = ForumConnection.UAT_NODE;
     }
   }

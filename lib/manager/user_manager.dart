@@ -49,9 +49,9 @@ class UserManager extends BaseModel {
   }
 
   Future<bool> loginWith({String name, String password}) async {
-    AccountResponseModel account = await _api.getAccount(name: name);
-    if (account != null) {
-      try {
+    try {
+      AccountResponseModel account = await _api.getAccount(name: name);
+      if (account != null) {
         await unlockWith(name: name, password: password, account: account);
         user.name = name;
         user.account = account;
@@ -64,12 +64,11 @@ class UserManager extends BaseModel {
         notifyListeners();
 
         return true;
-      } catch (error) {
-        return false;
       }
+      return false;
+    } catch (error) {
+      throw error;
     }
-
-    return false;
   }
 
   Future<bool> loginWithPrivateKey(
@@ -315,6 +314,10 @@ class UserManager extends BaseModel {
   }
 
   reload() async {
+    await locator.get<RefManager>().updateRefData();
+    await locator.get<RefManager>().updateContract();
+    locator.get<RefManager>().updateUpContractId();
+    locator.get<RefManager>().updateDownContractId();
     fetchBalances(name: user.name);
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);

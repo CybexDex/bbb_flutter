@@ -1,9 +1,10 @@
+import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +18,6 @@ class _LoginState extends State<LoginPage> {
   final _accountNameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _errorMessageVisible = false;
-  bool _loadingVisibility = false;
   bool _enableButton = false;
   bool _obscureText = true;
   String _errorMessage = "";
@@ -192,32 +192,45 @@ class _LoginState extends State<LoginPage> {
                         child: WidgetFactory.button(
                             onPressed: _enableButton
                                 ? () async {
-                                    setState(() {
-                                      _loadingVisibility = true;
-                                    });
-                                    if (await userLocator.loginWith(
-                                        name: _accountNameController.text,
-                                        password: _passwordController.text)) {
-                                      userLocator.fetchBalances(
-                                          name: _accountNameController.text);
-                                      locator
-                                          .get<AccountViewModel>()
-                                          .checkRewardAccount(
-                                              accountName:
-                                                  _accountNameController.text,
-                                              bonusEvent: true);
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                    } else {
-                                      setState(() {
-                                        _errorMessageVisible = true;
-                                        _errorMessage =
-                                            I18n.of(context).accountLogInError;
-                                      });
+                                    showLoading(context,
+                                        isBarrierDismissible: true);
+                                    try {
+                                      if (await userLocator.loginWith(
+                                          name: _accountNameController.text,
+                                          password: _passwordController.text)) {
+                                        userLocator.fetchBalances(
+                                            name: _accountNameController.text);
+                                        locator
+                                            .get<AccountViewModel>()
+                                            .checkRewardAccount(
+                                                accountName:
+                                                    _accountNameController.text,
+                                                bonusEvent: true);
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
+                                      } else {
+                                        setState(() {
+                                          _errorMessageVisible = true;
+                                          _errorMessage = I18n.of(context)
+                                              .accountLogInError;
+                                        });
+                                        Navigator.of(context).maybePop();
+                                      }
+                                    } catch (error) {
+                                      if (error is DioError) {
+                                        setState(() {
+                                          _errorMessageVisible = true;
+                                          _errorMessage = "网络错误请重试";
+                                        });
+                                      } else {
+                                        setState(() {
+                                          _errorMessageVisible = true;
+                                          _errorMessage = I18n.of(context)
+                                              .accountLogInError;
+                                        });
+                                      }
+                                      Navigator.of(context).maybePop();
                                     }
-                                    setState(() {
-                                      _loadingVisibility = false;
-                                    });
                                   }
                                 : () {},
                             color: _enableButton
@@ -277,13 +290,6 @@ class _LoginState extends State<LoginPage> {
                       Navigator.pushNamed(context, RoutePaths.Register);
                     },
                   ),
-                  Visibility(
-                    visible: _loadingVisibility,
-                    child: SpinKitWave(
-                      color: Palette.redOrange,
-                      size: 50,
-                    ),
-                  )
                 ],
               )),
         ),

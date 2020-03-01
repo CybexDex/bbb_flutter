@@ -444,6 +444,24 @@ class _AccountPageState extends State<AccountPage> {
                           thickness: 1,
                           height: 1,
                         ),
+                        ListTile(
+                          trailing: Icon(Icons.keyboard_arrow_right),
+                          title: Text(
+                            I18n.of(context).limitOrderRecords,
+                            style: StyleNewFactory.black15,
+                          ),
+                          onTap: () {
+                            _accountViewModel.puchToNextPage(
+                                userManager.user.logined,
+                                RoutePaths.LimitOrderRecords,
+                                context);
+                          },
+                        ),
+                        Divider(
+                          color: Palette.appDividerBackgroudGreyColor,
+                          thickness: 1,
+                          height: 1,
+                        ),
                         userManager.user.loginType == LoginType.cloud ||
                                 userManager.user.loginType == LoginType.none
                             ? ListTile(

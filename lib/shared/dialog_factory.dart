@@ -1,6 +1,6 @@
 import 'package:bbb_flutter/base/base_widget.dart';
+import 'package:bbb_flutter/logic/limit_order_vm.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
-import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -241,20 +241,49 @@ class DialogFactory {
   }
 
   static Widget confirmDialog(BuildContext context,
-      {TradeViewModel model, TextEditingController controller}) {
+      {dynamic model, TextEditingController controller}) {
     return CupertinoAlertDialog(
       title: Text("买入确认"),
       content: Container(
         child: Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("预估价格"),
-                Text(
-                    "${((model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount).toStringAsFixed(4)} USDT"),
-              ],
-            ),
+            (model is LimitOrderViewModel)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(I18n.of(context).limitOrderPrice),
+                      Text("${model.orderForm.predictPrice} USDT"),
+                    ],
+                  )
+                : Container(),
+            (model is LimitOrderViewModel)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(I18n.of(context).forceClosePrice),
+                      Text("${model.orderForm.selectedItem.strikeLevel} USDT"),
+                    ],
+                  )
+                : Container(),
+            (model is LimitOrderViewModel)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(I18n.of(context).actLevel),
+                      Text("${model.actLevel.toStringAsFixed(1)}"),
+                    ],
+                  )
+                : Container(),
+            !(model is LimitOrderViewModel)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("预估价格"),
+                      Text(
+                          "${((model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount).toStringAsFixed(4)} USDT"),
+                    ],
+                  )
+                : Container(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
