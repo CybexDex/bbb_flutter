@@ -149,7 +149,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         decoration: InputDecoration(
                           // contentPadding: EdgeInsets.only(top: 4, bottom: 4),
                           border: InputBorder.none,
-                          hintText: I18n.of(context).investmentHint,
+                          hintText: "请输入价格",
                           hintStyle: StyleFactory.addReduceStyle,
                         ),
                       ),

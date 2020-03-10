@@ -4,13 +4,12 @@ import 'package:bbb_flutter/logic/limit_order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/limit_order/limit_order_form.dart';
 import 'package:bbb_flutter/shared/defs.dart';
-import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
 import 'package:logger/logger.dart';
@@ -45,25 +44,25 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
       iconTheme: IconThemeData(
         color: Palette.backButtonColor, //change your color here
       ),
-      actions: <Widget>[
-        locator.get<UserManager>().user.loginType != LoginType.cloud
-            ? Container()
-            : GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Center(
-                    child: Text(
-                      I18n.of(context).topUp,
-                      style: StyleNewFactory.yellowOrange18,
-                      textScaleFactor: 1,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                },
-              )
-      ],
+      // actions: <Widget>[
+      //   locator.get<UserManager>().user.loginType != LoginType.cloud
+      //       ? Container()
+      //       : GestureDetector(
+      //           child: Padding(
+      //             padding: EdgeInsets.only(right: 20),
+      //             child: Center(
+      //               child: Text(
+      //                 I18n.of(context).topUp,
+      //                 style: StyleNewFactory.yellowOrange18,
+      //                 textScaleFactor: 1,
+      //               ),
+      //             ),
+      //           ),
+      //           onTap: () {
+      //             Navigator.of(context).pushNamed(RoutePaths.Deposit);
+      //           },
+      //         )
+      // ],
       centerTitle: true,
       title: Consumer<LimitOrderViewModel>(builder: (context, model, child) {
         return Row(
@@ -163,7 +162,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
                                                 padding: EdgeInsets.only(
                                                     top: 12, bottom: 12),
                                                 child: new Text(
-                                                  I18n.of(context).buyUp,
+                                                  "下单",
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -202,7 +201,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
                                                 padding: EdgeInsets.only(
                                                     top: 12, bottom: 12),
                                                 child: new Text(
-                                                  I18n.of(context).buyDown,
+                                                  "下单",
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -278,11 +277,12 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
     showLoading(context, isBarrierDismissible: false);
     try {
       PostOrderResponseModel postOrderResponseModel = await model.postOrder();
-      Navigator.of(context).pop();
       if (postOrderResponseModel.code != 0) {
+        Navigator.of(context).pop();
         showNotification(context, true, postOrderResponseModel.msg);
       } else {
         await model.fetchPostion();
+        Navigator.of(context).pop();
         showNotification(context, false, I18n.of(context).successToast,
             callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);

@@ -21,6 +21,7 @@ import 'package:bbb_flutter/widgets/order_info.dart';
 import 'package:bbb_flutter/widgets/percentage_bar_painter.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/widgets/stagger_animation.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -154,7 +155,7 @@ class _ExchangePageState extends State<ExchangePage>
                                   flex: 1,
                                   child: Builder(
                                     builder: (context) => WidgetFactory.button(
-                                        data: I18n.of(context).marketOrder,
+                                        data: I18n.of(context).buyUp,
                                         color: Palette.redOrange,
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
@@ -217,17 +218,50 @@ class _ExchangePageState extends State<ExchangePage>
                                   flex: 1,
                                   child: Builder(
                                     builder: (context) => WidgetFactory.button(
-                                        data: I18n.of(context).limitOrder,
+                                        data: I18n.of(context).buyDown,
                                         color: Palette.shamrockGreen,
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
                                         onPressed: () {
+                                          if (locator
+                                                      .get<RefManager>()
+                                                      .upContract ==
+                                                  null ||
+                                              locator
+                                                  .get<RefManager>()
+                                                  .upContract
+                                                  .isEmpty) {
+                                            showNotification(
+                                                context,
+                                                true,
+                                                I18n.of(context)
+                                                    .toastNoContract);
+                                            return;
+                                          }
                                           if (user.user.logined) {
-                                            Navigator.pushNamed(context,
-                                                    RoutePaths.LimitOrder,
+                                            if (locator
+                                                        .get<RefManager>()
+                                                        .currentUpContract ==
+                                                    null ||
+                                                locator
+                                                        .get<RefManager>()
+                                                        .currentDownContract ==
+                                                    null ||
+                                                !locator
+                                                    .get<RefManager>()
+                                                    .isIdSelectedByUser) {
+                                              locator
+                                                  .get<RefManager>()
+                                                  .updateUpContractId();
+                                              locator
+                                                  .get<RefManager>()
+                                                  .updateDownContractId();
+                                            }
+                                            Navigator.pushNamed(
+                                                    context, RoutePaths.Trade,
                                                     arguments:
                                                         RouteParamsOfTrade(
-                                                            isUp: true,
+                                                            isUp: false,
                                                             title: "ttes"))
                                                 .then((v) {
                                               Provider.of<OrderViewModel>(
@@ -317,7 +351,7 @@ class _ExchangePageState extends State<ExchangePage>
                                     null) {
                               return child;
                             }
-                            return _newStockWidget(context, data);
+                            return _stockWidget(context, data);
                           },
                           child: Container(child: _emptyStockWidget()),
                         ),
@@ -434,55 +468,61 @@ class _ExchangePageState extends State<ExchangePage>
     );
   }
 
-  // Widget _stockWidget(BuildContext context, OrderViewModel bloc) {
-  //   return Column(children: [
-  //     CarouselSlider(
-  //         viewportFraction: 0.92,
-  //         aspectRatio: 335 / 200,
-  //         autoPlay: false,
-  //         reverse: false,
-  //         enableInfiniteScroll: false,
-  //         enlargeCenterPage: true,
-  //         onPageChanged: (index) {
-  //           bloc.index = index;
-  //           bloc.setBusy(false);
-  //         },
-  //         items: bloc.orders.map((i) {
-  //           return Builder(
-  //             builder: (BuildContext context) {
-  //               return Container(
-  //                   decoration: DecorationFactory.cornerShadowDecoration,
-  //                   margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
-  //                   padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
-  //                   width: ScreenUtil.screenWidth,
-  //                   child: OrderInfo(model: i));
-  //             },
-  //           );
-  //         }).toList()),
-  //     Row(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: bloc.orders
-  //           .asMap()
-  //           .map((i, element) {
-  //             return MapEntry(
-  //                 i,
-  //                 Container(
-  //                   width: 8.0,
-  //                   height: 8.0,
-  //                   margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
-  //                   decoration: BoxDecoration(
-  //                       shape: BoxShape.circle,
-  //                       color: bloc.index == i
-  //                           ? Palette.redOrange
-  //                           : Palette.hintTitleColor),
-  //                 ));
-  //           })
-  //           .values
-  //           .toList(),
-  //     ),
-  //     SizedBox(
-  //       height: 10,
-  //     )
-  //   ]);
-  // }
+  Widget _stockWidget(BuildContext context, OrderViewModel bloc) {
+    return Container(
+      padding: EdgeInsets.only(top: 10),
+      child: Column(children: [
+        CarouselSlider(
+            viewportFraction: 0.92,
+            aspectRatio: 350 / 200,
+            autoPlay: false,
+            reverse: false,
+            enableInfiniteScroll: false,
+            enlargeCenterPage: true,
+            onPageChanged: (index) {
+              bloc.index = index;
+              bloc.setBusy(false);
+            },
+            items: bloc.orders.map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                      decoration: DecorationFactory.cornerShadowDecoration,
+                      margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
+                      padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
+                      width: ScreenUtil.screenWidth,
+                      child: OrderInfo(
+                        model: i,
+                        isAll: false,
+                      ));
+                },
+              );
+            }).toList()),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: bloc.orders
+        //       .asMap()
+        //       .map((i, element) {
+        //         return MapEntry(
+        //             i,
+        //             Container(
+        //               width: 8.0,
+        //               height: 8.0,
+        //               margin: EdgeInsets.fromLTRB(2, 0, 2, 0),
+        //               decoration: BoxDecoration(
+        //                   shape: BoxShape.circle,
+        //                   color: bloc.index == i
+        //                       ? Palette.redOrange
+        //                       : Palette.hintTitleColor),
+        //             ));
+        //       })
+        //       .values
+        //       .toList(),
+        // ),
+        // SizedBox(
+        //   height: 10,
+        // )
+      ]),
+    );
+  }
 }

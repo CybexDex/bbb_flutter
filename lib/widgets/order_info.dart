@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
@@ -7,6 +8,7 @@ import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class OrderInfo extends StatelessWidget {
@@ -176,10 +178,32 @@ class OrderInfo extends StatelessWidget {
                             child: Container(),
                             flex: 5,
                           ),
-                          Text(
-                            "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
-                            style: StyleNewFactory.grey15,
-                          ),
+                          _isAll
+                              ? Text(
+                                  "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
+                                  style: StyleNewFactory.grey15,
+                                )
+                              : GestureDetector(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text(
+                                        "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : (cutLoss.round().toStringAsFixed(0) + "%")}",
+                                        style: StyleNewFactory.grey15,
+                                      ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      SvgPicture.asset(
+                                        R.resAssetsIconsIcReviseYellow,
+                                        width: 14,
+                                        height: 14,
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    openDialog(context, _model);
+                                  },
+                                ),
                           Expanded(
                             flex: 23,
                             child: Container(),
@@ -371,11 +395,11 @@ class OrderInfo extends StatelessWidget {
                             },
                             child: Container(
                                 alignment: Alignment.center,
+                                padding: EdgeInsets.only(left: 15, right: 15),
                                 child: new Text(
                                   "平仓",
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                width: 130,
                                 color: Palette.invitePromotionBadgeColor),
                           ),
                         ],

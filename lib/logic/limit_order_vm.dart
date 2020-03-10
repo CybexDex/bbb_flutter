@@ -24,6 +24,7 @@ import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:bbb_flutter/widgets/custom_dropdown.dart' as custom;
 import 'package:cybex_flutter_plugin/order.dart';
+import 'package:decimal/decimal.dart';
 import 'package:intl/intl.dart';
 
 class LimitOrderViewModel extends BaseModel {
@@ -150,7 +151,6 @@ class LimitOrderViewModel extends BaseModel {
   }
 
   updateCurrentContract(bool isUp, String contractId) {
-    orderForm.investAmount = 1;
     orderForm.isUp = isUp;
     updateAmountAndFee();
   }
@@ -321,8 +321,8 @@ class LimitOrderViewModel extends BaseModel {
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),
         amount:
-            ((double.parse(orderForm.totalAmount.amount.toStringAsFixed(4))) *
-                    pow(10, quoteAsset.precision))
+            ((Decimal.parse(orderForm.totalAmount.amount.toStringAsFixed(4))) *
+                    Decimal.parse(pow(10, quoteAsset.precision).toString()))
                 .toInt());
     comm.isTwo = false;
     return comm;

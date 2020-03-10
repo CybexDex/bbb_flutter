@@ -8,7 +8,9 @@ import 'package:bbb_flutter/models/response/bbb_query_response/contract_response
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
+import 'package:bbb_flutter/shared/ui_common.dart' as prefix0;
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
@@ -54,30 +56,29 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
         color: Palette.backButtonColor, //change your color here
       ),
       actions: <Widget>[
-        locator.get<UserManager>().user.loginType != LoginType.cloud
-            ? Container()
-            : GestureDetector(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Center(
-                    child: Text(
-                      I18n.of(context).topUp,
-                      style: TextStyle(
-                        fontFamily: 'PingFangSC',
-                        color: Color(0xffffa700),
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0,
-                      ),
-                      textScaleFactor: 1,
-                    ),
+        // locator.get<UserManager>().user.loginType != LoginType.cloud
+        //     ? Container()
+        Consumer<TradeViewModel>(
+          builder: (context, model, child) {
+            return GestureDetector(
+              child: Padding(
+                padding: EdgeInsets.only(right: 20),
+                child: Center(
+                  child: Text(
+                    I18n.of(context).limitOrder,
+                    style: StyleNewFactory.yellowOrange18,
+                    textScaleFactor: 1,
                   ),
                 ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(RoutePaths.Deposit);
-                },
-              )
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, RoutePaths.LimitOrder,
+                    arguments: RouteParamsOfTrade(
+                        isUp: model.orderForm.isUp, title: "ttes"));
+              },
+            );
+          },
+        )
       ],
       centerTitle: true,
       title: Consumer<TradeViewModel>(builder: (context, model, child) {
@@ -237,7 +238,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     padding: EdgeInsets.only(
                                                         top: 12, bottom: 12),
                                                     child: new Text(
-                                                      I18n.of(context).buyUp,
+                                                      "开仓",
                                                       style: TextStyle(
                                                           fontSize: 18,
                                                           fontWeight:
@@ -261,7 +262,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                     padding: EdgeInsets.only(
                                                         top: 12, bottom: 12),
                                                     child: new Text(
-                                                      I18n.of(context).buyDown,
+                                                      "开仓",
                                                       style: TextStyle(
                                                           fontSize: 18,
                                                           fontWeight:
@@ -356,11 +357,12 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
     showLoading(context, isBarrierDismissible: false);
     try {
       PostOrderResponseModel postOrderResponseModel = await model.postOrder();
-      Navigator.of(context).pop();
       if (postOrderResponseModel.code != 0) {
+        Navigator.of(context).pop();
         showNotification(context, true, postOrderResponseModel.msg);
       } else {
         await model.fetchPostion();
+        Navigator.of(context).pop();
         showNotification(context, false, I18n.of(context).successToast,
             callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);
