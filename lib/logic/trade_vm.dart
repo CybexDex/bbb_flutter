@@ -124,14 +124,13 @@ class TradeViewModel extends BaseModel {
     double totalAmount = orderForm.investAmount * amount;
 
     orderForm.totalAmount = Asset(amount: totalAmount + commiDouble);
-    if (orderForm.investAmount > contract.availableInventory ||
-        _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ==
+    if (_um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ==
             null ||
         orderForm.totalAmount.amount >
             _um
                 .fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId)
                 .quantity ||
-        orderForm.investAmount > contract.maxOrderQty ||
+        orderForm.investAmount > _refm.config.maxOrderQuantity ||
         orderForm.totalAmount.amount <= double.minPositive ||
         !isTakeProfitInputCorrect ||
         !isCutLossInputCorrect ||
@@ -150,13 +149,8 @@ class TradeViewModel extends BaseModel {
   }
 
   void increaseInvest() {
-    var contract =
-        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
-
-    if (orderForm.investAmount < contract.availableInventory) {
-      orderForm.investAmount += 1;
-      updateAmountAndFee();
-    }
+    orderForm.investAmount += 1;
+    updateAmountAndFee();
   }
 
   void decreaseInvest() {

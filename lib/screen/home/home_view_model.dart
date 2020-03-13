@@ -32,6 +32,7 @@ class HomeViewModel extends BaseModel {
   List<Articles> zendeskAdvertise = [];
   AstrologyPredictResponse astrologyPredictResponse;
   bool depositAvailable = true;
+  bool isAutoPlay = false;
 
   HomeViewModel(
       {BBBAPI bbbapi,
@@ -61,11 +62,11 @@ class HomeViewModel extends BaseModel {
     }
   }
 
-  getBanners() async {
+  Future<ForumResponse<BannerResponse>> getBanners() async {
     ForumResponse<BannerResponse> response =
         await _forumApi.getBanners(pg: 0, siz: 100);
     banners = response.result;
-    setBusy(false);
+    return response;
   }
 
   getRankingList() async {

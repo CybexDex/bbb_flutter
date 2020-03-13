@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/logic/trade_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -325,7 +326,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                       height: 6,
                     ),
                     Text(
-                      "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} ${I18n.of(context).perDay}",
+                      "${(locator.get<RefManager>().config.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} ${I18n.of(context).perDay}",
                       style: StyleFactory.cellTitleStyle,
                     )
                   ],
@@ -349,13 +350,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                         ),
                         Builder(
                           builder: (context) {
-                            if (model.orderForm.investAmount >
-                                refreshContract.availableInventory) {
-                              return Text(
-                                I18n.of(context).orderFormSupplyNotEnoughError,
-                                style: StyleFactory.smallButtonTitleStyle,
-                              );
-                            } else if (model.usdtBalance == null ||
+                            if (model.usdtBalance == null ||
                                 model.orderForm.totalAmount.amount >
                                     model.usdtBalance.quantity) {
                               return Text(
@@ -363,9 +358,12 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (model.orderForm.investAmount >
-                                refreshContract.maxOrderQty) {
+                                locator
+                                    .get<RefManager>()
+                                    .config
+                                    .maxOrderQuantity) {
                               return Text(
-                                "${I18n.of(context).orderFormBuyLimitationError}${refreshContract.maxOrderQty}",
+                                "${I18n.of(context).orderFormBuyLimitationError}${locator.get<RefManager>().config.maxOrderQuantity}",
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (!model.isCutLossInputCorrect ||

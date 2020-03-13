@@ -10,7 +10,6 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
-import 'package:bbb_flutter/shared/ui_common.dart' as prefix0;
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
@@ -174,19 +173,6 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                   text:
                                                       "${price.toStringAsFixed(4)} USDT"),
                                             ])),
-                                            RichText(
-                                                text: TextSpan(children: [
-                                              TextSpan(
-                                                  style: StyleFactory
-                                                      .subTitleStyle,
-                                                  text:
-                                                      "${I18n.of(context).rest}: "),
-                                              TextSpan(
-                                                  style: StyleFactory
-                                                      .cellBoldTitleStyle,
-                                                  text:
-                                                      "${refreshContract.availableInventory.toStringAsFixed(0)}"),
-                                            ]))
                                           ],
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,

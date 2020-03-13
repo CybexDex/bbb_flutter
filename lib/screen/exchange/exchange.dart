@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
-import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
@@ -69,8 +68,7 @@ class _ExchangePageState extends State<ExchangePage>
           return Scaffold(
               key: globalKey,
               resizeToAvoidBottomPadding: false,
-              // drawer: user.user.logined ? UserDrawer() : null,
-              appBar: exchangeAppBar(),
+              appBar: exchangeAppBar(context: globalKey.currentContext),
               body: SafeArea(
                   left: false,
                   right: false,
@@ -225,11 +223,11 @@ class _ExchangePageState extends State<ExchangePage>
                                         onPressed: () {
                                           if (locator
                                                       .get<RefManager>()
-                                                      .upContract ==
+                                                      .downContract ==
                                                   null ||
                                               locator
                                                   .get<RefManager>()
-                                                  .upContract
+                                                  .downContract
                                                   .isEmpty) {
                                             showNotification(
                                                 context,
@@ -404,69 +402,69 @@ class _ExchangePageState extends State<ExchangePage>
             ));
   }
 
-  Widget _newStockWidget(BuildContext context, OrderViewModel orderViewModel) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.pushNamed(context, RoutePaths.AllLimitOrders);
-                //   },
-                //   child: Row(
-                //     children: <Widget>[
-                //       Text(I18n.of(context).holdAll,
-                //           style: StyleNewFactory.black15),
-                //       SizedBox(
-                //         width: 10,
-                //       ),
-                //       SvgPicture.asset(
-                //         R.resAssetsIconsHoldAll,
-                //         width: 14,
-                //         height: 15,
-                //       )
-                //     ],
-                //   ),
-                // ),
-                GestureDetector(
-                  onTap: () {
-                    openDialog(context, orderViewModel.orders[0]);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.only(right: 9),
-                        child: Text(I18n.of(context).resetPnl,
-                            style: StyleNewFactory.black15),
-                      ),
-                      SvgPicture.asset(
-                        R.resAssetsIconsIcReviseYellow,
-                        width: 14,
-                        height: 14,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-              height: ScreenUtil.getInstance().setHeight(190),
-              width: ScreenUtil.screenWidth,
-              color: Colors.white,
-              child: OrderInfo(
-                model: orderViewModel.orders[0],
-                isAll: false,
-              )),
-        ],
-      ),
-    );
-  }
+  // Widget _newStockWidget(BuildContext context, OrderViewModel orderViewModel) {
+  //   return Container(
+  //     color: Colors.white,
+  //     child: Column(
+  //       children: <Widget>[
+  //         Container(
+  //           padding: EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 8),
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.end,
+  //             children: <Widget>[
+  //               // GestureDetector(
+  //               //   onTap: () {
+  //               //     Navigator.pushNamed(context, RoutePaths.AllLimitOrders);
+  //               //   },
+  //               //   child: Row(
+  //               //     children: <Widget>[
+  //               //       Text(I18n.of(context).holdAll,
+  //               //           style: StyleNewFactory.black15),
+  //               //       SizedBox(
+  //               //         width: 10,
+  //               //       ),
+  //               //       SvgPicture.asset(
+  //               //         R.resAssetsIconsHoldAll,
+  //               //         width: 14,
+  //               //         height: 15,
+  //               //       )
+  //               //     ],
+  //               //   ),
+  //               // ),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   openDialog(context, orderViewModel.orders[0]);
+  //                 },
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     Container(
+  //                       padding: EdgeInsets.only(right: 9),
+  //                       child: Text(I18n.of(context).resetPnl,
+  //                           style: StyleNewFactory.black15),
+  //                     ),
+  //                     SvgPicture.asset(
+  //                       R.resAssetsIconsIcReviseYellow,
+  //                       width: 14,
+  //                       height: 14,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //         Container(
+  //             height: ScreenUtil.getInstance().setHeight(190),
+  //             width: ScreenUtil.screenWidth,
+  //             color: Colors.white,
+  //             child: OrderInfo(
+  //               model: orderViewModel.orders[0],
+  //               isAll: false,
+  //             )),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _stockWidget(BuildContext context, OrderViewModel bloc) {
     return Container(

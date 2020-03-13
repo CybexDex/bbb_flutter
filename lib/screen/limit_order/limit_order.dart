@@ -12,6 +12,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
 import 'package:bbb_flutter/widgets/market_view.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 
 class LimitOrderPage extends StatefulWidget {
@@ -81,10 +82,17 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
               width: 7,
             ),
             GestureDetector(
-              child: Icon(Icons.swap_vert,
-                  color: model.orderForm.isUp
-                      ? Palette.redOrange
-                      : Palette.shamrockGreen),
+              child: model.orderForm.isUp
+                  ? SvgPicture.asset(
+                      R.resAssetsIconsIcUpRed,
+                      width: 18,
+                      height: 18,
+                    )
+                  : SvgPicture.asset(
+                      R.resAssetsIconsIcDownGreen,
+                      width: 18,
+                      height: 18,
+                    ),
               onTap: model.updateSide,
             )
           ],

@@ -150,9 +150,9 @@ class LimitOrderManager extends BaseModel {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _um.removeListener(_getOrdersCallback);
-    _refSub.cancel();
+    await _refSub.cancel();
 
     super.dispose();
   }

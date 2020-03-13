@@ -1,8 +1,10 @@
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/action_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -20,28 +22,28 @@ abstract class BBBAPI {
   setTestNet({bool isTestNet});
   setEnvMode({EnvType envType});
   setAction({String action});
+  setAsset({String asset});
   Future<RefContractResponseModel> getRefData({List<ContractStatus> status});
   Future<RefDataResponse> getRefDataNew({String injectAction});
   Future<ContractResponse> getContract({String active});
   Future<ActionResponse> getActions();
+  Future<ConfigResponse> getConfig();
+  Future<TickerResponse> getTicker({String injectAsset});
   Future<PositionsResponseModel> getPositions(
       {String name, String injectAction});
   Future<PositionsResponseModel> getPositionsTestAccount({String name});
   Future<List<OrderResponseModel>> getOrders(String name,
-      {List<OrderStatus> status, String startTime, String endTime});
+      {List<OrderStatus> status,
+      String startTime,
+      String endTime,
+      String injectAsset});
   Future<List<LimitOrderResponse>> getLimitOrders(String name,
-      {String startTime, String endTime, String active});
+      {String startTime, String endTime, String active, String injectAsset});
   Future<AccountResponseModel> getAccount({String name});
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
-      {String startTime,
-      String endTime,
-      String asset,
-      MarketDuration duration});
+      {String startTime, String endTime, MarketDuration duration});
   Future<List<KLineEntity>> getMarketHistoryCandle(
-      {String startTime,
-      String endTime,
-      String asset,
-      MarketDuration duration});
+      {String startTime, String endTime, MarketDuration duration});
   Future<DepositResponseModel> getDeposit({String name, String asset});
 
   Future<List<FundRecordModel>> getFundRecords(

@@ -5,7 +5,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-AppBar exchangeAppBar() {
+AppBar exchangeAppBar({BuildContext context}) {
   return AppBar(
     actions: <Widget>[
       Consumer<UserManager>(
@@ -16,7 +16,7 @@ AppBar exchangeAppBar() {
                       child: SvgPicture.asset(
                     R.resAssetsIconsHoldAll,
                     width: 24,
-                    height: 20,
+                    height: 24,
                   )),
                 ),
                 onTap: () {
@@ -28,26 +28,37 @@ AppBar exchangeAppBar() {
                 },
               )),
     ],
-    // leading: Consumer<UserManager>(
-    //   builder: (context, bloc, child) => GestureDetector(
-    //     child: !bloc.user.logined
-    //         ? child
-    //         : Padding(
-    //             padding: EdgeInsets.all(16),
-    //             child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
-    //                 fit: BoxFit.contain, height: 20, width: 20),
-    //           ),
-    //     onTap: () {
-    //       if (bloc.user.logined) {
-    //         bloc.fetchBalances(name: bloc.user.name);
-    //         Scaffold.of(context).openDrawer();
-    //       } else {
-    //         Navigator.of(context).pushNamed(RoutePaths.Login);
-    //       }
-    //     },
-    //   ),
-    //   child: Image.asset(R.resAssetsIconsIcPerson),
-    // ),
+    leading: GestureDetector(
+      onTap: () {
+        Scaffold.of(globalKey.currentContext).openDrawer();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: SvgPicture.asset(
+          R.resAssetsIconsIcDrawer,
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+    // Consumer<UserManager>(
+    //     builder: (context, bloc, child) => GestureDetector(
+    //           child: child,
+    //           // : Padding(
+    //           //     padding: EdgeInsets.all(16),
+    //           //     child: SvgPicture.string(Jdenticon.toSvg(bloc.user.name),
+    //           //         fit: BoxFit.contain, height: 20, width: 20),
+    //           // ),
+    //           onTap: () {
+    //             if (bloc.user.logined) {
+    //               bloc.fetchBalances(name: bloc.user.name);
+    //               Scaffold.of(context).openDrawer();
+    //             } else {
+    //               Navigator.of(context).pushNamed(RoutePaths.Login);
+    //             }
+    //           },
+    //         ),
+    //     child:
+    //         SvgPicture.asset(R.resAssetsIconsIcDrawer, width: 24, height: 24)),
     centerTitle: true,
     title: Consumer2<UserManager, TickerData>(
       builder: (context, bloc, ticker, child) {

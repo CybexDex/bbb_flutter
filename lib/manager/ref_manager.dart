@@ -1,10 +1,10 @@
 import 'package:bbb_flutter/models/response/bbb_query_response/action_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
-import 'package:bbb_flutter/shared/types.dart';
 import 'package:rxdart/subjects.dart';
 
 class RefManager {
@@ -17,6 +17,7 @@ class RefManager {
   String _downcontractId;
   List<Action> actions;
   ContractResponse allContracts;
+  ConfigResponse config;
   bool isIdSelectedByUser = false;
 
   RefManager({BBBAPI api}) : _api = api;
@@ -38,8 +39,7 @@ class RefManager {
   List<Contract> get upContract {
     List<Contract> contractList =
         contractController.value?.contract?.where((contract) {
-      return contract.contractId.contains("N") &&
-          contractStatusMap[ContractStatus.active] == contract.status;
+      return contract.contractId.contains("N");
     })?.toList();
     contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
     return contractList;
@@ -48,8 +48,7 @@ class RefManager {
   List<Contract> get downContract {
     List<Contract> contractList =
         contractController.value?.contract?.where((contract) {
-      return contract.contractId.contains("X") &&
-          contractStatusMap[ContractStatus.active] == contract.status;
+      return contract.contractId.contains("X");
     })?.toList();
     contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
     return contractList;
@@ -80,6 +79,7 @@ class RefManager {
   }
 
   firstLoadData() async {
+    await getConfig();
     await getActions();
     await updateRefData();
     await updateContract();
@@ -111,11 +111,6 @@ class RefManager {
     var timerManager = locator.get<TimerManager>();
     timerManager.tick.listen((_) {
       updateContract();
-      if (currentDownContract == null || currentUpContract == null) {
-        print("a");
-        updateUpContractId();
-        updateDownContractId();
-      }
     });
     timerManager.start();
     timerManager.refDataUpdate.listen((ticker) {
@@ -143,6 +138,11 @@ class RefManager {
   getActions() async {
     ActionResponse response = await _api.getActions();
     actions = response.action;
+  }
+
+  getConfig() async {
+    ConfigResponse response = await _api.getConfig();
+    config = response;
   }
 
   getAllContracts() async {

@@ -40,7 +40,8 @@ class BannerState extends State<BannerWidget> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(8),
+                    constraints: BoxConstraints.expand(),
                     decoration: BoxDecoration(boxShadow: [
                       BoxShadow(
                           color: Color(0xffe2e2e2),
@@ -62,6 +63,7 @@ class BannerState extends State<BannerWidget> {
                         },
                         child: Image.network(
                           i.image,
+                          fit: BoxFit.fill,
                         )),
                   );
                 },

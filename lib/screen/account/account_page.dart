@@ -235,7 +235,7 @@ class _AccountPageState extends State<AccountPage> {
                                 alignment: Alignment.centerLeft,
                                 margin: EdgeInsets.only(top: 10),
                                 child: Text(
-                                    "活动结束时间: ${_accountViewModel.action != null ? DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(locator.get<RefManager>().actions.where((value) => value.name.contains("reward")).toList().first.stop)) : "--"}",
+                                    "活动结束时间: ${_accountViewModel.action != null ? DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(locator.get<RefManager>().actions.where((value) => value.name.contains("reward")).toList().first.stop).toLocal()) : "--"}",
                                     style: StyleNewFactory.grey15))
                             : Container(),
                         userManager.user.loginType != LoginType.cloud ||

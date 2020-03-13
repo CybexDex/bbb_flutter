@@ -31,6 +31,8 @@ class R {
   static final String resAssetsIconsIcAdd2 = 'res/assets/icons/ic_add_2.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop1.png)
   static final String resAssetsIconsIcTop1 = 'res/assets/icons/icTop1.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_up_red.svg)
+  static final String resAssetsIconsIcUpRed = 'res/assets/icons/ic_up_red.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_no_stoke.svg)
   static final String resAssetsIconsIcNoStoke = 'res/assets/icons/ic_no_stoke.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icAdd.png)
@@ -81,6 +83,8 @@ class R {
   static final String resAssetsIconsIcFallGreen = 'res/assets/icons/icFallGreen.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTime.png)
   static final String resAssetsIconsIcTime = 'res/assets/icons/icTime.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/test.png)
+  static final String resAssetsIconsTest = 'res/assets/icons/test.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_title_line.svg)
   static final String resAssetsIconsIcTitleLine = 'res/assets/icons/ic_title_line.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_withdraw.svg)
@@ -99,6 +103,8 @@ class R {
   static final String resAssetsIconsIcSwitch = 'res/assets/icons/icSwitch.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_deposit.svg)
   static final String resAssetsIconsIcHomeDeposit = 'res/assets/icons/ic_home_deposit.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_down_green.svg)
+  static final String resAssetsIconsIcDownGreen = 'res/assets/icons/ic_down_green.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/empty_order_logo.svg)
   static final String resAssetsIconsEmptyOrderLogo = 'res/assets/icons/empty_order_logo.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_deposit.svg)
@@ -153,6 +159,8 @@ class R {
   static final String resAssetsIconsIcEyeClose = 'res/assets/icons/ic_eye_close.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_service.svg)
   static final String resAssetsIconsIcService = 'res/assets/icons/ic_service.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/ic_drawer.svg)
+  static final String resAssetsIconsIcDrawer = 'res/assets/icons/ic_drawer.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_marquee.svg)
   static final String resAssetsIconsIcHomeMarquee = 'res/assets/icons/ic_home_marquee.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/mask.png)

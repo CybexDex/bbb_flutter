@@ -38,7 +38,6 @@ class GroupedListView<T, E> extends ListView {
           cacheExtent: cacheExtent,
           itemBuilder: (context, index) {
             int actualIndex = index ~/ 2;
-            print(actualIndex);
             if (index.isEven) {
               E curr = groupBy(elements[actualIndex]);
               E prev = actualIndex - 1 < 0

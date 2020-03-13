@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/screen/account/account_page.dart';
 import 'package:bbb_flutter/screen/exchange/exchange.dart';
+import 'package:bbb_flutter/screen/exchange/nav_drawer_assets.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/home/home_page.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
@@ -26,6 +27,7 @@ class _MainState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: _currentIndex == 1 ? NavDrawer() : null,
         resizeToAvoidBottomPadding: false,
         bottomNavigationBar: BottomNavigationBar(
           key: navGlobaykey,

@@ -247,6 +247,7 @@
 	"exchange_24_low": "24h最低",
 	"limit_order": "限价单",
 	"market_order": "市价单",
+	"nav_drawer_select_contract": "选择合约",
 	"limit_order_empty": "暂无委托",
 	"limit_order_price": "预计买入价格",
 	"limit_order_status": "状态",

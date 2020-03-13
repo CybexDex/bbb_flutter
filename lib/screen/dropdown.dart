@@ -38,8 +38,6 @@ class Dropdown extends StatelessWidget {
                         ),
                         Text(I18n.of(context).actLevel,
                             style: StyleFactory.navButtonTitleStyle),
-                        Text(I18n.of(context).restAmount,
-                            style: StyleFactory.navButtonTitleStyle),
                       ],
                     )),
                   ],
@@ -92,9 +90,7 @@ class Dropdown extends StatelessWidget {
                     contents: <Widget>[
                       Container(
                         child: ListView.builder(
-                            itemCount: model.getUpContracts().where((element) {
-                              return element.status == "ACTIVE";
-                            }).length,
+                            itemCount: model.getUpContracts().length,
                             itemExtent: 50,
                             itemBuilder: (context, index) {
                               return GestureDetector(
@@ -123,10 +119,6 @@ class Dropdown extends StatelessWidget {
                                                       .getUpContracts()[index]
                                                       .strikeLevel))
                                           .toStringAsFixed(1)),
-                                      Text(model
-                                          .getUpContracts()[index]
-                                          .availableInventory
-                                          .toStringAsFixed(0))
                                     ],
                                   ),
                                 ),
@@ -135,10 +127,7 @@ class Dropdown extends StatelessWidget {
                       ),
                       Container(
                         child: ListView.builder(
-                            itemCount:
-                                model.getDownContracts().where((element) {
-                              return element.status == "ACTIVE";
-                            }).length,
+                            itemCount: model.getDownContracts().length,
                             itemExtent: 50,
                             itemBuilder: (context, index) {
                               return GestureDetector(
@@ -170,10 +159,6 @@ class Dropdown extends StatelessWidget {
                                                       .strikeLevel -
                                                   model.currentTicker.value))
                                           .toStringAsFixed(1)),
-                                      Text(model
-                                          .getDownContracts()[index]
-                                          .availableInventory
-                                          .toStringAsFixed(0))
                                     ],
                                   ),
                                 ),

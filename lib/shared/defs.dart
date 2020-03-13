@@ -72,7 +72,7 @@ class WebSocketConnection {
   static const PRO_TEST_WEBSOCKET = "wss://nxmdp-tn.cybex.io";
   static const UAT_TEST_WEBSOCKET = "wss://nxmdptest-tn.cybex.io";
   static const TEST_WEBSOCKET = "wss://bbb-test-new.cybex.io/mdp";
-  static const DEV_WEBSOCKET = "ws://43.252.132.73:55500/mdp";
+  static const DEV_WEBSOCKET = "ws://43.252.132.73:55500";
 }
 
 class ReferSystemConnection {

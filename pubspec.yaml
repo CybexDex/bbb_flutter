@@ -13,7 +13,7 @@ dependencies:
         git:
             url: git@github.com:CybexDex/cybex_flutter_plugin.git
             ref: develop
-    dio: ^2.1.0
+    dio: 3.0.9
     qr_flutter: ^2.0.0
     jdenticon_dart: ^1.2.1+1
     flutter_svg:
@@ -103,6 +103,7 @@ flutter:
         - res/assets/icons/icMaskClose.png
         - res/assets/icons/ic_add_2.svg
         - res/assets/icons/icTop1.png
+        - res/assets/icons/ic_up_red.svg
         - res/assets/icons/ic_no_stoke.svg
         - res/assets/icons/icAdd.png
         - res/assets/icons/ic_home_astrology_left.svg
@@ -128,6 +129,7 @@ flutter:
         - res/assets/icons/icTabDeposit.png
         - res/assets/icons/icFallGreen.png
         - res/assets/icons/icTime.png
+        - res/assets/icons/test.png
         - res/assets/icons/ic_title_line.svg
         - res/assets/icons/ic_withdraw.svg
         - res/assets/icons/icNotifyBack.png
@@ -137,6 +139,7 @@ flutter:
         - res/assets/icons/ic_exchange_records.svg
         - res/assets/icons/icSwitch.png
         - res/assets/icons/ic_home_deposit.svg
+        - res/assets/icons/ic_down_green.svg
         - res/assets/icons/empty_order_logo.svg
         - res/assets/icons/ic_deposit.svg
         - res/assets/icons/ic_reward_account.svg
@@ -164,6 +167,7 @@ flutter:
         - res/assets/icons/ic_guess_up_down.svg
         - res/assets/icons/ic_eye_close.svg
         - res/assets/icons/ic_service.svg
+        - res/assets/icons/ic_drawer.svg
         - res/assets/icons/ic_home_marquee.svg
         - res/assets/icons/mask.png
         - res/assets/icons/ic_deposit_new.svg

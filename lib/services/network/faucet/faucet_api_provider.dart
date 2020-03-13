@@ -50,6 +50,8 @@ class FaucetAPIProvider extends FaucetAPI {
       dio.options.baseUrl = FaucetConnection.PRO_FAUCET;
     } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = FaucetConnection.UAT_FAUCET;
+    } else {
+      dio.options.baseUrl = FaucetConnection.PRO_FAUCET;
     }
   }
 }

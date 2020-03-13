@@ -4,8 +4,10 @@ import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/models/request/amend_order_request_model.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/action_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -27,13 +29,15 @@ class BBBAPIProvider extends BBBAPI {
   SharedPref _pref;
   Dio newDio = Dio();
   String action = "main";
+  String asset;
 
   BBBAPIProvider({SharedPref sharedPref}) {
     _pref = sharedPref;
-    _dispatchNode();
     _dispatchNewNode();
     newDio.options.connectTimeout = 15000;
     newDio.options.receiveTimeout = 13000;
+    // newDio.interceptors
+    //     .add(LogInterceptor(requestBody: true, responseBody: true));
   }
 
   @override
@@ -52,6 +56,12 @@ class BBBAPIProvider extends BBBAPI {
   setAction({String action}) async {
     await _pref.saveAction(action: action);
     this.action = action;
+  }
+
+  @override
+  setAsset({String asset}) async {
+    await _pref.saveAsset(asset: asset);
+    this.asset = asset;
   }
 
   _dispatchNode() {
@@ -75,6 +85,7 @@ class BBBAPIProvider extends BBBAPI {
       newDio.options.baseUrl = BBBApiConnection.PRO_DEV;
     }
     action = _pref.getAction();
+    asset = _pref.getAsset();
   }
 
   @override
@@ -91,31 +102,43 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<ActionResponse> getActions() async {
-    var response = await newDio.get('/actions?active=1');
+    var response = await newDio.get('/cybex/actions?active=1');
     return Future.value(ActionResponse.fromJson(response.data));
   }
 
   @override
   Future<RefDataResponse> getRefDataNew({String injectAction}) async {
-    var response = await newDio
-        .get('/refdata?action=${injectAction == null ? action : injectAction}');
+    var response = await newDio.get(
+        '/cybex/refdata?action=${injectAction == null ? action : injectAction}');
     return Future.value(RefDataResponse.fromJson(response.data));
   }
 
   @override
   Future<ContractResponse> getContract({String active}) async {
     var response = await newDio.get(active == null
-        ? '/contracts?action=$action'
-        : '/contracts?action=$action&active=$active');
+        ? '/api/$asset/contracts?action=$action'
+        : '/api/$asset/contracts?action=$action&active=$active');
     Map<String, dynamic> convertedResult = convertJson(response.data);
     return Future.value(ContractResponse.fromJson(convertedResult));
+  }
+
+  @override
+  Future<ConfigResponse> getConfig() async {
+    var response = await newDio.get('/api/$asset/config');
+    return Future.value(ConfigResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<TickerResponse> getTicker({String injectAsset}) async {
+    var response = await newDio.get('/api/$injectAsset/ticker');
+    return Future.value(TickerResponse.fromJson(response.data));
   }
 
   @override
   Future<PositionsResponseModel> getPositions(
       {String name, String injectAction}) async {
     var response = await newDio.get(
-        '/position?accountName=$name&action=${injectAction == null ? action : injectAction}');
+        '/cybex/position?accountName=$name&action=${injectAction == null ? action : injectAction}');
     return Future.value(PositionsResponseModel.fromJson(response.data));
   }
 
@@ -133,7 +156,10 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<OrderResponseModel>> getOrders(String name,
-      {List<OrderStatus> status, String startTime, String endTime}) async {
+      {List<OrderStatus> status,
+      String startTime,
+      String endTime,
+      String injectAsset}) async {
     var params = {
       "accountName": name,
     };
@@ -149,7 +175,9 @@ class BBBAPIProvider extends BBBAPI {
     }
     params["action"] = action;
 
-    var response = await newDio.get('/order', queryParameters: params);
+    var response = await newDio.get(
+        '/api/${injectAsset == null ? asset : injectAsset}/order',
+        queryParameters: params);
     var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);
@@ -162,7 +190,10 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<LimitOrderResponse>> getLimitOrders(String name,
-      {String startTime, String endTime, String active}) async {
+      {String startTime,
+      String endTime,
+      String active,
+      String injectAsset}) async {
     var params = {
       "accountName": name,
     };
@@ -173,7 +204,9 @@ class BBBAPIProvider extends BBBAPI {
     }
     params["action"] = action;
     params["active"] = active;
-    var response = await newDio.get('/limit_order', queryParameters: params);
+    var response = await newDio.get(
+        '/api/${injectAsset == null ? asset : injectAsset}/limit_order',
+        queryParameters: params);
     var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);
@@ -187,8 +220,8 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<List<FundRecordModel>> getFundRecords(
       {String name, DateTime start, DateTime end}) async {
-    var response = await newDio
-        .get("/fund", queryParameters: {"accountName": name, "action": action});
+    var response = await newDio.get("/cybex/fund",
+        queryParameters: {"accountName": name, "action": action});
     var responseData = response.data as List;
     List<FundRecordModel> model = responseData.map((data) {
       return FundRecordModel.fromJson(data);
@@ -198,8 +231,8 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<RankingResponse>> getRankings({int indicator}) async {
-    var response =
-        await newDio.get("/ranking", queryParameters: {"indicator": indicator});
+    var response = await newDio
+        .get("/api/$asset/ranking", queryParameters: {"indicator": indicator});
     var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);
@@ -212,12 +245,9 @@ class BBBAPIProvider extends BBBAPI {
 
   //assetName=BXBT&interval=1m&startTime=1561453047&endTime=1561453347
   Future<List<MarketHistoryResponseModel>> getMarketHistory(
-      {String startTime,
-      String endTime,
-      String asset,
-      MarketDuration duration}) async {
+      {String startTime, String endTime, MarketDuration duration}) async {
     var response = await newDio.get(
-        '/kline?interval=${marketDurationMap[duration]}&endTime=$endTime&limit=300');
+        '/api/$asset/kline?interval=${marketDurationMap[duration]}&endTime=$endTime&limit=300');
     // var response = await dio.get(
     //     '/klines?assetName=$asset&interval=${marketDurationMap[duration]}&startTime=$startTime&endTime=$endTime&limit=300');
     var responseData = response.data as List;
@@ -235,12 +265,9 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   Future<List<KLineEntity>> getMarketHistoryCandle(
-      {String startTime,
-      String endTime,
-      String asset,
-      MarketDuration duration}) async {
+      {String startTime, String endTime, MarketDuration duration}) async {
     var response = await newDio.get(
-        '/kline?interval=${marketDurationMap[duration]}&endTime=$endTime&limit=300');
+        '/api/$asset/kline?interval=${marketDurationMap[duration]}&endTime=$endTime&limit=300');
     // var response = await dio.get(
     //     '/klines?assetName=$asset&interval=${marketDurationMap[duration]}&startTime=$startTime&endTime=$endTime&limit=300');
     var responseData = response.data as List;
@@ -273,7 +300,8 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<PostOrderResponseModel> amendOrder(
       {AmendOrderRequestModel order, bool exNow}) async {
-    var response = await newDio.post(exNow ? "/trade/close" : "/trade/amend",
+    var response = await newDio.post(
+        exNow ? "/trade/$asset/close" : "/trade/$asset/amend",
         data: exNow ? order.toCloseJson() : order.toJson());
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
@@ -281,7 +309,7 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<PostOrderResponseModel> postOrder(
       {Map<String, dynamic> requestOrder}) async {
-    var response = await newDio.post("/trade/order", data: requestOrder);
+    var response = await newDio.post("/trade/$asset/order", data: requestOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
@@ -289,14 +317,14 @@ class BBBAPIProvider extends BBBAPI {
   Future<PostOrderResponseModel> postLimitOrder(
       {Map<String, dynamic> requestLimitOrder}) async {
     var response =
-        await newDio.post("/trade/limit/order", data: requestLimitOrder);
+        await newDio.post("/trade/$asset/limit/order", data: requestLimitOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   Future<PostOrderResponseModel> postCancelLimitOrder(
       {Map<String, dynamic> requestCancelLimitOrder}) async {
-    var response =
-        await newDio.post("/trade/limit/cancel", data: requestCancelLimitOrder);
+    var response = await newDio.post("/trade/$asset/limit/cancel",
+        data: requestCancelLimitOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
@@ -323,7 +351,7 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<AccountResponseModel> getAccount({String name}) async {
     var response =
-        await newDio.get("/account?accountName=$name&action=$action");
+        await newDio.get("/cybex/account?accountName=$name&action=$action");
     return Future.value(response.data == null
         ? null
         : AccountResponseModel.fromJson(response.data));

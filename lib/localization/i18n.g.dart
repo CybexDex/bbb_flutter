@@ -545,6 +545,8 @@ class _$Keys {
 
   static final String marketOrder = 'market_order';
 
+  static final String navDrawerSelectContract = 'nav_drawer_select_contract';
+
   static final String limitOrderEmpty = 'limit_order_empty';
 
   static final String limitOrderPrice = 'limit_order_price';
@@ -869,6 +871,8 @@ abstract class _$I18nHelper {
   String get exchange24Low => this._translate(_$Keys.exchange24Low);
   String get limitOrder => this._translate(_$Keys.limitOrder);
   String get marketOrder => this._translate(_$Keys.marketOrder);
+  String get navDrawerSelectContract =>
+      this._translate(_$Keys.navDrawerSelectContract);
   String get limitOrderEmpty => this._translate(_$Keys.limitOrderEmpty);
   String get limitOrderPrice => this._translate(_$Keys.limitOrderPrice);
   String get limitOrderStatus => this._translate(_$Keys.limitOrderStatus);

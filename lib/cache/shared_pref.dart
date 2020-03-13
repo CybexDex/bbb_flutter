@@ -46,6 +46,22 @@ class SharedPref {
     await _prefs.remove('bbb.action');
   }
 
+  String getAsset() {
+    var value = _prefs.getString("bbb.asset");
+    if (value != null) {
+      return value;
+    }
+    return "BTC";
+  }
+
+  saveAsset({String asset}) async {
+    await _prefs.setString('bbb.asset', asset);
+  }
+
+  removeAsset() async {
+    await _prefs.remove('bbb.asset');
+  }
+
   AccountResponseModel getAccount() {
     final value = _prefs.getString("bbb.account");
     if (value != null) {

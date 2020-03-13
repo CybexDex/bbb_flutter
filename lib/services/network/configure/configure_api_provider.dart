@@ -25,9 +25,13 @@ class ConfiguireApiProvider extends ConfigureApi {
   }
 
   _dispatchNode() {
-    dio.options.baseUrl = _pref.getEnvType() == EnvType.Pro
-        ? ConfigureConnection.PRO_CONFIGURE
-        : ConfigureConnection.UAT_CONFIGURE;
+    if (_pref.getEnvType() == EnvType.Pro) {
+      dio.options.baseUrl = ConfigureConnection.PRO_CONFIGURE;
+    } else if (_pref.getEnvType() == EnvType.Test) {
+      dio.options.baseUrl = ConfigureConnection.UAT_CONFIGURE;
+    } else {
+      dio.options.baseUrl = ConfigureConnection.PRO_CONFIGURE;
+    }
   }
 
   @override

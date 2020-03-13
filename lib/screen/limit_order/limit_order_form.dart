@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/logic/limit_order_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
@@ -149,7 +150,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         decoration: InputDecoration(
                           // contentPadding: EdgeInsets.only(top: 4, bottom: 4),
                           border: InputBorder.none,
-                          hintText: "请输入价格",
+                          hintText: "输入价格",
                           hintStyle: StyleFactory.addReduceStyle,
                         ),
                       ),
@@ -213,7 +214,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         padding: EdgeInsets.only(left: 10),
                         child: model.orderForm.predictPrice == null
                             ? Text(
-                                "请先填入预计购买价格",
+                                "请先输入预计购买价格",
                                 style: StyleFactory.addReduceStyle,
                               )
                             : Text(
@@ -301,7 +302,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                     ),
                     Text(
                       refreshContract != null
-                          ? "${(refreshContract.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} ${I18n.of(context).perDay}"
+                          ? "${(locator.get<RefManager>().config.dailyInterest * (refreshContract.strikeLevel / 1000) * model.orderForm.investAmount).toStringAsFixed(4)} ${I18n.of(context).perDay}"
                           : "-- USDT",
                       style: StyleFactory.cellTitleStyle,
                     )
@@ -326,14 +327,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         ),
                         Builder(
                           builder: (context) {
-                            if (refreshContract != null &&
-                                model.orderForm.investAmount >
-                                    refreshContract.availableInventory) {
-                              return Text(
-                                I18n.of(context).orderFormSupplyNotEnoughError,
-                                style: StyleFactory.smallButtonTitleStyle,
-                              );
-                            } else if (model.usdtBalance == null ||
+                            if (model.usdtBalance == null ||
                                 model.orderForm.totalAmount.amount >
                                     model.usdtBalance.quantity) {
                               return Text(
@@ -342,9 +336,12 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                               );
                             } else if (refreshContract != null &&
                                 model.orderForm.investAmount >
-                                    refreshContract.maxOrderQty) {
+                                    locator
+                                        .get<RefManager>()
+                                        .config
+                                        .maxOrderQuantity) {
                               return Text(
-                                "${I18n.of(context).orderFormBuyLimitationError}${refreshContract.maxOrderQty}",
+                                "${I18n.of(context).orderFormBuyLimitationError}${locator.get<RefManager>().config.maxOrderQuantity}",
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (!model.isInvestAmountInputCorrect) {

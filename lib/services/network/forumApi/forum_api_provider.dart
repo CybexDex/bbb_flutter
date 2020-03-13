@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
+import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
@@ -29,6 +30,8 @@ class ForumApiProvider extends ForumApi {
       dio.options.baseUrl = ForumConnection.PRO_NODE;
     } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = ForumConnection.UAT_NODE;
+    } else {
+      dio.options.baseUrl = ForumConnection.PRO_NODE;
     }
   }
 
@@ -71,6 +74,14 @@ class ForumApiProvider extends ForumApi {
   Future<ForumResponse<BannerResponse>> getBanners({int pg, int siz}) async {
     var response = await dio
         .get("/list/prod/bbb/banner", queryParameters: {"pg": pg, "siz": siz});
+    var responseData = json.decode(response.data);
+    return Future.value(ForumResponse.fromJson(responseData));
+  }
+
+  @override
+  Future<ForumResponse<AssetList>> getAssetList({int pg, int siz}) async {
+    var response = await dio
+        .get("/list/prod/bbb/assets", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }

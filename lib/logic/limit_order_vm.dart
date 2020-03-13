@@ -95,7 +95,7 @@ class LimitOrderViewModel extends BaseModel {
               ((orderForm.predictPrice /
                       ((orderForm.predictPrice - contract.strikeLevel)
                           .abs())) <=
-                  contract.maxGearing);
+                  _refm.config.maxGearing);
         }).toList();
       } else {
         return _refm.allDownContract.where((contract) {
@@ -103,7 +103,7 @@ class LimitOrderViewModel extends BaseModel {
               ((orderForm.predictPrice /
                       ((orderForm.predictPrice - contract.strikeLevel)
                           .abs())) <=
-                  contract.maxGearing);
+                  _refm.config.maxGearing);
         }).toList();
       }
     }
@@ -189,14 +189,13 @@ class LimitOrderViewModel extends BaseModel {
     double totalAmount = orderForm.investAmount * amount;
 
     orderForm.totalAmount = Asset(amount: totalAmount + commiDouble);
-    if (orderForm.investAmount > contract.availableInventory ||
-        _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ==
+    if (_um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) ==
             null ||
         orderForm.totalAmount.amount >
             _um
                 .fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId)
                 .quantity ||
-        orderForm.investAmount > contract.maxOrderQty ||
+        orderForm.investAmount > _refm.config.maxOrderQuantity ||
         orderForm.totalAmount.amount <= double.minPositive ||
         !isInvestAmountInputCorrect) {
       isSatisfied = false;
@@ -212,13 +211,8 @@ class LimitOrderViewModel extends BaseModel {
   }
 
   void increaseInvest() {
-    var contract =
-        orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
-
-    if (orderForm.investAmount < contract.availableInventory) {
-      orderForm.investAmount += 1;
-      updateAmountAndFee();
-    }
+    orderForm.investAmount += 1;
+    updateAmountAndFee();
   }
 
   void decreaseInvest() {

@@ -83,10 +83,7 @@ class MarketManager {
       MarketDuration marketDuration}) async {
     if (marketDuration == MarketDuration.line) {
       List<MarketHistoryResponseModel> _list = await _api.getMarketHistory(
-          startTime: startTime,
-          endTime: endTime,
-          asset: asset,
-          duration: marketDuration);
+          startTime: startTime, endTime: endTime, duration: marketDuration);
       List<TickerData> data = _list.map((marketHistoryResponseModel) {
         var tickerData = TickerData(
             marketHistoryResponseModel.px,
@@ -100,10 +97,7 @@ class MarketManager {
       }
     } else {
       List<KLineEntity> list = await _api.getMarketHistoryCandle(
-          startTime: startTime,
-          endTime: endTime,
-          asset: asset,
-          duration: marketDuration);
+          startTime: startTime, endTime: endTime, duration: marketDuration);
       DataUtil.calculate(list);
       _kLine.add(list);
     }
@@ -117,7 +111,8 @@ class MarketManager {
       _channel =
           IOWebSocketChannel.connect(WebSocketConnection.PRO_TEST_WEBSOCKET);
     } else if (_sharedPref.getEnvType() == EnvType.Dev) {
-      _channel = IOWebSocketChannel.connect(WebSocketConnection.DEV_WEBSOCKET);
+      _channel = IOWebSocketChannel.connect(
+          "${WebSocketConnection.DEV_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
     }
 
     // _channel = _sharedPref.getEnvType() == EnvType.Pro
@@ -137,7 +132,7 @@ class MarketManager {
     });
   }
 
-  dispatchMessage(String response) {
+  dispatchMessage(String response) async {
     if (response.contains(WebsocketRequestTopic.FAIRPRICE)) {
       var wbResponse =
           WebSocketNXPriceResponseEntity.fromJson(json.decode(response));

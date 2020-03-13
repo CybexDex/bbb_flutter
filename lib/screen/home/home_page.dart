@@ -1,5 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
+import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/screen/home/banner_widget.dart';
 import 'package:bbb_flutter/screen/home/home_app_bar.dart';
 import 'package:bbb_flutter/screen/home/home_ranking_item_builder.dart';
@@ -24,6 +26,9 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
   TabController _tabController;
+  Future<ForumResponse<BannerResponse>> future =
+      locator.get<HomeViewModel>().getBanners();
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -42,7 +47,6 @@ class _HomePageState extends State<HomePage>
     return BaseWidget<HomeViewModel>(
       model: locator.get<HomeViewModel>(),
       onModelReady: (homeViewMode) {
-        homeViewMode.getBanners();
         homeViewMode.getRankingList();
         homeViewMode.startLoop();
         homeViewMode.getZendeskAdvertise();
@@ -67,7 +71,19 @@ class _HomePageState extends State<HomePage>
                             color: Colors.white,
                             child: Column(
                               children: <Widget>[
-                                BannerWidget(items: homeViewModel.banners),
+                                // get banner data first to enable autoplay
+                                FutureBuilder<ForumResponse<BannerResponse>>(
+                                  future: future,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return BannerWidget(
+                                        items: homeViewModel.banners,
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
                                 Container(
                                   margin: EdgeInsets.fromLTRB(16, 20, 16, 10),
                                   child: Row(

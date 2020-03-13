@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
+import 'package:bbb_flutter/logic/nav_drawer_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
 import 'package:bbb_flutter/manager/limit_order_manager.dart';
@@ -109,6 +110,13 @@ setupLocator() async {
   locator.registerLazySingleton(
       () => AccountViewModel(bbbapi: locator.get(), gatewayApi: locator.get()));
 
+  locator.registerLazySingleton(() => NavDrawerViewModel(
+      forumApi: locator.get(),
+      bbbapi: locator.get(),
+      refManager: locator.get(),
+      userManager: locator.get(),
+      marketManager: locator.get()));
+
   locator.registerFactory(() => TradeViewModel(
       api: locator<BBBAPI>(),
       mtm: locator<MarketManager>(),
@@ -136,6 +144,7 @@ setupProviders() {
     ChangeNotifierProvider.value(
       value: locator.get<UserManager>(),
     ),
+    ChangeNotifierProvider.value(value: locator.get<NavDrawerViewModel>()),
     StreamProvider(create: (context) => locator.get<MarketManager>().prices),
     StreamProvider(create: (context) => locator.get<MarketManager>().kline),
     StreamProvider(

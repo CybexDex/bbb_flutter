@@ -26,6 +26,8 @@ class NodeApiProvider extends NodeApi {
       dio.options.baseUrl = NodeConnection.PRO_NODE;
     } else if (_pref.getEnvType() == EnvType.Test) {
       dio.options.baseUrl = NodeConnection.UAT_NODE;
+    } else {
+      dio.options.baseUrl = NodeConnection.PRO_NODE;
     }
   }
 

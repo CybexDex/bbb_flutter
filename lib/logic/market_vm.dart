@@ -68,7 +68,6 @@ class MarketViewModel extends BaseModel {
         startTime:
             (now - 300 * marketDurationSecondMap[marketDuration]).toString(),
         endTime: now.toString(),
-        asset: "BXBT",
         duration: marketDuration);
     DataUtil.calculate(candleData);
     this.isline = isline;

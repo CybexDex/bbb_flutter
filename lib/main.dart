@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/localization/i18n.dart';
+import 'package:bbb_flutter/logic/nav_drawer_vm.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
@@ -47,7 +48,6 @@ main() async {
   setupLog();
   await setupLocator();
   setupProviders();
-
   CatcherOptions debugOptions =
       CatcherOptions(SilentReportMode(), [ConsoleHandler()]);
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
@@ -59,6 +59,7 @@ main() async {
   // runApp(MyApp());
   await locator.get<RefManager>().getActions();
   await locator.get<RefManager>().firstLoadData();
+  locator.get<NavDrawerViewModel>().getAssetList();
   if (locator.get<UserManager>().user.logined) {
     locator
         .get<UserManager>()
