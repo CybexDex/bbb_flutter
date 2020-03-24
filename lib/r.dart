@@ -13,6 +13,8 @@ class R {
   static final String resAssetsIconsIcEyeOpen = 'res/assets/icons/ic_eye_open.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_selected.svg)
   static final String resAssetsIconsIcHomeSelected = 'res/assets/icons/ic_home_selected.svg';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/bbb_splash.png)
+  static final String resAssetsIconsBbbSplash = 'res/assets/icons/bbb_splash.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_revise_yellow.svg)
   static final String resAssetsIconsIcReviseYellow = 'res/assets/icons/ic_revise_yellow.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/ic_home_background.png)
@@ -23,6 +25,8 @@ class R {
   static final String resAssetsIconsIcNews = 'res/assets/icons/ic_news.svg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop2.png)
   static final String resAssetsIconsIcTop2 = 'res/assets/icons/icTop2.png';
+  /// ![](http://127.0.0.1:2227/res/assets/icons/Wechat.jpeg)
+  static final String resAssetsIconsWechat = 'res/assets/icons/Wechat.jpeg';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icTop3.png)
   static final String resAssetsIconsIcTop3 = 'res/assets/icons/icTop3.png';
   /// ![](http://127.0.0.1:2227/res/assets/icons/icMaskClose.png)

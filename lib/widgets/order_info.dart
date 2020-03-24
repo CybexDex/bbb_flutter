@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
@@ -156,20 +157,6 @@ class OrderInfo extends StatelessWidget {
                             flex: 23,
                             child: Container(),
                           ),
-                          Text(I18n.of(context).accruedInterest,
-                              style: StyleNewFactory.grey12Opacity60),
-                          Expanded(
-                            child: Container(),
-                            flex: 5,
-                          ),
-                          Text(
-                            _model.accruedInterest.toStringAsFixed(4),
-                            style: StyleNewFactory.grey15,
-                          ),
-                          Expanded(
-                            child: Container(),
-                            flex: 15,
-                          ),
                           Text(
                             "${I18n.of(context).takeProfit}/${I18n.of(context).cutLoss}",
                             style: StyleNewFactory.grey12Opacity60,
@@ -204,6 +191,20 @@ class OrderInfo extends StatelessWidget {
                                     openDialog(context, _model);
                                   },
                                 ),
+                          Expanded(
+                            child: Container(),
+                            flex: 15,
+                          ),
+                          Text(I18n.of(context).accruedInterest,
+                              style: StyleNewFactory.grey12Opacity60),
+                          Expanded(
+                            child: Container(),
+                            flex: 5,
+                          ),
+                          Text(
+                            _model.accruedInterest.toStringAsFixed(4),
+                            style: StyleNewFactory.grey15,
+                          ),
                           Expanded(
                             flex: 23,
                             child: Container(),
@@ -375,23 +376,21 @@ class OrderInfo extends StatelessWidget {
                             onTap: () {
                               TextEditingController controller =
                                   TextEditingController();
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return DialogFactory.closeOutConfirmDialog(
-                                        context,
-                                        value: (_model.pnl).toStringAsFixed(4),
-                                        pnl: (_model.pnl -
-                                                _model.accruedInterest -
-                                                _model.commission)
-                                            .toStringAsFixed(4),
-                                        controller: controller);
-                                  }).then((value) async {
-                                if (value != null && value) {
-                                  callAmend(context);
-                                }
-                              });
+                              if (locator.get<UserManager>().user.isLocked) {
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return DialogFactory.unlockDialog(context,
+                                          controller: controller);
+                                    }).then((value) async {
+                                  if (value != null && value) {
+                                    showCloseOutDialog(context, controller);
+                                  }
+                                });
+                              } else {
+                                showCloseOutDialog(context, controller);
+                              }
                             },
                             child: Container(
                                 alignment: Alignment.center,
@@ -438,6 +437,23 @@ class OrderInfo extends StatelessWidget {
     }
 
     return null;
+  }
+
+  showCloseOutDialog(BuildContext context, TextEditingController controller) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return DialogFactory.closeOutConfirmDialog(context,
+              value: (_model.pnl).toStringAsFixed(4),
+              pnl: (_model.pnl - _model.accruedInterest - _model.commission)
+                  .toStringAsFixed(4),
+              controller: controller);
+        }).then((value) {
+      if (value != null && value) {
+        callAmend(context);
+      }
+    });
   }
 
   // openDialog(BuildContext context, OrderResponseModel model) {

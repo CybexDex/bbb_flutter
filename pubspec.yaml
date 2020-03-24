@@ -1,7 +1,7 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 2.0.3+1
+version: 2.0.4+1
 
 environment:
     sdk: ">=2.3.0 <3.0.0"
@@ -69,6 +69,7 @@ dependencies:
     sticky_headers: ^0.1.8+1
     flutter_sticky_header: "^0.4.0"
     decimal: ^0.3.0
+    splashscreen: ^1.2.0
 
 
 
@@ -94,11 +95,13 @@ flutter:
         - res/assets/icons/ic_account_unselected.svg
         - res/assets/icons/ic_eye_open.svg
         - res/assets/icons/ic_home_selected.svg
+        - res/assets/icons/bbb_splash.png
         - res/assets/icons/ic_revise_yellow.svg
         - res/assets/icons/ic_home_background.png
         - res/assets/icons/ic_account_header_background.svg
         - res/assets/icons/ic_news.svg
         - res/assets/icons/icTop2.png
+        - res/assets/icons/Wechat.jpeg
         - res/assets/icons/icTop3.png
         - res/assets/icons/icMaskClose.png
         - res/assets/icons/ic_add_2.svg

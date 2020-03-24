@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/Input_editor_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -7,13 +8,15 @@ class IStep extends StatelessWidget {
   final GestureTapCallback plusOnTap;
   final TextEditingController text;
   final ValueChanged<String> onChange;
+  final bool isPrice;
 
   IStep(
       {Key key,
       TextEditingController text,
       this.minusOnTap,
       this.plusOnTap,
-      this.onChange})
+      this.onChange,
+      this.isPrice})
       : this.text = text,
         super(key: key);
 
@@ -32,7 +35,9 @@ class IStep extends StatelessWidget {
               padding: EdgeInsets.only(left: 10),
               child: TextField(
                 inputFormatters: [
-                  WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
+                  (isPrice != null && isPrice)
+                      ? TestFormat(integerRange: 10, decimalRange: 4)
+                      : WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
                 ],
                 controller: this.text,
                 keyboardType: TextInputType.numberWithOptions(
@@ -41,7 +46,9 @@ class IStep extends StatelessWidget {
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(top: 4, bottom: 4),
                   border: InputBorder.none,
-                  hintText: I18n.of(context).investmentHint,
+                  hintText: (isPrice != null && isPrice)
+                      ? I18n.of(context).inputPriceHint
+                      : I18n.of(context).inputAmountHint,
                   hintStyle: StyleFactory.addReduceStyle,
                 ),
               ),

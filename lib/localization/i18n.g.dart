@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String updatedDate = 'updated_date';
+  static final String address = 'address';
 
   static final String transfer = 'transfer';
 
@@ -213,9 +213,9 @@ class _$Keys {
 
   static final String accountLogOut = 'account_log_out';
 
-  static final String assetCat = 'asset_cat';
+  static final String updatedDate = 'updated_date';
 
-  static final String address = 'address';
+  static final String assetCat = 'asset_cat';
 
   static final String fundStatusInProgress = 'fundStatus_inProgress';
 
@@ -305,7 +305,9 @@ class _$Keys {
 
   static final String chooseEnvDetail = 'choose_env_detail';
 
-  static final String investmentHint = 'investment_hint';
+  static final String inputPriceHint = 'input_price_hint';
+
+  static final String inputAmountHint = 'input_amount_hint';
 
   static final String changeToTryEnv = 'change_to_try_env';
 
@@ -589,7 +591,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get updatedDate => this._translate(_$Keys.updatedDate);
+  String get address => this._translate(_$Keys.address);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transactionRecords => this._translate(_$Keys.transactionRecords);
@@ -689,8 +691,8 @@ abstract class _$I18nHelper {
   String get registerWarningText => this._translate(_$Keys.registerWarningText);
   String get accountLogInError => this._translate(_$Keys.accountLogInError);
   String get accountLogOut => this._translate(_$Keys.accountLogOut);
+  String get updatedDate => this._translate(_$Keys.updatedDate);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get address => this._translate(_$Keys.address);
   String get fundStatusInProgress =>
       this._translate(_$Keys.fundStatusInProgress);
   String get fundStatusCompleted => this._translate(_$Keys.fundStatusCompleted);
@@ -738,7 +740,8 @@ abstract class _$I18nHelper {
   String get changeEnv => this._translate(_$Keys.changeEnv);
   String get chooseEnv => this._translate(_$Keys.chooseEnv);
   String get chooseEnvDetail => this._translate(_$Keys.chooseEnvDetail);
-  String get investmentHint => this._translate(_$Keys.investmentHint);
+  String get inputPriceHint => this._translate(_$Keys.inputPriceHint);
+  String get inputAmountHint => this._translate(_$Keys.inputAmountHint);
   String get changeToTryEnv => this._translate(_$Keys.changeToTryEnv);
   String get changeFromTryEnv => this._translate(_$Keys.changeFromTryEnv);
   String get orderFormReset => this._translate(_$Keys.orderFormReset);

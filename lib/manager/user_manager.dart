@@ -318,7 +318,9 @@ class UserManager extends BaseModel {
     await locator.get<RefManager>().updateContract();
     locator.get<RefManager>().updateUpContractId();
     locator.get<RefManager>().updateDownContractId();
-    fetchBalances(name: user.name);
+    if (user.logined) {
+      fetchBalances(name: user.name);
+    }
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);
     notifyListeners();

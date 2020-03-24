@@ -4,7 +4,6 @@ import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/nav_drawer_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
-import 'package:bbb_flutter/manager/limit_order_manager.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
@@ -111,7 +110,6 @@ setupLocator() async {
       () => AccountViewModel(bbbapi: locator.get(), gatewayApi: locator.get()));
 
   locator.registerLazySingleton(() => NavDrawerViewModel(
-      forumApi: locator.get(),
       bbbapi: locator.get(),
       refManager: locator.get(),
       userManager: locator.get(),
@@ -132,11 +130,8 @@ setupLocator() async {
   locator.registerFactory(() => OrderViewModel(
       api: locator<BBBAPI>(),
       um: locator<UserManager>(),
-      rm: locator<RefManager>()));
-  locator.registerFactory(() => LimitOrderManager(
-      api: locator<BBBAPI>(),
-      um: locator<UserManager>(),
-      rm: locator<RefManager>()));
+      rm: locator<RefManager>(),
+      tm: locator<TimerManager>()));
 }
 
 setupProviders() {

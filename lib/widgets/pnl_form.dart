@@ -12,10 +12,8 @@ import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class PnlForm extends StatefulWidget {
   final OrderResponseModel _order;
-  final Function _callback;
-  PnlForm({Key key, OrderResponseModel model, Function() callback})
+  PnlForm({Key key, OrderResponseModel model})
       : _order = model,
-        _callback = callback,
         super(key: key);
 
   @override
@@ -83,10 +81,10 @@ class _PnlFormState extends State<PnlForm> {
             _cutLossPxController.text =
                 model.cutLossPx == widget._order.strikePx
                     ? I18n.of(context).stepWidgetNotSetHint
-                    : model.cutLossPx.round().toStringAsFixed(0);
+                    : model.cutLossPx.toStringAsFixed(4);
             _takeProfitPxController.text = model.takeProfitPx == 0
                 ? I18n.of(context).stepWidgetNotSetHint
-                : model.takeProfitPx.round().toStringAsFixed(0);
+                : model.takeProfitPx.toStringAsFixed(4);
           },
           builder: (context, model, child) {
             return Align(
@@ -239,12 +237,15 @@ class _PnlFormState extends State<PnlForm> {
       showLoading(context);
       PostOrderResponseModel postOrderResponseModel =
           await model.amend(widget._order, execute, currentSegment == 0);
-      Navigator.of(context).pop();
       if (postOrderResponseModel.code != 0) {
+        Navigator.of(context).pop();
         showNotification(context, true, postOrderResponseModel.msg);
       } else {
+        Navigator.of(context).pop();
         showNotification(context, false, I18n.of(context).successToast,
-            callback: widget._callback);
+            callback: () {
+          Navigator.of(context).maybePop();
+        });
       }
     } catch (error) {
       Navigator.of(context).pop();

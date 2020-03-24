@@ -27,7 +27,10 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
   Widget build(BuildContext context) {
     return BaseWidget<LimitOrderManager>(
       model: LimitOrderManager(
-          api: locator.get(), um: locator.get(), rm: locator.get()),
+          api: locator.get(),
+          um: locator.get(),
+          rm: locator.get(),
+          tm: locator.get()),
       builder: (context, data, child) {
         return Scaffold(
           body: SafeArea(
@@ -51,7 +54,10 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
                               onChanged: (bool) {
                                 data.selectAll();
                               }),
-                          Text("全选"),
+                          Text(
+                            "全选",
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -98,7 +104,7 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
                                   child: Container(
                                       alignment: Alignment.center,
                                       child: new Text(
-                                        "${I18n.of(context).limitOrderCancelButton}(${data.selectedTotalCount})",
+                                        "${I18n.of(context).limitOrderCancelButton}(${data.selectedTotalCount}/${data.orders.length})",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       width: 130,

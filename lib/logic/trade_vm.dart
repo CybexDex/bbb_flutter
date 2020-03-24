@@ -21,6 +21,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/commision.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:cybex_flutter_plugin/order.dart';
+import 'package:decimal/decimal.dart';
 
 class TradeViewModel extends BaseModel {
   OrderForm orderForm;
@@ -38,6 +39,7 @@ class TradeViewModel extends BaseModel {
   Order buyOrder;
   Commission commission;
   double actLevel = 0;
+  double savedAmount;
   Position usdtBalance;
 
   BBBAPI _api;
@@ -45,7 +47,6 @@ class TradeViewModel extends BaseModel {
   RefManager _refm;
   UserManager _um;
 
-  StreamSubscription _refSub;
   StreamSubscription _lastTickerSub;
 
   TradeViewModel(
@@ -61,10 +62,6 @@ class TradeViewModel extends BaseModel {
     isSatisfied = true;
     currentTicker = _mtm.lastTicker.value;
 
-    _refSub = _refm.contractController.stream.listen((onData) {
-      updateAmountAndFee();
-    });
-
     _lastTickerSub = _mtm.lastTicker.listen((onData) {
       updateAmountAndFee();
     });
@@ -72,7 +69,6 @@ class TradeViewModel extends BaseModel {
 
   @override
   dispose() {
-    _refSub.cancel();
     _lastTickerSub.cancel();
     super.dispose();
   }
@@ -371,11 +367,7 @@ class TradeViewModel extends BaseModel {
         : orderForm.cutoffPx.toStringAsFixed(4);
 
     order.data.quantity = orderForm.investAmount;
-    order.data.paid = locator.get<SharedPref>().getAction() == "main"
-        ? (commission.amount.amount /
-                pow(10, _refm.refDataControllerNew.value.bbbAssetPrecision))
-            .toString()
-        : (orderForm.totalAmount.amount).toStringAsFixed(4);
+    order.data.paid = (savedAmount).toStringAsFixed(4);
     order.data.timeout = expir + 5 * 60;
 
     var data = order.data.toJson();
@@ -401,9 +393,11 @@ class TradeViewModel extends BaseModel {
         orderForm.isUp ? _refm.currentUpContract : _refm.currentDownContract;
 
     final refData = _refm.refDataControllerNew.value;
-
+    savedAmount = orderForm.totalAmount.amount;
     order = OpenOrderRequest(data: Data());
-    commission = getCommission(refData, contract);
+    if (locator.get<SharedPref>().getAction() == "main") {
+      commission = getCommission(refData, contract);
+    }
   }
 
   // Order getBuyOrder(RefContractResponseModel refData, Contract contract) {
@@ -447,7 +441,6 @@ class TradeViewModel extends BaseModel {
   // }
 
   Commission getCommission(RefDataResponse refData, Contract contract) {
-    OrderForm form = orderForm;
     AvailableAsset quoteAsset = AvailableAsset(
         assetId: refData.bbbAssetId, precision: refData.bbbAssetPrecision);
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
@@ -465,7 +458,8 @@ class TradeViewModel extends BaseModel {
     comm.to = suffixId(refData.adminAccountId);
     comm.amount = AmountToSell(
         assetId: suffixId(quoteAsset.assetId),
-        amount: ((form.totalAmount.amount) * pow(10, quoteAsset.precision))
+        amount: ((Decimal.parse(savedAmount.toStringAsFixed(4))) *
+                Decimal.parse(pow(10, quoteAsset.precision).toString()))
             .toInt());
     comm.isTwo = false;
     return comm;

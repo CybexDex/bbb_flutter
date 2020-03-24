@@ -14,6 +14,7 @@ class _NavDrawerState extends State<NavDrawer> {
   @override
   void initState() {
     locator.get<NavDrawerViewModel>().subscribeTicker();
+    locator.get<NavDrawerViewModel>().getAssetList();
     super.initState();
   }
 
@@ -52,8 +53,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       return InkWell(
                         onTap: () {
                           model.onChangeAsset(
-                              context: context,
-                              asset: model.assetList[index].symbol);
+                              context: context, asset: model.assetList[index]);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +68,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                     RichText(
                                         text: TextSpan(children: [
                                       TextSpan(
-                                        text: model.assetList[index].symbol,
+                                        text: model.assetList[index],
                                         style: StyleNewFactory.black15,
                                       ),
                                       TextSpan(

@@ -3,17 +3,13 @@ import 'dart:collection';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
-import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
-import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
-import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/custom_dropdown.dart' as custom;
 
 class LimitOrderRecordsViewModel extends BaseModel {
-  final ForumApi _forumApi;
   final BBBAPI _bbbapi;
   final UserManager _userManager;
 
@@ -23,14 +19,12 @@ class LimitOrderRecordsViewModel extends BaseModel {
   LinkedHashMap<int, List<LimitOrderResponse>> orderMap = LinkedHashMap();
   LinkedHashMap<int, List<LimitOrderResponse>> upOrderMap = LinkedHashMap();
   LinkedHashMap<int, List<LimitOrderResponse>> downOrderMap = LinkedHashMap();
-  List<AssetList> assetList = [];
-  List<custom.DropdownMenuItem<AssetList>> dropdownList = [];
-  AssetList selectedItem;
+  List<String> assetList = [];
+  List<custom.DropdownMenuItem<String>> dropdownList = [];
+  String selectedItem;
 
-  LimitOrderRecordsViewModel(
-      ForumApi forumApi, BBBAPI bbbapi, UserManager userManager)
-      : _forumApi = forumApi,
-        _bbbapi = bbbapi,
+  LimitOrderRecordsViewModel(BBBAPI bbbapi, UserManager userManager)
+      : _bbbapi = bbbapi,
         _userManager = userManager;
 
   getRecords({String asset}) async {
@@ -55,10 +49,8 @@ class LimitOrderRecordsViewModel extends BaseModel {
   }
 
   getAsset() async {
-    ForumResponse<AssetList> response =
-        await _forumApi.getAssetList(siz: 100, pg: 0);
-    assetList = response.result;
-    assetList.sort((a, b) => a.seq.compareTo(b.seq));
+    List<String> response = await _bbbapi.getAsset();
+    assetList = response;
     buildDropdownMenu();
     setBusy(false);
   }
@@ -66,25 +58,25 @@ class LimitOrderRecordsViewModel extends BaseModel {
   buildDropdownMenu() {
     for (var asset in assetList) {
       dropdownList.add(
-        custom.DropdownMenuItem<AssetList>(
+        custom.DropdownMenuItem<String>(
           value: asset,
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: Text(asset.symbol, style: StyleNewFactory.grey14),
+            child: Text(asset, style: StyleNewFactory.grey14),
           ),
         ),
       );
     }
     selectedItem = dropdownList
         .firstWhere(
-            (test) => test.value.symbol == locator.get<SharedPref>().getAsset(),
+            (test) => test.value == locator.get<SharedPref>().getAsset(),
             orElse: () => null)
         ?.value;
   }
 
-  changeSelectedItem(AssetList asset) {
+  changeSelectedItem(String asset) {
     selectedItem = asset;
-    getRecords(asset: asset.symbol);
+    getRecords(asset: asset);
     setBusy(false);
   }
 

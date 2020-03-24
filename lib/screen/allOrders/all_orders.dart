@@ -2,6 +2,7 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -29,7 +30,10 @@ class AllOrderState extends State<AllOrdersPage> {
   Widget build(BuildContext context) {
     return BaseWidget<OrderViewModel>(
       model: OrderViewModel(
-          api: locator.get(), um: locator.get(), rm: locator.get()),
+          api: locator.get(),
+          um: locator.get(),
+          rm: locator.get(),
+          tm: locator.get()),
       builder: (context, data, child) {
         return Scaffold(
           // appBar: AppBar(
@@ -66,7 +70,10 @@ class AllOrderState extends State<AllOrdersPage> {
                                 data.selectAll();
                                 data.calculateMoneyCount();
                               }),
-                          Text("全选"),
+                          Text(
+                            "全选",
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
                           Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -90,28 +97,34 @@ class AllOrderState extends State<AllOrdersPage> {
                                       ? () {
                                           TextEditingController controller =
                                               TextEditingController();
-                                          showDialog(
-                                              barrierDismissible: false,
-                                              context: context,
-                                              builder: (context) {
-                                                return DialogFactory
-                                                    .closeOutConfirmDialog(
-                                                        context,
-                                                        value: data
-                                                            .selectedTotalPnl
-                                                            .toStringAsFixed(4),
-                                                        controller: controller);
-                                              }).then((value) async {
-                                            if (value != null && value) {
-                                              callAmendAll(data);
-                                            }
-                                          });
+                                          if (locator
+                                              .get<UserManager>()
+                                              .user
+                                              .isLocked) {
+                                            showDialog(
+                                                barrierDismissible: false,
+                                                context: context,
+                                                builder: (context) {
+                                                  return DialogFactory
+                                                      .unlockDialog(context,
+                                                          controller:
+                                                              controller);
+                                                }).then((value) async {
+                                              if (value != null && value) {
+                                                showCloseOutDialog(
+                                                    context, controller, data);
+                                              }
+                                            });
+                                          } else {
+                                            showCloseOutDialog(
+                                                context, controller, data);
+                                          }
                                         }
                                       : () {},
                                   child: Container(
                                       alignment: Alignment.center,
                                       child: new Text(
-                                        "${I18n.of(context).closeOut}(${data.selectedTotalCount})",
+                                        "${I18n.of(context).closeOut}(${data.selectedTotalCount}/${data.orders.length})",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       width: 130,
@@ -214,6 +227,22 @@ class AllOrderState extends State<AllOrdersPage> {
           isAll: true,
         )));
     return listWidget;
+  }
+
+  showCloseOutDialog(BuildContext context, TextEditingController controller,
+      OrderViewModel data) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return DialogFactory.closeOutConfirmDialog(context,
+              value: data.selectedTotalPnl.toStringAsFixed(4),
+              controller: controller);
+        }).then((value) async {
+      if (value != null && value) {
+        callAmendAll(data);
+      }
+    });
   }
 
   callAmendAll(OrderViewModel orderViewModel) async {

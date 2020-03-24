@@ -50,7 +50,7 @@ class LimitOrderRecordItem extends StatelessWidget {
                 ),
                 Text(
                   DateFormat("MM/dd HH:mm")
-                      .format(DateTime.parse(_model.createTime)),
+                      .format(DateTime.parse(_model.createTime).toLocal()),
                   style: StyleNewFactory.grey14,
                 )
               ],

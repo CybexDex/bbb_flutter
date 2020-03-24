@@ -4,6 +4,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/Input_editor_formatter.dart';
 import 'package:bbb_flutter/widgets/istep.dart';
 import 'package:bbb_flutter/widgets/custom_dropdown.dart' as custom;
 import 'package:flutter/services.dart';
@@ -140,7 +141,8 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                       padding: EdgeInsets.only(left: 10),
                       child: TextField(
                         inputFormatters: [
-                          WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
+                          TestFormat(decimalRange: 4, integerRange: 10)
+                          // WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
                         ],
                         style: StyleNewFactory.grey14,
                         focusNode: _predictPriceFocusNode,

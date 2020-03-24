@@ -56,7 +56,7 @@ class ReviseState extends State<ReviseWidget> {
                       widget._takeProfitController.text =
                           widget.model.takeProfit.toStringAsFixed(0);
                       widget._takeProfitPxController.text =
-                          widget.model.takeProfitPx.toStringAsFixed(0);
+                          widget.model.takeProfitPx.toStringAsFixed(4);
                     },
                     minusOnTap: () {
                       widget.model.decreaseTakeProfit(order: widget._order);
@@ -64,7 +64,7 @@ class ReviseState extends State<ReviseWidget> {
                       widget._takeProfitController.text =
                           widget.model.takeProfit.toStringAsFixed(0);
                       widget._takeProfitPxController.text =
-                          widget.model.takeProfitPx.toStringAsFixed(0);
+                          widget.model.takeProfitPx.toStringAsFixed(4);
                     },
                     onChange: (value) {
                       if (value.isNotEmpty &&
@@ -79,7 +79,7 @@ class ReviseState extends State<ReviseWidget> {
                         widget._takeProfitPxController.text =
                             widget.model.takeProfitPx == 0
                                 ? I18n.of(context).stepWidgetNotSetHint
-                                : widget.model.takeProfitPx.toStringAsFixed(0);
+                                : widget.model.takeProfitPx.toStringAsFixed(4);
                       }
                     },
                   ),
@@ -134,7 +134,7 @@ class ReviseState extends State<ReviseWidget> {
                       widget._cutLossController.text =
                           widget.model.cutLoss.toStringAsFixed(0);
                       widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(0);
+                          widget.model.cutLossPx.toStringAsFixed(4);
                     },
                     minusOnTap: () {
                       widget.model.decreaseCutLoss(order: widget._order);
@@ -142,7 +142,7 @@ class ReviseState extends State<ReviseWidget> {
                       widget._cutLossController.text =
                           widget.model.cutLoss.toStringAsFixed(0);
                       widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(0);
+                          widget.model.cutLossPx.toStringAsFixed(4);
                     },
                     onChange: (value) {
                       if (value.isNotEmpty &&
@@ -162,7 +162,7 @@ class ReviseState extends State<ReviseWidget> {
                           widget._cutLossController.text = "100";
                         }
                         widget._cutLossPxController.text =
-                            widget.model.cutLossPx.toStringAsFixed(0);
+                            widget.model.cutLossPx.toStringAsFixed(4);
                       }
                     },
                   ),
@@ -173,7 +173,7 @@ class ReviseState extends State<ReviseWidget> {
                 widget.model.changeCutLoss(cutLoss: 100, order: widget._order);
                 widget._cutLossController.text = "100";
                 widget._cutLossPxController.text =
-                    widget.model.cutLossPx.toStringAsFixed(0);
+                    widget.model.cutLossPx.toStringAsFixed(4);
               },
               child: Text(
                 I18n.of(context).orderFormReset,

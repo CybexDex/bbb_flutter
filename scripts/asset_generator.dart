@@ -32,7 +32,8 @@ void main() async {
               var varName = path
                   .replaceAll('/', '_')
                   .replaceAll('.png', '')
-                  .replaceAll('.svg', '');
+                  .replaceAll('.svg', '')
+                  .replaceAll('.jpeg', '');
               var pos = 0;
               String char;
               while (true) {

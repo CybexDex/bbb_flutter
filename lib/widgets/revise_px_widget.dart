@@ -49,12 +49,13 @@ class RevisePxState extends State<RevisePxWidget> {
                 height: 40,
                 child: Material(
                   child: IStep(
+                    isPrice: true,
                     text: widget._takeProfitPxController,
                     plusOnTap: () {
                       widget.model.increaseTakeProfitPx(order: widget._order);
                       widget.model.setTakeProfitInputCorrectness(true);
                       widget._takeProfitPxController.text =
-                          widget.model.takeProfitPx.toStringAsFixed(0);
+                          widget.model.takeProfitPx.toStringAsFixed(4);
                       widget._takeProfitController.text =
                           widget.model.takeProfit.toStringAsFixed(0);
                     },
@@ -64,7 +65,7 @@ class RevisePxState extends State<RevisePxWidget> {
                       widget._takeProfitPxController.text =
                           widget.model.takeProfitPx == 0
                               ? I18n.of(context).stepWidgetNotSetHint
-                              : widget.model.takeProfitPx.toStringAsFixed(0);
+                              : widget.model.takeProfitPx.toStringAsFixed(4);
                       widget._takeProfitController.text =
                           widget.model.takeProfit == null
                               ? I18n.of(context).stepWidgetNotSetHint
@@ -137,12 +138,13 @@ class RevisePxState extends State<RevisePxWidget> {
                 height: 40,
                 child: Material(
                   child: IStep(
+                    isPrice: true,
                     text: widget._cutLossPxController,
                     plusOnTap: () {
                       widget.model.increaseCutLossPx(order: widget._order);
                       widget.model.setCutLossInputCorectness(true);
                       widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(0);
+                          widget.model.cutLossPx.toStringAsFixed(4);
                       widget._cutLossController.text =
                           widget.model.cutLoss.toStringAsFixed(0);
                     },
@@ -150,7 +152,7 @@ class RevisePxState extends State<RevisePxWidget> {
                       widget.model.decreaseCutLossPx(order: widget._order);
                       widget.model.setCutLossInputCorectness(true);
                       widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(0);
+                          widget.model.cutLossPx.toStringAsFixed(4);
                       widget._cutLossController.text =
                           widget.model.cutLoss.toStringAsFixed(0);
                     },
@@ -186,7 +188,7 @@ class RevisePxState extends State<RevisePxWidget> {
                     cutLossPx: widget._order.forceClosePx,
                     order: widget._order);
                 widget._cutLossPxController.text =
-                    widget.model.cutLossPx.toStringAsFixed(0);
+                    widget.model.cutLossPx.toStringAsFixed(4);
                 widget._cutLossController.text = widget.model.cutLoss == null
                     ? "100"
                     : widget.model.cutLoss.toStringAsFixed(0);

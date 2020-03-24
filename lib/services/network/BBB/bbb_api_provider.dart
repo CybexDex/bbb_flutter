@@ -116,7 +116,7 @@ class BBBAPIProvider extends BBBAPI {
   @override
   Future<ContractResponse> getContract({String active}) async {
     var response = await newDio.get(active == null
-        ? '/api/$asset/contracts?action=$action'
+        ? '/api/$asset/contracts?'
         : '/api/$asset/contracts?action=$action&active=$active');
     Map<String, dynamic> convertedResult = convertJson(response.data);
     return Future.value(ContractResponse.fromJson(convertedResult));
@@ -132,6 +132,14 @@ class BBBAPIProvider extends BBBAPI {
   Future<TickerResponse> getTicker({String injectAsset}) async {
     var response = await newDio.get('/api/$injectAsset/ticker');
     return Future.value(TickerResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<List<String>> getAsset() async {
+    var response = await newDio.get('/cybex/underlying');
+    var responseData = response.data as List;
+    List<String> list = responseData.map((value) => value.toString()).toList();
+    return Future.value(list);
   }
 
   @override

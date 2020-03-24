@@ -1,8 +1,5 @@
-import 'dart:collection';
-
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/limit_order_records_vm.dart';
-import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
@@ -62,8 +59,7 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
     return DefaultTabController(
         length: 3,
         child: BaseWidget<LimitOrderRecordsViewModel>(
-          model: LimitOrderRecordsViewModel(
-              locator.get(), locator.get(), locator.get()),
+          model: LimitOrderRecordsViewModel(locator.get(), locator.get()),
           onModelReady: (model) {
             model.getAsset();
             model.getRecords();
@@ -79,14 +75,14 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
                           Border.all(color: Palette.separatorColor, width: 0.5),
                     ),
                     width: 100,
-                    child: custom.DropdownButton<AssetList>(
+                    child: custom.DropdownButton<String>(
                       hint: Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
                             "选择币种",
                             style: StyleFactory.addReduceStyle,
                           )),
-                      height: 200,
+                      height: 100,
                       underline: Container(),
                       value: model.selectedItem,
                       isExpanded: true,

@@ -1,6 +1,5 @@
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/order_records_vm.dart';
-import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -62,8 +61,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
     return DefaultTabController(
         length: 3,
         child: BaseWidget<OrderRecordsViewModel>(
-          model: OrderRecordsViewModel(
-              locator.get(), locator.get(), locator.get()),
+          model: OrderRecordsViewModel(locator.get(), locator.get()),
           onModelReady: (model) {
             model.getRecords();
             model.getAsset();
@@ -79,14 +77,14 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                           Border.all(color: Palette.separatorColor, width: 0.5),
                     ),
                     width: 100,
-                    child: custom.DropdownButton<AssetList>(
+                    child: custom.DropdownButton<String>(
                       hint: Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
                             "选择币种",
                             style: StyleFactory.addReduceStyle,
                           )),
-                      height: 200,
+                      height: 100,
                       underline: Container(),
                       value: model.selectedItem,
                       isExpanded: true,

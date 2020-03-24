@@ -18,15 +18,12 @@ Widget getPnlIcon(bool isN) {
 }
 
 openDialog(BuildContext context, OrderResponseModel model) {
-  Function callback = () {
-    Navigator.of(context).pop();
-  };
   showGeneralDialog(
     context: context,
     pageBuilder: (BuildContext buildContext, Animation<double> animation,
         Animation<double> secondaryAnimation) {
       return Builder(builder: (BuildContext context) {
-        return PnlForm(model: model, callback: callback);
+        return PnlForm(model: model);
       });
     },
     barrierDismissible: true,

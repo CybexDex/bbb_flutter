@@ -13,7 +13,7 @@ import 'package:path_drawing/path_drawing.dart';
 @immutable
 class TickerData {
   final double value;
-  final DateTime time;
+  DateTime time;
 
   TickerData(this.value, this.time);
 

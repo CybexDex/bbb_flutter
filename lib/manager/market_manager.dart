@@ -34,6 +34,7 @@ class MarketManager {
   BehaviorSubject<WebSocketNXDailyPxResponse> dailyPxTicker =
       BehaviorSubject<WebSocketNXDailyPxResponse>();
   IOWebSocketChannel _channel;
+  bool isClosedManually = false;
 
   BBBAPI _api;
   SharedPref _sharedPref;
@@ -61,9 +62,12 @@ class MarketManager {
         marketDuration: _marketDuration);
     initCommunication();
     send(jsonEncode(WebSocketRequestEntity(
-        type: "subscribe", topic: WebsocketRequestTopic.NX_PERCENTAGE_MAIN)));
+        type: "subscribe",
+        topic:
+            "${WebsocketRequestTopic.NX_PERCENTAGE}.${_sharedPref.getAction()}")));
     send(jsonEncode(WebSocketRequestEntity(
-        topic: WebsocketRequestTopic.PNL_MAIN, type: "subscribe")));
+        topic: "${WebsocketRequestTopic.PNL}.${_sharedPref.getAction()}",
+        type: "subscribe")));
     send(jsonEncode(WebSocketRequestEntity(
         topic: WebsocketRequestTopic.NX_DAILYPX, type: "subscribe")));
     send(jsonEncode(WebSocketRequestEntity(
@@ -106,10 +110,11 @@ class MarketManager {
   initCommunication() {
     reset();
     if (_sharedPref.getEnvType() == EnvType.Pro) {
-      _channel = IOWebSocketChannel.connect(WebSocketConnection.PRO_WEBSOCKET);
+      _channel = IOWebSocketChannel.connect(
+          "${WebSocketConnection.PRO_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
     } else if (_sharedPref.getEnvType() == EnvType.Test) {
-      _channel =
-          IOWebSocketChannel.connect(WebSocketConnection.PRO_TEST_WEBSOCKET);
+      _channel = IOWebSocketChannel.connect(
+          "${WebSocketConnection.TEST_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
     } else if (_sharedPref.getEnvType() == EnvType.Dev) {
       _channel = IOWebSocketChannel.connect(
           "${WebSocketConnection.DEV_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
@@ -129,6 +134,13 @@ class MarketManager {
     }, onError: (error) {
       cancelAndRemoveData();
       loadAllData(_assetName);
+    }, onDone: () {
+      if (isClosedManually) {
+        print("onDoneManually");
+      } else {
+        print("onDone");
+        loadAllData(_assetName);
+      }
     });
   }
 
@@ -147,17 +159,19 @@ class MarketManager {
         return;
       }
 
-      var phase =
-          (_priceController.value.last.time.minute - t.time.minute).abs();
-      if (phase == 1) {
+      var phase = (_priceController.value.last.time.millisecondsSinceEpoch -
+              t.time.millisecondsSinceEpoch)
+          .abs();
+      if (phase < 60 * 1000) {
+        t.time = _priceController.value.last.time;
+        _priceController.value.removeLast();
+        _priceController.value.add(t);
+        _priceController.add(_priceController.value.toList());
+      } else {
         _priceController.value.add(t);
         if (_priceController.value.length >= 500) {
           _priceController.value.removeRange(0, 200);
         }
-        _priceController.add(_priceController.value.toList());
-      } else if (phase == 0) {
-        _priceController.value.removeLast();
-        _priceController.value.add(t);
         _priceController.add(_priceController.value.toList());
       }
     } else if (response.contains(WebsocketRequestTopic.NX_KLINE)) {
@@ -184,11 +198,11 @@ class MarketManager {
         DataUtil.addLastData(_kLine.value, kLineEntity);
         _kLine.add(_kLine.value.toList());
       }
-    } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE_MAIN)) {
+    } else if (response.contains(WebsocketRequestTopic.NX_PERCENTAGE)) {
       var percentageResponse =
           WebSocketPercentageResponse.fromJson(json.decode(response));
       percentageTicker.add(percentageResponse);
-    } else if (response.contains(WebsocketRequestTopic.PNL_MAIN)) {
+    } else if (response.contains(WebsocketRequestTopic.PNL)) {
       var pnlResponse = WebSocketPNLResponse.fromJson(json.decode(response));
       pnlTicker.add(pnlResponse);
     } else if (response.contains(WebsocketRequestTopic.NX_DAILYPX)) {
@@ -214,6 +228,7 @@ class MarketManager {
   reset() {
     if (_channel != null) {
       if (_channel.sink != null) {
+        isClosedManually = true;
         _channel.sink.close();
       }
     }

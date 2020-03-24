@@ -130,6 +130,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                     SizedBox(
                       width: 160,
                       child: IStep(
+                        isPrice: true,
                         text: _takeProfitController,
                         plusOnTap: () {
                           model.increaseTakeProfitPx();
@@ -189,6 +190,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                     SizedBox(
                       width: 160,
                       child: IStep(
+                        isPrice: true,
                         text: _cutLossController,
                         plusOnTap: () {
                           model.increaseCutLossPx();

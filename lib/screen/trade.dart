@@ -333,7 +333,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
           return DialogFactory.confirmDialog(context,
               model: model, controller: passwordEditor);
         }).then((value) async {
-      if (value) {
+      if (value != null && value) {
         callPostOrder(context, model);
       }
     });

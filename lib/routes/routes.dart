@@ -45,6 +45,7 @@ class RoutePaths {
   static const String OrderHome = "OrderHome";
   static const String Setting = "Setting";
   static const String LimitOrder = "LimitOrder";
+  static const String SplashScreen = "SplashScreen";
 }
 
 class Routes {

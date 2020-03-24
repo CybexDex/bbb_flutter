@@ -32,6 +32,7 @@ abstract class BBBAPI {
   Future<PositionsResponseModel> getPositions(
       {String name, String injectAction});
   Future<PositionsResponseModel> getPositionsTestAccount({String name});
+  Future<List<String>> getAsset();
   Future<List<OrderResponseModel>> getOrders(String name,
       {List<OrderStatus> status,
       String startTime,

@@ -137,8 +137,7 @@ class RouteParamsOfTrade {
   final bool isUp;
   final String title;
 
-  RouteParamsOfTrade(
-      {this.contract, @required this.isUp, @required this.title});
+  RouteParamsOfTrade({this.contract, @required this.isUp, this.title});
 }
 
 class RouteParamsOfTransactionRecords {

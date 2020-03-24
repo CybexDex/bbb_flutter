@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -63,29 +64,17 @@ AppBar exchangeAppBar({BuildContext context}) {
     title: Consumer2<UserManager, TickerData>(
       builder: (context, bloc, ticker, child) {
         if (ticker == null) {
-          return Text("BTC/USDT --", style: StyleFactory.title);
+          return Text("${locator.get<SharedPref>().getAsset()}/USDT --",
+              style: StyleFactory.title);
         }
         return bloc.user.loginType == LoginType.test
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("试玩 BTC/USDT", style: StyleFactory.title),
-                  // Text("${ticker.value.toStringAsFixed(4)}",
-                  //     style: StyleFactory.subTitleStyle)
-                ],
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                      bloc.user.loginType == LoginType.reward
-                          ? "奖励 BTC/USDT"
-                          : "BTC/USDT",
-                      style: StyleFactory.title),
-                  // Text("${ticker.value.toStringAsFixed(4)}",
-                  //     style: StyleFactory.subTitleStyle)
-                ],
-              );
+            ? Text("试玩 ${locator.get<SharedPref>().getAsset()}/USDT",
+                style: StyleFactory.title)
+            : Text(
+                bloc.user.loginType == LoginType.reward
+                    ? "奖励 ${locator.get<SharedPref>().getAsset()}/USDT"
+                    : "${locator.get<SharedPref>().getAsset()}/USDT",
+                style: StyleFactory.title);
       },
     ),
     backgroundColor: Colors.white,

@@ -36,8 +36,8 @@ const ReferAction = "cybexbbb";
 
 class WebsocketRequestTopic {
   static const FAIRPRICE = "FAIRPRICE";
-  static const PNL_MAIN = "PNL.main";
-  static const NX_PERCENTAGE_MAIN = "NX_PERCENTAGE.main";
+  static const PNL = "PNL";
+  static const NX_PERCENTAGE = "NX_PERCENTAGE";
   static const NX_DAILYPX = "NX_DAILYPX";
   static const NX_KLINE = "KLINE";
 }
@@ -58,7 +58,7 @@ class BBBApiConnection {
 
 class GatewayConnection {
   static const PRO_GATEWAY = "https://bbbnew-gateway.cybex.io";
-  static const UAT_GATEWAY = "https://uat-bbb.cybex.io";
+  static const UAT_GATEWAY = "https://bbbnew-gateway.cybex.io";
 }
 
 class FaucetConnection {
@@ -67,11 +67,11 @@ class FaucetConnection {
 }
 
 class WebSocketConnection {
-  static const PRO_WEBSOCKET = "wss://bbb-new.cybex.io/mdp";
+  static const PRO_WEBSOCKET = "wss://bbb-new.cybex.io";
   // static const PRO_WEBSOCKET = "ws://43.252.132.73:55500/mdp";
   static const PRO_TEST_WEBSOCKET = "wss://nxmdp-tn.cybex.io";
   static const UAT_TEST_WEBSOCKET = "wss://nxmdptest-tn.cybex.io";
-  static const TEST_WEBSOCKET = "wss://bbb-test-new.cybex.io/mdp";
+  static const TEST_WEBSOCKET = "wss://bbb-test-new.cybex.io";
   static const DEV_WEBSOCKET = "ws://43.252.132.73:55500";
 }
 
@@ -82,7 +82,8 @@ class ReferSystemConnection {
 
 class ConfigureConnection {
   static const PRO_CONFIGURE = "https://app.cybex.io";
-  static const UAT_CONFIGURE = "http://47.100.98.113:3039";
+  static const UAT_CONFIGURE = "https://app.cybex.io";
+  // static const UAT_CONFIGURE = "http://47.100.98.113:3039";
 }
 
 class NodeConnection {
@@ -92,7 +93,7 @@ class NodeConnection {
 
 class ForumConnection {
   static const PRO_NODE = "https://guests-cfg.cybex.io";
-  static const UAT_NODE = "";
+  static const UAT_NODE = "https://guests-cfg.cybex.io";
 }
 
 class ZenDeskConnection {

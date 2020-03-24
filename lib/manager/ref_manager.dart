@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/action_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
@@ -16,7 +17,7 @@ class RefManager {
   String _upcontractId;
   String _downcontractId;
   List<Action> actions;
-  ContractResponse allContracts;
+  ContractResponse firstLoadContractResponse;
   ConfigResponse config;
   bool isIdSelectedByUser = false;
 
@@ -55,7 +56,8 @@ class RefManager {
   }
 
   List<Contract> get allUpContract {
-    List<Contract> contractList = allContracts.contract?.where((contract) {
+    List<Contract> contractList =
+        firstLoadContractResponse.contract?.where((contract) {
       return contract.contractId.contains("N");
     })?.toList();
     contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -63,7 +65,8 @@ class RefManager {
   }
 
   List<Contract> get allDownContract {
-    List<Contract> contractList = allContracts.contract?.where((contract) {
+    List<Contract> contractList =
+        firstLoadContractResponse.contract?.where((contract) {
       return contract.contractId.contains("X");
     })?.toList();
     contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -80,12 +83,10 @@ class RefManager {
 
   firstLoadData() async {
     await getConfig();
-    await getActions();
     await updateRefData();
     await updateContract();
-    await getAllContracts();
-    updateUpContractId();
-    updateDownContractId();
+    // updateUpContractId();
+    // updateDownContractId();
     startLoop();
   }
 
@@ -109,10 +110,28 @@ class RefManager {
 
   startLoop() {
     var timerManager = locator.get<TimerManager>();
-    timerManager.tick.listen((_) {
-      updateContract();
+    var marketManager = locator.get<MarketManager>();
+    marketManager.lastTicker.stream.listen((ticker) {
+      firstLoadContractResponse.contract =
+          firstLoadContractResponse.contract.where((contract) {
+        return ((contract.contractId.contains("N")) &&
+                (ticker.value > contract.strikeLevel) &&
+                ((ticker.value /
+                        ((ticker.value - contract.strikeLevel).abs())) <=
+                    config.maxGearing)) ||
+            ((contract.contractId.contains("X")) &&
+                (ticker.value < contract.strikeLevel) &&
+                ((ticker.value /
+                        ((ticker.value - contract.strikeLevel).abs())) <=
+                    config.maxGearing));
+      }).toList();
+      contractController.add(firstLoadContractResponse);
     });
-    timerManager.start();
+
+    // timerManager.tick.listen((_) {
+    //   updateContract();
+    // });
+    // timerManager.start();
     timerManager.refDataUpdate.listen((ticker) {
       updateRefData();
     });
@@ -132,7 +151,8 @@ class RefManager {
 
   updateContract() async {
     ContractResponse contractResponse = await _api.getContract();
-    contractController.add(contractResponse);
+    firstLoadContractResponse = contractResponse;
+    // contractController.add(contractResponse);
   }
 
   getActions() async {
@@ -143,10 +163,5 @@ class RefManager {
   getConfig() async {
     ConfigResponse response = await _api.getConfig();
     config = response;
-  }
-
-  getAllContracts() async {
-    ContractResponse response = await _api.getContract(active: "0");
-    allContracts = response;
   }
 }

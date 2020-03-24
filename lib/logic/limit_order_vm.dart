@@ -43,7 +43,6 @@ class LimitOrderViewModel extends BaseModel {
   RefManager _refm;
   UserManager _um;
 
-  StreamSubscription _refSub;
   StreamSubscription _lastTickerSub;
 
   LimitOrderViewModel(
@@ -62,7 +61,6 @@ class LimitOrderViewModel extends BaseModel {
 
   @override
   dispose() {
-    _refSub.cancel();
     _lastTickerSub.cancel();
     super.dispose();
   }
@@ -76,9 +74,6 @@ class LimitOrderViewModel extends BaseModel {
         totalAmount: Asset(amount: 0),
         cybBalance: Position(quantity: 0),
         fee: Asset(amount: 0));
-    _refSub = _refm.contractController.stream.listen((onData) {
-      updateAmountAndFee();
-    });
 
     _lastTickerSub = _mtm.lastTicker.listen((onData) {
       updateAmountAndFee();
@@ -268,10 +263,10 @@ class LimitOrderViewModel extends BaseModel {
     order.data.deadline = DateFormat("yyyy-MM-ddTHH:mm:ss")
         .format(DateTime.now().toUtc().add(Duration(days: 1)));
     order.data.lowestTriggerPrice = orderForm.predictPrice > ticker.value
-        ? orderForm.predictPrice.toStringAsFixed(0)
+        ? orderForm.predictPrice.toStringAsFixed(4)
         : "0";
     order.data.highestTriggerPrice = orderForm.predictPrice < ticker.value
-        ? orderForm.predictPrice.toStringAsFixed(0)
+        ? orderForm.predictPrice.toStringAsFixed(4)
         : "0";
 
     var data = order.data.toJson();

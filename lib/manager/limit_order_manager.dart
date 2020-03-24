@@ -5,6 +5,7 @@ import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/cancel_limit_order_request_model.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
@@ -19,27 +20,27 @@ class LimitOrderManager extends BaseModel {
   List<LimitOrderResponse> orders = [];
   List<SelectedItem> selectedOrders = [];
   bool isSelected = false;
+  bool isSubscribed = false;
   int selectedTotalCount = 0;
 
   int index = 0;
   BBBAPI _api;
   UserManager _um;
+  TimerManager _tm;
 
   Function _getOrdersCallback;
   StreamSubscription _refSub;
 
-  LimitOrderManager({BBBAPI api, UserManager um, RefManager rm}) {
+  LimitOrderManager(
+      {BBBAPI api, UserManager um, RefManager rm, TimerManager tm}) {
     _api = api;
     _um = um;
-
+    _tm = tm;
     getOrders();
 
     _getOrdersCallback = () {
       getOrders();
     };
-    _refSub = rm.contractController.stream.listen((data) {
-      getOrders();
-    });
     um.removeListener(_getOrdersCallback);
     um.addListener(_getOrdersCallback);
   }
@@ -50,6 +51,17 @@ class LimitOrderManager extends BaseModel {
       orders = orders.toList();
       if (orders.length > 0) {
         index = min(index, orders.length - 1);
+        if (!isSubscribed) {
+          isSubscribed = true;
+          _refSub = _tm.tick.listen((data) {
+            getOrders();
+          });
+        }
+      } else {
+        if (_refSub != null) {
+          _refSub.cancel();
+        }
+        isSubscribed = false;
       }
       initOrUpdateSelectedList();
       calculateMoneyCount();
@@ -152,8 +164,9 @@ class LimitOrderManager extends BaseModel {
   @override
   void dispose() async {
     _um.removeListener(_getOrdersCallback);
-    await _refSub.cancel();
-
+    if (_refSub != null) {
+      await _refSub.cancel();
+    }
     super.dispose();
   }
 }

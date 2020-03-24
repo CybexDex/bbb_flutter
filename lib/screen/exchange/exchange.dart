@@ -158,55 +158,12 @@ class _ExchangePageState extends State<ExchangePage>
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
                                         onPressed: () {
-                                          if (locator
-                                                      .get<RefManager>()
-                                                      .upContract ==
-                                                  null ||
-                                              locator
-                                                  .get<RefManager>()
-                                                  .upContract
-                                                  .isEmpty) {
-                                            showNotification(
-                                                context,
-                                                true,
-                                                I18n.of(context)
-                                                    .toastNoContract);
-                                            return;
-                                          }
-                                          if (user.user.logined) {
-                                            if (locator
-                                                        .get<RefManager>()
-                                                        .currentUpContract ==
-                                                    null ||
-                                                locator
-                                                        .get<RefManager>()
-                                                        .currentDownContract ==
-                                                    null ||
-                                                !locator
-                                                    .get<RefManager>()
-                                                    .isIdSelectedByUser) {
-                                              locator
-                                                  .get<RefManager>()
-                                                  .updateUpContractId();
-                                              locator
-                                                  .get<RefManager>()
-                                                  .updateDownContractId();
-                                            }
-                                            Navigator.pushNamed(
-                                                    context, RoutePaths.Trade,
-                                                    arguments:
-                                                        RouteParamsOfTrade(
-                                                            isUp: true,
-                                                            title: "ttes"))
-                                                .then((v) {
-                                              Provider.of<OrderViewModel>(
-                                                      context)
-                                                  .getOrders();
-                                            });
-                                          } else {
-                                            Navigator.of(context)
-                                                .pushNamed(RoutePaths.Login);
-                                          }
+                                          _onClickBuyOrSellButton(
+                                              ref: locator.get(),
+                                              user: locator.get(),
+                                              isUp: true,
+                                              orderViewModel:
+                                                  Provider.of(context));
                                         }),
                                   )),
                               Container(
@@ -221,55 +178,12 @@ class _ExchangePageState extends State<ExchangePage>
                                         topPadding: 10.0,
                                         bottomPadding: 10.0,
                                         onPressed: () {
-                                          if (locator
-                                                      .get<RefManager>()
-                                                      .downContract ==
-                                                  null ||
-                                              locator
-                                                  .get<RefManager>()
-                                                  .downContract
-                                                  .isEmpty) {
-                                            showNotification(
-                                                context,
-                                                true,
-                                                I18n.of(context)
-                                                    .toastNoContract);
-                                            return;
-                                          }
-                                          if (user.user.logined) {
-                                            if (locator
-                                                        .get<RefManager>()
-                                                        .currentUpContract ==
-                                                    null ||
-                                                locator
-                                                        .get<RefManager>()
-                                                        .currentDownContract ==
-                                                    null ||
-                                                !locator
-                                                    .get<RefManager>()
-                                                    .isIdSelectedByUser) {
-                                              locator
-                                                  .get<RefManager>()
-                                                  .updateUpContractId();
-                                              locator
-                                                  .get<RefManager>()
-                                                  .updateDownContractId();
-                                            }
-                                            Navigator.pushNamed(
-                                                    context, RoutePaths.Trade,
-                                                    arguments:
-                                                        RouteParamsOfTrade(
-                                                            isUp: false,
-                                                            title: "ttes"))
-                                                .then((v) {
-                                              Provider.of<OrderViewModel>(
-                                                      context)
-                                                  .getOrders();
-                                            });
-                                          } else {
-                                            Navigator.of(context)
-                                                .pushNamed(RoutePaths.Login);
-                                          }
+                                          _onClickBuyOrSellButton(
+                                              ref: locator.get(),
+                                              user: locator.get(),
+                                              isUp: false,
+                                              orderViewModel:
+                                                  Provider.of(context));
                                         }),
                                   )),
                             ],
@@ -400,6 +314,58 @@ class _ExchangePageState extends State<ExchangePage>
                     height: 118,
                   )),
             ));
+  }
+
+  _onClickBuyOrSellButton(
+      {RefManager ref,
+      UserManager user,
+      bool isUp,
+      OrderViewModel orderViewModel}) {
+    if (isUp
+        ? (ref.upContract == null || ref.upContract.isEmpty)
+        : (ref.downContract == null || ref.downContract.isEmpty)) {
+      showNotification(context, true, I18n.of(context).toastNoContract);
+      return;
+    }
+    if (user.user.logined) {
+      TextEditingController controller = TextEditingController();
+      if (user.user.isLocked) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return DialogFactory.unlockDialog(context,
+                  controller: controller);
+            }).then((value) {
+          if (value != null && value) {
+            if (ref.currentUpContract == null ||
+                ref.currentDownContract == null ||
+                !ref.isIdSelectedByUser) {
+              ref.updateUpContractId();
+              ref.updateDownContractId();
+            }
+            Navigator.pushNamed(context, RoutePaths.Trade,
+                    arguments: RouteParamsOfTrade(isUp: isUp))
+                .then((v) {
+              orderViewModel.getOrders();
+            });
+          }
+        });
+      } else {
+        if (ref.currentUpContract == null ||
+            ref.currentDownContract == null ||
+            !ref.isIdSelectedByUser) {
+          ref.updateUpContractId();
+          ref.updateDownContractId();
+        }
+        Navigator.pushNamed(context, RoutePaths.Trade,
+                arguments: RouteParamsOfTrade(isUp: isUp))
+            .then((v) {
+          orderViewModel.getOrders();
+        });
+      }
+    } else {
+      Navigator.of(context).pushNamed(RoutePaths.Login);
+    }
   }
 
   // Widget _newStockWidget(BuildContext context, OrderViewModel orderViewModel) {

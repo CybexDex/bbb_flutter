@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/common_utils.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
+import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
@@ -15,27 +16,26 @@ class OrderViewModel extends BaseModel {
   bool isSelected = false;
   var selectedTotalPnl = 0.0;
   int selectedTotalCount = 0;
+  bool isSubscribed = false;
 
   int index = 0;
   double totlaPnl = 0;
   BBBAPI _api;
   UserManager _um;
+  TimerManager _tm;
 
   Function _getOrdersCallback;
   StreamSubscription _refSub;
 
-  OrderViewModel({BBBAPI api, UserManager um, RefManager rm}) {
+  OrderViewModel({BBBAPI api, UserManager um, RefManager rm, TimerManager tm}) {
     _api = api;
     _um = um;
+    _tm = tm;
 
     getOrders();
-
     _getOrdersCallback = () {
       getOrders();
     };
-    _refSub = rm.contractController.stream.listen((data) {
-      getOrders();
-    });
     um.removeListener(_getOrdersCallback);
     um.addListener(_getOrdersCallback);
   }
@@ -47,6 +47,17 @@ class OrderViewModel extends BaseModel {
       orders = orders.toList();
       if (orders.length > 0) {
         index = min(index, orders.length - 1);
+        if (!isSubscribed) {
+          isSubscribed = true;
+          _refSub = _tm.tick.listen((data) {
+            getOrders();
+          });
+        }
+      } else {
+        if (_refSub != null) {
+          _refSub.cancel();
+        }
+        isSubscribed = false;
       }
       calculateTotalPnl();
       initOrUpdateSelectedList();
@@ -129,9 +140,11 @@ class OrderViewModel extends BaseModel {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _um.removeListener(_getOrdersCallback);
-    _refSub.cancel();
+    if (_refSub != null) {
+      await _refSub.cancel();
+    }
 
     super.dispose();
   }
