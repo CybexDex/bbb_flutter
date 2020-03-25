@@ -8,6 +8,7 @@ import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dar
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 import 'package:bbb_flutter/screen/forum/astrology_header_result.dart';
 import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -82,6 +83,15 @@ class ForumApiProvider extends ForumApi {
   Future<ForumResponse<AssetList>> getAssetList({int pg, int siz}) async {
     var response = await dio
         .get("/list/prod/bbb/assets", queryParameters: {"pg": pg, "siz": siz});
+    var responseData = json.decode(response.data);
+    return Future.value(ForumResponse.fromJson(responseData));
+  }
+
+  @override
+  Future<ForumResponse<UrlConfigResponse>> getUrlConfig(
+      {int pg, int siz}) async {
+    var response = await dio
+        .get("/list/prod/bbb/url", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }

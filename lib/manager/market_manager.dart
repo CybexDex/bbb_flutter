@@ -19,6 +19,8 @@ import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../setup.dart';
+
 class MarketManager {
   Stream<List<TickerData>> get prices => _priceController.stream;
   Stream<List<KLineEntity>> get kline => _kLine.stream;
@@ -111,7 +113,7 @@ class MarketManager {
     reset();
     if (_sharedPref.getEnvType() == EnvType.Pro) {
       _channel = IOWebSocketChannel.connect(
-          "${WebSocketConnection.PRO_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
+          "${configResult != null ? configResult.mdp : WebSocketConnection.PRO_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");
     } else if (_sharedPref.getEnvType() == EnvType.Test) {
       _channel = IOWebSocketChannel.connect(
           "${WebSocketConnection.TEST_WEBSOCKET}/api/${_sharedPref.getAsset()}/mdp");

@@ -45,7 +45,7 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
       case AppLifecycleState.paused:
         locator.get<MarketManager>().cancelAndRemoveData();
         break;
-      case AppLifecycleState.suspending:
+      case AppLifecycleState.detached:
         break;
       case AppLifecycleState.resumed:
         locator.get<MarketManager>().loadAllData(null);

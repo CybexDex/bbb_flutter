@@ -6,6 +6,7 @@ import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 
 class ForumResponse<T> {
   List<T> result;
@@ -33,6 +34,8 @@ class ForumResponse<T> {
             item = BannerResponse.fromJson(item);
           } else if (T == AssetList) {
             item = AssetList.fromJson(item);
+          } else if (T == UrlConfigResponse) {
+            item = UrlConfigResponse.fromJson(item);
           }
           result.add(item);
         }

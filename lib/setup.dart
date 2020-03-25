@@ -8,6 +8,7 @@ import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api_provider.dart';
@@ -38,6 +39,7 @@ List<SingleChildCloneableWidget> providers = [];
 final globalKey = GlobalKey();
 GlobalKey navGlobaykey = GlobalKey();
 final flutterWebViewPlugin = FlutterWebviewPlugin();
+UrlConfigResponse configResult;
 
 class SimpleLogPrinter extends LogPrinter {
   final String className;
@@ -74,8 +76,15 @@ setupLocator() async {
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
-  locator.registerSingleton<BBBAPI>(
-      BBBAPIProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ForumApi>(
+      ForumApiProvider(sharedPref: locator<SharedPref>()));
+  var configResponse =
+      await locator.get<ForumApi>().getUrlConfig(pg: 0, siz: 100);
+  configResult = configResponse.result.firstWhere(
+      (value) => value.version == packageInfo.version,
+      orElse: () => null);
+  locator.registerSingleton<BBBAPI>(BBBAPIProvider(
+      sharedPref: locator<SharedPref>(), url: configResult?.url));
   locator.registerSingleton<GatewayApi>(
       GatewayAPIProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ReferApi>(
@@ -89,8 +98,6 @@ setupLocator() async {
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
   locator.registerSingleton<NodeApi>(
       NodeApiProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton<ForumApi>(
-      ForumApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ZendeskApi>(ZendeskApiProvider());
 
   locator.registerLazySingleton(() => UserManager(

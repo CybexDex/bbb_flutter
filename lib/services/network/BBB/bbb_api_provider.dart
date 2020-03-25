@@ -31,9 +31,9 @@ class BBBAPIProvider extends BBBAPI {
   String action = "main";
   String asset;
 
-  BBBAPIProvider({SharedPref sharedPref}) {
+  BBBAPIProvider({SharedPref sharedPref, String url}) {
     _pref = sharedPref;
-    _dispatchNewNode();
+    _dispatchNewNode(url: url);
     newDio.options.connectTimeout = 15000;
     newDio.options.receiveTimeout = 13000;
     // newDio.interceptors
@@ -76,9 +76,9 @@ class BBBAPIProvider extends BBBAPI {
     }
   }
 
-  _dispatchNewNode() {
+  _dispatchNewNode({String url}) {
     if (_pref.getEnvType() == EnvType.Pro) {
-      newDio.options.baseUrl = BBBApiConnection.PRO;
+      newDio.options.baseUrl = url != null ? url : BBBApiConnection.PRO;
     } else if (_pref.getEnvType() == EnvType.Test) {
       newDio.options.baseUrl = BBBApiConnection.PRO_TEST;
     } else if (_pref.getEnvType() == EnvType.Dev) {

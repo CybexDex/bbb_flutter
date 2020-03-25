@@ -44,7 +44,6 @@ class IStep extends StatelessWidget {
                     decimal: true, signed: false),
                 onChanged: onChange,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(top: 4, bottom: 4),
                   border: InputBorder.none,
                   hintText: (isPrice != null && isPrice)
                       ? I18n.of(context).inputPriceHint

@@ -5,6 +5,7 @@ import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dar
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 import 'package:bbb_flutter/screen/forum/astrology_header_result.dart';
 import 'package:bbb_flutter/shared/types.dart';
 
@@ -18,4 +19,5 @@ abstract class ForumApi {
   Future<AstrologyPredictResponse> getAstrologyPredict();
   Future<ForumResponse<BannerResponse>> getBanners({int pg, int siz});
   Future<ForumResponse<AssetList>> getAssetList({int pg, int siz});
+  Future<ForumResponse<UrlConfigResponse>> getUrlConfig({int pg, int siz});
 }
