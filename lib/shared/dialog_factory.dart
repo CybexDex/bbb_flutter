@@ -77,20 +77,32 @@ class DialogFactory {
                     child: TextField(
                       controller: _textEditorController,
                       enableInteractiveSelection: true,
-                      obscureText: true,
+                      obscureText: model.isObscure,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(
-                              top: 9, bottom: 9, left: 10, right: 16),
-                          hintText: I18n.of(context).passwordHint,
-                          labelText: null,
-                          fillColor: Palette.subTitleColor.withOpacity(0.1),
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.none, width: 0)),
-                          errorText: model.shouldShowErrorMessage
-                              ? I18n.of(context).passwordError
-                              : ""),
+                        contentPadding: EdgeInsets.only(
+                            top: 9, bottom: 9, left: 10, right: 16),
+                        hintText: I18n.of(context).passwordHint,
+                        labelText: null,
+                        fillColor: Palette.subTitleColor.withOpacity(0.1),
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(style: BorderStyle.none, width: 0)),
+                        errorText: model.shouldShowErrorMessage
+                            ? I18n.of(context).passwordError
+                            : "",
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            model.changeObscure();
+                          },
+                          child: Icon(
+                            model.isObscure
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Palette.appGrey.withOpacity(0.3),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

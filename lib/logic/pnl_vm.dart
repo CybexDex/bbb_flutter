@@ -25,6 +25,7 @@ class PnlViewModel extends BaseModel {
   bool isTakeProfitInputCorrect = true;
   bool isCutLossInputCorrect = true;
   bool isCutLossCorrect = true;
+  bool isObscure = true;
   BBBAPI _api;
   UserManager _um;
   MarketManager _mtm;
@@ -253,5 +254,10 @@ class PnlViewModel extends BaseModel {
       setBusy(false);
       return false;
     }
+  }
+
+  changeObscure() {
+    isObscure = !isObscure;
+    setBusy(false);
   }
 }
