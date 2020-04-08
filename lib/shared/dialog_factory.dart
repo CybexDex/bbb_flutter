@@ -1,5 +1,5 @@
 import 'package:bbb_flutter/base/base_widget.dart';
-import 'package:bbb_flutter/logic/limit_order_vm.dart';
+import 'package:bbb_flutter/logic/coupon_order_view_model.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/setup.dart';
@@ -27,8 +27,7 @@ class DialogFactory {
       actions: isForce
           ? <Widget>[
               CupertinoDialogAction(
-                  child: Text(I18n.of(context).confirm,
-                      style: StyleFactory.dialogButtonFontStyle),
+                  child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
                   onPressed: onConfirmPressed)
             ]
           : <Widget>[
@@ -40,8 +39,7 @@ class DialogFactory {
                     style: StyleFactory.dialogButtonFontStyle),
               ),
               CupertinoDialogAction(
-                  child: Text(I18n.of(context).confirm,
-                      style: StyleFactory.dialogButtonFontStyle),
+                  child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
                   onPressed: onConfirmPressed)
             ],
     );
@@ -59,10 +57,7 @@ class DialogFactory {
     TextEditingController _textEditorController = controller;
     return BaseWidget<PnlViewModel>(
         model: PnlViewModel(
-            api: locator.get(),
-            um: locator.get(),
-            mtm: locator.get(),
-            refm: locator.get()),
+            api: locator.get(), um: locator.get(), mtm: locator.get(), refm: locator.get()),
         builder: (context, model, child) {
           return CupertinoAlertDialog(
             title: Text(I18n.of(context).dialogCheckPassword),
@@ -79,26 +74,21 @@ class DialogFactory {
                       enableInteractiveSelection: true,
                       obscureText: model.isObscure,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                            top: 9, bottom: 9, left: 10, right: 16),
+                        contentPadding: EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
                         hintText: I18n.of(context).passwordHint,
                         labelText: null,
                         fillColor: Palette.subTitleColor.withOpacity(0.1),
                         filled: true,
                         border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(style: BorderStyle.none, width: 0)),
-                        errorText: model.shouldShowErrorMessage
-                            ? I18n.of(context).passwordError
-                            : "",
+                            borderSide: BorderSide(style: BorderStyle.none, width: 0)),
+                        errorText:
+                            model.shouldShowErrorMessage ? I18n.of(context).passwordError : "",
                         suffixIcon: GestureDetector(
                           onTap: () {
                             model.changeObscure();
                           },
                           child: Icon(
-                            model.isObscure
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            model.isObscure ? Icons.visibility_off : Icons.visibility,
                             color: Palette.appGrey.withOpacity(0.3),
                           ),
                         ),
@@ -125,8 +115,7 @@ class DialogFactory {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }
                 },
-                child: Text(I18n.of(context).confirm,
-                    style: StyleFactory.dialogButtonFontStyle),
+                child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
               )
             ],
           );
@@ -157,15 +146,13 @@ class DialogFactory {
               child: TextField(
                 controller: _textEditorController,
                 decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
+                    contentPadding: EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
                     hintText: I18n.of(context).inviteInputPinCode,
                     labelText: null,
                     fillColor: Palette.subTitleColor.withOpacity(0.1),
                     filled: true,
                     border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(style: BorderStyle.none, width: 0)),
+                        borderSide: BorderSide(style: BorderStyle.none, width: 0)),
                     errorText: ""),
               ),
             ),
@@ -177,8 +164,8 @@ class DialogFactory {
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop([false]);
           },
-          child: Text(I18n.of(context).dialogCancelButton,
-              style: StyleFactory.dialogButtonFontStyle),
+          child:
+              Text(I18n.of(context).dialogCancelButton, style: StyleFactory.dialogButtonFontStyle),
         ),
         CupertinoDialogAction(
           onPressed: () {
@@ -187,8 +174,7 @@ class DialogFactory {
                   context: context,
                   builder: (context) {
                     return KeyboardAvoider(
-                      child: DialogFactory.unlockDialog(context,
-                          controller: controllerForPassword),
+                      child: DialogFactory.unlockDialog(context, controller: controllerForPassword),
                       autoScroll: true,
                     );
                   }).then((value) {
@@ -198,25 +184,21 @@ class DialogFactory {
                 }
               });
             } else {
-              Navigator.of(context, rootNavigator: true)
-                  .pop([true, _textEditorController.text]);
+              Navigator.of(context, rootNavigator: true).pop([true, _textEditorController.text]);
             }
           },
-          child: Text(I18n.of(context).confirm,
-              style: StyleFactory.dialogButtonFontStyle),
+          child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
         )
       ],
     );
   }
 
-  static CupertinoAlertDialog successDialogDetail(BuildContext context,
-      {String value}) {
+  static CupertinoAlertDialog successDialogDetail(BuildContext context, {String value}) {
     return CupertinoAlertDialog(
       title: Column(
         children: <Widget>[
           Image.asset("res/assets/icons/icSuccess.png"),
-          Text(I18n.of(context).closeOut,
-              style: StyleFactory.dialogButtonFontStyle)
+          Text(I18n.of(context).closeOut, style: StyleFactory.dialogButtonFontStyle)
         ],
       ),
       content: Column(
@@ -228,8 +210,7 @@ class DialogFactory {
     );
   }
 
-  static CupertinoAlertDialog successDialog(BuildContext context,
-      {String content}) {
+  static CupertinoAlertDialog successDialog(BuildContext context, {String content}) {
     return CupertinoAlertDialog(
       title: Column(
         children: <Widget>[
@@ -240,8 +221,7 @@ class DialogFactory {
     );
   }
 
-  static CupertinoAlertDialog failDialog(BuildContext context,
-      {String content}) {
+  static CupertinoAlertDialog failDialog(BuildContext context, {String content}) {
     return CupertinoAlertDialog(
       title: Column(
         children: <Widget>[
@@ -256,99 +236,141 @@ class DialogFactory {
       {dynamic model, TextEditingController controller}) {
     return CupertinoAlertDialog(
       title: Text("买入确认"),
-      content: Container(
-        child: Column(
-          children: <Widget>[
-            (model is LimitOrderViewModel)
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(I18n.of(context).limitOrderPrice),
-                      Text("${model.orderForm.predictPrice} USDT"),
-                    ],
-                  )
-                : Container(),
-            (model is LimitOrderViewModel)
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(I18n.of(context).forceClosePrice),
-                      Text("${model.orderForm.selectedItem.strikeLevel} USDT"),
-                    ],
-                  )
-                : Container(),
-            (model is LimitOrderViewModel)
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(I18n.of(context).actLevel),
-                      Text("${model.actLevel.toStringAsFixed(1)}"),
-                    ],
-                  )
-                : Container(),
-            !(model is LimitOrderViewModel)
-                ? Row(
+      content: model is CouponOrderViewModel
+          ? Container(
+              child: Column(
+                children: <Widget>[
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("预估价格"),
+                      Text("${model.amountPerContract.toStringAsFixed(4)} USDT"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("投资份数"),
+                      Text(model.couponAmount.toStringAsFixed(0) + "份"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("手续费"),
+                      Text("${model.orderForm.fee.amount.toStringAsFixed(4)} USDT"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("投资总额"),
                       Text(
-                          "${((model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount).toStringAsFixed(4)} USDT"),
+                          "${(model.amountPerContract * model.couponAmount + model.orderForm.fee.amount).toStringAsFixed(4)} USDT"),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Image.asset(R.resAssetsIconsIcWarn),
+                      Text(
+                        "由于价格波动，买入可能失败",
+                        style: StyleFactory.errorMessageText,
+                      )
                     ],
                   )
-                : Container(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("投资份数"),
-                Text(model.orderForm.investAmount.toString() + "份"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("手续费"),
-                Text("${model.orderForm.fee.amount.toStringAsFixed(4)} USDT"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("投资总额"),
-                Text(
-                    "${model.orderForm.totalAmount.amount.toStringAsFixed(4)} USDT"),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Image.asset(R.resAssetsIconsIcWarn),
-                Text(
-                  "由于价格波动，买入可能失败",
-                  style: StyleFactory.errorMessageText,
-                )
-              ],
+                ],
+              ),
             )
-          ],
-        ),
-      ),
+          : Container(
+              child: Column(
+                children: <Widget>[
+                  (!model.isMarket)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(I18n.of(context).limitOrderPrice),
+                            Text("${model.orderForm.predictPrice} USDT"),
+                          ],
+                        )
+                      : Container(),
+                  (!model.isMarket)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(I18n.of(context).forceClosePrice),
+                            Text("${model.orderForm.selectedItem.strikeLevel} USDT"),
+                          ],
+                        )
+                      : Container(),
+                  (!model.isMarket)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(I18n.of(context).actLevel),
+                            Text("${model.actLevel.toStringAsFixed(1)}"),
+                          ],
+                        )
+                      : Container(),
+                  (model.isMarket)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("预估价格"),
+                            Text(
+                                "${((model.orderForm.totalAmount.amount - model.orderForm.fee.amount) / model.orderForm.investAmount).toStringAsFixed(4)} USDT"),
+                          ],
+                        )
+                      : Container(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("投资份数"),
+                      Text(model.orderForm.investAmount.toString() + "份"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("手续费"),
+                      Text("${model.orderForm.fee.amount.toStringAsFixed(4)} USDT"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("投资总额"),
+                      Text("${model.orderForm.totalAmount.amount.toStringAsFixed(4)} USDT"),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Image.asset(R.resAssetsIconsIcWarn),
+                      Text(
+                        "由于价格波动，买入可能失败",
+                        style: StyleFactory.errorMessageText,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
       actions: <Widget>[
         CupertinoDialogAction(
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop(false);
           },
-          child: Text(I18n.of(context).dialogCancelButton,
-              style: StyleFactory.dialogButtonFontStyle),
+          child:
+              Text(I18n.of(context).dialogCancelButton, style: StyleFactory.dialogButtonFontStyle),
         ),
         CupertinoDialogAction(
-            child: Text(I18n.of(context).confirm,
-                style: StyleFactory.dialogButtonFontStyle),
+            child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
             onPressed: () {
               if (locator.get<UserManager>().user.isLocked) {
                 showDialog(
                     context: context,
                     builder: (context) {
                       return KeyboardAvoider(
-                        child: DialogFactory.unlockDialog(context,
-                            controller: controller),
+                        child: DialogFactory.unlockDialog(context, controller: controller),
                         autoScroll: true,
                       );
                     }).then((value) {
@@ -357,13 +379,9 @@ class DialogFactory {
                   }
                 });
               } else {
-                if (locator.get<UserManager>().user.testAccountResponseModel !=
-                    null) {
-                  CybexFlutterPlugin.setDefaultPrivKey(locator
-                      .get<UserManager>()
-                      .user
-                      .testAccountResponseModel
-                      .privkey);
+                if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+                  CybexFlutterPlugin.setDefaultPrivKey(
+                      locator.get<UserManager>().user.testAccountResponseModel.privkey);
                 }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }
@@ -391,12 +409,10 @@ class DialogFactory {
               style: StyleFactory.dialogContentStyle,
             ),
             SizedBox(height: 5),
-            Text(value + AssetName.USDT,
-                style: StyleFactory.dialogContentTitleStyle),
+            Text(value + AssetName.USDT, style: StyleFactory.dialogContentTitleStyle),
             SizedBox(height: 8),
             pnl != null
-                ? Text(I18n.of(context).pnl,
-                    style: StyleFactory.dialogContentStyle)
+                ? Text(I18n.of(context).pnl, style: StyleFactory.dialogContentStyle)
                 : Container(),
             SizedBox(height: 5),
             pnl != null
@@ -413,20 +429,18 @@ class DialogFactory {
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop(false);
           },
-          child: Text(I18n.of(context).dialogCancelButton,
-              style: StyleFactory.dialogButtonFontStyle),
+          child:
+              Text(I18n.of(context).dialogCancelButton, style: StyleFactory.dialogButtonFontStyle),
         ),
         CupertinoDialogAction(
-            child: Text(I18n.of(context).confirm,
-                style: StyleFactory.dialogButtonFontStyle),
+            child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
             onPressed: () async {
               if (locator.get<UserManager>().user.isLocked) {
                 showDialog(
                     context: context,
                     builder: (context) {
                       return KeyboardAvoider(
-                        child: DialogFactory.unlockDialog(context,
-                            controller: controller),
+                        child: DialogFactory.unlockDialog(context, controller: controller),
                         autoScroll: true,
                       );
                     }).then((value) {
@@ -435,13 +449,9 @@ class DialogFactory {
                   }
                 });
               } else {
-                if (locator.get<UserManager>().user.testAccountResponseModel !=
-                    null) {
-                  await CybexFlutterPlugin.setDefaultPrivKey(locator
-                      .get<UserManager>()
-                      .user
-                      .testAccountResponseModel
-                      .privkey);
+                if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+                  await CybexFlutterPlugin.setDefaultPrivKey(
+                      locator.get<UserManager>().user.testAccountResponseModel.privkey);
                 }
                 Navigator.of(context, rootNavigator: true).pop(true);
               }
@@ -450,14 +460,12 @@ class DialogFactory {
     );
   }
 
-  static Widget addsDialog(BuildContext context,
-      {String url, String img, Function onImageTap}) {
+  static Widget addsDialog(BuildContext context, {String url, String img, Function onImageTap}) {
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          GestureDetector(
-              onTap: onImageTap, child: Image.network(img, width: 270)),
+          GestureDetector(onTap: onImageTap, child: Image.network(img, width: 270)),
           SizedBox(height: 20),
           GestureDetector(
             onTap: () {

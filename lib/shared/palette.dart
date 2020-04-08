@@ -48,6 +48,7 @@ class Palette {
   //New design color collection
   static const appBlack = const Color(0xff282c35);
   static const appGrey = const Color(0xff6f7072);
+  static const appLightGrey = const Color(0xff808080);
   static const appCellTitlelightGrey = const Color(0xffa9aaab);
   static const appYellowOrange = const Color(0xffffa700);
   static const appDividerBackgroudGreyColor = const Color(0xfff7f7f7);

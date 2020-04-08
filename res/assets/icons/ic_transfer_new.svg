@@ -1,8 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="62" height="62" viewBox="0 0 62 62">
-    <g fill="none" fill-rule="evenodd" transform="translate(3 5)">
-        <path stroke="#282C35" stroke-linecap="round" stroke-width="4" d="M2.307 30.78C4.563 42.856 15.208 52 28 52c12.83 0 23.5-9.198 25.713-21.328m.025-9.204C51.583 9.27 40.879 0 28 0 15.052 0 4.304 9.368 2.229 21.663"/>
-        <rect width="3.733" height="16.714" x="52.267" y="6.5" fill="#282C35" rx="1.867"/>
-        <rect width="3.733" height="16.714" y="28.786" fill="#282C35" rx="1.867"/>
-        <circle cx="28" cy="26" r="12" stroke="#FFA700" stroke-width="4"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="59.34" height="56" viewBox="0 0 59.34 56">
+  <g id="编组_4" data-name="编组 4" transform="translate(3.22 2)">
+    <g id="划转">
+      <g id="编组_3" data-name="编组 3">
+        <path id="形状" d="M25.771,52A26.107,26.107,0,0,1,.078,30.78l51.405-.108A26.106,26.106,0,0,1,25.771,52ZM0,21.663H0a26.175,26.175,0,0,1,42.662-15.5,26,26,0,0,1,8.847,15.308Z" transform="translate(2.229)" fill="none" stroke="#282c35" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+        <rect id="矩形" width="3.733" height="16.714" rx="1.867" transform="translate(52.267 6.5)" fill="#282c35"/>
+        <rect id="矩形-2" data-name="矩形" width="3.733" height="16.714" rx="1.867" transform="translate(0 28.786)" fill="#282c35"/>
+      </g>
     </g>
+    <g id="椭圆形" transform="translate(14 12)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4">
+      <circle cx="14" cy="14" r="14" stroke="none"/>
+      <circle cx="14" cy="14" r="12" fill="none"/>
+    </g>
+  </g>
 </svg>

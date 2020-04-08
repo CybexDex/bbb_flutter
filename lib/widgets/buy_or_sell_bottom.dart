@@ -24,7 +24,7 @@ class BuyOrSellBottom extends StatelessWidget {
                   letterSpacing: 0,
                 )),
             Text(
-              totalAmount > double.minPositive
+              (totalAmount != null && totalAmount > double.minPositive)
                   ? totalAmount.toStringAsFixed(4) + " USDT"
                   : "-- USDT",
               style: StyleFactory.buySellValueText,

@@ -36,15 +36,12 @@ main() async {
     FlutterUmplus.init('5d8098c90cafb277140006f7',
         reportCrash: false, logEnable: true, encrypt: true);
   }
-
   setupLog();
   await setupLocator();
   setupProviders();
-  CatcherOptions debugOptions =
-      CatcherOptions(SilentReportMode(), [ConsoleHandler()]);
+  CatcherOptions debugOptions = CatcherOptions(SilentReportMode(), [ConsoleHandler()]);
   CatcherOptions releaseOptions = CatcherOptions(SilentReportMode(), [
-    SentryHandler(
-        "https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"),
+    SentryHandler("https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"),
   ]);
   Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
   // runApp(MyApp());
@@ -52,13 +49,9 @@ main() async {
   await locator.get<RefManager>().firstLoadData();
   locator.get<TimerManager>().start();
   if (locator.get<UserManager>().user.logined) {
-    locator
-        .get<UserManager>()
-        .fetchBalances(name: locator.get<UserManager>().user.name);
+    locator.get<UserManager>().fetchBalances(name: locator.get<UserManager>().user.name);
   }
-  locator
-      .get<MarketManager>()
-      .loadAllData("BXBT", marketDuration: MarketDuration.line);
+  locator.get<MarketManager>().loadAllData("BXBT", marketDuration: MarketDuration.line);
 }
 
 class MyApp extends StatelessWidget {

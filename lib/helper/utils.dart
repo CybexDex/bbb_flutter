@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:intl/intl.dart';
 
 dynamic convertValueByType(value, Type type, {String stack: ""}) {
   if (value == null) {
@@ -55,9 +56,7 @@ String getEllipsisName({String value, int precision}) {
   }
   precision = precision ?? 6;
   if (value.length >= precision) {
-    return value.substring(0, 3) +
-        "***" +
-        value.substring(value.length - 2, value.length);
+    return value.substring(0, 3) + "***" + value.substring(value.length - 2, value.length);
   }
 
   return value;
@@ -88,4 +87,8 @@ dynamic convertJson(Map<String, dynamic> json) {
   }
   var newJson = {"contract": contracts};
   return newJson;
+}
+
+String dateFormat({String date}) {
+  return DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(date).toLocal());
 }

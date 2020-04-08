@@ -45,8 +45,7 @@ class _ExchangePageState extends State<ExchangePage>
   void initState() {
     super.initState();
     checkConfiguretion();
-    _animationController =
-        AnimationController(duration: Duration(seconds: 5), vsync: this);
+    _animationController = AnimationController(duration: Duration(seconds: 5), vsync: this);
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         locator<MarketManager>().pnlTicker.value = null;
@@ -115,8 +114,7 @@ class _ExchangePageState extends State<ExchangePage>
                       Consumer<WebSocketPercentageResponse>(
                         builder: (context, percentage, child) {
                           return percentage == null ||
-                                  (percentage.nPercentage == 0 &&
-                                      percentage.xPercentage == 0)
+                                  (percentage.nPercentage == 0 && percentage.xPercentage == 0)
                               ? Container()
                               : Visibility(
                                   visible: !isExpandOpen,
@@ -131,8 +129,7 @@ class _ExchangePageState extends State<ExchangePage>
                                             size: Size.infinite,
                                             painter: PercentageBarPainter(
                                                 context: context,
-                                                percentage:
-                                                    percentage.nPercentage),
+                                                percentage: percentage.nPercentage),
                                           ),
                                         );
                                       },
@@ -144,8 +141,7 @@ class _ExchangePageState extends State<ExchangePage>
                       Visibility(
                         visible: !isExpandOpen,
                         child: Container(
-                          padding: EdgeInsets.only(
-                              right: 20, left: 20, bottom: 15, top: 15),
+                          padding: EdgeInsets.only(right: 20, left: 20, bottom: 15, top: 15),
                           color: Colors.white,
                           child: Row(
                             children: <Widget>[
@@ -162,8 +158,7 @@ class _ExchangePageState extends State<ExchangePage>
                                               ref: locator.get(),
                                               user: locator.get(),
                                               isUp: true,
-                                              orderViewModel:
-                                                  Provider.of(context));
+                                              orderViewModel: Provider.of(context));
                                         }),
                                   )),
                               Container(
@@ -182,8 +177,7 @@ class _ExchangePageState extends State<ExchangePage>
                                               ref: locator.get(),
                                               user: locator.get(),
                                               isUp: false,
-                                              orderViewModel:
-                                                  Provider.of(context));
+                                              orderViewModel: Provider.of(context));
                                         }),
                                   )),
                             ],
@@ -217,11 +211,9 @@ class _ExchangePageState extends State<ExchangePage>
                             Container(
                               padding: EdgeInsets.only(top: 8, bottom: 8),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text("总盈亏(USDT)：",
-                                      style: StyleNewFactory.grey14),
+                                  Text("总盈亏(USDT)：", style: StyleNewFactory.grey14),
                                   Consumer<OrderViewModel>(
                                     builder: (context, model, child) {
                                       return Text(
@@ -249,18 +241,12 @@ class _ExchangePageState extends State<ExchangePage>
                       ),
                       Visibility(
                         visible: isExpandOpen,
-                        child: Consumer4<UserManager, OrderViewModel,
-                            ContractResponse, TickerData>(
+                        child: Consumer4<UserManager, OrderViewModel, ContractResponse, TickerData>(
                           builder: (context, userMg, data, ref, __, child) {
                             if (!userMg.user.logined ||
                                 data.orders.isEmpty ||
-                                locator.get<MarketManager>().lastTicker.value ==
-                                    null ||
-                                locator
-                                        .get<RefManager>()
-                                        .refDataControllerNew
-                                        .value ==
-                                    null) {
+                                locator.get<MarketManager>().lastTicker.value == null ||
+                                locator.get<RefManager>().refDataControllerNew.value == null) {
                               return child;
                             }
                             return _stockWidget(context, data);
@@ -277,8 +263,7 @@ class _ExchangePageState extends State<ExchangePage>
     await locator.get<ConfigureApi>().getUpdateInfo(isIOS: Platform.isIOS);
 
     UpdateResponse updateResponse = locator.get<ConfigureApi>().updateResponse;
-    bool isForce =
-        updateResponse.isForceUpdate(locator.get<PackageInfo>().version);
+    bool isForce = updateResponse.isForceUpdate(locator.get<PackageInfo>().version);
     if (updateResponse.needUpdate(locator.get<PackageInfo>().version)) {
       Future.delayed(Duration.zero, () {
         showDialog(
@@ -317,10 +302,7 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   _onClickBuyOrSellButton(
-      {RefManager ref,
-      UserManager user,
-      bool isUp,
-      OrderViewModel orderViewModel}) {
+      {RefManager ref, UserManager user, bool isUp, OrderViewModel orderViewModel}) {
     if (isUp
         ? (ref.upContract == null || ref.upContract.isEmpty)
         : (ref.downContract == null || ref.downContract.isEmpty)) {
@@ -333,8 +315,7 @@ class _ExchangePageState extends State<ExchangePage>
         showDialog(
             context: context,
             builder: (context) {
-              return DialogFactory.unlockDialog(context,
-                  controller: controller);
+              return DialogFactory.unlockDialog(context, controller: controller);
             }).then((value) {
           if (value != null && value) {
             if (ref.currentUpContract == null ||
@@ -344,7 +325,7 @@ class _ExchangePageState extends State<ExchangePage>
               ref.updateDownContractId();
             }
             Navigator.pushNamed(context, RoutePaths.Trade,
-                    arguments: RouteParamsOfTrade(isUp: isUp))
+                    arguments: RouteParamsOfTrade(isUp: isUp, isCoupon: false))
                 .then((v) {
               orderViewModel.getOrders();
             });
@@ -358,7 +339,7 @@ class _ExchangePageState extends State<ExchangePage>
           ref.updateDownContractId();
         }
         Navigator.pushNamed(context, RoutePaths.Trade,
-                arguments: RouteParamsOfTrade(isUp: isUp))
+                arguments: RouteParamsOfTrade(isUp: isUp, isCoupon: false))
             .then((v) {
           orderViewModel.getOrders();
         });

@@ -13,8 +13,7 @@ class SharedPref {
   SharedPreferences _prefs;
   SharedPref._(this._prefs);
 
-  static Future<SharedPref> create() async =>
-      SharedPref._(await SharedPreferences.getInstance());
+  static Future<SharedPref> create() async => SharedPref._(await SharedPreferences.getInstance());
 
   String getUserName() {
     var value = _prefs.getString("bbb.username");
@@ -87,8 +86,7 @@ class SharedPref {
   }
 
   saveActivitiesResponse({ActivitiesResponse activitiesResponse}) async {
-    await _prefs.setString(
-        activitiesResponse.name, activitiesResponse.toString());
+    await _prefs.setString(activitiesResponse.name, activitiesResponse.toString());
   }
 
   removeActivitiesResponse() async {

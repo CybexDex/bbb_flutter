@@ -1,6 +1,8 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
+import 'package:bbb_flutter/logic/coupon_order_view_model.dart';
+import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/logic/nav_drawer_vm.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/trade_vm.dart';
@@ -76,28 +78,20 @@ setupLocator() async {
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
-  locator.registerSingleton<ForumApi>(
-      ForumApiProvider(sharedPref: locator<SharedPref>()));
-  var configResponse =
-      await locator.get<ForumApi>().getUrlConfig(pg: 0, siz: 100);
-  configResult = configResponse.result.firstWhere(
-      (value) => value.version == packageInfo.version,
-      orElse: () => null);
-  locator.registerSingleton<BBBAPI>(BBBAPIProvider(
-      sharedPref: locator<SharedPref>(), url: configResult?.url));
-  locator.registerSingleton<GatewayApi>(
-      GatewayAPIProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton<ReferApi>(
-      ReferApiProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton<FaucetAPI>(
-      FaucetAPIProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton<ConfigureApi>(
-      ConfiguireApiProvider(sharedPref: locator<SharedPref>()));
-  locator.registerSingleton(
-      MarketManager(api: locator<BBBAPI>(), sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ForumApi>(ForumApiProvider(sharedPref: locator<SharedPref>()));
+  var configResponse = await locator.get<ForumApi>().getUrlConfig(pg: 0, siz: 100);
+  configResult = configResponse.result
+      .firstWhere((value) => value.version == packageInfo.version, orElse: () => null);
+  locator.registerSingleton<BBBAPI>(
+      BBBAPIProvider(sharedPref: locator<SharedPref>(), url: configResult?.url));
+  locator.registerSingleton<GatewayApi>(GatewayAPIProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ReferApi>(ReferApiProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<FaucetAPI>(FaucetAPIProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<ConfigureApi>(ConfiguireApiProvider(sharedPref: locator<SharedPref>()));
+  locator
+      .registerSingleton(MarketManager(api: locator<BBBAPI>(), sharedPref: locator<SharedPref>()));
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
-  locator.registerSingleton<NodeApi>(
-      NodeApiProvider(sharedPref: locator<SharedPref>()));
+  locator.registerSingleton<NodeApi>(NodeApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ZendeskApi>(ZendeskApiProvider());
 
   locator.registerLazySingleton(() => UserManager(
@@ -112,6 +106,7 @@ setupLocator() async {
       zendeskApi: locator.get(),
       gatewayApi: locator.get(),
       userManager: locator.get()));
+  locator.registerLazySingleton(() => CouponViewModel(bbbapi: locator.get(), um: locator.get()));
 
   locator.registerLazySingleton(
       () => AccountViewModel(bbbapi: locator.get(), gatewayApi: locator.get()));
@@ -134,6 +129,13 @@ setupLocator() async {
       refm: locator<RefManager>(),
       um: locator<UserManager>()));
 
+  locator.registerFactory(() => CouponOrderViewModel(
+      api: locator<BBBAPI>(),
+      mtm: locator<MarketManager>(),
+      refm: locator<RefManager>(),
+      um: locator<UserManager>(),
+      cm: locator.get()));
+
   locator.registerFactory(() => OrderViewModel(
       api: locator<BBBAPI>(),
       um: locator<UserManager>(),
@@ -147,25 +149,19 @@ setupProviders() {
       value: locator.get<UserManager>(),
     ),
     ChangeNotifierProvider.value(value: locator.get<NavDrawerViewModel>()),
+    ChangeNotifierProvider.value(
+      value: locator.get<CouponViewModel>(),
+    ),
     StreamProvider(create: (context) => locator.get<MarketManager>().prices),
     StreamProvider(create: (context) => locator.get<MarketManager>().kline),
-    StreamProvider(
-        create: (context) => locator.get<MarketManager>().lastTicker.stream),
-    StreamProvider(
-        create: (context) =>
-            locator.get<MarketManager>().percentageTicker.stream),
-    StreamProvider(
-        create: (context) => locator.get<MarketManager>().pnlTicker.stream),
-    StreamProvider(
-        create: (context) =>
-            locator.get<RefManager>().refDataControllerNew.stream),
-    StreamProvider(
-        create: (context) =>
-            locator.get<RefManager>().contractController.stream),
+    StreamProvider(create: (context) => locator.get<MarketManager>().lastTicker.stream),
+    StreamProvider(create: (context) => locator.get<MarketManager>().percentageTicker.stream),
+    StreamProvider(create: (context) => locator.get<MarketManager>().pnlTicker.stream),
+    StreamProvider(create: (context) => locator.get<RefManager>().refDataControllerNew.stream),
+    StreamProvider(create: (context) => locator.get<RefManager>().contractController.stream),
     StreamProvider(
       create: (context) => locator.get<TimerManager>().tick,
     ),
-    StreamProvider(
-        create: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
+    StreamProvider(create: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
   ];
 }

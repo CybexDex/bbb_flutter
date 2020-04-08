@@ -9,6 +9,7 @@ class IStep extends StatelessWidget {
   final TextEditingController text;
   final ValueChanged<String> onChange;
   final bool isPrice;
+  final bool enabled;
 
   IStep(
       {Key key,
@@ -16,7 +17,8 @@ class IStep extends StatelessWidget {
       this.minusOnTap,
       this.plusOnTap,
       this.onChange,
-      this.isPrice})
+      this.isPrice,
+      this.enabled})
       : this.text = text,
         super(key: key);
 
@@ -34,14 +36,14 @@ class IStep extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 10),
               child: TextField(
+                enabled: enabled == null || enabled,
                 inputFormatters: [
                   (isPrice != null && isPrice)
                       ? TestFormat(integerRange: 10, decimalRange: 4)
                       : WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
                 ],
                 controller: this.text,
-                keyboardType: TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
+                keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
                 onChanged: onChange,
                 decoration: InputDecoration(
                   border: InputBorder.none,

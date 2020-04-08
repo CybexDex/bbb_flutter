@@ -9,16 +9,15 @@ import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:rxdart/subjects.dart';
 
 class RefManager {
-  BehaviorSubject<RefDataResponse> refDataControllerNew =
-      BehaviorSubject<RefDataResponse>();
-  BehaviorSubject<ContractResponse> contractController =
-      BehaviorSubject<ContractResponse>();
+  BehaviorSubject<RefDataResponse> refDataControllerNew = BehaviorSubject<RefDataResponse>();
+  BehaviorSubject<ContractResponse> contractController = BehaviorSubject<ContractResponse>();
   BBBAPI _api;
   String _upcontractId;
   String _downcontractId;
   List<Action> actions;
   ContractResponse firstLoadContractResponse;
   ConfigResponse config;
+  ConfigResponse couponConfig;
   bool isIdSelectedByUser = false;
 
   RefManager({BBBAPI api}) : _api = api;
@@ -38,8 +37,7 @@ class RefManager {
   }
 
   List<Contract> get upContract {
-    List<Contract> contractList =
-        contractController.value?.contract?.where((contract) {
+    List<Contract> contractList = contractController.value?.contract?.where((contract) {
       return contract.contractId.contains("N");
     })?.toList();
     contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -47,8 +45,7 @@ class RefManager {
   }
 
   List<Contract> get downContract {
-    List<Contract> contractList =
-        contractController.value?.contract?.where((contract) {
+    List<Contract> contractList = contractController.value?.contract?.where((contract) {
       return contract.contractId.contains("X");
     })?.toList();
     contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -56,8 +53,7 @@ class RefManager {
   }
 
   List<Contract> get allUpContract {
-    List<Contract> contractList =
-        firstLoadContractResponse.contract?.where((contract) {
+    List<Contract> contractList = firstLoadContractResponse.contract?.where((contract) {
       return contract.contractId.contains("N");
     })?.toList();
     contractList?.sort((b, a) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -65,8 +61,7 @@ class RefManager {
   }
 
   List<Contract> get allDownContract {
-    List<Contract> contractList =
-        firstLoadContractResponse.contract?.where((contract) {
+    List<Contract> contractList = firstLoadContractResponse.contract?.where((contract) {
       return contract.contractId.contains("X");
     })?.toList();
     contractList?.sort((a, b) => a.strikeLevel.compareTo(b.strikeLevel));
@@ -91,13 +86,11 @@ class RefManager {
   }
 
   updateUpContractId() {
-    changeUpContractId(
-        upContract.isEmpty ? null : upContract.first?.contractId);
+    changeUpContractId(upContract.isEmpty ? null : upContract.first?.contractId);
   }
 
   updateDownContractId() {
-    changeDownContractId(
-        downContract.isEmpty ? null : downContract.first?.contractId);
+    changeDownContractId(downContract.isEmpty ? null : downContract.first?.contractId);
   }
 
   changeUpContractId(String id) {
@@ -112,17 +105,14 @@ class RefManager {
     var timerManager = locator.get<TimerManager>();
     var marketManager = locator.get<MarketManager>();
     marketManager.lastTicker.stream.listen((ticker) {
-      firstLoadContractResponse.contract =
-          firstLoadContractResponse.contract.where((contract) {
+      firstLoadContractResponse.contract = firstLoadContractResponse.contract.where((contract) {
         return ((contract.contractId.contains("N")) &&
                 (ticker.value > contract.strikeLevel) &&
-                ((ticker.value /
-                        ((ticker.value - contract.strikeLevel).abs())) <=
+                ((ticker.value / ((ticker.value - contract.strikeLevel).abs())) <=
                     config.maxGearing)) ||
             ((contract.contractId.contains("X")) &&
                 (ticker.value < contract.strikeLevel) &&
-                ((ticker.value /
-                        ((ticker.value - contract.strikeLevel).abs())) <=
+                ((ticker.value / ((ticker.value - contract.strikeLevel).abs())) <=
                     config.maxGearing));
       }).toList();
       contractController.add(firstLoadContractResponse);
@@ -162,6 +152,8 @@ class RefManager {
 
   getConfig() async {
     ConfigResponse response = await _api.getConfig();
+    ConfigResponse couponResponse = await _api.getConfig(injectAction: "coupon");
     config = response;
+    couponConfig = couponResponse;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
-import 'package:bbb_flutter/widgets/custom_dropdown.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/custom_dropdown.dart' as custom;
 
 import 'order_form_model.dart';
 
@@ -10,7 +11,9 @@ class LimitOrderForm {
   String contractId;
   double takeProfit;
   double takeProfitPx;
-  List<DropdownMenuItem<Contract>> dropdownMenuItems;
+  double cutoffPx;
+  List<custom.DropdownMenuItem<Contract>> dropdownMenuItems;
+  List<Widget> pickerItems;
   Contract selectedItem;
   bool isUp;
   bool showProfit;
@@ -25,8 +28,10 @@ class LimitOrderForm {
       this.predictPrice,
       this.takeProfit,
       this.takeProfitPx,
+      this.cutoffPx,
       this.contractId,
       this.dropdownMenuItems,
+      this.pickerItems,
       this.selectedItem,
       this.isUp,
       this.fee,

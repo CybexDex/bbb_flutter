@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/foundation.dart';
@@ -9,11 +10,7 @@ enum UnlockType { none, cloud, key }
 
 enum EnvType { Pro, Test, Dev }
 
-const Map<EnvType, String> envMap = {
-  EnvType.Pro: "pro",
-  EnvType.Test: "test",
-  EnvType.Dev: "dev"
-};
+const Map<EnvType, String> envMap = {EnvType.Pro: "pro", EnvType.Test: "test", EnvType.Dev: "dev"};
 
 enum LockTimeType { lower, middle, high }
 
@@ -61,6 +58,15 @@ const Map<ContractStatus, String> contractStatusMap = {
   ContractStatus.knocked_out: "KNOCKED_OUT",
 };
 
+enum CouponStatus { used, expired, pending, activateFailed, activated }
+const Map<CouponStatus, String> couponStatusMap = {
+  CouponStatus.used: "USED",
+  CouponStatus.expired: "EXPIRED",
+  CouponStatus.pending: "PENDING",
+  CouponStatus.activateFailed: "ACTIVATE_FAILED",
+  CouponStatus.activated: "ACTIVATED"
+};
+
 enum ActivityType { register, mainActivity }
 const Map<ActivityType, int> activityTypes = {
   ActivityType.register: 0,
@@ -70,24 +76,28 @@ const Map<ActivityType, int> activityTypes = {
 enum FundType {
   userDepositExtern,
   userWithdrawExtern,
-  adminAdjust,
+  airDrop,
   userDepositCybex,
   userWithdrawCybex
 }
 const Map<String, FundType> fundTypeMap = {
-  "gateway_deposit":
-      FundType.userDepositExtern, //user deposits USDT from outside
+  "gateway_deposit": FundType.userDepositExtern, //user deposits USDT from outside
 
-  "gateway_withdraw":
-      FundType.userWithdrawExtern, //user withdraws USDT to outside
+  "gateway_withdraw": FundType.userWithdrawExtern, //user withdraws USDT to outside
 
-  "ADMIN_ADJUST": FundType.adminAdjust, // admin fixes balance issue
+  "airdrop": FundType.airDrop, // admin fixes balance issue
 
-  "transfer_in":
-      FundType.userDepositCybex, // user deposits USDT from its cybex wallet
+  "transfer_in": FundType.userDepositCybex, // user deposits USDT from its cybex wallet
 
-  "transfer_out":
-      FundType.userWithdrawCybex, //user withdraws USDT to its cybex wallet
+  "transfer_out": FundType.userWithdrawCybex, //user withdraws USDT to its cybex wallet
+};
+
+enum FundSubType { bbbRebator, bbbAirDrop }
+
+const Map<String, FundSubType> fundSubTypeMap = {
+  "teddy-14": FundSubType.bbbRebator, //user deposits USDT from outside
+
+  "bbb-airdrop": FundSubType.bbbAirDrop, //user withdraws USDT to outside
 };
 
 enum FundStatus { inProgress, rejected, completed, error }
@@ -135,9 +145,15 @@ String limitOrderStatusResonCN(String status) {
 class RouteParamsOfTrade {
   final Contract contract;
   final bool isUp;
-  final String title;
+  final bool isCoupon;
+  final Coupon defaultCoupon;
 
-  RouteParamsOfTrade({this.contract, @required this.isUp, this.title});
+  RouteParamsOfTrade({
+    this.contract,
+    @required this.isUp,
+    this.isCoupon,
+    this.defaultCoupon,
+  });
 }
 
 class RouteParamsOfTransactionRecords {

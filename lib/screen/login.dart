@@ -1,5 +1,5 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
-import 'package:bbb_flutter/logic/account_vm.dart';
+import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
@@ -69,8 +69,7 @@ class _LoginState extends State<LoginPage> {
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.only(top: 44),
-                      child: Text(I18n.of(context).loginTitle,
-                          style: StyleNewFactory.black26)),
+                      child: Text(I18n.of(context).loginTitle, style: StyleNewFactory.black26)),
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -109,11 +108,9 @@ class _LoginState extends State<LoginPage> {
                         ),
                       ),
                       enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                     ),
                   ),
                   SizedBox(
@@ -133,11 +130,9 @@ class _LoginState extends State<LoginPage> {
                         letterSpacing: 0,
                       ),
                       enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       suffixIcon: SizedBox(
                         width: 96,
                         child: Row(
@@ -151,9 +146,7 @@ class _LoginState extends State<LoginPage> {
                                 });
                               },
                               icon: Icon(
-                                _obscureText
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+                                _obscureText ? Icons.visibility_off : Icons.visibility,
                               ),
                               color: Palette.appGrey.withOpacity(0.3),
                             ),
@@ -192,27 +185,25 @@ class _LoginState extends State<LoginPage> {
                         child: WidgetFactory.button(
                             onPressed: _enableButton
                                 ? () async {
-                                    showLoading(context,
-                                        isBarrierDismissible: true);
+                                    showLoading(context, isBarrierDismissible: true);
                                     try {
                                       if (await userLocator.loginWith(
                                           name: _accountNameController.text,
                                           password: _passwordController.text)) {
                                         userLocator.fetchBalances(
                                             name: _accountNameController.text);
-                                        locator
-                                            .get<AccountViewModel>()
-                                            .checkRewardAccount(
-                                                accountName:
-                                                    _accountNameController.text,
-                                                bonusEvent: true);
-                                        Navigator.of(context)
-                                            .popUntil((route) => route.isFirst);
+                                        // locator
+                                        //     .get<AccountViewModel>()
+                                        //     .checkRewardAccount(
+                                        //         accountName:
+                                        //             _accountNameController.text,
+                                        //         bonusEvent: true);
+                                        locator.get<CouponViewModel>().getCoupons();
+                                        Navigator.of(context).popUntil((route) => route.isFirst);
                                       } else {
                                         setState(() {
                                           _errorMessageVisible = true;
-                                          _errorMessage = I18n.of(context)
-                                              .accountLogInError;
+                                          _errorMessage = I18n.of(context).accountLogInError;
                                         });
                                         Navigator.of(context).maybePop();
                                       }
@@ -225,8 +216,7 @@ class _LoginState extends State<LoginPage> {
                                       } else {
                                         setState(() {
                                           _errorMessageVisible = true;
-                                          _errorMessage = I18n.of(context)
-                                              .accountLogInError;
+                                          _errorMessage = I18n.of(context).accountLogInError;
                                         });
                                       }
                                       Navigator.of(context).maybePop();

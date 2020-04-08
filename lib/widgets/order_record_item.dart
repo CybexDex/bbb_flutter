@@ -3,6 +3,7 @@ import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class OrderRecordItem extends StatelessWidget {
@@ -21,28 +22,35 @@ class OrderRecordItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: getPnlIcon(isN),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 18),
-                  child: Text(
-                      isN ? I18n.of(context).buyUp : I18n.of(context).buyDown,
-                      style: isN
-                          ? StyleNewFactory.red15
-                          : StyleNewFactory.green15),
-                ),
-                Text(
-                  _model.contractId,
-                  style: StyleNewFactory.black15,
-                )
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Row(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5),
+                        child: getPnlIcon(isN),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 18),
+                        child: Text(isN ? I18n.of(context).buyUp : I18n.of(context).buyDown,
+                            style: isN ? StyleNewFactory.red15 : StyleNewFactory.green15),
+                      ),
+                      Text(
+                        _model.contractId,
+                        style: StyleNewFactory.black15,
+                      )
+                    ],
+                  ),
+                  _model.action == "coupon"
+                      ? SvgPicture.asset(
+                          R.resAssetsIconsCouponLog,
+                          width: 18,
+                          height: 18,
+                        )
+                      : Container()
+                ],
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -85,9 +93,7 @@ class OrderRecordItem extends StatelessWidget {
                   ),
                   Text(
                     (_model.pnl).toStringAsFixed(4),
-                    style: (_model.pnl) > 0
-                        ? StyleNewFactory.red15
-                        : StyleNewFactory.green15,
+                    style: (_model.pnl) > 0 ? StyleNewFactory.red15 : StyleNewFactory.green15,
                   )
                 ],
               )

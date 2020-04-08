@@ -31,10 +31,9 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   children: <Widget>[
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, RoutePaths.OrderRecordDetail,
-                            arguments: RouteParamsOfTransactionRecords(
-                                orderResponseModel: value[i]));
+                        Navigator.pushNamed(context, RoutePaths.OrderRecordDetail,
+                            arguments:
+                                RouteParamsOfTransactionRecords(orderResponseModel: value[i]));
                       },
                       child: OrderRecordItem(
                         model: value[i],
@@ -73,8 +72,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   Container(
                     margin: EdgeInsets.only(top: 10, bottom: 10, right: 10),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Palette.separatorColor, width: 0.5),
+                      border: Border.all(color: Palette.separatorColor, width: 0.5),
                     ),
                     width: 100,
                     child: custom.DropdownButton<String>(
@@ -97,8 +95,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                   color: Palette.backButtonColor, //change your color here
                 ),
                 centerTitle: true,
-                title: Text(I18n.of(context).transactionRecords,
-                    style: StyleFactory.title),
+                title: Text(I18n.of(context).transactionRecords, style: StyleFactory.title),
                 backgroundColor: Colors.white,
                 brightness: Brightness.light,
                 elevation: 0,
@@ -120,9 +117,8 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                         isScrollable: true,
                         indicatorSize: TabBarIndicatorSize.label,
                         indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              color: Palette.invitePromotionBadgeColor,
-                              width: 4),
+                          borderSide:
+                              BorderSide(color: Palette.invitePromotionBadgeColor, width: 4),
                           insets: EdgeInsets.fromLTRB(0, 0.0, 60, 0),
                         ),
                         unselectedLabelColor: Palette.appGrey,
@@ -146,8 +142,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
               ),
               body: SafeArea(
                 child: TabBarView(
-                  physics: BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   children: [
                     Container(
                         child: model.data.length == 0

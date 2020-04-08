@@ -65,11 +65,13 @@ dependencies:
     flutter_dash: ^0.0.1
     marquee: ^1.3.1
     extended_nested_scroll_view: 0.3.8
-    flushbar: ^1.9.1
+    flushbar: 1.9.1
     sticky_headers: ^0.1.8+1
     flutter_sticky_header: "^0.4.0"
     decimal: ^0.3.0
     splashscreen: ^1.2.0
+    flutter_statusbarcolor: ^0.2.3
+
 
 
 
@@ -97,6 +99,7 @@ flutter:
         - res/assets/icons/ic_home_selected.svg
         - res/assets/icons/bbb_splash.png
         - res/assets/icons/ic_revise_yellow.svg
+        - res/assets/icons/used.svg
         - res/assets/icons/ic_home_background.png
         - res/assets/icons/ic_account_header_background.svg
         - res/assets/icons/ic_news.svg
@@ -105,6 +108,7 @@ flutter:
         - res/assets/icons/icTop3.png
         - res/assets/icons/icMaskClose.png
         - res/assets/icons/ic_add_2.svg
+        - res/assets/icons/coupon_rule_logo.png
         - res/assets/icons/icTop1.png
         - res/assets/icons/ic_up_red.svg
         - res/assets/icons/ic_no_stoke.svg
@@ -129,13 +133,16 @@ flutter:
         - res/assets/icons/ic_forum_unselected.svg
         - res/assets/icons/icEmpty.png
         - res/assets/icons/ic_rank1.svg
+        - res/assets/icons/expired.svg
         - res/assets/icons/icTabDeposit.png
+        - res/assets/icons/coupon_yellow.png
         - res/assets/icons/icFallGreen.png
         - res/assets/icons/icTime.png
         - res/assets/icons/test.png
         - res/assets/icons/ic_title_line.svg
         - res/assets/icons/ic_withdraw.svg
         - res/assets/icons/icNotifyBack.png
+        - res/assets/icons/setting.svg
         - res/assets/icons/ic_click_try_new.svg
         - res/assets/icons/ic_rewoard.svg
         - res/assets/icons/content_copy.svg
@@ -151,6 +158,7 @@ flutter:
         - res/assets/icons/ic_home_astrology_right.svg
         - res/assets/icons/icAccount.png
         - res/assets/icons/ic_no_orders.svg
+        - res/assets/icons/coupon_log.svg
         - res/assets/icons/icRiseRed18.png
         - res/assets/icons/share.png
         - res/assets/icons/icRevise.png
@@ -167,6 +175,7 @@ flutter:
         - res/assets/icons/imgBanner.png
         - res/assets/icons/ic_account_avatar_new.svg
         - res/assets/icons/ic_invite.svg
+        - res/assets/icons/wave.svg
         - res/assets/icons/ic_guess_up_down.svg
         - res/assets/icons/ic_eye_close.svg
         - res/assets/icons/ic_service.svg
@@ -174,10 +183,13 @@ flutter:
         - res/assets/icons/ic_home_marquee.svg
         - res/assets/icons/mask.png
         - res/assets/icons/ic_deposit_new.svg
+        - res/assets/icons/coupon_red.png
         - res/assets/icons/icTabArrow.png
+        - res/assets/icons/coupon_grey.png
         - res/assets/icons/ic_wdrecords.svg
         - res/assets/icons/icTabWithdraw.png
         - res/assets/icons/hold_all.svg
+        - res/assets/icons/usdt_icon.svg
         - res/assets/icons/ic_logout.svg
         - res/assets/icons/ic_try.svg
         - res/assets/icons/ic_adds_cancel.svg

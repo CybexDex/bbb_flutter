@@ -24,8 +24,7 @@ class LimitOrderPage extends StatefulWidget {
 
 class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
   double showDropdownMenuHeight = 0;
-  MarketManager mtm =
-      MarketManager(api: locator.get(), sharedPref: locator.get());
+  MarketManager mtm = MarketManager(api: locator.get(), sharedPref: locator.get());
 
   @override
   void afterFirstLayout(BuildContext context) {
@@ -45,25 +44,6 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
       iconTheme: IconThemeData(
         color: Palette.backButtonColor, //change your color here
       ),
-      // actions: <Widget>[
-      //   locator.get<UserManager>().user.loginType != LoginType.cloud
-      //       ? Container()
-      //       : GestureDetector(
-      //           child: Padding(
-      //             padding: EdgeInsets.only(right: 20),
-      //             child: Center(
-      //               child: Text(
-      //                 I18n.of(context).topUp,
-      //                 style: StyleNewFactory.yellowOrange18,
-      //                 textScaleFactor: 1,
-      //               ),
-      //             ),
-      //           ),
-      //           onTap: () {
-      //             Navigator.of(context).pushNamed(RoutePaths.Deposit);
-      //           },
-      //         )
-      // ],
       centerTitle: true,
       title: Consumer<LimitOrderViewModel>(builder: (context, model, child) {
         return Row(
@@ -74,9 +54,8 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
                   model.orderForm.isUp
                       ? "${I18n.of(context).buyUp}"
                       : "${I18n.of(context).buyDown}",
-                  style: model.orderForm.isUp
-                      ? StyleFactory.buyUpTitle
-                      : StyleFactory.buyDownTitle),
+                  style:
+                      model.orderForm.isUp ? StyleFactory.buyUpTitle : StyleFactory.buyDownTitle),
             ),
             SizedBox(
               width: 7,
@@ -105,7 +84,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
     );
     return ChangeNotifierProvider(
       create: (context) {
-        var vm = locator<LimitOrderViewModel>();
+        var vm = locator.get<LimitOrderViewModel>();
         vm.initForm(params.isUp);
         vm.fetchPostion();
         return vm;
@@ -132,11 +111,8 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
                               Expanded(
                                 child: MultiProvider(
                                   providers: [
-                                    StreamProvider(
-                                        create: (context) => mtm.prices),
-                                    StreamProvider(
-                                        create: (context) =>
-                                            mtm.lastTicker.stream)
+                                    StreamProvider(create: (context) => mtm.prices),
+                                    StreamProvider(create: (context) => mtm.lastTicker.stream)
                                   ],
                                   child: Container(
                                     margin: EdgeInsets.only(top: 10),
@@ -156,90 +132,67 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
                               Container(
                                   color: Colors.white,
                                   margin: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .padding
-                                          .bottom),
+                                      bottom: MediaQuery.of(context).padding.bottom),
                                   padding: EdgeInsets.only(left: 15),
                                   child: BuyOrSellBottom(
-                                      totalAmount:
-                                          model.orderForm.totalAmount.amount,
+                                      totalAmount: model.orderForm.totalAmount.amount,
                                       button: model.orderForm.isUp
                                           ? GestureDetector(
                                               child: Container(
                                                 alignment: Alignment.center,
-                                                padding: EdgeInsets.only(
-                                                    top: 12, bottom: 12),
+                                                padding: EdgeInsets.only(top: 12, bottom: 12),
                                                 child: new Text(
                                                   "下单",
                                                   style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontWeight: FontWeight.w500,
                                                       color: Colors.white),
                                                 ),
                                                 width: 130,
                                                 color: model.isSatisfied &&
-                                                        model.orderForm
-                                                                .predictPrice !=
-                                                            null &&
-                                                        model.contract !=
-                                                            null &&
-                                                        model.orderForm
-                                                                .predictPrice !=
+                                                        model.orderForm.predictPrice != null &&
+                                                        model.contract != null &&
+                                                        model.orderForm.predictPrice !=
                                                             model.ticker.value
                                                     ? Palette.redOrange
                                                     : Palette.subTitleColor,
                                               ),
                                               onTap: model.isSatisfied &&
-                                                      model.orderForm
-                                                              .predictPrice !=
-                                                          null &&
+                                                      model.orderForm.predictPrice != null &&
                                                       model.contract != null &&
-                                                      model.orderForm
-                                                              .predictPrice !=
+                                                      model.orderForm.predictPrice !=
                                                           model.ticker.value
                                                   ? () async {
-                                                      onConfirmClicked(
-                                                          model: model);
+                                                      onConfirmClicked(model: model);
                                                     }
                                                   : () {})
                                           : GestureDetector(
                                               child: Container(
                                                 alignment: Alignment.center,
-                                                padding: EdgeInsets.only(
-                                                    top: 12, bottom: 12),
+                                                padding: EdgeInsets.only(top: 12, bottom: 12),
                                                 child: new Text(
                                                   "下单",
                                                   style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontWeight: FontWeight.w500,
                                                       color: Colors.white),
                                                 ),
                                                 width: 130,
                                                 color: model.isSatisfied &&
-                                                        model.orderForm
-                                                                .predictPrice !=
-                                                            null &&
-                                                        model.contract !=
-                                                            null &&
-                                                        model.orderForm
-                                                                .predictPrice !=
+                                                        model.orderForm.predictPrice != null &&
+                                                        model.contract != null &&
+                                                        model.orderForm.predictPrice !=
                                                             model.ticker.value
                                                     ? Palette.shamrockGreen
                                                     : Palette.subTitleColor,
                                               ),
                                               onTap: model.isSatisfied &&
-                                                      model.orderForm
-                                                              .predictPrice !=
-                                                          null &&
+                                                      model.orderForm.predictPrice != null &&
                                                       model.contract != null &&
-                                                      model.orderForm
-                                                              .predictPrice !=
+                                                      model.orderForm.predictPrice !=
                                                           model.ticker.value
                                                   ? () async {
-                                                      onConfirmClicked(
-                                                          model: model);
+                                                      onConfirmClicked(model: model);
                                                     }
                                                   : () {},
                                             ))),
@@ -258,8 +211,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
 
   onConfirmClicked({LimitOrderViewModel model}) {
     if (locator.get<UserManager>().user.loginType == LoginType.cloud &&
-        model.orderForm.cybBalance.quantity <
-            (AssetDef.cybTransfer.amount / 100000)) {
+        model.orderForm.cybBalance.quantity < (AssetDef.cybTransfer.amount / 100000)) {
       showNotification(context, true, I18n.of(context).noFeeError);
     } else {
       _onDialogConfirmClicked(model: model);
@@ -272,8 +224,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return DialogFactory.confirmDialog(context,
-              model: model, controller: passwordEditor);
+          return DialogFactory.confirmDialog(context, model: model, controller: passwordEditor);
         }).then((value) async {
       if (value) {
         callPostOrder(context, model);
@@ -291,8 +242,7 @@ class _LimitOrderPageState extends State<LimitOrderPage> with AfterLayoutMixin {
       } else {
         await model.fetchPostion();
         Navigator.of(context).pop();
-        showNotification(context, false, I18n.of(context).successToast,
-            callback: () {
+        showNotification(context, false, I18n.of(context).successToast, callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         });
       }

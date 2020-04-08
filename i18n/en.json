@@ -1,9 +1,13 @@
 {
 	"asset_cat": "币种",
-	"transfer": "资金划转",
+	"transfer": "划转",
 	"cash_records": "充提记录",
+	"transfer_records": "划转记录",
+	"transfer_in": "转入",
+	"transfer_out": "转出",
 	"record_empty": "暂无记录",
 	"transaction_records": "交易记录",
+	"reward_records": "奖励记录",
 	"logout": "退出登录",
 	"my_asset": "我的资产",
 	"withdraw": "提现",
@@ -259,5 +263,6 @@
 	"limit_order_cancel_sucess": "撤单成功",
 	"limit_order_cancel_failed": "撤单失败",
 	"limit_order_status_expired": "已到期",
-	"limit_order_cancel_button": "撤单"
+	"limit_order_cancel_button": "撤单",
+	"coupon": "代金券"
 }

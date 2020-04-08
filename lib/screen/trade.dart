@@ -28,8 +28,7 @@ class TradePage extends StatefulWidget {
 
 class _TradePageState extends State<TradePage> with AfterLayoutMixin {
   double showDropdownMenuHeight = 0;
-  MarketManager mtm =
-      MarketManager(api: locator.get(), sharedPref: locator.get());
+  MarketManager mtm = MarketManager(api: locator.get(), sharedPref: locator.get());
 
   void setDropdownMenuHeight() {
     showDropdownMenuHeight = showDropdownMenuHeight != 0 ? 0 : 316;
@@ -72,8 +71,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
               ),
               onTap: () {
                 Navigator.pushNamed(context, RoutePaths.LimitOrder,
-                    arguments: RouteParamsOfTrade(
-                        isUp: model.orderForm.isUp, title: "ttes"));
+                    arguments: RouteParamsOfTrade(isUp: model.orderForm.isUp, isCoupon: false));
               },
             );
           },
@@ -89,9 +87,8 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                   model.orderForm.isUp
                       ? "${I18n.of(context).buyUp}-${model.contract.strikeLevel.toStringAsFixed(0)}"
                       : "${I18n.of(context).buyDown}-${model.contract.strikeLevel.toStringAsFixed(0)}",
-                  style: model.orderForm.isUp
-                      ? StyleFactory.buyUpTitle
-                      : StyleFactory.buyDownTitle),
+                  style:
+                      model.orderForm.isUp ? StyleFactory.buyUpTitle : StyleFactory.buyDownTitle),
             ),
             SizedBox(
               width: 7,
@@ -130,8 +127,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                     children: <Widget>[
                       Container(
                           foregroundDecoration: showDropdownMenuHeight != 0
-                              ? BoxDecoration(
-                                  color: Color(000000).withOpacity(0.4))
+                              ? BoxDecoration(color: Color(000000).withOpacity(0.4))
                               : null,
                           child: IgnorePointer(
                             ignoring: showDropdownMenuHeight != 0,
@@ -142,40 +138,28 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                 children: <Widget>[
                                   Container(
                                     color: Colors.white,
-                                    padding: EdgeInsets.only(
-                                        top: 10,
-                                        bottom: 10,
-                                        right: 15,
-                                        left: 15),
-                                    child:
-                                        Consumer2<TickerData, ContractResponse>(
-                                      builder:
-                                          (context, current, refdata, child) {
-                                        Contract refreshContract =
-                                            model.contract;
-                                        double price =
-                                            OrderCalculate.calculatePrice(
-                                                current.value,
-                                                refreshContract.strikeLevel,
-                                                refreshContract.conversionRate);
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10, right: 15, left: 15),
+                                    child: Consumer2<TickerData, ContractResponse>(
+                                      builder: (context, current, refdata, child) {
+                                        Contract refreshContract = model.contract;
+                                        double price = OrderCalculate.calculatePrice(
+                                            current.value,
+                                            refreshContract.strikeLevel,
+                                            refreshContract.conversionRate);
                                         return Row(
                                           children: <Widget>[
                                             RichText(
                                                 text: TextSpan(children: [
                                               TextSpan(
-                                                  style: StyleFactory
-                                                      .subTitleStyle,
-                                                  text:
-                                                      "${I18n.of(context).perPrice}: "),
+                                                  style: StyleFactory.subTitleStyle,
+                                                  text: "${I18n.of(context).perPrice}: "),
                                               TextSpan(
-                                                  style: StyleFactory
-                                                      .cellBoldTitleStyle,
-                                                  text:
-                                                      "${price.toStringAsFixed(4)} USDT"),
+                                                  style: StyleFactory.cellBoldTitleStyle,
+                                                  text: "${price.toStringAsFixed(4)} USDT"),
                                             ])),
                                           ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         );
                                       },
                                     ),
@@ -183,11 +167,8 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                   Expanded(
                                     child: MultiProvider(
                                       providers: [
-                                        StreamProvider(
-                                            create: (context) => mtm.prices),
-                                        StreamProvider(
-                                            create: (context) =>
-                                                mtm.lastTicker.stream)
+                                        StreamProvider(create: (context) => mtm.prices),
+                                        StreamProvider(create: (context) => mtm.lastTicker.stream)
                                       ],
                                       child: Container(
                                         margin: EdgeInsets.only(top: 10),
@@ -202,33 +183,26 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                   Container(
                                     color: Colors.white,
                                     padding: EdgeInsets.only(bottom: 12),
-                                    margin:
-                                        EdgeInsets.only(bottom: 10, top: 10),
-                                    child: OrderFormWidget(
-                                        contract: model.contract),
+                                    margin: EdgeInsets.only(bottom: 10, top: 10),
+                                    child: OrderFormWidget(contract: model.contract),
                                   ),
                                   Container(
                                       color: Colors.white,
                                       margin: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .padding
-                                              .bottom),
+                                          bottom: MediaQuery.of(context).padding.bottom),
                                       padding: EdgeInsets.only(left: 15),
                                       child: BuyOrSellBottom(
-                                          totalAmount: model
-                                              .orderForm.totalAmount.amount,
+                                          totalAmount: model.orderForm.totalAmount.amount,
                                           button: model.orderForm.isUp
                                               ? GestureDetector(
                                                   child: Container(
                                                     alignment: Alignment.center,
-                                                    padding: EdgeInsets.only(
-                                                        top: 12, bottom: 12),
+                                                    padding: EdgeInsets.only(top: 12, bottom: 12),
                                                     child: new Text(
                                                       "开仓",
                                                       style: TextStyle(
                                                           fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                          fontWeight: FontWeight.w500,
                                                           color: Colors.white),
                                                     ),
                                                     width: 130,
@@ -238,21 +212,18 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                   ),
                                                   onTap: model.isSatisfied
                                                       ? () async {
-                                                          onConfirmClicked(
-                                                              model: model);
+                                                          onConfirmClicked(model: model);
                                                         }
                                                       : () {})
                                               : GestureDetector(
                                                   child: Container(
                                                     alignment: Alignment.center,
-                                                    padding: EdgeInsets.only(
-                                                        top: 12, bottom: 12),
+                                                    padding: EdgeInsets.only(top: 12, bottom: 12),
                                                     child: new Text(
                                                       "开仓",
                                                       style: TextStyle(
                                                           fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                          fontWeight: FontWeight.w500,
                                                           color: Colors.white),
                                                     ),
                                                     width: 130,
@@ -262,8 +233,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
                                                   ),
                                                   onTap: model.isSatisfied
                                                       ? () async {
-                                                          onConfirmClicked(
-                                                              model: model);
+                                                          onConfirmClicked(model: model);
                                                         }
                                                       : () {},
                                                 ))),
@@ -288,8 +258,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
 
   onConfirmClicked({TradeViewModel model}) {
     if (locator.get<UserManager>().user.loginType == LoginType.cloud &&
-        model.orderForm.cybBalance.quantity <
-            (AssetDef.cybTransfer.amount / 100000)) {
+        model.orderForm.cybBalance.quantity < (AssetDef.cybTransfer.amount / 100000)) {
       showNotification(context, true, I18n.of(context).noFeeError);
     } else {
       bool shouldShowAlertBuyUp = model.orderForm.isUp &&
@@ -312,8 +281,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
             builder: (context) {
               return DialogFactory.normalConfirmDialog(context,
                   title: I18n.of(context).remider,
-                  content: I18n.of(context).triggerCloseContent,
-                  onConfirmPressed: () {
+                  content: I18n.of(context).triggerCloseContent, onConfirmPressed: () {
                 _onDialogConfirmClicked(model: model);
               });
             });
@@ -330,8 +298,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return DialogFactory.confirmDialog(context,
-              model: model, controller: passwordEditor);
+          return DialogFactory.confirmDialog(context, controller: passwordEditor);
         }).then((value) async {
       if (value != null && value) {
         callPostOrder(context, model);
@@ -349,8 +316,7 @@ class _TradePageState extends State<TradePage> with AfterLayoutMixin {
       } else {
         await model.fetchPostion();
         Navigator.of(context).pop();
-        showNotification(context, false, I18n.of(context).successToast,
-            callback: () {
+        showNotification(context, false, I18n.of(context).successToast, callback: () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         });
       }

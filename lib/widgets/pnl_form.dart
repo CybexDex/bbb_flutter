@@ -41,50 +41,27 @@ class _PnlFormState extends State<PnlForm> {
       child: KeyboardAvoider(
         autoScroll: true,
         child: BaseWidget<PnlViewModel>(
-          model: PnlViewModel(
-              api: locator.get(),
-              um: locator.get(),
-              mtm: locator.get(),
-              refm: locator.get()),
+          model: PnlViewModel(api: locator.get(), um: locator.get(), mtm: locator.get(), refm: locator.get()),
           onModelReady: (model) {
             model.takeProfit = widget._order.takeProfitPx == 0
                 ? null
-                : OrderCalculate.getTakeProfit(
-                    widget._order.takeProfitPx,
-                    widget._order.boughtPx,
-                    widget._order.strikePx,
-                    widget._order.contractId.contains("N"));
+                : OrderCalculate.getTakeProfit(widget._order.takeProfitPx, widget._order.boughtPx, widget._order.strikePx, widget._order.contractId.contains("N"));
 
             model.cutLoss = widget._order.cutLossPx == widget._order.strikePx
                 ? null
-                : OrderCalculate.getCutLoss(
-                    widget._order.cutLossPx,
-                    widget._order.boughtPx,
-                    widget._order.strikePx,
-                    widget._order.contractId.contains("N"));
+                : OrderCalculate.getCutLoss(widget._order.cutLossPx, widget._order.boughtPx, widget._order.strikePx, widget._order.contractId.contains("N"));
             model.cutLossPx = widget._order.cutLossPx;
             model.takeProfitPx = widget._order.takeProfitPx;
 
-            double invest = OrderCalculate.calculateInvest(
-                orderQtyContract: widget._order.qtyContract,
-                orderBoughtContractPx: widget._order.boughtContractPx);
+            double invest = OrderCalculate.calculateInvest(orderQtyContract: widget._order.qtyContract, orderBoughtContractPx: widget._order.boughtContractPx);
 
             model.pnlPercent = (100 * ((widget._order.pnl) / invest)).abs();
 
-            _cutLossController.text = model.cutLoss == null
-                ? I18n.of(context).stepWidgetNotSetHint
-                : model.cutLoss.round().toStringAsFixed(0);
-            _takeProfitController.text = model.takeProfit == null
-                ? I18n.of(context).stepWidgetNotSetHint
-                : model.takeProfit.round().toStringAsFixed(0);
+            _cutLossController.text = model.cutLoss == null ? I18n.of(context).stepWidgetNotSetHint : model.cutLoss.round().toStringAsFixed(0);
+            _takeProfitController.text = model.takeProfit == null ? I18n.of(context).stepWidgetNotSetHint : model.takeProfit.round().toStringAsFixed(0);
 
-            _cutLossPxController.text =
-                model.cutLossPx == widget._order.strikePx
-                    ? I18n.of(context).stepWidgetNotSetHint
-                    : model.cutLossPx.toStringAsFixed(4);
-            _takeProfitPxController.text = model.takeProfitPx == 0
-                ? I18n.of(context).stepWidgetNotSetHint
-                : model.takeProfitPx.toStringAsFixed(4);
+            _cutLossPxController.text = model.cutLossPx == widget._order.strikePx ? I18n.of(context).stepWidgetNotSetHint : model.cutLossPx.toStringAsFixed(4);
+            _takeProfitPxController.text = model.takeProfitPx == 0 ? I18n.of(context).stepWidgetNotSetHint : model.takeProfitPx.toStringAsFixed(4);
           },
           builder: (context, model, child) {
             return Align(
@@ -94,8 +71,7 @@ class _PnlFormState extends State<PnlForm> {
                 child: SafeArea(
                   top: false,
                   child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 20, top: 20, right: 20, bottom: 40),
+                    padding: EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 40),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,11 +97,7 @@ class _PnlFormState extends State<PnlForm> {
                                     child: Text(
                                       I18n.of(context).pnlAmendByPrice,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: currentSegment == 0
-                                              ? Colors.white
-                                              : Colors.black),
+                                      style: TextStyle(fontSize: 15, color: currentSegment == 0 ? Colors.white : Colors.black),
                                     ),
                                     alignment: Alignment.center,
                                   ),
@@ -134,19 +106,14 @@ class _PnlFormState extends State<PnlForm> {
                                     child: Text(
                                       I18n.of(context).pnlAmendByPercentage,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: currentSegment == 1
-                                              ? Colors.white
-                                              : Colors.black),
+                                      style: TextStyle(fontSize: 15, color: currentSegment == 1 ? Colors.white : Colors.black),
                                     ),
                                     alignment: Alignment.center,
                                   ),
                                 },
                                 onValueChanged: onValueChanged,
                                 groupValue: currentSegment,
-                                selectedColor:
-                                    Palette.invitePromotionBadgeColor,
+                                selectedColor: Palette.invitePromotionBadgeColor,
                                 borderColor: Palette.separatorColor,
                               ),
                             ),
@@ -180,14 +147,8 @@ class _PnlFormState extends State<PnlForm> {
                           height: 44,
                           child: WidgetFactory.button(
                               data: I18n.of(context).confirm,
-                              color: (model.isCutLossInputCorrect &&
-                                      model.isTakeProfitInputCorrect &&
-                                      model.isCutLossCorrect)
-                                  ? Palette.redOrange
-                                  : Palette.subTitleColor,
-                              onPressed: (model.isCutLossInputCorrect &&
-                                      model.isTakeProfitInputCorrect &&
-                                      model.isCutLossCorrect)
+                              color: (model.isCutLossInputCorrect && model.isTakeProfitInputCorrect && model.isCutLossCorrect) ? Palette.redOrange : Palette.subTitleColor,
+                              onPressed: (model.isCutLossInputCorrect && model.isTakeProfitInputCorrect && model.isCutLossCorrect)
                                   ? () {
                                       onClickConfirm(model: model);
                                     }
@@ -206,20 +167,13 @@ class _PnlFormState extends State<PnlForm> {
   }
 
   onClickConfirm({PnlViewModel model}) {
-    bool isPercentShouldShowDialog = (model.takeProfit != null &&
-            ((model.pnlPercent > model.takeProfit && widget._order.pnl > 0) ||
-                model.takeProfit < 0)) ||
-        (model.cutLoss != null &&
-            ((model.pnlPercent > model.cutLoss && widget._order.pnl < 0) ||
-                (model.cutLoss < 0)));
+    bool isPercentShouldShowDialog = (model.takeProfit != null && ((model.pnlPercent > model.takeProfit && widget._order.pnl > 0) || model.takeProfit < 0)) ||
+        (model.cutLoss != null && ((model.pnlPercent > model.cutLoss && widget._order.pnl < 0) || (model.cutLoss < 0)));
     if ((isPercentShouldShowDialog)) {
       showDialog(
           context: context,
           builder: (context) {
-            return DialogFactory.normalConfirmDialog(context,
-                title: I18n.of(context).remider,
-                content: I18n.of(context).triggerCloseContent,
-                onConfirmPressed: () {
+            return DialogFactory.normalConfirmDialog(context, title: I18n.of(context).remider, content: I18n.of(context).triggerCloseContent, onConfirmPressed: () {
               Navigator.of(context).pop(true);
             });
           }).then((onValue) {
@@ -235,15 +189,13 @@ class _PnlFormState extends State<PnlForm> {
   callAmend(BuildContext context, PnlViewModel model, {bool execute}) async {
     try {
       showLoading(context);
-      PostOrderResponseModel postOrderResponseModel =
-          await model.amend(widget._order, execute, currentSegment == 0);
+      PostOrderResponseModel postOrderResponseModel = await model.amend(widget._order, execute, currentSegment == 0);
       if (postOrderResponseModel.code != 0) {
         Navigator.of(context).pop();
         showNotification(context, true, postOrderResponseModel.msg);
       } else {
         Navigator.of(context).pop();
-        showNotification(context, false, I18n.of(context).successToast,
-            callback: () {
+        showNotification(context, false, I18n.of(context).successToast, callback: () {
           Navigator.of(context).maybePop();
         });
       }

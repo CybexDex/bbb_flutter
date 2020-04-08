@@ -186,6 +186,9 @@ class MarketManager {
           close: kLineResponse.close,
           vol: 10000,
           id: kLineResponse.start);
+      if (marketDurationSecondMap[_marketDuration] != kLineResponse.interval) {
+        return;
+      }
       if (isAllEmpty(_kLine.value)) {
         _kLine.value.add(kLineEntity);
         _kLine.add(_kLine.value.toList());

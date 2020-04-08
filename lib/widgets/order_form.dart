@@ -23,6 +23,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
 
   @override
   void initState() {
+    print("d");
     _takeProfitController.text = "-";
     _cutLossController.text = widget._contract.strikeLevel.toStringAsFixed(0);
     _amountController.text = "1";
@@ -139,22 +140,18 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                         },
                         minusOnTap: () {
                           model.decreaseTakeProfitPx();
-                          _takeProfitController.text =
-                              model.orderForm.takeProfitPx == null
-                                  ? "-"
-                                  : model.orderForm.takeProfitPx
-                                      .toStringAsFixed(0);
+                          _takeProfitController.text = model.orderForm.takeProfitPx == null
+                              ? "-"
+                              : model.orderForm.takeProfitPx.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
-                              (double.tryParse(value) == null ||
-                                  double.tryParse(value) < 0)) {
+                              (double.tryParse(value) == null || double.tryParse(value) < 0)) {
                             model.setTakeProfitInputCorrectness(false);
                           } else {
                             model.setTakeProfitInputCorrectness(true);
                             model.changeTakeProfitPx(
-                                profit:
-                                    value.isEmpty ? null : double.parse(value));
+                                profit: value.isEmpty ? null : double.parse(value));
                           }
                         },
                       ),
@@ -176,9 +173,8 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                           GestureDetector(
                             onTap: () {
                               model.changeCutLossPx(cutLoss: null);
-                              _cutLossController.text = widget
-                                  ._contract.strikeLevel
-                                  .toStringAsFixed(0);
+                              _cutLossController.text =
+                                  widget._contract.strikeLevel.toStringAsFixed(0);
                             },
                             child: Text(I18n.of(context).orderFormReset,
                                 style: StyleFactory.cellDescLabel),
@@ -194,18 +190,15 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                         text: _cutLossController,
                         plusOnTap: () {
                           model.increaseCutLossPx();
-                          _cutLossController.text =
-                              model.orderForm.cutoffPx.toStringAsFixed(0);
+                          _cutLossController.text = model.orderForm.cutoffPx.toStringAsFixed(0);
                         },
                         minusOnTap: () {
                           model.decreaseCutLossPx();
-                          _cutLossController.text =
-                              model.orderForm.cutoffPx.toStringAsFixed(0);
+                          _cutLossController.text = model.orderForm.cutoffPx.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty &&
-                              (double.tryParse(value) == null ||
-                                  double.tryParse(value) < 0)) {
+                              (double.tryParse(value) == null || double.tryParse(value) < 0)) {
                             model.setCutLossInputCorectness(false);
                           } else {
                             model.setCutLossInputCorectness(true);
@@ -251,14 +244,12 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                         text: _amountController,
                         plusOnTap: () {
                           model.increaseInvest();
-                          _amountController.text =
-                              model.orderForm.investAmount.toStringAsFixed(0);
+                          _amountController.text = model.orderForm.investAmount.toStringAsFixed(0);
                         },
                         minusOnTap: () {
                           model.decreaseInvest();
 
-                          _amountController.text =
-                              model.orderForm.investAmount.toStringAsFixed(0);
+                          _amountController.text = model.orderForm.investAmount.toStringAsFixed(0);
                         },
                         onChange: (value) {
                           if (value.isNotEmpty && int.tryParse(value) == null ||
@@ -266,8 +257,7 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                             model.setTotalAmountInputCorectness(false);
                           } else {
                             model.setTotalAmountInputCorectness(true);
-                            model.changeInvest(
-                                amount: value.isEmpty ? 0 : int.parse(value));
+                            model.changeInvest(amount: value.isEmpty ? 0 : int.parse(value));
                           }
                         },
                       ),
@@ -337,8 +327,8 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
             Offstage(
-                offstage: model.isSatisfied ||
-                    model.orderForm.totalAmount.amount <= double.minPositive,
+                offstage:
+                    model.isSatisfied || model.orderForm.totalAmount.amount <= double.minPositive,
                 child: Column(
                   children: <Widget>[
                     SizedBox(
@@ -353,17 +343,13 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                         Builder(
                           builder: (context) {
                             if (model.usdtBalance == null ||
-                                model.orderForm.totalAmount.amount >
-                                    model.usdtBalance.quantity) {
+                                model.orderForm.totalAmount.amount > model.usdtBalance.quantity) {
                               return Text(
                                 I18n.of(context).orderFormBalanceNotEnoughError,
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             } else if (model.orderForm.investAmount >
-                                locator
-                                    .get<RefManager>()
-                                    .config
-                                    .maxOrderQuantity) {
+                                locator.get<RefManager>().config.maxOrderQuantity) {
                               return Text(
                                 "${I18n.of(context).orderFormBuyLimitationError}${locator.get<RefManager>().config.maxOrderQuantity}",
                                 style: StyleFactory.smallButtonTitleStyle,
@@ -371,21 +357,14 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
                             } else if (!model.isCutLossInputCorrect ||
                                 !model.isInvestAmountInputCorrect ||
                                 !model.isTakeProfitInputCorrect) {
-                              return Text(
-                                  I18n.of(context)
-                                      .orderFormInputPositiveNumberError,
+                              return Text(I18n.of(context).orderFormInputPositiveNumberError,
                                   style: StyleFactory.smallButtonTitleStyle);
-                            } else if (!model.isCutLossCorrect &&
-                                model.orderForm.isUp) {
-                              return Text(
-                                  I18n.of(context)
-                                      .orderFormBuyUpCutlossLowerStriklevel,
+                            } else if (!model.isCutLossCorrect && model.orderForm.isUp) {
+                              return Text(I18n.of(context).orderFormBuyUpCutlossLowerStriklevel,
                                   style: StyleFactory.smallButtonTitleStyle);
-                            } else if (!model.isCutLossCorrect &&
-                                !model.orderForm.isUp) {
+                            } else if (!model.isCutLossCorrect && !model.orderForm.isUp) {
                               return Text(
-                                I18n.of(context)
-                                    .orderFormBuyDownCutlossHigherStriklevel,
+                                I18n.of(context).orderFormBuyDownCutlossHigherStriklevel,
                                 style: StyleFactory.smallButtonTitleStyle,
                               );
                             }

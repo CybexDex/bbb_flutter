@@ -15,7 +15,7 @@ class AccountViewModel extends BaseModel {
   bool depositAvailable = true;
   bool hasBonus = false;
   bool showAmount = true;
-  Position bounusAccountBalance = Position(quantity: 0);
+  Position bounusAccountBalance;
   String action;
 
   AccountViewModel({BBBAPI bbbapi, GatewayApi gatewayApi})
@@ -50,12 +50,12 @@ class AccountViewModel extends BaseModel {
     } else {
       PositionsResponseModel testAccountPosition =
           await _bbbapi.getPositions(name: accountName, injectAction: action);
-      RefDataResponse refDataResponse =
-          await _bbbapi.getRefDataNew(injectAction: action);
+      RefDataResponse refDataResponse = await _bbbapi.getRefDataNew(injectAction: action);
       hasBonus = testAccountPosition.positions.first.quantity != null;
       if (hasBonus) {
-        bounusAccountBalance =
-            _fetchPositionFrom(refDataResponse.bbbAssetId, testAccountPosition);
+        bounusAccountBalance = _fetchPositionFrom(refDataResponse.bbbAssetId, testAccountPosition);
+      } else {
+        bounusAccountBalance = null;
       }
     }
     setBusy(false);
@@ -66,14 +66,11 @@ class AccountViewModel extends BaseModel {
     setBusy(false);
   }
 
-  Position _fetchPositionFrom(
-      String assetid, PositionsResponseModel positionsResponseModel) {
-    if (positionsResponseModel == null ||
-        positionsResponseModel.positions.length == 0) {
+  Position _fetchPositionFrom(String assetid, PositionsResponseModel positionsResponseModel) {
+    if (positionsResponseModel == null || positionsResponseModel.positions.length == 0) {
       return null;
     }
-    List<Position> positions =
-        positionsResponseModel.positions.where((position) {
+    List<Position> positions = positionsResponseModel.positions.where((position) {
       return position.assetId == assetid;
     }).toList();
     return positions.isEmpty ? null : positions.first;

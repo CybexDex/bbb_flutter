@@ -24,15 +24,14 @@ class OrderInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     double takeprofit = _model.takeProfitPx == 0
         ? null
-        : OrderCalculate.getTakeProfit(_model.takeProfitPx, _model.boughtPx,
-            _model.strikePx, _model.contractId.contains("N"));
+        : OrderCalculate.getTakeProfit(
+            _model.takeProfitPx, _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
     double cutLoss = _model.cutLossPx == _model.strikePx
         ? null
-        : OrderCalculate.getCutLoss(_model.cutLossPx, _model.boughtPx,
-            _model.strikePx, _model.contractId.contains("N"));
+        : OrderCalculate.getCutLoss(
+            _model.cutLossPx, _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
     double invest = OrderCalculate.calculateInvest(
-        orderQtyContract: _model.qtyContract,
-        orderBoughtContractPx: _model.boughtContractPx);
+        orderQtyContract: _model.qtyContract, orderBoughtContractPx: _model.boughtContractPx);
 
     return Consumer<TickerData>(builder: (context, ticker, child) {
       return Container(
@@ -47,16 +46,22 @@ class OrderInfo extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 4),
-                      child: Text(_model.contractId,
-                          style: StyleNewFactory.grey12),
+                      child: Text(_model.contractId, style: StyleNewFactory.grey12),
                     ),
                     getUpOrDownIcon(orderResponse: _model),
                     SizedBox(
-                      width: 25,
+                      width: 20,
                     ),
                     Text(
                         "${I18n.of(context).actLevel}${_model.contractId.contains("N") ? (_model.boughtPx / (_model.boughtPx - _model.strikePx)).toStringAsFixed(1) : (_model.boughtPx / (_model.strikePx - _model.boughtPx)).toStringAsFixed(1)}",
                         style: StyleNewFactory.grey12),
+                    _model.action == "coupon"
+                        ? SvgPicture.asset(
+                            R.resAssetsIconsCouponLog,
+                            width: 18,
+                            height: 18,
+                          )
+                        : Container(),
                     SizedBox(
                       width: 5,
                     ),
@@ -64,9 +69,8 @@ class OrderInfo extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                                DateFormat("MM/dd HH:mm").format(
-                                    DateTime.parse(_model.createTime)
-                                        .toLocal()),
+                                DateFormat("MM/dd HH:mm")
+                                    .format(DateTime.parse(_model.createTime).toLocal()),
                                 style: StyleNewFactory.grey12))),
                   ],
                 ),
@@ -134,8 +138,7 @@ class OrderInfo extends StatelessWidget {
                             child: Container(),
                             flex: 15,
                           ),
-                          Text(I18n.of(context).fee,
-                              style: StyleNewFactory.grey12Opacity60),
+                          Text(I18n.of(context).fee, style: StyleNewFactory.grey12Opacity60),
                           Expanded(
                             child: Container(),
                             flex: 5,
@@ -299,15 +302,13 @@ class OrderInfo extends StatelessWidget {
                       padding: EdgeInsets.only(right: 15, left: 15),
                       child: Row(
                         children: <Widget>[
-                          Text(I18n.of(context).futureProfit,
-                              style: StyleNewFactory.grey14),
+                          Text(I18n.of(context).futureProfit, style: StyleNewFactory.grey14),
                           Row(
                             children: <Widget>[
                               Text(
                                 (_model.pnl).toStringAsFixed(4) +
                                     "(" +
-                                    (100 * ((_model.pnl) / invest))
-                                        .toStringAsFixed(1) +
+                                    (100 * ((_model.pnl) / invest)).toStringAsFixed(1) +
                                     "%)",
                                 style: (_model.pnl) > 0
                                     ? StyleFactory.buyUpOrderInfo
@@ -363,8 +364,7 @@ class OrderInfo extends StatelessWidget {
                               Text(
                                 (_model.pnl).toStringAsFixed(4) +
                                     "(" +
-                                    (100 * ((_model.pnl) / invest))
-                                        .toStringAsFixed(1) +
+                                    (100 * ((_model.pnl) / invest)).toStringAsFixed(1) +
                                     "%)",
                                 style: (_model.pnl) > 0
                                     ? StyleFactory.buyUpOrderInfo
@@ -374,8 +374,7 @@ class OrderInfo extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              TextEditingController controller =
-                                  TextEditingController();
+                              TextEditingController controller = TextEditingController();
                               if (locator.get<UserManager>().user.isLocked) {
                                 showDialog(
                                     barrierDismissible: false,
@@ -446,8 +445,7 @@ class OrderInfo extends StatelessWidget {
         builder: (context) {
           return DialogFactory.closeOutConfirmDialog(context,
               value: (_model.pnl).toStringAsFixed(4),
-              pnl: (_model.pnl - _model.accruedInterest - _model.commission)
-                  .toStringAsFixed(4),
+              pnl: (_model.pnl - _model.accruedInterest - _model.commission).toStringAsFixed(4),
               controller: controller);
         }).then((value) {
       if (value != null && value) {
@@ -492,25 +490,19 @@ class OrderInfo extends StatelessWidget {
 
   callAmend(BuildContext context) async {
     PnlViewModel pnlViewModel = PnlViewModel(
-        api: locator.get(),
-        um: locator.get(),
-        mtm: locator.get(),
-        refm: locator.get());
+        api: locator.get(), um: locator.get(), mtm: locator.get(), refm: locator.get());
     try {
       showLoading(context, isBarrierDismissible: false);
-      PostOrderResponseModel postOrderResponseModel =
-          await pnlViewModel.amend(_model, true, false);
+      PostOrderResponseModel postOrderResponseModel = await pnlViewModel.amend(_model, true, false);
       Navigator.of(context).pop();
       if (postOrderResponseModel.code != 0) {
         showNotification(context, true, postOrderResponseModel.msg);
       } else {
-        showNotification(context, false,
-            I18n.of(context).closeOut + I18n.of(context).successToast);
+        showNotification(context, false, I18n.of(context).closeOut + I18n.of(context).successToast);
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showNotification(context, true,
-          I18n.of(context).closeOut + I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).closeOut + I18n.of(context).failToast);
     }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:bbb_flutter/base/base_model.dart';
-import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
@@ -31,8 +30,7 @@ class PnlViewModel extends BaseModel {
   MarketManager _mtm;
   RefManager _refm;
 
-  PnlViewModel(
-      {BBBAPI api, UserManager um, MarketManager mtm, RefManager refm}) {
+  PnlViewModel({BBBAPI api, UserManager um, MarketManager mtm, RefManager refm}) {
     _api = api;
     _um = um;
     _mtm = mtm;
@@ -46,13 +44,12 @@ class PnlViewModel extends BaseModel {
   Future<PostOrderResponseModel> amend(
       OrderResponseModel order, bool execNow, bool amendByPrice) async {
     if (_um.user.testAccountResponseModel != null) {
-      CybexFlutterPlugin.setDefaultPrivKey(
-          _um.user.testAccountResponseModel.privkey);
+      CybexFlutterPlugin.setDefaultPrivKey(_um.user.testAccountResponseModel.privkey);
     }
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
     final model = AmendOrderRequestModel(data: Data());
-    model.data.action = locator.get<SharedPref>().getAction();
+    model.data.action = order.action;
     model.data.user = _um.user.testAccountResponseModel != null
         ? _um.user.testAccountResponseModel.name
         : _um.user.account.name;
@@ -62,13 +59,13 @@ class PnlViewModel extends BaseModel {
       if (!amendByPrice) {
         model.data.cutlossPrice = cutLoss == null
             ? order.strikePx.toStringAsFixed(4)
-            : OrderCalculate.cutLossPx(cutLoss, order.boughtPx, order.strikePx,
-                    order.contractId.contains("N"))
+            : OrderCalculate.cutLossPx(
+                    cutLoss, order.boughtPx, order.strikePx, order.contractId.contains("N"))
                 .toStringAsFixed(4);
         model.data.takeProfitPrice = takeProfit == null
             ? "0"
-            : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
-                    order.strikePx, order.contractId.contains("N"))
+            : OrderCalculate.takeProfitPx(
+                    takeProfit, order.boughtPx, order.strikePx, order.contractId.contains("N"))
                 .toStringAsFixed(4);
       } else {
         model.data.cutlossPrice = cutLossPx.toStringAsFixed(4);
@@ -79,11 +76,9 @@ class PnlViewModel extends BaseModel {
     var data = execNow ? model.data.toCloseJson() : model.data.toJson();
     String sig = await CybexFlutterPlugin.signMessageOperation(
         getQueryStringFromJson(data, data.keys.toList()..sort()));
-    model.signature =
-        sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
+    model.signature = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     try {
-      PostOrderResponseModel res =
-          await _api.amendOrder(order: model, exNow: execNow);
+      PostOrderResponseModel res = await _api.amendOrder(order: model, exNow: execNow);
       locator.get<Logger>().w(res);
       return res;
     } catch (error) {
@@ -98,8 +93,8 @@ class PnlViewModel extends BaseModel {
     } else {
       takeProfit += 1;
     }
-    takeProfitPx = OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    takeProfitPx = OrderCalculate.takeProfitPx(
+        takeProfit, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -109,8 +104,8 @@ class PnlViewModel extends BaseModel {
     }
     takeProfitPx = takeProfit == null
         ? 0
-        : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
-            order.strikePx, order.contractId.contains("N"));
+        : OrderCalculate.takeProfitPx(
+            takeProfit, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -118,15 +113,15 @@ class PnlViewModel extends BaseModel {
     this.takeProfit = profit;
     takeProfitPx = profit == null
         ? 0
-        : OrderCalculate.takeProfitPx(takeProfit, order.boughtPx,
-            order.strikePx, order.contractId.contains("N"));
+        : OrderCalculate.takeProfitPx(
+            takeProfit, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
   void increaseTakeProfitPx({OrderResponseModel order}) {
     takeProfitPx += 1;
-    takeProfit = OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    takeProfit = OrderCalculate.getTakeProfit(
+        takeProfitPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -136,8 +131,8 @@ class PnlViewModel extends BaseModel {
     }
     takeProfit = takeProfitPx == 0
         ? null
-        : OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
-            order.strikePx, order.contractId.contains("N"));
+        : OrderCalculate.getTakeProfit(
+            takeProfitPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -145,8 +140,8 @@ class PnlViewModel extends BaseModel {
     this.takeProfitPx = profitPrice ?? 0;
     takeProfit = takeProfitPx == 0
         ? null
-        : OrderCalculate.getTakeProfit(takeProfitPx, order.boughtPx,
-            order.strikePx, order.contractId.contains("N"));
+        : OrderCalculate.getTakeProfit(
+            takeProfitPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     setBusy(false);
   }
 
@@ -158,8 +153,8 @@ class PnlViewModel extends BaseModel {
         cutLoss += 1;
       }
     }
-    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    cutLossPx = OrderCalculate.cutLossPx(
+        cutLoss, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }
@@ -172,8 +167,8 @@ class PnlViewModel extends BaseModel {
         cutLoss -= 1;
       }
     }
-    cutLossPx = OrderCalculate.cutLossPx(cutLoss, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    cutLossPx = OrderCalculate.cutLossPx(
+        cutLoss, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }
@@ -182,8 +177,8 @@ class PnlViewModel extends BaseModel {
     this.cutLoss = cutLoss;
     cutLossPx = cutLoss == null
         ? order.strikePx
-        : OrderCalculate.cutLossPx(cutLoss, order.boughtPx, order.strikePx,
-            order.contractId.contains("N"));
+        : OrderCalculate.cutLossPx(
+            cutLoss, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }
@@ -194,8 +189,8 @@ class PnlViewModel extends BaseModel {
     } else {
       cutLossPx += 1;
     }
-    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    cutLoss = OrderCalculate.getCutLoss(
+        cutLossPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }
@@ -208,8 +203,8 @@ class PnlViewModel extends BaseModel {
         cutLossPx -= 1;
       }
     }
-    cutLoss = OrderCalculate.getCutLoss(cutLossPx, order.boughtPx,
-        order.strikePx, order.contractId.contains("N"));
+    cutLoss = OrderCalculate.getCutLoss(
+        cutLossPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }
@@ -218,8 +213,8 @@ class PnlViewModel extends BaseModel {
     this.cutLossPx = cutLossPx ?? order.strikePx;
     cutLoss = this.cutLossPx == order.strikePx
         ? (cutLossPx == null ? null : 100)
-        : OrderCalculate.getCutLoss(this.cutLossPx, order.boughtPx,
-            order.strikePx, order.contractId.contains("N"));
+        : OrderCalculate.getCutLoss(
+            this.cutLossPx, order.boughtPx, order.strikePx, order.contractId.contains("N"));
     checkIfCutLossCorrect(order);
     setBusy(false);
   }

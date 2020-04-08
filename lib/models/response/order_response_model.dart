@@ -5,6 +5,7 @@ import 'package:bbb_flutter/helper/utils.dart';
 class OrderResponseModel {
   String accountName;
   String status;
+  String action;
   int buyOrderTxId;
   String contractId;
   double latestContractPx;
@@ -33,6 +34,7 @@ class OrderResponseModel {
   OrderResponseModel({
     this.accountName,
     this.status,
+    this.action,
     this.buyOrderTxId,
     this.contractId,
     this.latestContractPx,
@@ -62,66 +64,53 @@ class OrderResponseModel {
   factory OrderResponseModel.fromJson(jsonRes) => jsonRes == null
       ? null
       : OrderResponseModel(
-          accountName: convertValueByType(jsonRes['accountName'], String,
-              stack: "Root-accountName"),
-          status: convertValueByType(jsonRes['status'], String,
-              stack: "Root-status"),
-          buyOrderTxId: convertValueByType(jsonRes['buyOrderTxId'], int,
-              stack: "Root-buyOrderTxId"),
-          contractId: convertValueByType(jsonRes['contractId'], String,
-              stack: "Root-contractId"),
-          latestContractPx: convertValueByType(
-              jsonRes['latestContractPx'], double,
+          accountName:
+              convertValueByType(jsonRes['accountName'], String, stack: "Root-accountName"),
+          status: convertValueByType(jsonRes['status'], String, stack: "Root-status"),
+          action: convertValueByType(jsonRes['action'], String, stack: "Root-action"),
+          buyOrderTxId:
+              convertValueByType(jsonRes['buyOrderTxId'], int, stack: "Root-buyOrderTxId"),
+          contractId: convertValueByType(jsonRes['contractId'], String, stack: "Root-contractId"),
+          latestContractPx: convertValueByType(jsonRes['latestContractPx'], double,
               stack: "Root-latestContractPx"),
           pnl: convertValueByType(jsonRes['pnl'], double, stack: "Root-pnl"),
-          underlyingSpotPx: convertValueByType(
-              jsonRes['underlyingSpotPx'], double,
+          underlyingSpotPx: convertValueByType(jsonRes['underlyingSpotPx'], double,
               stack: "Root-underlyingSpotPx"),
-          cutLossPx: convertValueByType(jsonRes['cutLossPx'], double,
-              stack: "Root-cutLossPx"),
-          takeProfitPx: convertValueByType(jsonRes['takeProfitPx'], double,
-              stack: "Root-takeProfitPx"),
-          forceClosePx: convertValueByType(jsonRes['forceClosePx'], double,
-              stack: "Root-forceClosePx"),
-          expiration: convertValueByType(jsonRes['expiration'], String,
-              stack: "Root-expiration"),
-          qtyContract: convertValueByType(jsonRes['qtyContract'], double,
-              stack: "Root-qtyContract"),
-          commission: convertValueByType(jsonRes['commission'], double,
-              stack: "Root-commission"),
-          accruedInterest: convertValueByType(
-              jsonRes['accruedInterest'], double,
-              stack: "Root-accruedInterest"),
-          strikePx: convertValueByType(jsonRes['strikePx'], double,
-              stack: "Root-boughtPx"),
-          boughtPx: convertValueByType(jsonRes['boughtPx'], double,
-              stack: "Root-boughtPx"),
-          boughtContractPx: convertValueByType(
-              jsonRes['boughtContractPx'], double,
+          cutLossPx: convertValueByType(jsonRes['cutLossPx'], double, stack: "Root-cutLossPx"),
+          takeProfitPx:
+              convertValueByType(jsonRes['takeProfitPx'], double, stack: "Root-takeProfitPx"),
+          forceClosePx:
+              convertValueByType(jsonRes['forceClosePx'], double, stack: "Root-forceClosePx"),
+          expiration: convertValueByType(jsonRes['expiration'], String, stack: "Root-expiration"),
+          qtyContract:
+              convertValueByType(jsonRes['qtyContract'], double, stack: "Root-qtyContract"),
+          commission: convertValueByType(jsonRes['commission'], double, stack: "Root-commission"),
+          accruedInterest:
+              convertValueByType(jsonRes['accruedInterest'], double, stack: "Root-accruedInterest"),
+          strikePx: convertValueByType(jsonRes['strikePx'], double, stack: "Root-boughtPx"),
+          boughtPx: convertValueByType(jsonRes['boughtPx'], double, stack: "Root-boughtPx"),
+          boughtContractPx: convertValueByType(jsonRes['boughtContractPx'], double,
               stack: "Root-boughtContractPx"),
-          boughtNotional: convertValueByType(jsonRes['boughtNotional'], double,
-              stack: "Root-boughtNotional"),
-          soldPx: convertValueByType(jsonRes['soldPx'], double,
-              stack: "Root-soldPx"),
-          soldContractPx: convertValueByType(jsonRes['soldContractPx'], double,
-              stack: "Root-soldContractPx"),
-          soldNotional: convertValueByType(jsonRes['soldNotional'], double,
-              stack: "Root-soldNotional"),
-          closeReason: convertValueByType(jsonRes['closeReason'], String,
-              stack: "Root-closeReason"),
-          settleTime: convertValueByType(jsonRes['settleTime'], String,
-              stack: "Root-settleTime"),
-          createTime: convertValueByType(jsonRes['createTime'], String,
-              stack: "Root-createTime"),
-          lastUpdateTime: convertValueByType(jsonRes['lastUpdateTime'], String,
-              stack: "Root-lastUpdateTime"),
-          details: convertValueByType(jsonRes['details'], String,
-              stack: "Root-details"),
+          boughtNotional:
+              convertValueByType(jsonRes['boughtNotional'], double, stack: "Root-boughtNotional"),
+          soldPx: convertValueByType(jsonRes['soldPx'], double, stack: "Root-soldPx"),
+          soldContractPx:
+              convertValueByType(jsonRes['soldContractPx'], double, stack: "Root-soldContractPx"),
+          soldNotional:
+              convertValueByType(jsonRes['soldNotional'], double, stack: "Root-soldNotional"),
+          closeReason:
+              convertValueByType(jsonRes['closeReason'], String, stack: "Root-closeReason"),
+          settleTime: convertValueByType(jsonRes['settleTime'], String, stack: "Root-settleTime"),
+          createTime: convertValueByType(jsonRes['createTime'], String, stack: "Root-createTime"),
+          lastUpdateTime:
+              convertValueByType(jsonRes['lastUpdateTime'], String, stack: "Root-lastUpdateTime"),
+          details: convertValueByType(jsonRes['details'], String, stack: "Root-details"),
         );
 
   Map<String, dynamic> toJson() => {
         'accountName': accountName,
         'status': status,
+        'action': action,
         'buyOrderTxId': buyOrderTxId,
         'contractId': contractId,
         'latestContractPx': latestContractPx,

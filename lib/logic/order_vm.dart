@@ -43,7 +43,10 @@ class OrderViewModel extends BaseModel {
   getOrders() async {
     if (_um.user.logined) {
 //      setBusy(true);
-      orders = await _api.getOrders(_um.user.name, status: [OrderStatus.open]);
+      orders = await _api.getOrders(
+        _um.user.name,
+        status: [OrderStatus.open],
+      );
       orders = orders.toList();
       if (orders.length > 0) {
         index = min(index, orders.length - 1);
@@ -85,8 +88,7 @@ class OrderViewModel extends BaseModel {
         selectedItem.buyOrderTxId = value.buyOrderTxId;
         return selectedItem;
       }).toList();
-    } else if (selectedOrders.isNotEmpty &&
-        selectedOrders.length != orders.length) {
+    } else if (selectedOrders.isNotEmpty && selectedOrders.length != orders.length) {
       List<SelectedItem> tempList = [];
       tempList = orders.map((value) {
         SelectedItem selectedItem = SelectedItem();

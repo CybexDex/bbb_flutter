@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/account_util.dart';
+import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
@@ -37,9 +38,7 @@ class UserManager extends BaseModel {
   ///AssetName.CYB
 
   Position fetchPositionFrom(String assetId) {
-    if (user.balances == null ||
-        user.balances.positions.length == 0 ||
-        assetId == null) {
+    if (user.balances == null || user.balances.positions.length == 0 || assetId == null) {
       return null;
     }
     List<Position> positions = user.balances.positions.where((position) {
@@ -71,11 +70,9 @@ class UserManager extends BaseModel {
     }
   }
 
-  Future<bool> loginWithPrivateKey(
-      {bool bonusEvent, String accountName}) async {
+  Future<bool> loginWithPrivateKey({bool bonusEvent, String accountName}) async {
     TestAccountResponseModel testAccount = _pref.getTestAccount() ??
-        await _api.getTestAccount(
-            bonusEvent: bonusEvent, accountName: accountName);
+        await _api.getTestAccount(bonusEvent: bonusEvent, accountName: accountName);
     if (testAccount != null) {
       try {
         await locator.get<BBBAPI>().setAction(action: "test");
@@ -87,15 +84,10 @@ class UserManager extends BaseModel {
         if (user.balances.positions
                 .firstWhere((position) =>
                     position.assetId ==
-                    locator
-                        .get<RefManager>()
-                        .refDataControllerNew
-                        .value
-                        ?.bbbAssetId)
+                    locator.get<RefManager>().refDataControllerNew.value?.bbbAssetId)
                 .quantity ==
             null) {
-          testAccount = await _api.getTestAccount(
-              bonusEvent: bonusEvent, accountName: accountName);
+          testAccount = await _api.getTestAccount(bonusEvent: bonusEvent, accountName: accountName);
           await fetchBalances(name: testAccount.name);
         }
         await unlockWithPrivKey(testAccount: testAccount);
@@ -135,14 +127,11 @@ class UserManager extends BaseModel {
     }
   }
 
-  unlockWith(
-      {String name, String password, AccountResponseModel account}) async {
+  unlockWith({String name, String password, AccountResponseModel account}) async {
     try {
-      AccountKeysEntity keys =
-          await generateAccountKeys(name: name, password: password);
+      AccountKeysEntity keys = await generateAccountKeys(name: name, password: password);
       if (keys != null) {
-        var permission =
-            generatePermission(account: account ?? user.account, keys: [keys]);
+        var permission = generatePermission(account: account ?? user.account, keys: [keys]);
         if (permission.unlock) {
           CybexFlutterPlugin.resetDefaultPubKey(permission.defaultKey);
           keys.removePrivateKey();
@@ -182,16 +171,13 @@ class UserManager extends BaseModel {
   }
 
   getDepositAddress({String name, String asset}) async {
-    String expiration =
-        (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000).toString();
-    String sig =
-        await CybexFlutterPlugin.signMessageOperation(expiration + name);
+    String expiration = (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000).toString();
+    String sig = await CybexFlutterPlugin.signMessageOperation(expiration + name);
     sig = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     String authorization = "bearer $expiration.$name.$sig";
     DepositResponseModel deposit = await locator
         .get<GatewayApi>()
-        .getDepositAddress(
-            user: name, asset: asset, authorization: authorization);
+        .getDepositAddress(user: name, asset: asset, authorization: authorization);
     if (deposit != null) {
       user.deposit = deposit;
       notifyListeners();
@@ -215,14 +201,13 @@ class UserManager extends BaseModel {
   }
 
   checkRewardAccount({String accountName, bool bonusEvent}) async {
-    TestAccountResponseModel testAccount = await _api.getTestAccount(
-        accountName: accountName, bonusEvent: bonusEvent);
+    TestAccountResponseModel testAccount =
+        await _api.getTestAccount(accountName: accountName, bonusEvent: bonusEvent);
     hasBonus = testAccount != null;
     notifyListeners();
   }
 
-  Future<AccountKeysEntity> generateAccountKeys(
-      {String name, String password}) async {
+  Future<AccountKeysEntity> generateAccountKeys({String name, String password}) async {
     await CybexFlutterPlugin.cancelDefaultPubKey();
     String keys = await CybexFlutterPlugin.getUserKeyWith(name, password);
     if (keys != null) {
@@ -237,10 +222,7 @@ class UserManager extends BaseModel {
     permission.unlock = false;
     permission.trade = false;
 
-    var allKeys = keys
-        .fold(<String>[], (List<String> t, e) => t + e.pubkeys)
-        .toSet()
-        .toList();
+    var allKeys = keys.fold(<String>[], (List<String> t, e) => t + e.pubkeys).toSet().toList();
 
     for (var key in allPubkeys(account: account)) {
       if (allKeys.contains(key)) {
@@ -271,6 +253,7 @@ class UserManager extends BaseModel {
     user.permission = null;
     user.balances = null;
     user.loginType = LoginType.none;
+    locator.get<CouponViewModel>().getCoupons();
     notifyListeners();
   }
 
@@ -295,6 +278,7 @@ class UserManager extends BaseModel {
       user.balances = null;
     }
     locator.get<HomeViewModel>().getRankingList();
+    locator.get<CouponViewModel>().getCoupons();
     notifyListeners();
   }
 

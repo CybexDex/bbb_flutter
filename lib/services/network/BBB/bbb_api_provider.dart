@@ -6,6 +6,7 @@ import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/action_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
@@ -66,13 +67,11 @@ class BBBAPIProvider extends BBBAPI {
 
   _dispatchNode() {
     if (_pref.getEnvType() == EnvType.Pro) {
-      dio.options.baseUrl = _pref.getTestNet()
-          ? NetworkConnection.PRO_TESTNET
-          : NetworkConnection.PRO_STANDARD;
+      dio.options.baseUrl =
+          _pref.getTestNet() ? NetworkConnection.PRO_TESTNET : NetworkConnection.PRO_STANDARD;
     } else if (_pref.getEnvType() == EnvType.Test) {
-      dio.options.baseUrl = _pref.getTestNet()
-          ? NetworkConnection.UAT_TESTNET
-          : NetworkConnection.UAT_STANDARD;
+      dio.options.baseUrl =
+          _pref.getTestNet() ? NetworkConnection.UAT_TESTNET : NetworkConnection.UAT_STANDARD;
     }
   }
 
@@ -89,8 +88,7 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<RefContractResponseModel> getRefData(
-      {List<ContractStatus> status}) async {
+  Future<RefContractResponseModel> getRefData({List<ContractStatus> status}) async {
     var params = Map<String, dynamic>();
     if (!isAllEmpty(status)) {
       final statusValue = status.map((s) => contractStatusMap[s]).join(",");
@@ -108,8 +106,8 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<RefDataResponse> getRefDataNew({String injectAction}) async {
-    var response = await newDio.get(
-        '/cybex/refdata?action=${injectAction == null ? action : injectAction}');
+    var response =
+        await newDio.get('/cybex/refdata?action=${injectAction == null ? action : injectAction}');
     return Future.value(RefDataResponse.fromJson(response.data));
   }
 
@@ -123,8 +121,9 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<ConfigResponse> getConfig() async {
-    var response = await newDio.get('/api/$asset/config');
+  Future<ConfigResponse> getConfig({String injectAction}) async {
+    var response = await newDio
+        .get('/api/$asset/config?action=${injectAction == null ? action : injectAction}');
     return Future.value(ConfigResponse.fromJson(response.data));
   }
 
@@ -143,8 +142,7 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<PositionsResponseModel> getPositions(
-      {String name, String injectAction}) async {
+  Future<PositionsResponseModel> getPositions({String name, String injectAction}) async {
     var response = await newDio.get(
         '/cybex/position?accountName=$name&action=${injectAction == null ? action : injectAction}');
     return Future.value(PositionsResponseModel.fromJson(response.data));
@@ -164,10 +162,7 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<OrderResponseModel>> getOrders(String name,
-      {List<OrderStatus> status,
-      String startTime,
-      String endTime,
-      String injectAsset}) async {
+      {List<OrderStatus> status, String startTime, String endTime, String injectAsset}) async {
     var params = {
       "accountName": name,
     };
@@ -181,10 +176,9 @@ class BBBAPIProvider extends BBBAPI {
       params["beginTime"] = startTime;
       params["endTime"] = endTime;
     }
-    params["action"] = action;
+    params["action"] = action != "test" ? "main,coupon" : action;
 
-    var response = await newDio.get(
-        '/api/${injectAsset == null ? asset : injectAsset}/order',
+    var response = await newDio.get('/api/${injectAsset == null ? asset : injectAsset}/order',
         queryParameters: params);
     var responseData = response.data as List;
     if (responseData == null) {
@@ -198,10 +192,7 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<LimitOrderResponse>> getLimitOrders(String name,
-      {String startTime,
-      String endTime,
-      String active,
-      String injectAsset}) async {
+      {String startTime, String endTime, String active, String injectAsset}) async {
     var params = {
       "accountName": name,
     };
@@ -212,8 +203,7 @@ class BBBAPIProvider extends BBBAPI {
     }
     params["action"] = action;
     params["active"] = active;
-    var response = await newDio.get(
-        '/api/${injectAsset == null ? asset : injectAsset}/limit_order',
+    var response = await newDio.get('/api/${injectAsset == null ? asset : injectAsset}/limit_order',
         queryParameters: params);
     var responseData = response.data as List;
     if (responseData == null) {
@@ -226,10 +216,22 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<List<FundRecordModel>> getFundRecords(
-      {String name, DateTime start, DateTime end}) async {
-    var response = await newDio.get("/cybex/fund",
-        queryParameters: {"accountName": name, "action": action});
+  Future<CouponResponse> getCoupons({List<CouponStatus> status, String name}) async {
+    var params = {
+      "accountName": name,
+    };
+    if (!isAllEmpty(status)) {
+      final statusValue = status.map((s) => couponStatusMap[s]).join(",");
+      params["status"] = statusValue;
+    }
+    var response = await newDio.get('/cybex/coupon', queryParameters: params);
+    return Future.value(CouponResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end}) async {
+    var response =
+        await newDio.get("/cybex/fund", queryParameters: {"accountName": name, "action": action});
     var responseData = response.data as List;
     List<FundRecordModel> model = responseData.map((data) {
       return FundRecordModel.fromJson(data);
@@ -239,8 +241,8 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<List<RankingResponse>> getRankings({int indicator}) async {
-    var response = await newDio
-        .get("/api/$asset/ranking", queryParameters: {"indicator": indicator});
+    var response =
+        await newDio.get("/api/$asset/ranking", queryParameters: {"indicator": indicator});
     var responseData = response.data as List;
     if (responseData == null) {
       return Future.value([]);
@@ -300,45 +302,38 @@ class BBBAPIProvider extends BBBAPI {
 
   @override
   Future<DepositResponseModel> getDeposit({String name, String asset}) async {
-    var response = await dio.get('/depositAddress',
-        queryParameters: {"accountName": name, "asset": asset});
+    var response =
+        await dio.get('/depositAddress', queryParameters: {"accountName": name, "asset": asset});
     return Future.value(DepositResponseModel.fromJson(response.data));
   }
 
   @override
-  Future<PostOrderResponseModel> amendOrder(
-      {AmendOrderRequestModel order, bool exNow}) async {
-    var response = await newDio.post(
-        exNow ? "/trade/$asset/close" : "/trade/$asset/amend",
+  Future<PostOrderResponseModel> amendOrder({AmendOrderRequestModel order, bool exNow}) async {
+    var response = await newDio.post(exNow ? "/trade/$asset/close" : "/trade/$asset/amend",
         data: exNow ? order.toCloseJson() : order.toJson());
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
-  Future<PostOrderResponseModel> postOrder(
-      {Map<String, dynamic> requestOrder}) async {
+  Future<PostOrderResponseModel> postOrder({Map<String, dynamic> requestOrder}) async {
     var response = await newDio.post("/trade/$asset/order", data: requestOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
-  Future<PostOrderResponseModel> postLimitOrder(
-      {Map<String, dynamic> requestLimitOrder}) async {
-    var response =
-        await newDio.post("/trade/$asset/limit/order", data: requestLimitOrder);
+  Future<PostOrderResponseModel> postLimitOrder({Map<String, dynamic> requestLimitOrder}) async {
+    var response = await newDio.post("/trade/$asset/limit/order", data: requestLimitOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   Future<PostOrderResponseModel> postCancelLimitOrder(
       {Map<String, dynamic> requestCancelLimitOrder}) async {
-    var response = await newDio.post("/trade/$asset/limit/cancel",
-        data: requestCancelLimitOrder);
+    var response = await newDio.post("/trade/$asset/limit/cancel", data: requestCancelLimitOrder);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
-  Future<PostOrderResponseModel> postWithdraw(
-      {Map<String, dynamic> withdraw}) async {
+  Future<PostOrderResponseModel> postWithdraw({Map<String, dynamic> withdraw}) async {
     try {
       var response = await newDio.post("/trade/transfer", data: withdraw);
 
@@ -350,27 +345,22 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<PostOrderResponseModel> postTransfer(
-      {Map<String, dynamic> transfer}) async {
+  Future<PostOrderResponseModel> postTransfer({Map<String, dynamic> transfer}) async {
     var response = await newDio.post("/trade/transfer", data: transfer);
     return Future.value(PostOrderResponseModel.fromJson(response.data));
   }
 
   @override
   Future<AccountResponseModel> getAccount({String name}) async {
-    var response =
-        await newDio.get("/cybex/account?accountName=$name&action=$action");
-    return Future.value(response.data == null
-        ? null
-        : AccountResponseModel.fromJson(response.data));
+    var response = await newDio.get("/cybex/account?accountName=$name&action=$action");
+    return Future.value(
+        response.data == null ? null : AccountResponseModel.fromJson(response.data));
   }
 
   @override
-  Future<TestAccountResponseModel> getTestAccount(
-      {bool bonusEvent, String accountName}) async {
+  Future<TestAccountResponseModel> getTestAccount({bool bonusEvent, String accountName}) async {
     var response = await newDio.post("/trade/create_test_account");
-    return Future.value(response.data == null
-        ? null
-        : TestAccountResponseModel.fromJson(response.data));
+    return Future.value(
+        response.data == null ? null : TestAccountResponseModel.fromJson(response.data));
   }
 }
