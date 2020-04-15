@@ -27,14 +27,10 @@ class PnlViewModel extends BaseModel {
   bool isObscure = true;
   BBBAPI _api;
   UserManager _um;
-  MarketManager _mtm;
-  RefManager _refm;
 
   PnlViewModel({BBBAPI api, UserManager um, MarketManager mtm, RefManager refm}) {
     _api = api;
     _um = um;
-    _mtm = mtm;
-    _refm = refm;
   }
 
   // Contract currentContract(OrderResponseModel order) {

@@ -59,7 +59,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
     return Consumer3<LimitOrderViewModel, UserManager, ContractResponse>(
         builder: (context, model, userModel, refData, child) {
       if (model.isChangeSide) {
-        _cutLossController.text = widget._model.contract.strikeLevel.toStringAsFixed(0);
+        _cutLossController.text = widget._model.contract?.strikeLevel?.toStringAsFixed(0) ?? "-";
         model.isChangeSide = false;
       }
       Contract refreshContract = model.contract;
@@ -104,6 +104,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         _amountController.text = "1";
                         _takeProfitController.text = "-";
                         _cutLossController.text = "-";
+                        _predictPriceController.text = "";
                       },
                       backgroundColor: Palette.appDividerBackgroudGreyColor,
                       selectedColor: Palette.appYellowOrange,
@@ -114,7 +115,31 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   height: 15,
                 ),
                 model.isMarket
-                    ? Container()
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            I18n.of(context).limitOrderPrice,
+                            style: StyleNewFactory.grey15,
+                          ),
+                          SizedBox(
+                            width: 240,
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: 10),
+                              height: 36,
+                              decoration: BoxDecoration(
+                                  color: Palette.separatorColor,
+                                  border: Border.all(color: Palette.separatorColor, width: 0.5),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                "以当前指数价交易",
+                                style: StyleNewFactory.grey12,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
@@ -142,7 +167,6 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                                   keyboardType:
                                       TextInputType.numberWithOptions(decimal: true, signed: false),
                                   decoration: InputDecoration(
-                                    // contentPadding: EdgeInsets.only(top: 4, bottom: 4),
                                     border: InputBorder.none,
                                     hintText: "输入价格",
                                     hintStyle: StyleFactory.addReduceStyle,
@@ -204,34 +228,18 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                             borderRadius: BorderRadius.circular(5)),
                         child: GestureDetector(
                           onTap: () {
-                            final limitOrderViewModel = Provider.of<LimitOrderViewModel>(context);
-                            showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return ChangeNotifierProvider<LimitOrderViewModel>.value(
-                                        value: limitOrderViewModel,
-                                        child: Container(
-                                            height:
-                                                MediaQuery.of(context).copyWith().size.height / 3,
-                                            child: Consumer<LimitOrderViewModel>(
-                                              builder: (context, model, child) {
-                                                return DataPickerWidget(
-                                                  model: model,
-                                                  isCoupon: false,
-                                                );
-                                              },
-                                            )),
-                                      );
-                                    })
-                                .then((value) => _cutLossController.text =
-                                    model.contract.strikeLevel.toStringAsFixed(0));
+                            if (model.contract != null ||
+                                (_predictPriceController.text.isNotEmpty)) {
+                              _predictPriceFocusNode.unfocus();
+                              _showBottomSelectionMenu(model);
+                            }
                           },
                           child: custom.DropdownButton<Contract>(
                             hint: Padding(
                               padding: EdgeInsets.only(left: 10),
                               child: model.orderForm.predictPrice == null
                                   ? Text(
-                                      "请先输入预计购买价格",
+                                      "请先输入预计买入价格",
                                       style: StyleFactory.addReduceStyle,
                                     )
                                   : Text(
@@ -579,5 +587,26 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
         ],
       );
     });
+  }
+
+  _showBottomSelectionMenu(dynamic model) {
+    final limitOrderViewModel = Provider.of<LimitOrderViewModel>(context);
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ChangeNotifierProvider<LimitOrderViewModel>.value(
+            value: limitOrderViewModel,
+            child: Container(
+                height: MediaQuery.of(context).copyWith().size.height / 3,
+                child: Consumer<LimitOrderViewModel>(
+                  builder: (context, model, child) {
+                    return DataPickerWidget(
+                      model: model,
+                      isCoupon: false,
+                    );
+                  },
+                )),
+          );
+        }).then((value) => _cutLossController.text = model.contract.strikeLevel.toStringAsFixed(0));
   }
 }

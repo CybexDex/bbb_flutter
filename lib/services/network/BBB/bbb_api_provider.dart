@@ -9,6 +9,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/contract_response
 import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -134,10 +135,11 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<List<String>> getAsset() async {
+  Future<List<UnderlyingAssetResponse>> getAsset() async {
     var response = await newDio.get('/cybex/underlying');
     var responseData = response.data as List;
-    List<String> list = responseData.map((value) => value.toString()).toList();
+    List<UnderlyingAssetResponse> list =
+        responseData.map((value) => UnderlyingAssetResponse.fromJson(value)).toList();
     return Future.value(list);
   }
 
@@ -237,6 +239,14 @@ class BBBAPIProvider extends BBBAPI {
       return FundRecordModel.fromJson(data);
     }).toList();
     return Future.value(model);
+  }
+
+  @override
+  Future<List<String>> getFundDescription() async {
+    var response = await newDio.get('/cybex/fund/descriptions');
+    var responseData = response.data as List;
+    List<String> list = responseData.map((value) => value.toString()).toList();
+    return Future.value(list);
   }
 
   @override

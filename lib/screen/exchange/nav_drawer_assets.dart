@@ -53,22 +53,20 @@ class _NavDrawerState extends State<NavDrawer> {
                       return InkWell(
                         onTap: () {
                           model.onChangeAsset(
-                              context: context, asset: model.assetList[index]);
+                              context: context, asset: model.assetList[index].underlying);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 17),
+                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 17),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     RichText(
                                         text: TextSpan(children: [
                                       TextSpan(
-                                        text: model.assetList[index],
+                                        text: model.assetList[index].underlying,
                                         style: StyleNewFactory.black15,
                                       ),
                                       TextSpan(
@@ -78,8 +76,7 @@ class _NavDrawerState extends State<NavDrawer> {
                                     ])),
                                     Text(
                                       model.tickerList[index].latest,
-                                      style: double.parse(model
-                                                  .tickerList[index].latest) >
+                                      style: double.parse(model.tickerList[index].latest) >
                                               model.tickerList[index].lastDayPx
                                           ? StyleNewFactory.red15
                                           : StyleNewFactory.green15,

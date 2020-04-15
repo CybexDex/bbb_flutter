@@ -27,15 +27,14 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
   Widget build(BuildContext context) {
     return BaseWidget<LimitOrderManager>(
       model: LimitOrderManager(
-          api: locator.get(),
-          um: locator.get(),
-          rm: locator.get(),
-          tm: locator.get()),
+          api: locator.get(), um: locator.get(), rm: locator.get(), tm: locator.get()),
       builder: (context, data, child) {
         return Scaffold(
           body: SafeArea(
             child: data.orders.isEmpty
-                ? EmptyOrder(isLimit: true)
+                ? EmptyOrder(
+                    message: I18n.of(context).limitOrderEmpty,
+                  )
                 : Column(
                     children: <Widget>[
                       new Expanded(
@@ -70,25 +69,15 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
                                           showDialog(
                                               context: context,
                                               builder: (context) {
-                                                return DialogFactory
-                                                    .normalConfirmDialog(
-                                                        context,
-                                                        title: I18n.of(context)
-                                                            .limitOrderCancelButton,
-                                                        content: "是否撤单",
-                                                        onConfirmPressed: () {
-                                                  if (locator
-                                                      .get<UserManager>()
-                                                      .user
-                                                      .isLocked) {
+                                                return DialogFactory.normalConfirmDialog(context,
+                                                    title: I18n.of(context).limitOrderCancelButton,
+                                                    content: "是否撤单", onConfirmPressed: () {
+                                                  if (locator.get<UserManager>().user.isLocked) {
                                                     showDialog(
                                                         context: context,
                                                         builder: (context) {
-                                                          return DialogFactory
-                                                              .unlockDialog(
-                                                                  context,
-                                                                  controller:
-                                                                      controller);
+                                                          return DialogFactory.unlockDialog(context,
+                                                              controller: controller);
                                                         }).then((value) async {
                                                       if (value) {
                                                         cancelAll(data);
@@ -141,8 +130,7 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
     return listWidget;
   }
 
-  List<Widget> _itemViewChild(
-      int index, bool item, LimitOrderManager orderViewModel) {
+  List<Widget> _itemViewChild(int index, bool item, LimitOrderManager orderViewModel) {
     var row = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -191,12 +179,10 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
       List<Future<PostOrderResponseModel>> futures = [];
       for (int i = 0; i < limitOrderManager.orders.length; i++) {
         if (limitOrderManager.selectedOrders[i].isSelected) {
-          futures
-              .add(limitOrderManager.cancelOrder(limitOrderManager.orders[i]));
+          futures.add(limitOrderManager.cancelOrder(limitOrderManager.orders[i]));
         }
       }
-      List<PostOrderResponseModel> postOrderResponseList =
-          await Future.wait(futures);
+      List<PostOrderResponseModel> postOrderResponseList = await Future.wait(futures);
       Navigator.of(context).pop();
 
       for (var i in postOrderResponseList) {
@@ -209,21 +195,17 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
       if (failCount != 0 && sucessCount != 0) {
         showNotification(context, true, "部分撤单");
       } else if (failCount == 0) {
-        showNotification(
-            context, false, I18n.of(context).limitOrderCancelSucess,
-            callback: () {
+        showNotification(context, false, I18n.of(context).limitOrderCancelSucess, callback: () {
           Navigator.of(context).pop();
         });
       } else {
-        showNotification(context, true, I18n.of(context).limitOrderCancelFailed,
-            callback: () {
+        showNotification(context, true, I18n.of(context).limitOrderCancelFailed, callback: () {
           Navigator.of(context).pop();
         });
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showNotification(context, true, I18n.of(context).limitOrderCancelFailed,
-          callback: () {
+      showNotification(context, true, I18n.of(context).limitOrderCancelFailed, callback: () {
         Navigator.of(context).pop();
       });
     }

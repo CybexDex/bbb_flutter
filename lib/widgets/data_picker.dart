@@ -28,11 +28,14 @@ class DataPickerState extends State<DataPickerWidget> {
           preferredSize: Size.fromHeight(40),
           child: AppBar(
             elevation: 0,
-            leading: Align(
-              alignment: Alignment.center,
-              child: Text(
-                I18n.of(context).dialogCancelButton,
-                style: StyleNewFactory.grey15,
+            leading: GestureDetector(
+              onTap: () => Navigator.of(context).maybePop(),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  I18n.of(context).dialogCancelButton,
+                  style: StyleNewFactory.grey15,
+                ),
               ),
             ),
             backgroundColor: Palette.seperateOrBackgroundGreyColor,

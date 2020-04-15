@@ -15,6 +15,20 @@ class LimitOrderRecordItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isN = _model.contractId.contains("N");
+    double takeprofit = _model.takeProfitPx == 0
+        ? null
+        : OrderCalculate.getTakeProfit(
+            _model.takeProfitPx,
+            _model.highestTriggerPx != 0 ? _model.highestTriggerPx : _model.lowestTriggerPx,
+            _model.strikePx,
+            _model.contractId.contains("N"));
+    double cutLoss = _model.cutLossPx == _model.strikePx
+        ? null
+        : OrderCalculate.getCutLoss(
+            _model.cutLossPx,
+            _model.highestTriggerPx != 0 ? _model.highestTriggerPx : _model.lowestTriggerPx,
+            _model.strikePx,
+            _model.contractId.contains("N"));
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
@@ -34,13 +48,8 @@ class LimitOrderRecordItem extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 18),
-                      child: Text(
-                          isN
-                              ? I18n.of(context).buyUp
-                              : I18n.of(context).buyDown,
-                          style: isN
-                              ? StyleNewFactory.red15
-                              : StyleNewFactory.green15),
+                      child: Text(isN ? I18n.of(context).buyUp : I18n.of(context).buyDown,
+                          style: isN ? StyleNewFactory.red15 : StyleNewFactory.green15),
                     ),
                     Text(
                       _model.contractId,
@@ -49,8 +58,7 @@ class LimitOrderRecordItem extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  DateFormat("MM/dd HH:mm")
-                      .format(DateTime.parse(_model.createTime).toLocal()),
+                  DateFormat("MM/dd HH:mm").format(DateTime.parse(_model.createTime).toLocal()),
                   style: StyleNewFactory.grey14,
                 )
               ],
@@ -120,7 +128,7 @@ class LimitOrderRecordItem extends StatelessWidget {
                     style: StyleNewFactory.appCellTitleLightGrey14,
                   ),
                   Text(
-                    "--/100%",
+                    "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? "100%" : (cutLoss.round().toStringAsFixed(0) + "%")}",
                     style: StyleNewFactory.grey14,
                   ),
                   SizedBox(
@@ -131,10 +139,10 @@ class LimitOrderRecordItem extends StatelessWidget {
                     style: StyleNewFactory.appCellTitleLightGrey14,
                   ),
                   Text(
-                    limitOrderStatusResonCN(_model.status == "FAILED" &&
-                            _model.failReason == "EXPIRED"
-                        ? _model.failReason
-                        : _model.status),
+                    limitOrderStatusResonCN(
+                        _model.status == "FAILED" && _model.failReason == "EXPIRED"
+                            ? _model.failReason
+                            : _model.status),
                     style: StyleNewFactory.grey14,
                   )
                 ],

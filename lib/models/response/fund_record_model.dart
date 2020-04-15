@@ -12,7 +12,7 @@ class FundRecordModel {
   double amount;
   String time;
   String custom;
-  String description;
+  String description = "活动入金";
 
   FundRecordModel(
       {this.accountName,

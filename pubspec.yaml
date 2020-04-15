@@ -1,197 +1,195 @@
 name: bbb_flutter
 description: A new Flutter project.
 
-version: 2.0.5+1
+version: 2.0.6+1
 
 environment:
-    sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
-    flutter:
-        sdk: flutter
-    cybex_flutter_plugin:
-        git:
-            url: git@github.com:CybexDex/cybex_flutter_plugin.git
-            ref: develop
-    dio: 3.0.9
-    qr_flutter: ^2.0.0
-    jdenticon_dart: ^1.2.1+1
-    flutter_svg:
-        git:
-            url: https://github.com/shefengl/flutter_svg
+  flutter:
+    sdk: flutter
+  cybex_flutter_plugin:
+    git:
+      url: git@github.com:CybexDex/cybex_flutter_plugin.git
+      ref: develop
+  dio: 3.0.9
+  qr_flutter: ^2.0.0
+  jdenticon_dart: ^1.2.1+1
+  flutter_svg:
+    git:
+      url: https://github.com/shefengl/flutter_svg
 
-    flutter_page_indicator: ^0.0.3
-    flutter_spinkit: ^3.1.0
-    cached_network_image: ^0.7.0
-    shared_preferences: ^0.5.2
-    simple_animations: ^1.0.0
-    magical_widget: ^1.0.1
-    rosetta: ^0.1.2
-    animator: ^0.1.4
+  flutter_page_indicator: ^0.0.3
+  flutter_spinkit: ^3.1.0
+  cached_network_image: ^0.7.0
+  shared_preferences: ^0.5.2
+  simple_animations: ^1.0.0
+  magical_widget: ^1.0.1
+  rosetta: ^0.1.2
+  animator: ^0.1.4
 
-    pointycastle: ^1.0.1
-    vertical_tabs: ^0.1.4
-    logger: ^0.6.0
-    carousel_slider: ^1.3.0
-    flutter_screenutil: ^0.5.2
-    flutter_localizations:
-        sdk: flutter # The following adds the Cupertino Icons font to your application.
-    web_socket_channel: ^1.0.12
+  pointycastle: ^1.0.1
+  vertical_tabs: ^0.1.4
+  logger: ^0.6.0
+  carousel_slider: ^1.3.0
+  flutter_screenutil: ^0.5.2
+  flutter_localizations:
+    sdk: flutter # The following adds the Cupertino Icons font to your application.
+  web_socket_channel: ^1.0.12
 
-    cupertino_icons: ^0.1.2
-    provider: ^3.0.0+1
-    rxdart: ^0.22.0
-    get_it: ^1.0.3+1
-    quiver: ">=2.0.0 <3.0.0"
-    oktoast: 2.3.0
-    rflutter_alert: ^1.0.3
-    pull_to_refresh: ^1.5.7
-    functional_widget_annotation: ^0.5.0
-    json_annotation: ^2.4.0
-    keyboard_avoider: ^0.1.2
-    rx_command: ^4.3.1+1
-    rx_widgets: ^2.2.0+1
-    # flutter_flipperkit: ^0.0.20
-    webview_flutter: ^0.3.11+3
-    flutter_webview_plugin: ^0.3.8
-    image_gallery_saver: ^1.1.0
-    permission_handler: "^4.0.0"
-    catcher: ^0.2.3
-    package_info: ^0.4.0+6
-    connectivity: ^0.4.4
-    url_launcher: ^5.1.2
-    flutter_umplus: ^0.0.1
-    badges: ^1.1.0
-    flutter_dash: ^0.0.1
-    marquee: ^1.3.1
-    extended_nested_scroll_view: 0.3.8
-    flushbar: 1.9.1
-    sticky_headers: ^0.1.8+1
-    flutter_sticky_header: "^0.4.0"
-    decimal: ^0.3.0
-    splashscreen: ^1.2.0
-    flutter_statusbarcolor: ^0.2.3
-
-
-
-
+  cupertino_icons: ^0.1.2
+  provider: ^3.0.0+1
+  rxdart: ^0.22.0
+  get_it: ^1.0.3+1
+  quiver: ">=2.0.0 <3.0.0"
+  oktoast: 2.3.0
+  rflutter_alert: ^1.0.3
+  pull_to_refresh: ^1.5.7
+  functional_widget_annotation: ^0.5.0
+  json_annotation: ^2.4.0
+  keyboard_avoider: ^0.1.2
+  rx_command: ^4.3.1+1
+  rx_widgets: ^2.2.0+1
+  # flutter_flipperkit: ^0.0.20
+  webview_flutter: ^0.3.11+3
+  flutter_webview_plugin:
+    git:
+      url: git://github.com/YukiOya/flutter_webview_plugin.git
+  image_gallery_saver: ^1.1.0
+  permission_handler: ^4.0.0
+  catcher: ^0.2.3
+  package_info: ^0.4.0+6
+  connectivity: ^0.4.4
+  url_launcher: ^5.1.2
+  flutter_umplus: ^0.0.1
+  badges: ^1.1.0
+  flutter_dash: ^0.0.1
+  marquee: ^1.3.1
+  extended_nested_scroll_view: 0.3.8
+  flushbar: 1.9.1
+  sticky_headers: ^0.1.8+1
+  flutter_sticky_header: "^0.4.0"
+  decimal: ^0.3.0
+  splashscreen: ^1.2.0
+  flutter_statusbarcolor: ^0.2.3
 
 dev_dependencies:
-    flutter_test:
-        sdk: flutter
-    build_runner: any
-    # functional_widget: any
-    json_serializable: ^3.0.0
-    rosetta_generator: any
+  flutter_test:
+    sdk: flutter
+  build_runner: any
+  # functional_widget: any
+  json_serializable: ^3.0.0
+  rosetta_generator: any
 flutter:
-    uses-material-design: true
+  uses-material-design: true
 
-    assets:
-        - i18n/
-        # assets begin
-        # res/assets/icons/*
-        - res/assets/icons/ic_rank_2.svg
-        - res/assets/icons/ic_market_up.svg
-        - res/assets/icons/ic_rank_3.svg
-        - res/assets/icons/ic_visibility.svg
-        - res/assets/icons/ic_account_unselected.svg
-        - res/assets/icons/ic_eye_open.svg
-        - res/assets/icons/ic_home_selected.svg
-        - res/assets/icons/bbb_splash.png
-        - res/assets/icons/ic_revise_yellow.svg
-        - res/assets/icons/used.svg
-        - res/assets/icons/ic_home_background.png
-        - res/assets/icons/ic_account_header_background.svg
-        - res/assets/icons/ic_news.svg
-        - res/assets/icons/icTop2.png
-        - res/assets/icons/Wechat.jpeg
-        - res/assets/icons/icTop3.png
-        - res/assets/icons/icMaskClose.png
-        - res/assets/icons/ic_add_2.svg
-        - res/assets/icons/coupon_rule_logo.png
-        - res/assets/icons/icTop1.png
-        - res/assets/icons/ic_up_red.svg
-        - res/assets/icons/ic_no_stoke.svg
-        - res/assets/icons/icAdd.png
-        - res/assets/icons/ic_home_astrology_left.svg
-        - res/assets/icons/icReduce.png
-        - res/assets/icons/ic_transaction_selected.svg
-        - res/assets/icons/icFail.png
-        - res/assets/icons/ic_pull_down.svg
-        - res/assets/icons/icDownGreen14.png
-        - res/assets/icons/ic_account_selected.svg
-        - res/assets/icons/ic_setting.svg
-        - res/assets/icons/bbblog.svg
-        - res/assets/icons/icDropdown.png
-        - res/assets/icons/ic_transfer_new.svg
-        - res/assets/icons/icPerson.png
-        - res/assets/icons/icWarn.png
-        - res/assets/icons/icChange.png
-        - res/assets/icons/icUpRed14.png
-        - res/assets/icons/icSuccess.png
-        - res/assets/icons/icPassword.png
-        - res/assets/icons/ic_forum_unselected.svg
-        - res/assets/icons/icEmpty.png
-        - res/assets/icons/ic_rank1.svg
-        - res/assets/icons/expired.svg
-        - res/assets/icons/icTabDeposit.png
-        - res/assets/icons/coupon_yellow.png
-        - res/assets/icons/icFallGreen.png
-        - res/assets/icons/icTime.png
-        - res/assets/icons/test.png
-        - res/assets/icons/ic_title_line.svg
-        - res/assets/icons/ic_withdraw.svg
-        - res/assets/icons/icNotifyBack.png
-        - res/assets/icons/setting.svg
-        - res/assets/icons/ic_click_try_new.svg
-        - res/assets/icons/ic_rewoard.svg
-        - res/assets/icons/content_copy.svg
-        - res/assets/icons/ic_exchange_records.svg
-        - res/assets/icons/icSwitch.png
-        - res/assets/icons/ic_home_deposit.svg
-        - res/assets/icons/ic_down_green.svg
-        - res/assets/icons/empty_order_logo.svg
-        - res/assets/icons/ic_deposit.svg
-        - res/assets/icons/ic_reward_account.svg
-        - res/assets/icons/ic_transaction_unselected.svg
-        - res/assets/icons/ic_reduce_2.svg
-        - res/assets/icons/ic_home_astrology_right.svg
-        - res/assets/icons/icAccount.png
-        - res/assets/icons/ic_no_orders.svg
-        - res/assets/icons/coupon_log.svg
-        - res/assets/icons/icRiseRed18.png
-        - res/assets/icons/share.png
-        - res/assets/icons/icRevise.png
-        - res/assets/icons/ic_withdraw_new.svg
-        - res/assets/icons/icCode.png
-        - res/assets/icons/ic_help.svg
-        - res/assets/icons/ic_home_unselected.svg
-        - res/assets/icons/ic_send.svg
-        - res/assets/icons/ic_pull_up.svg
-        - res/assets/icons/ic_forum_selected.svg
-        - res/assets/icons/icUser.png
-        - res/assets/icons/icHand.png
-        - res/assets/icons/icUsdt.png
-        - res/assets/icons/imgBanner.png
-        - res/assets/icons/ic_account_avatar_new.svg
-        - res/assets/icons/ic_invite.svg
-        - res/assets/icons/wave.svg
-        - res/assets/icons/ic_guess_up_down.svg
-        - res/assets/icons/ic_eye_close.svg
-        - res/assets/icons/ic_service.svg
-        - res/assets/icons/ic_drawer.svg
-        - res/assets/icons/ic_home_marquee.svg
-        - res/assets/icons/mask.png
-        - res/assets/icons/ic_deposit_new.svg
-        - res/assets/icons/coupon_red.png
-        - res/assets/icons/icTabArrow.png
-        - res/assets/icons/coupon_grey.png
-        - res/assets/icons/ic_wdrecords.svg
-        - res/assets/icons/icTabWithdraw.png
-        - res/assets/icons/hold_all.svg
-        - res/assets/icons/usdt_icon.svg
-        - res/assets/icons/ic_logout.svg
-        - res/assets/icons/ic_try.svg
-        - res/assets/icons/ic_adds_cancel.svg
-        - res/assets/icons/ic_market_down.svg
-    # assets end
+  assets:
+    - i18n/
+    # assets begin
+    # res/assets/icons/*
+    - res/assets/icons/ic_rank_2.svg
+    - res/assets/icons/ic_market_up.svg
+    - res/assets/icons/ic_rank_3.svg
+    - res/assets/icons/ic_visibility.svg
+    - res/assets/icons/ic_account_unselected.svg
+    - res/assets/icons/ic_eye_open.svg
+    - res/assets/icons/ic_home_selected.svg
+    - res/assets/icons/bbb_splash.png
+    - res/assets/icons/ic_revise_yellow.svg
+    - res/assets/icons/used.svg
+    - res/assets/icons/ic_home_background.png
+    - res/assets/icons/ic_account_header_background.svg
+    - res/assets/icons/ic_news.svg
+    - res/assets/icons/icTop2.png
+    - res/assets/icons/Wechat.jpeg
+    - res/assets/icons/icTop3.png
+    - res/assets/icons/icMaskClose.png
+    - res/assets/icons/ic_add_2.svg
+    - res/assets/icons/coupon_rule_logo.png
+    - res/assets/icons/icTop1.png
+    - res/assets/icons/ic_up_red.svg
+    - res/assets/icons/ic_no_stoke.svg
+    - res/assets/icons/icAdd.png
+    - res/assets/icons/ic_home_astrology_left.svg
+    - res/assets/icons/icReduce.png
+    - res/assets/icons/ic_transaction_selected.svg
+    - res/assets/icons/icFail.png
+    - res/assets/icons/ic_pull_down.svg
+    - res/assets/icons/icDownGreen14.png
+    - res/assets/icons/ic_account_selected.svg
+    - res/assets/icons/ic_setting.svg
+    - res/assets/icons/bbblog.svg
+    - res/assets/icons/icDropdown.png
+    - res/assets/icons/ic_transfer_new.svg
+    - res/assets/icons/icPerson.png
+    - res/assets/icons/icWarn.png
+    - res/assets/icons/icChange.png
+    - res/assets/icons/icUpRed14.png
+    - res/assets/icons/icSuccess.png
+    - res/assets/icons/icPassword.png
+    - res/assets/icons/ic_forum_unselected.svg
+    - res/assets/icons/icEmpty.png
+    - res/assets/icons/ic_rank1.svg
+    - res/assets/icons/expired.svg
+    - res/assets/icons/icTabDeposit.png
+    - res/assets/icons/coupon_yellow.png
+    - res/assets/icons/icFallGreen.png
+    - res/assets/icons/icTime.png
+    - res/assets/icons/test.png
+    - res/assets/icons/ic_title_line.svg
+    - res/assets/icons/ic_withdraw.svg
+    - res/assets/icons/icNotifyBack.png
+    - res/assets/icons/setting.svg
+    - res/assets/icons/ic_click_try_new.svg
+    - res/assets/icons/ic_rewoard.svg
+    - res/assets/icons/content_copy.svg
+    - res/assets/icons/ic_exchange_records.svg
+    - res/assets/icons/icSwitch.png
+    - res/assets/icons/ic_home_deposit.svg
+    - res/assets/icons/ic_down_green.svg
+    - res/assets/icons/empty_order_logo.svg
+    - res/assets/icons/ic_deposit.svg
+    - res/assets/icons/ic_reward_account.svg
+    - res/assets/icons/ic_transaction_unselected.svg
+    - res/assets/icons/ic_reduce_2.svg
+    - res/assets/icons/ic_home_astrology_right.svg
+    - res/assets/icons/icAccount.png
+    - res/assets/icons/ic_no_orders.svg
+    - res/assets/icons/coupon_log.svg
+    - res/assets/icons/icRiseRed18.png
+    - res/assets/icons/share.png
+    - res/assets/icons/icRevise.png
+    - res/assets/icons/ic_withdraw_new.svg
+    - res/assets/icons/icCode.png
+    - res/assets/icons/ic_help.svg
+    - res/assets/icons/ic_home_unselected.svg
+    - res/assets/icons/ic_send.svg
+    - res/assets/icons/ic_pull_up.svg
+    - res/assets/icons/ic_forum_selected.svg
+    - res/assets/icons/icUser.png
+    - res/assets/icons/icHand.png
+    - res/assets/icons/icUsdt.png
+    - res/assets/icons/imgBanner.png
+    - res/assets/icons/ic_account_avatar_new.svg
+    - res/assets/icons/ic_invite.svg
+    - res/assets/icons/wave.svg
+    - res/assets/icons/ic_guess_up_down.svg
+    - res/assets/icons/ic_eye_close.svg
+    - res/assets/icons/ic_service.svg
+    - res/assets/icons/ic_drawer.svg
+    - res/assets/icons/ic_home_marquee.svg
+    - res/assets/icons/mask.png
+    - res/assets/icons/ic_deposit_new.svg
+    - res/assets/icons/coupon_red.png
+    - res/assets/icons/icTabArrow.png
+    - res/assets/icons/coupon_grey.png
+    - res/assets/icons/ic_wdrecords.svg
+    - res/assets/icons/icTabWithdraw.png
+    - res/assets/icons/hold_all.svg
+    - res/assets/icons/usdt_icon.svg
+    - res/assets/icons/ic_logout.svg
+    - res/assets/icons/ic_try.svg
+    - res/assets/icons/ic_adds_cancel.svg
+    - res/assets/icons/ic_market_down.svg
+  # assets end

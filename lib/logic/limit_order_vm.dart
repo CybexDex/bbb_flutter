@@ -40,6 +40,7 @@ class LimitOrderViewModel extends BaseModel {
   bool isChangeSide = false;
   var ticker;
   var currentTicker;
+  var priceFloating;
   prefix.OpenLimitOrderRequestModel order;
   OpenOrderRequest marketOrder;
   Commission commission;
@@ -67,6 +68,9 @@ class LimitOrderViewModel extends BaseModel {
     _um = um;
     isSatisfied = true;
     currentTicker = _mtm.lastTicker.value;
+    priceFloating = _refm.underlyingList
+        .firstWhere((value) => value.underlying == locator.get<SharedPref>().getAsset())
+        .priceFloating;
   }
 
   @override
@@ -194,6 +198,7 @@ class LimitOrderViewModel extends BaseModel {
       orderForm.dropdownMenuItems = null;
       orderForm.selectedItem = null;
       orderForm.totalAmount.amount = 0;
+      orderForm.pickerItems = [];
       setBusy(false);
     }
   }
@@ -238,8 +243,8 @@ class LimitOrderViewModel extends BaseModel {
             (contract.strikeLevel - (isMarket ? ticker.value : orderForm.predictPrice)));
 
     var amount = ((orderForm.isUp
-                    ? ((isMarket ? ticker.value : orderForm.predictPrice) + 10)
-                    : ((isMarket ? ticker.value : orderForm.predictPrice) - 10)) -
+                    ? ((isMarket ? ticker.value : orderForm.predictPrice) + priceFloating)
+                    : ((isMarket ? ticker.value : orderForm.predictPrice) - priceFloating)) -
                 contract.strikeLevel)
             .abs() *
         contract.conversionRate.abs();
@@ -471,12 +476,12 @@ class LimitOrderViewModel extends BaseModel {
     marketOrder.data.user = _um.user.testAccountResponseModel != null
         ? _um.user.testAccountResponseModel.name
         : _um.user.account.name;
-    marketOrder.data.contract = saveContract.contractId;
+    marketOrder.data.contract = orderForm.selectedItem.contractId;
     marketOrder.data.takeProfitPrice =
         orderForm.takeProfitPx == null ? "0" : orderForm.takeProfitPx.toStringAsFixed(4);
 
     marketOrder.data.cutlossPrice = orderForm.cutoffPx == null
-        ? saveContract.strikeLevel.toStringAsFixed(4)
+        ? orderForm.selectedItem.strikeLevel.toStringAsFixed(4)
         : orderForm.cutoffPx.toStringAsFixed(4);
 
     marketOrder.data.quantity = orderForm.investAmount;

@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/coupon_order_view_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
@@ -8,6 +9,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 
 class TradeCouponPage extends StatefulWidget {
@@ -25,7 +27,7 @@ class TradeCouponState extends State<TradeCouponPage> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: KeyboardScrollPage(
-          appbarHeight: 48,
+          appbarHeight: 0,
           widget: Consumer3<CouponOrderViewModel, TickerData, WebSocketNXDailyPxResponse>(
             builder: (context, model, ticker, dailyPx, child) {
               double percentage = (ticker != null && dailyPx != null)
@@ -42,7 +44,8 @@ class TradeCouponState extends State<TradeCouponPage> {
                       children: <Widget>[
                         Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("BTC/USDT", style: StyleNewFactory.grey14)),
+                            child: Text("${locator.get<SharedPref>().getAsset()}/USDT",
+                                style: StyleNewFactory.grey14)),
                         SizedBox(
                           height: 10,
                         ),
@@ -52,15 +55,31 @@ class TradeCouponState extends State<TradeCouponPage> {
                             Row(
                               children: <Widget>[
                                 Text(ticker?.value?.toStringAsFixed(4) ?? "--",
-                                    style: StyleNewFactory.green27),
-                                Icon(percentage >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                                    color: percentage >= 0
-                                        ? Palette.redOrange
-                                        : Palette.shamrockGreen),
+                                    style: percentage >= 0
+                                        ? StyleNewFactory.red27
+                                        : StyleNewFactory.green27),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                percentage >= 0
+                                    ? SvgPicture.asset(
+                                        R.resAssetsIconsIcWithdraw,
+                                        color: Palette.appRed,
+                                        height: 20,
+                                        width: 14,
+                                      )
+                                    : SvgPicture.asset(
+                                        R.resAssetsIconsIcDeposit,
+                                        color: Palette.shamrockGreen,
+                                        height: 20,
+                                        width: 14,
+                                      )
                               ],
                             ),
                             Text(percentage == 0 ? "--" : "${percentage.toStringAsFixed(2)}%",
-                                style: StyleNewFactory.green27)
+                                style: percentage >= 0
+                                    ? StyleNewFactory.red27
+                                    : StyleNewFactory.green27)
                           ],
                         ),
                         SizedBox(
@@ -118,11 +137,11 @@ class TradeCouponState extends State<TradeCouponPage> {
                                           color: Colors.white),
                                     ),
                                     width: 130,
-                                    color: model.isSatisfied
+                                    color: model.isSatisfied && model.selectedCoupon != null
                                         ? Palette.redOrange
                                         : Palette.subTitleColor,
                                   ),
-                                  onTap: model.isSatisfied
+                                  onTap: model.isSatisfied && model.selectedCoupon != null
                                       ? () async {
                                           onConfirmClicked(model: model);
                                         }
@@ -139,11 +158,11 @@ class TradeCouponState extends State<TradeCouponPage> {
                                           color: Colors.white),
                                     ),
                                     width: 130,
-                                    color: model.isSatisfied
+                                    color: model.isSatisfied && model.selectedCoupon != null
                                         ? Palette.shamrockGreen
                                         : Palette.subTitleColor,
                                   ),
-                                  onTap: model.isSatisfied
+                                  onTap: model.isSatisfied && model.selectedCoupon != null
                                       ? () async {
                                           onConfirmClicked(model: model);
                                         }

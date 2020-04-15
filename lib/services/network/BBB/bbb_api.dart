@@ -6,6 +6,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/contract_response
 import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/models/response/limit_order_response_model.dart';
 import 'package:bbb_flutter/models/response/market_history_response_model.dart';
@@ -32,7 +33,7 @@ abstract class BBBAPI {
   Future<TickerResponse> getTicker({String injectAsset});
   Future<PositionsResponseModel> getPositions({String name, String injectAction});
   Future<PositionsResponseModel> getPositionsTestAccount({String name});
-  Future<List<String>> getAsset();
+  Future<List<UnderlyingAssetResponse>> getAsset();
   Future<List<OrderResponseModel>> getOrders(String name,
       {List<OrderStatus> status, String startTime, String endTime, String injectAsset});
   Future<List<LimitOrderResponse>> getLimitOrders(String name,
@@ -45,6 +46,7 @@ abstract class BBBAPI {
   Future<DepositResponseModel> getDeposit({String name, String asset});
 
   Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end});
+  Future<List<String>> getFundDescription();
   Future<TestAccountResponseModel> getTestAccount({bool bonusEvent, String accountName});
   Future<List<RankingResponse>> getRankings({int indicator});
   Future<CouponResponse> getCoupons({List<CouponStatus> status, String name});

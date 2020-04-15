@@ -3,6 +3,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/action_response.d
 import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
@@ -14,6 +15,7 @@ class RefManager {
   BBBAPI _api;
   String _upcontractId;
   String _downcontractId;
+  List<UnderlyingAssetResponse> underlyingList;
   List<Action> actions;
   ContractResponse firstLoadContractResponse;
   ConfigResponse config;
@@ -80,6 +82,7 @@ class RefManager {
     await getConfig();
     await updateRefData();
     await updateContract();
+    await getAssetList();
     // updateUpContractId();
     // updateDownContractId();
     startLoop();
@@ -105,7 +108,8 @@ class RefManager {
     var timerManager = locator.get<TimerManager>();
     var marketManager = locator.get<MarketManager>();
     marketManager.lastTicker.stream.listen((ticker) {
-      firstLoadContractResponse.contract = firstLoadContractResponse.contract.where((contract) {
+      var copyContractResponse = ContractResponse();
+      copyContractResponse.contract = firstLoadContractResponse.contract.where((contract) {
         return ((contract.contractId.contains("N")) &&
                 (ticker.value > contract.strikeLevel) &&
                 ((ticker.value / ((ticker.value - contract.strikeLevel).abs())) <=
@@ -115,7 +119,7 @@ class RefManager {
                 ((ticker.value / ((ticker.value - contract.strikeLevel).abs())) <=
                     config.maxGearing));
       }).toList();
-      contractController.add(firstLoadContractResponse);
+      contractController.add(copyContractResponse);
     });
 
     // timerManager.tick.listen((_) {
@@ -155,5 +159,10 @@ class RefManager {
     ConfigResponse couponResponse = await _api.getConfig(injectAction: "coupon");
     config = response;
     couponConfig = couponResponse;
+  }
+
+  getAssetList() async {
+    List<UnderlyingAssetResponse> assetList = await _api.getAsset();
+    underlyingList = assetList;
   }
 }

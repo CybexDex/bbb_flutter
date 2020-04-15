@@ -42,12 +42,9 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
               fundTypeMap[f.subtype] == FundType.userDepositExtern ||
               fundTypeMap[f.subtype] == FundType.userWithdrawExtern)
           .toList();
-      depositData = d
-          .where((f) => fundTypeMap[f.subtype] == FundType.userDepositExtern)
-          .toList();
-      withdrawalData = d
-          .where((f) => fundTypeMap[f.subtype] == FundType.userWithdrawExtern)
-          .toList();
+      depositData = d.where((f) => fundTypeMap[f.subtype] == FundType.userDepositExtern).toList();
+      withdrawalData =
+          d.where((f) => fundTypeMap[f.subtype] == FundType.userWithdrawExtern).toList();
       _constructMap(data, dataMap);
       _constructMap(depositData, depositMap);
       _constructMap(withdrawalData, withdrawalMap);
@@ -71,7 +68,8 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;
-      } else if (i == list.length - 1) {
+      }
+      if (i == list.length - 1) {
         map.putIfAbsent(current, () => list.sublist(count));
       }
     }
@@ -139,8 +137,7 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
                   isScrollable: true,
                   indicatorSize: TabBarIndicatorSize.label,
                   indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                        color: Palette.invitePromotionBadgeColor, width: 4),
+                    borderSide: BorderSide(color: Palette.invitePromotionBadgeColor, width: 4),
                     insets: EdgeInsets.fromLTRB(0, 0.0, 60, 0),
                   ),
                   unselectedLabelColor: Palette.appGrey,
@@ -164,8 +161,7 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
         ),
         body: SafeArea(
           child: TabBarView(
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               Container(
                   child: data.length == 0

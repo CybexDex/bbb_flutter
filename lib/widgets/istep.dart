@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/Input_editor_formatter.dart';
 import 'package:flutter/services.dart';
@@ -42,6 +43,7 @@ class IStep extends StatelessWidget {
                       ? TestFormat(integerRange: 10, decimalRange: 4)
                       : WhitelistingTextInputFormatter(RegExp(r'^[0-9]{1,7}'))
                 ],
+                style: StyleNewFactory.grey14,
                 controller: this.text,
                 keyboardType: TextInputType.numberWithOptions(decimal: true, signed: false),
                 onChanged: onChange,

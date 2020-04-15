@@ -54,7 +54,8 @@ class _RewardRecordsState extends State<RewardRecordsWidget> {
   Widget build(BuildContext context) {
     return BaseWidget<RewardRecordsViewModel>(
       model: RewardRecordsViewModel(locator.get(), locator.get()),
-      onModelReady: (model) {
+      onModelReady: (model) async {
+        await model.getDescription();
         model.getRecords(dropdownType: model.typeList[0]);
         model.buildDropdownMenu();
       },
@@ -95,7 +96,7 @@ class _RewardRecordsState extends State<RewardRecordsWidget> {
                                 "选择类型",
                                 style: StyleFactory.addReduceStyle,
                               )),
-                          height: 100,
+                          height: 200,
                           underline: Container(),
                           value: model.selectedItem,
                           isExpanded: true,

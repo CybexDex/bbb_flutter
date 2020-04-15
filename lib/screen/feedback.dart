@@ -10,28 +10,24 @@ class FeedBackScreen extends StatelessWidget {
   _capturePng() async {
     ByteData bytes = await rootBundle.load(R.resAssetsIconsWechat);
 
-    final result =
-        await ImageGallerySaver.saveImage(bytes.buffer.asUint8List());
+    final result = await ImageGallerySaver.saveImage(bytes.buffer.asUint8List());
     print(result);
   }
 
-  Future<void> requestPermission(
-      List<PermissionGroup> permissions, BuildContext context) async {
+  Future<void> requestPermission(List<PermissionGroup> permissions, BuildContext context) async {
     final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
         await PermissionHandler().requestPermissions(permissions);
     print(permissionRequestResult);
     if (Platform.isAndroid) {
       if (permissionRequestResult[permissions[0]] == PermissionStatus.granted) {
         _capturePng();
-        showToast(I18n.of(context).savePhotoSuccess,
-            textPadding: EdgeInsets.all(20));
+        showToast(I18n.of(context).savePhotoSuccess, textPadding: EdgeInsets.all(20));
       } else {}
     } else {
       print(permissions[1]);
       if (permissionRequestResult[permissions[1]] == PermissionStatus.granted) {
         _capturePng();
-        showToast(I18n.of(context).savePhotoSuccess,
-            textPadding: EdgeInsets.all(20));
+        showToast(I18n.of(context).savePhotoSuccess, textPadding: EdgeInsets.all(20));
       } else {
         showDialog(
             context: context,
@@ -71,8 +67,15 @@ class FeedBackScreen extends StatelessWidget {
                 height: 20,
               ),
               Container(
-                padding:
-                    EdgeInsets.only(right: 20, left: 20, bottom: 15, top: 15),
+                  margin: EdgeInsets.only(right: 20, left: 20),
+                  alignment: Alignment.centerLeft,
+                  child: Text("您好，感谢支持！")),
+              Container(
+                  margin: EdgeInsets.only(right: 20, left: 20),
+                  alignment: Alignment.centerLeft,
+                  child: Text("新人福利添加客服微信，回复【奖励金】即可领取10U奖励金，可直接用于交易，盈利可提现哦～")),
+              Container(
+                padding: EdgeInsets.only(right: 20, left: 20, bottom: 15, top: 15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -80,10 +83,8 @@ class FeedBackScreen extends StatelessWidget {
                             color: Colors.lightBlueAccent,
                             data: "保存二维码",
                             onPressed: () {
-                              requestPermission([
-                                PermissionGroup.storage,
-                                PermissionGroup.photos
-                              ], context);
+                              requestPermission(
+                                  [PermissionGroup.storage, PermissionGroup.photos], context);
                             })),
                     Container(
                       width: 20,
@@ -93,10 +94,8 @@ class FeedBackScreen extends StatelessWidget {
                             color: Colors.lightBlueAccent,
                             data: "复制微信号",
                             onPressed: () {
-                              Clipboard.setData(
-                                  ClipboardData(text: "CybexServiceB"));
-                              showToast("复制成功",
-                                  textPadding: EdgeInsets.all(20));
+                              Clipboard.setData(ClipboardData(text: "CybexServiceB"));
+                              showToast("复制成功", textPadding: EdgeInsets.all(20));
                             })),
                   ],
                 ),

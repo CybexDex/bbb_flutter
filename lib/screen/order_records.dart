@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/order_records_vm.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -75,7 +76,7 @@ class _OrderRecordsWidgetState extends State<OrderRecordsWidget> {
                       border: Border.all(color: Palette.separatorColor, width: 0.5),
                     ),
                     width: 100,
-                    child: custom.DropdownButton<String>(
+                    child: custom.DropdownButton<UnderlyingAssetResponse>(
                       hint: Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(

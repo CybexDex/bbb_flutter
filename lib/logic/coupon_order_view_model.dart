@@ -78,7 +78,7 @@ class CouponOrderViewModel extends BaseModel {
     super.dispose();
   }
 
-  initForm(bool isup) {
+  initForm(bool isup, Coupon coupon) {
     orderForm = LimitOrderForm(
         isUp: isup,
         investAmount: 1,
@@ -87,9 +87,8 @@ class CouponOrderViewModel extends BaseModel {
         totalAmount: Asset(amount: 0),
         cybBalance: Position(quantity: 0),
         fee: Asset(amount: 0));
-
+    selectedCoupon = coupon;
     _lastTickerSub = _mtm.lastTicker.listen((onData) {
-      buildDropdownMenuItems(contractIds);
       buildPickerMenuItem(contractIds);
       updateAmountAndFee();
     });
@@ -171,18 +170,21 @@ class CouponOrderViewModel extends BaseModel {
     if (_cm.pendingCoupon != null && _cm.pendingCoupon.isNotEmpty) {
       List<custom.DropdownMenuItem<Coupon>> items = List();
       for (Coupon coupon in _cm.pendingCoupon) {
-        items.add(
-          custom.DropdownMenuItem(
-            value: coupon,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(coupon.amount.toStringAsFixed(0), style: StyleNewFactory.grey14),
+        if (coupon.status == couponStatusMap[CouponStatus.activated]) {
+          items.add(
+            custom.DropdownMenuItem(
+              value: coupon,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text(coupon.amount.toStringAsFixed(0), style: StyleNewFactory.grey14),
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
       couponDropdownList = items;
-      selectedCoupon = selectedCoupon != null ? selectedCoupon : items[0].value;
+      selectedCoupon =
+          selectedCoupon != null ? selectedCoupon : (items.isEmpty ? null : items[0].value);
     } else {
       couponDropdownList = null;
       selectedCoupon = null;
@@ -267,10 +269,7 @@ class CouponOrderViewModel extends BaseModel {
     }
 
     orderForm.totalAmount = Asset(amount: totalAmount + commiDouble);
-    if (_um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId) == null ||
-        orderForm.totalAmount.amount >
-            _um.fetchPositionFrom(_refm.refDataControllerNew.value.bbbAssetId).quantity ||
-        orderForm.investAmount > _refm.config.maxOrderQuantity ||
+    if (orderForm.investAmount > _refm.config.maxOrderQuantity ||
         orderForm.totalAmount.amount <= double.minPositive ||
         !isInvestAmountInputCorrect ||
         !isTakeProfitInputCorrect ||
@@ -437,12 +436,12 @@ class CouponOrderViewModel extends BaseModel {
     marketOrder.data.user = _um.user.testAccountResponseModel != null
         ? _um.user.testAccountResponseModel.name
         : _um.user.account.name;
-    marketOrder.data.contract = saveContract.contractId;
+    marketOrder.data.contract = orderForm.selectedItem.contractId;
     marketOrder.data.takeProfitPrice =
         orderForm.takeProfitPx == null ? "0" : orderForm.takeProfitPx.toStringAsFixed(4);
 
     marketOrder.data.cutlossPrice = orderForm.cutoffPx == null
-        ? saveContract.strikeLevel.toStringAsFixed(4)
+        ? orderForm.selectedItem.strikeLevel.toStringAsFixed(4)
         : orderForm.cutoffPx.toStringAsFixed(4);
 
     marketOrder.data.quantity = couponAmount;

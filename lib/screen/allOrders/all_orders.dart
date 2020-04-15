@@ -30,10 +30,7 @@ class AllOrderState extends State<AllOrdersPage> {
   Widget build(BuildContext context) {
     return BaseWidget<OrderViewModel>(
       model: OrderViewModel(
-          api: locator.get(),
-          um: locator.get(),
-          rm: locator.get(),
-          tm: locator.get()),
+          api: locator.get(), um: locator.get(), rm: locator.get(), tm: locator.get()),
       builder: (context, data, child) {
         return Scaffold(
           // appBar: AppBar(
@@ -49,7 +46,7 @@ class AllOrderState extends State<AllOrdersPage> {
           body: SafeArea(
             child: data.orders.isEmpty
                 ? EmptyOrder(
-                    isLimit: false,
+                    message: I18n.of(context).orderEmpty,
                   )
                 : Column(
                     children: <Widget>[
@@ -80,8 +77,7 @@ class AllOrderState extends State<AllOrdersPage> {
                               children: <Widget>[
                                 Text(
                                   "总收益:",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 12),
+                                  style: TextStyle(color: Colors.black, fontSize: 12),
                                 ),
                                 Text(
                                   data.selectedTotalPnl.toStringAsFixed(4),
@@ -97,27 +93,20 @@ class AllOrderState extends State<AllOrdersPage> {
                                       ? () {
                                           TextEditingController controller =
                                               TextEditingController();
-                                          if (locator
-                                              .get<UserManager>()
-                                              .user
-                                              .isLocked) {
+                                          if (locator.get<UserManager>().user.isLocked) {
                                             showDialog(
                                                 barrierDismissible: false,
                                                 context: context,
                                                 builder: (context) {
-                                                  return DialogFactory
-                                                      .unlockDialog(context,
-                                                          controller:
-                                                              controller);
+                                                  return DialogFactory.unlockDialog(context,
+                                                      controller: controller);
                                                 }).then((value) async {
                                               if (value != null && value) {
-                                                showCloseOutDialog(
-                                                    context, controller, data);
+                                                showCloseOutDialog(context, controller, data);
                                               }
                                             });
                                           } else {
-                                            showCloseOutDialog(
-                                                context, controller, data);
+                                            showCloseOutDialog(context, controller, data);
                                           }
                                         }
                                       : () {},
@@ -161,8 +150,7 @@ class AllOrderState extends State<AllOrdersPage> {
     return listWidget;
   }
 
-  List<Widget> _itemViewChild(
-      int index, bool item, OrderViewModel orderViewModel) {
+  List<Widget> _itemViewChild(int index, bool item, OrderViewModel orderViewModel) {
     var row = new Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -196,8 +184,7 @@ class AllOrderState extends State<AllOrdersPage> {
                       fontStyle: FontStyle.normal,
                     )),
               ),
-              SvgPicture.asset(R.resAssetsIconsIcReviseYellow,
-                  width: 16, height: 16),
+              SvgPicture.asset(R.resAssetsIconsIcReviseYellow, width: 16, height: 16),
               SizedBox(
                 width: 15,
               ),
@@ -229,15 +216,13 @@ class AllOrderState extends State<AllOrdersPage> {
     return listWidget;
   }
 
-  showCloseOutDialog(BuildContext context, TextEditingController controller,
-      OrderViewModel data) {
+  showCloseOutDialog(BuildContext context, TextEditingController controller, OrderViewModel data) {
     showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
           return DialogFactory.closeOutConfirmDialog(context,
-              value: data.selectedTotalPnl.toStringAsFixed(4),
-              controller: controller);
+              value: data.selectedTotalPnl.toStringAsFixed(4), controller: controller);
         }).then((value) async {
       if (value != null && value) {
         callAmendAll(data);
@@ -247,10 +232,7 @@ class AllOrderState extends State<AllOrdersPage> {
 
   callAmendAll(OrderViewModel orderViewModel) async {
     var pnl = PnlViewModel(
-        api: locator.get(),
-        um: locator.get(),
-        mtm: locator.get(),
-        refm: locator.get());
+        api: locator.get(), um: locator.get(), mtm: locator.get(), refm: locator.get());
     var failCount = 0;
     var sucessCount = 0;
     try {
@@ -261,8 +243,7 @@ class AllOrderState extends State<AllOrdersPage> {
           futures.add(pnl.amend(orderViewModel.orders[i], true, false));
         }
       }
-      List<PostOrderResponseModel> postOrderResponseList =
-          await Future.wait(futures);
+      List<PostOrderResponseModel> postOrderResponseList = await Future.wait(futures);
       Navigator.of(context).pop();
 
       for (var i in postOrderResponseList) {
@@ -275,16 +256,13 @@ class AllOrderState extends State<AllOrdersPage> {
       if (failCount != 0 && sucessCount != 0) {
         showNotification(context, true, "部分平仓");
       } else if (failCount == 0) {
-        showNotification(context, false,
-            I18n.of(context).closeOut + I18n.of(context).successToast);
+        showNotification(context, false, I18n.of(context).closeOut + I18n.of(context).successToast);
       } else {
-        showNotification(context, true,
-            I18n.of(context).closeOut + I18n.of(context).failToast);
+        showNotification(context, true, I18n.of(context).closeOut + I18n.of(context).failToast);
       }
     } catch (error) {
       Navigator.of(context).pop();
-      showNotification(context, true,
-          I18n.of(context).closeOut + I18n.of(context).failToast);
+      showNotification(context, true, I18n.of(context).closeOut + I18n.of(context).failToast);
     }
   }
 }

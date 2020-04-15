@@ -2,6 +2,7 @@ import 'package:bbb_flutter/models/response/websocket_nx_daily_px_response.dart'
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ExchangeHeader extends StatefulWidget {
   ExchangeHeader({Key key}) : super(key: key);
@@ -30,19 +31,28 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                 Text(data?.value?.toStringAsFixed(4) ?? "--",
                     style: TextStyle(
                       fontFamily: 'PingFangSC',
-                      color: percentage >= 0
-                          ? Palette.redOrange
-                          : Palette.shamrockGreen,
+                      color: percentage >= 0 ? Palette.redOrange : Palette.shamrockGreen,
                       fontSize: ScreenUtil.getInstance().setSp(24),
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0,
                     )),
-                Icon(
-                    percentage >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                    color: percentage >= 0
-                        ? Palette.redOrange
-                        : Palette.shamrockGreen),
+                SizedBox(
+                  width: 9,
+                ),
+                percentage >= 0
+                    ? SvgPicture.asset(
+                        R.resAssetsIconsIcWithdraw,
+                        color: Palette.redOrange,
+                        height: 20,
+                        width: 14,
+                      )
+                    : SvgPicture.asset(
+                        R.resAssetsIconsIcDeposit,
+                        color: Palette.shamrockGreen,
+                        height: 20,
+                        width: 14,
+                      )
               ],
             ),
             Row(
@@ -51,20 +61,14 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(I18n.of(context).exchangeChangeRatio,
-                        style: StyleNewFactory.grey9),
+                    Text(I18n.of(context).exchangeChangeRatio, style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(
-                        percentage == 0
-                            ? "--"
-                            : "${percentage.toStringAsFixed(2)}%",
+                    Text(percentage == 0 ? "--" : "${percentage.toStringAsFixed(2)}%",
                         style: TextStyle(
                           fontFamily: 'PingFangSC',
-                          color: percentage >= 0
-                              ? Palette.redOrange
-                              : Palette.shamrockGreen,
+                          color: percentage >= 0 ? Palette.redOrange : Palette.shamrockGreen,
                           fontSize: Dimen.fontSize10,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
@@ -73,24 +77,20 @@ class ExchangeHeaderState extends State<ExchangeHeader> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text(I18n.of(context).exchange24High,
-                        style: StyleNewFactory.grey9),
+                    Text(I18n.of(context).exchange24High, style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(dailyPx?.highPx?.toStringAsFixed(2) ?? "--",
-                        style: StyleNewFactory.grey10)
+                    Text(dailyPx?.highPx?.toStringAsFixed(2) ?? "--", style: StyleNewFactory.grey10)
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Text(I18n.of(context).exchange24Low,
-                        style: StyleNewFactory.grey9),
+                    Text(I18n.of(context).exchange24Low, style: StyleNewFactory.grey9),
                     SizedBox(
                       width: 10,
                     ),
-                    Text(dailyPx?.lowPx?.toStringAsFixed(2) ?? "--",
-                        style: StyleNewFactory.grey10)
+                    Text(dailyPx?.lowPx?.toStringAsFixed(2) ?? "--", style: StyleNewFactory.grey10)
                   ],
                 )
               ],

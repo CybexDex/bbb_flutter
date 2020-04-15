@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
@@ -20,9 +21,9 @@ class OrderRecordsViewModel extends BaseModel {
   LinkedHashMap<int, List<OrderResponseModel>> orderMap = LinkedHashMap();
   LinkedHashMap<int, List<OrderResponseModel>> upOrderMap = LinkedHashMap();
   LinkedHashMap<int, List<OrderResponseModel>> downOrderMap = LinkedHashMap();
-  List<String> assetList = [];
-  List<custom.DropdownMenuItem<String>> dropdownList = [];
-  String selectedItem;
+  List<UnderlyingAssetResponse> assetList = [];
+  List<custom.DropdownMenuItem<UnderlyingAssetResponse>> dropdownList = [];
+  UnderlyingAssetResponse selectedItem;
 
   OrderRecordsViewModel(BBBAPI bbbapi, UserManager userManager)
       : _bbbapi = bbbapi,
@@ -33,9 +34,7 @@ class OrderRecordsViewModel extends BaseModel {
     _bbbapi
         .getOrders(name,
             status: [OrderStatus.closed],
-            startTime: (DateTime.now().subtract(Duration(days: 90)))
-                .toUtc()
-                .toIso8601String(),
+            startTime: (DateTime.now().subtract(Duration(days: 90))).toUtc().toIso8601String(),
             endTime: DateTime.now().toUtc().toIso8601String(),
             injectAsset: asset)
         .then((d) {
@@ -50,7 +49,7 @@ class OrderRecordsViewModel extends BaseModel {
   }
 
   getAsset() async {
-    List<String> response = await _bbbapi.getAsset();
+    List<UnderlyingAssetResponse> response = await _bbbapi.getAsset();
     assetList = response;
     buildDropdownMenu();
     setBusy(false);
@@ -59,25 +58,24 @@ class OrderRecordsViewModel extends BaseModel {
   buildDropdownMenu() {
     for (var asset in assetList) {
       dropdownList.add(
-        custom.DropdownMenuItem<String>(
+        custom.DropdownMenuItem<UnderlyingAssetResponse>(
           value: asset,
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: Text(asset, style: StyleNewFactory.grey14),
+            child: Text(asset.underlying, style: StyleNewFactory.grey14),
           ),
         ),
       );
     }
     selectedItem = dropdownList
-        .firstWhere(
-            (test) => test.value == locator.get<SharedPref>().getAsset(),
+        .firstWhere((test) => test.value.underlying == locator.get<SharedPref>().getAsset(),
             orElse: () => null)
         ?.value;
   }
 
-  changeSelectedItem(String asset) {
+  changeSelectedItem(UnderlyingAssetResponse asset) {
     selectedItem = asset;
-    getRecords(asset: asset);
+    getRecords(asset: asset.underlying);
     setBusy(false);
   }
 

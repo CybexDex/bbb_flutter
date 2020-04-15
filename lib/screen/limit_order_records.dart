@@ -1,5 +1,6 @@
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/limit_order_records_vm.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
@@ -71,11 +72,10 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
                   Container(
                     margin: EdgeInsets.only(top: 10, bottom: 10, right: 10),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Palette.separatorColor, width: 0.5),
+                      border: Border.all(color: Palette.separatorColor, width: 0.5),
                     ),
                     width: 100,
-                    child: custom.DropdownButton<String>(
+                    child: custom.DropdownButton<UnderlyingAssetResponse>(
                       hint: Padding(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
@@ -95,8 +95,7 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
                   color: Palette.backButtonColor, //change your color here
                 ),
                 centerTitle: true,
-                title: Text(I18n.of(context).limitOrderRecords,
-                    style: StyleFactory.title),
+                title: Text(I18n.of(context).limitOrderRecords, style: StyleFactory.title),
                 backgroundColor: Colors.white,
                 brightness: Brightness.light,
                 elevation: 0,
@@ -118,9 +117,8 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
                         isScrollable: true,
                         indicatorSize: TabBarIndicatorSize.label,
                         indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              color: Palette.invitePromotionBadgeColor,
-                              width: 4),
+                          borderSide:
+                              BorderSide(color: Palette.invitePromotionBadgeColor, width: 4),
                           insets: EdgeInsets.fromLTRB(0, 0.0, 60, 0),
                         ),
                         unselectedLabelColor: Palette.appGrey,
@@ -144,8 +142,7 @@ class _LimitOrderRecordsState extends State<LimitOrderRecordsPage> {
               ),
               body: SafeArea(
                 child: TabBarView(
-                  physics: BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                  physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   children: [
                     Container(
                         child: model.data.length == 0

@@ -9,8 +9,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void showNotification(BuildContext context, bool isFaild, String content,
-    {Function callback}) {
+void showNotification(BuildContext context, bool isFaild, String content, {Function callback}) {
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -48,32 +47,23 @@ showLoading(BuildContext context, {bool isBarrierDismissible}) {
 
 checkAdd(BuildContext context, int type) async {
   await locator.get<ConfigureApi>().getActivities();
-  ActivitiesResponse response =
-      locator.get<ConfigureApi>().activitiesResponseList[type];
+  ActivitiesResponse response = locator.get<ConfigureApi>().activitiesResponseList[type];
   if (response.showstaus == 0 ||
       (locator.get<UserManager>().user.logined && response.showstaus == 1) ||
       (!locator.get<UserManager>().user.logined && response.showstaus == 2)) {
     if (response.enable &&
-        (locator
-                    .get<SharedPref>()
-                    .getActivityResponse(name: response.name)
-                    ?.image !=
+        (locator.get<SharedPref>().getActivityResponse(name: response.name)?.image !=
                 response.image ||
-            locator
-                    .get<SharedPref>()
-                    .getActivityResponse(name: response.name)
-                    ?.url !=
+            locator.get<SharedPref>().getActivityResponse(name: response.name)?.url !=
                 response.url)) {
-      await locator
-          .get<SharedPref>()
-          .saveActivitiesResponse(activitiesResponse: response);
+      await locator.get<SharedPref>().saveActivitiesResponse(activitiesResponse: response);
       Future.delayed(Duration.zero, () {
         showDialog(
             barrierDismissible: true,
             context: context,
             builder: (context) {
-              return DialogFactory.addsDialog(context,
-                  url: response.url, img: response.image, onImageTap: () {
+              return DialogFactory.addsDialog(context, url: response.url, img: response.image,
+                  onImageTap: () {
                 if (response.url == null || response.url.isEmpty) {
                   return;
                 }
@@ -97,14 +87,11 @@ launchURL({String url}) async {
   }
 }
 
-Widget showFlashBar(BuildContext context, bool isFaild,
-    {String content, Function callback}) {
+Widget showFlashBar(BuildContext context, bool isFaild, {String content, Function callback}) {
   return Flushbar(
     flushbarStyle: FlushbarStyle.FLOATING,
     flushbarPosition: FlushbarPosition.TOP,
-    icon: isFaild
-        ? Image.asset(R.resAssetsIconsIcFail)
-        : Image.asset(R.resAssetsIconsIcSuccess),
+    icon: isFaild ? Image.asset(R.resAssetsIconsIcFail) : Image.asset(R.resAssetsIconsIcSuccess),
     messageText: Text(
       content,
       style: StyleNewFactory.black15,
@@ -116,12 +103,14 @@ Widget showFlashBar(BuildContext context, bool isFaild,
     duration: Duration(seconds: 3),
     onStatusChanged: (status) {
       if (status == FlushbarStatus.DISMISSED) {
-        if (callback != null) {
-          callback();
-        } else {
+        if (callback == null) {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
-      } else if (status == FlushbarStatus.SHOWING) {}
+      } else if (status == FlushbarStatus.SHOWING) {
+        if (callback != null) {
+          callback();
+        }
+      }
     },
   )..show(context);
 }

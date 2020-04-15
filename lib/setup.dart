@@ -25,6 +25,7 @@ import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
+import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
@@ -82,8 +83,9 @@ setupLocator() async {
   var configResponse = await locator.get<ForumApi>().getUrlConfig(pg: 0, siz: 100);
   configResult = configResponse.result
       .firstWhere((value) => value.version == packageInfo.version, orElse: () => null);
-  locator.registerSingleton<BBBAPI>(
-      BBBAPIProvider(sharedPref: locator<SharedPref>(), url: configResult?.url));
+  locator.registerSingleton<BBBAPI>(BBBAPIProvider(
+      sharedPref: locator<SharedPref>(),
+      url: pref.getEnvType() == EnvType.Pro ? configResult?.url : null));
   locator.registerSingleton<GatewayApi>(GatewayAPIProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ReferApi>(ReferApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<FaucetAPI>(FaucetAPIProvider(sharedPref: locator<SharedPref>()));

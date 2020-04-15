@@ -5,6 +5,7 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:bbb_flutter/widgets/empty_order.dart';
 import 'package:bbb_flutter/widgets/material_segmented_control.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,7 +47,7 @@ class CouponState extends State<CouponPage> {
               color: Palette.backButtonColor, //change your color here
             ),
             centerTitle: true,
-            title: Text(I18n.of(context).transactionRecords, style: StyleFactory.title),
+            title: Text(I18n.of(context).coupon, style: StyleFactory.title),
             backgroundColor: Colors.white,
             brightness: Brightness.light,
             elevation: 0,
@@ -84,18 +85,34 @@ class CouponState extends State<CouponPage> {
                     ),
                   ),
                   sliver: _currentSelection == 0
-                      ? SliverList(
-                          delegate: SliverChildBuilderDelegate((context, index) {
-                          return model.pendingCoupon[index].custom == null
-                              ? Container()
-                              : buildPendingItem(coupon: model.pendingCoupon[index]);
-                        }, childCount: model.pendingCoupon.length))
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate((context, index) {
-                          return model.usedCoupon[index].custom == null
-                              ? Container()
-                              : buildUsedItems(coupon: model.usedCoupon[index]);
-                        }, childCount: model.usedCoupon.length)),
+                      ? (model.pendingCoupon.length == 0
+                          ? SliverFillViewport(
+                              delegate: SliverChildBuilderDelegate((context, index) {
+                                return EmptyOrder(
+                                  message: "暂无奖励金",
+                                );
+                              }, childCount: 1),
+                            )
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate((context, index) {
+                              return model.pendingCoupon[index].custom == null
+                                  ? Container()
+                                  : buildPendingItem(coupon: model.pendingCoupon[index]);
+                            }, childCount: model.pendingCoupon.length)))
+                      : (model.usedCoupon.length == 0
+                          ? SliverFillViewport(
+                              delegate: SliverChildBuilderDelegate((context, index) {
+                                return EmptyOrder(
+                                  message: I18n.of(context).recordEmpty,
+                                );
+                              }, childCount: 1),
+                            )
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate((context, index) {
+                              return model.usedCoupon[index].custom == null
+                                  ? Container()
+                                  : buildUsedItems(coupon: model.usedCoupon[index]);
+                            }, childCount: model.usedCoupon.length))),
                 ),
               ],
             );
@@ -108,7 +125,7 @@ class CouponState extends State<CouponPage> {
     1: Container(child: Text('记录'))
   };
 
-  List<Widget> _getWords(String text) {
+  List<Widget> _getWords(String text, TextStyle style) {
     var emoji = RegExp(r"([\u2200-\u3300]|[\uD83C-\uD83E].)");
     List<Widget> res = [];
     var words = text.split(" ");
@@ -117,7 +134,7 @@ class CouponState extends State<CouponPage> {
       if (matches.isEmpty) {
         res.add(Text(
           word + ' ',
-          style: StyleNewFactory.yellowOrange14,
+          style: style,
         ));
       } else {
         var parts = word.split(emoji);
@@ -183,35 +200,29 @@ class CouponState extends State<CouponPage> {
                         ))
                       ],
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
+                    SizedBox(width: 5),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
-                          height: 5,
+                          height: 10,
+                        ),
+                        Text(
+                          coupon.custom.title,
+                          style: StyleNewFactory.black15,
                         ),
                         Text(
                           coupon.custom.description,
-                          style: StyleNewFactory.black15,
+                          style: StyleNewFactory.grey12,
                         ),
-                        coupon.custom.humanActivate
-                            ? Text(
-                                coupon.custom.description,
-                                style: StyleNewFactory.grey13,
-                              )
-                            : Container(
-                                height: 15,
-                              ),
                         SizedBox(
                           height: 5,
                         ),
                         Text("有效期:", style: StyleNewFactory.grey12),
                         Text(
                             coupon.status == couponStatusMap[CouponStatus.activated]
-                                ? "${dateFormat(date: coupon.effDate)} - ${dateFormat(date: coupon.expDate)}"
-                                : "${dateFormat(date: coupon.actEffDate)} - ${dateFormat(date: coupon.actExpDate)}",
+                                ? "${dateFormat(date: coupon.effDate)}-${dateFormat(date: coupon.expDate)}"
+                                : "${dateFormat(date: coupon.actEffDate)}-${dateFormat(date: coupon.actExpDate)}",
                             style: StyleNewFactory.grey11),
                         SizedBox(
                           height: 5,
@@ -229,10 +240,10 @@ class CouponState extends State<CouponPage> {
                           alignment: Alignment.center,
                           child: Wrap(
                             children: coupon.status == couponStatusMap[CouponStatus.activated]
-                                ? _getWords("立 即 使 用")
+                                ? _getWords("立 即 使 用", StyleNewFactory.yellowOrange14)
                                 : (coupon.custom.humanActivate
-                                    ? _getWords("待 激 活")
-                                    : _getWords("未 生 效")),
+                                    ? _getWords("待 激 活", StyleNewFactory.yellowOrange14)
+                                    : _getWords("未 生 效", StyleNewFactory.grey14)),
                             direction: Axis.vertical,
                           )))
                 ],
@@ -289,9 +300,18 @@ class CouponState extends State<CouponPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        coupon.custom.description,
-                        style: StyleNewFactory.grey15,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            coupon.custom.title,
+                            style: StyleNewFactory.grey15,
+                          ),
+                          Text(
+                            coupon.custom.description,
+                            style: StyleNewFactory.grey12,
+                          ),
+                        ],
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10, right: 10),
@@ -305,14 +325,6 @@ class CouponState extends State<CouponPage> {
                       )
                     ],
                   ),
-                  // coupon.custom.humanActivate
-                  //     ? Text(
-                  //         coupon.custom.description,
-                  //         style: StyleNewFactory.grey13,
-                  //       )
-                  //     : Container(
-                  //         height: 15,
-                  //       ),
                   SizedBox(
                     height: 5,
                   ),

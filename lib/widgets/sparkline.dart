@@ -10,7 +10,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:path_drawing/path_drawing.dart';
 
-@immutable
 class TickerData {
   final double value;
   DateTime time;
@@ -69,10 +68,8 @@ class Sparkline extends StatelessWidget {
     this.gridLineWidth = 0.5,
     this.repaint,
     this.dateFormat,
-    this.labelStyle = const TextStyle(
-        color: Color(0xffcccccc),
-        fontSize: 10.0,
-        fontWeight: FontWeight.normal),
+    this.labelStyle =
+        const TextStyle(color: Color(0xffcccccc), fontSize: 10.0, fontWeight: FontWeight.normal),
   })  : assert(data != null),
         assert(startTime != null),
         assert(endTime != null),
@@ -111,7 +108,7 @@ class Sparkline extends StatelessWidget {
   final Color gridLineColor;
   final TextStyle labelStyle;
 
-  String dateFormat;
+  final String dateFormat;
 
   final int gridLineAmount;
 
@@ -126,15 +123,11 @@ class Sparkline extends StatelessWidget {
 
   Future<List<dui.Image>> loadImages() async {
     List<dui.Image> images = [];
-    List<String> names = [
-      "res/assets/icons/icHand.png",
-      "res/assets/icons/icTime.png"
-    ];
+    List<String> names = ["res/assets/icons/icHand.png", "res/assets/icons/icTime.png"];
 
     for (var name in names) {
       ByteData data = await rootBundle.load(name);
-      dui.Codec codec =
-          await dui.instantiateImageCodec(data.buffer.asUint8List());
+      dui.Codec codec = await dui.instantiateImageCodec(data.buffer.asUint8List());
       dui.FrameInfo fi = await codec.getNextFrame();
       images.add(fi.image);
     }
@@ -200,12 +193,9 @@ class Sparkline extends StatelessWidget {
               minValue: min - space),
         )),
         Container(
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
+          child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
             double totalValue = ((max - min) * 3 / 2);
-            double unit =
-                (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) /
-                    totalValue;
+            double unit = (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) / totalValue;
             return Container(
               padding: EdgeInsets.only(
                   top: totalValue * unit / 6 + marginSpace,
@@ -246,8 +236,7 @@ class Sparkline extends StatelessWidget {
         Container(
             child: FutureBuilder(
                 future: loadImages(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<dui.Image>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<dui.Image>> snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                       return Container();
@@ -263,12 +252,9 @@ class Sparkline extends StatelessWidget {
                   }
                 })),
         Container(
-          child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
+          child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
             double totalValue = ((max - min) * 3 / 2);
-            double unit =
-                (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) /
-                    totalValue;
+            double unit = (constraints.maxHeight - 2 * marginSpace - timeAreaHeight) / totalValue;
             return Container(
               padding: EdgeInsets.only(
                   top: totalValue * unit / 6 + marginSpace,
@@ -343,10 +329,8 @@ class _CartesianPainter extends CustomPainter {
       this.dateFormat,
       this.timeLineGap = const Duration(minutes: 5),
       this.gridLineColor = const Color(0xffeaeaea),
-      this.labelStyle = const TextStyle(
-          color: Color(0xffcccccc),
-          fontSize: 10.0,
-          fontWeight: FontWeight.normal),
+      this.labelStyle =
+          const TextStyle(color: Color(0xffcccccc), fontSize: 10.0, fontWeight: FontWeight.normal),
       this.gridLineWidth = 1,
       this.timeAreaHeight,
       this.valueLineAmount = 6,
@@ -381,14 +365,10 @@ class _CartesianPainter extends CustomPainter {
     /// horizontal
     DateTime time;
     int i = 0;
-    for (Duration d = Duration();
-        d <= Duration(seconds: totalSeconds);
-        d += timeLineGap) {
+    for (Duration d = Duration(); d <= Duration(seconds: totalSeconds); d += timeLineGap) {
       time = startLineOfTime.add(d);
       horizontalTextPainters.add(TextPainter(
-          text: TextSpan(
-              text: DateFormat(dateFormat).format(time.toLocal()),
-              style: labelStyle),
+          text: TextSpan(text: DateFormat(dateFormat).format(time.toLocal()), style: labelStyle),
           textDirection: TextDirection.ltr));
 
       horizontalTextPainters[i].layout();
@@ -411,12 +391,10 @@ class _CartesianPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     /// Draw Vertical Line
-    double timeDist =
-        (size.width - 2 * marginSpace) / (horizontalTextPainters.length - 1);
+    double timeDist = (size.width - 2 * marginSpace) / (horizontalTextPainters.length - 1);
     double timeNormalizer = timeDist / timeLineGap.inSeconds;
 
-    double timeOffset =
-        startLineOfTime.difference(startTime).inSeconds * timeNormalizer;
+    double timeOffset = startLineOfTime.difference(startTime).inSeconds * timeNormalizer;
 
     horizontalTextPainters.asMap().forEach((index, value) {
       double gridLineX = timeDist * index + timeOffset + marginSpace;
@@ -456,8 +434,8 @@ class _CartesianPainter extends CustomPainter {
         gridPaint,
       );
 
-      verticalTextPainters[i].paint(canvas,
-          Offset(width, gridLineY - verticalTextPainters[i].size.height / 2));
+      verticalTextPainters[i]
+          .paint(canvas, Offset(width, gridLineY - verticalTextPainters[i].size.height / 2));
     }
 
     canvas.drawLine(Offset(0, size.height - timeAreaHeight),
@@ -506,8 +484,7 @@ class _TimeSharePainter extends CustomPainter {
 
   double getPixelX(int seconds, Size size) {
     var totalSeconds = endTime.difference(startTime).inSeconds;
-    final double widthNormalizer =
-        (size.width - 2 * marginSpace) / totalSeconds;
+    final double widthNormalizer = (size.width - 2 * marginSpace) / totalSeconds;
     return widthNormalizer * seconds;
   }
 
@@ -520,8 +497,7 @@ class _TimeSharePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     /// draw fillPath and line
     ///
-    canvas.clipRect(
-        Rect.fromLTWH(0, -size.height / 4, size.width, 3 * size.height / 2));
+    canvas.clipRect(Rect.fromLTWH(0, -size.height / 4, size.width, 3 * size.height / 2));
     Offset startPoint, endPoint;
     final Path path = Path();
 
@@ -578,8 +554,7 @@ class _TimeSharePainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     if (lineGradient != null) {
-      final Rect lineRect =
-          new Rect.fromLTWH(0.0, 0.0, size.width, size.height);
+      final Rect lineRect = new Rect.fromLTWH(0.0, 0.0, size.width, size.height);
       paint.shader = lineGradient.createShader(lineRect);
     }
 
@@ -597,8 +572,7 @@ class _TimeSharePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     if (fillGradient != null) {
-      final Rect fillRect =
-          new Rect.fromLTWH(0.0, 0.0, size.width, size.height);
+      final Rect fillRect = new Rect.fromLTWH(0.0, 0.0, size.width, size.height);
       fillPaint.shader = fillGradient.createShader(fillRect);
     }
     canvas.drawPath(fillPath, fillPaint);
@@ -641,8 +615,7 @@ class _Pointer extends CustomPainter {
 
   double getPixelX(int seconds, Size size) {
     var totalSeconds = endTime.difference(startTime).inSeconds;
-    final double widthNormalizer =
-        (size.width - 2 * marginSpace) / totalSeconds;
+    final double widthNormalizer = (size.width - 2 * marginSpace) / totalSeconds;
     return widthNormalizer * seconds;
   }
 
@@ -755,8 +728,7 @@ class _HorizontalSupplePainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final totalDist = maxValue - minValue;
-    double normalizer =
-        (size.height - 2 * marginSpace - timeAreaHeight) / totalDist;
+    double normalizer = (size.height - 2 * marginSpace - timeAreaHeight) / totalDist;
 
     var dy;
 
@@ -784,18 +756,14 @@ class _HorizontalSupplePainter extends CustomPainter {
           } else if (offset > totalDist) {
             dy = textHeight / 2;
           } else {
-            dy = size.height -
-                timeAreaHeight -
-                marginSpace -
-                offset * normalizer;
+            dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
           }
         } else {
           dy = size.height - timeAreaHeight - marginSpace - offset * normalizer;
         }
 
         if (value == suppleData.current) {
-          canvas.drawLine(
-              Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
+          canvas.drawLine(Offset(0, dy), Offset(size.width - textWidth, dy), gridPaint);
         } else {
           canvas.drawPath(
             dashPath(
@@ -832,10 +800,7 @@ class _HorizontalSupplePainter extends CustomPainter {
             textBorderPaint);
         textPainters[index].paint(
             canvas,
-            Offset(
-                index == 3
-                    ? size.width - textWidth + 10
-                    : size.width - 2 * textWidth + 10,
+            Offset(index == 3 ? size.width - textWidth + 10 : size.width - 2 * textWidth + 10,
                 dy - textHeight / 2 + 4));
       }
     });
@@ -846,10 +811,7 @@ class _HorizontalSupplePainter extends CustomPainter {
       textPainters.add(TextPainter(
           text: new TextSpan(
               text: values[i]?.toStringAsFixed(4),
-              style: TextStyle(
-                  color: colors[i],
-                  fontSize: 11.0,
-                  fontWeight: FontWeight.normal)),
+              style: TextStyle(color: colors[i], fontSize: 11.0, fontWeight: FontWeight.normal)),
           textDirection: TextDirection.ltr)
         ..layout());
     }
@@ -899,12 +861,10 @@ class _VerticalSupplePainter extends CustomPainter {
         suppleData.stopTime.isAfter(startTime) &&
         suppleData.stopTime.isBefore(endTime)) {
       dx = (suppleData.stopTime.difference(startTime).inSeconds) * normalizer;
-      canvas.drawLine(
-          Offset(dx, 0), Offset(dx, size.height - timeAreaHeight), gridPaint);
+      canvas.drawLine(Offset(dx, 0), Offset(dx, size.height - timeAreaHeight), gridPaint);
       canvas.drawImage(
           images[0],
-          Offset(dx - images[0].width / 2,
-              size.height - timeAreaHeight / 2 - images[0].height + 2),
+          Offset(dx - images[0].width / 2, size.height - timeAreaHeight / 2 - images[0].height + 2),
           Paint());
     }
 
@@ -913,12 +873,10 @@ class _VerticalSupplePainter extends CustomPainter {
         suppleData.endTime.isAfter(startTime) &&
         suppleData.endTime.isBefore(endTime)) {
       dx = (suppleData.endTime.difference(startTime).inSeconds) * normalizer;
-      canvas.drawLine(
-          Offset(dx, 0), Offset(dx, size.height - timeAreaHeight), gridPaint);
+      canvas.drawLine(Offset(dx, 0), Offset(dx, size.height - timeAreaHeight), gridPaint);
       canvas.drawImage(
           images[1],
-          Offset(dx - images[1].width / 2,
-              size.height - timeAreaHeight / 2 - images[1].height + 2),
+          Offset(dx - images[1].width / 2, size.height - timeAreaHeight / 2 - images[1].height + 2),
           Paint());
     }
   }

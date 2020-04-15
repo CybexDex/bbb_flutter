@@ -34,7 +34,9 @@ class CouponViewModel extends BaseModel {
   getTotalAmount() {
     totalAmount = 0;
     pendingCoupon.forEach((coupon) {
-      totalAmount += coupon.amount;
+      if (coupon.status == couponStatusMap[CouponStatus.activated]) {
+        totalAmount += coupon.amount;
+      }
     });
   }
 }

@@ -58,7 +58,8 @@ class TransferRecordsViewModel extends BaseModel {
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;
-      } else if (i == list.length - 1) {
+      }
+      if (i == list.length - 1) {
         map.putIfAbsent(current, () => list.sublist(count));
       }
     }

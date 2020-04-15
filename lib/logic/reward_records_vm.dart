@@ -5,7 +5,6 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/fund_record_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
-import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/custom_dropdown.dart' as custom;
 import 'package:flutter/widgets.dart';
 
@@ -19,7 +18,7 @@ class RewardRecordsViewModel extends BaseModel {
   LinkedHashMap<int, List<FundRecordModel>> dataMap = LinkedHashMap();
   LinkedHashMap<int, List<FundRecordModel>> transferInMap = LinkedHashMap();
   LinkedHashMap<int, List<FundRecordModel>> transferOutMap = LinkedHashMap();
-  List<String> typeList = ["奖励金盈利", "返佣"];
+  List<String> typeList = [];
   List<custom.DropdownMenuItem<String>> dropdownList = [];
   String selectedItem;
   String rewardType;
@@ -38,16 +37,23 @@ class RewardRecordsViewModel extends BaseModel {
       end: DateTime.now().toUtc(),
     )
         .then((d) {
-      data = d
-          .where((f) =>
-              (f.custom != null && f.custom.isNotEmpty) &&
-              f.custom.contains(rewardType) &&
-              fundTypeMap[f.subtype] == FundType.airDrop)
-          .toList();
-      print(data);
+      data = d.where((f) {
+        if (dropdownType == "全部") {
+          return f.subtype == "airdrop";
+        } else {
+          return f.description == dropdownType;
+        }
+      }).toList();
       _constructMap(data, dataMap);
       setBusy(false);
     });
+  }
+
+  getDescription() async {
+    List<String> response = await _bbbapi.getFundDescription();
+    typeList = response;
+    typeList.insert(0, "全部");
+    setBusy(false);
   }
 
   buildDropdownMenu() {
@@ -85,7 +91,8 @@ class RewardRecordsViewModel extends BaseModel {
       if (current != prev) {
         map.putIfAbsent(prev, () => list.sublist(count, i));
         count = i;
-      } else if (i == list.length - 1) {
+      }
+      if (i == list.length - 1) {
         map.putIfAbsent(current, () => list.sublist(count));
       }
     }

@@ -52,7 +52,52 @@ class CouponOrderFormState extends State<CouponOrderForm> {
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 65),
+                SizedBox(height: 50),
+                Row(
+                  children: <Widget>[
+                    ChoiceChip(
+                      label: Text(
+                        I18n.of(context).marketOrder,
+                        style: StyleNewFactory.white15,
+                      ),
+                      selected: true,
+                      onSelected: (value) {},
+                      backgroundColor: Palette.appDividerBackgroudGreyColor,
+                      selectedColor: Palette.appYellowOrange,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      I18n.of(context).limitOrderPrice,
+                      style: StyleNewFactory.grey15,
+                    ),
+                    SizedBox(
+                      width: 240,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.only(left: 10),
+                        height: 36,
+                        decoration: BoxDecoration(
+                            color: Palette.separatorColor,
+                            border: Border.all(color: Palette.separatorColor, width: 0.5),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          "以当前指数价交易",
+                          style: StyleNewFactory.grey12,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -65,35 +110,42 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
                             borderRadius: BorderRadius.circular(5)),
                         child: GestureDetector(
-                          onTap: () {
-                            final limitOrderViewModel = Provider.of<CouponOrderViewModel>(context);
-                            showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return ChangeNotifierProvider<CouponOrderViewModel>.value(
-                                        value: limitOrderViewModel,
-                                        child: Container(
-                                            height:
-                                                MediaQuery.of(context).copyWith().size.height / 3,
-                                            child: Consumer<CouponOrderViewModel>(
-                                              builder: (context, model, child) {
-                                                return DataPickerWidget(
-                                                  model: model,
-                                                  isCoupon: false,
-                                                );
-                                              },
-                                            )),
-                                      );
-                                    })
-                                .then((value) => _cutLossController.text =
-                                    model.contract.strikeLevel.toStringAsFixed(0));
-                          },
+                          onTap: model.contract == null
+                              ? () {}
+                              : () {
+                                  final limitOrderViewModel =
+                                      Provider.of<CouponOrderViewModel>(context);
+                                  showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return ChangeNotifierProvider<
+                                                CouponOrderViewModel>.value(
+                                              value: limitOrderViewModel,
+                                              child: Container(
+                                                  height: MediaQuery.of(context)
+                                                          .copyWith()
+                                                          .size
+                                                          .height /
+                                                      3,
+                                                  child: Consumer<CouponOrderViewModel>(
+                                                    builder: (context, model, child) {
+                                                      return DataPickerWidget(
+                                                        model: model,
+                                                        isCoupon: false,
+                                                      );
+                                                    },
+                                                  )),
+                                            );
+                                          })
+                                      .then((value) => _cutLossController.text =
+                                          model.contract.strikeLevel.toStringAsFixed(0));
+                                },
                           child: custom.DropdownButton<Contract>(
                             hint: Padding(
                               padding: EdgeInsets.only(left: 10),
                               child: model.orderForm.predictPrice == null
                                   ? Text(
-                                      "请先输入预计购买价格",
+                                      "请先输入预计买入价格",
                                       style: StyleFactory.addReduceStyle,
                                     )
                                   : Text(
@@ -235,26 +287,30 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
                             borderRadius: BorderRadius.circular(5)),
                         child: GestureDetector(
-                          onTap: () {
-                            final couponOrderViewModel = Provider.of<CouponOrderViewModel>(context);
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (context) {
-                                  return ChangeNotifierProvider<CouponOrderViewModel>.value(
-                                    value: couponOrderViewModel,
-                                    child: Container(
-                                        height: MediaQuery.of(context).copyWith().size.height / 3,
-                                        child: Consumer<CouponOrderViewModel>(
-                                          builder: (context, model, child) {
-                                            return DataPickerWidget(
-                                              model: model,
-                                              isCoupon: true,
-                                            );
-                                          },
-                                        )),
-                                  );
-                                });
-                          },
+                          onTap: model.selectedCoupon == null
+                              ? () {}
+                              : () {
+                                  final couponOrderViewModel =
+                                      Provider.of<CouponOrderViewModel>(context);
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return ChangeNotifierProvider<CouponOrderViewModel>.value(
+                                          value: couponOrderViewModel,
+                                          child: Container(
+                                              height:
+                                                  MediaQuery.of(context).copyWith().size.height / 3,
+                                              child: Consumer<CouponOrderViewModel>(
+                                                builder: (context, model, child) {
+                                                  return DataPickerWidget(
+                                                    model: model,
+                                                    isCoupon: true,
+                                                  );
+                                                },
+                                              )),
+                                        );
+                                      });
+                                },
                           child: custom.DropdownButton<Coupon>(
                               hint: Padding(
                                   padding: EdgeInsets.only(left: 10),
@@ -274,7 +330,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ],
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 15,
                 ),
                 Row(
                   children: <Widget>[
@@ -325,14 +381,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                             ),
                             Builder(
                               builder: (context) {
-                                if (model.usdtBalance == null ||
-                                    model.orderForm.totalAmount.amount >
-                                        model.usdtBalance.quantity) {
-                                  return Text(
-                                    I18n.of(context).orderFormBalanceNotEnoughError,
-                                    style: StyleFactory.smallButtonTitleStyle,
-                                  );
-                                } else if (refreshContract != null &&
+                                if (refreshContract != null &&
                                     model.orderForm.investAmount >
                                         locator.get<RefManager>().config.maxOrderQuantity) {
                                   return Text(
@@ -359,7 +408,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                       ],
                     )),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 )
               ],
             ),

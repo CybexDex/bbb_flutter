@@ -50,7 +50,7 @@ class OrderInfo extends StatelessWidget {
                     ),
                     getUpOrDownIcon(orderResponse: _model),
                     SizedBox(
-                      width: 20,
+                      width: 8,
                     ),
                     Text(
                         "${I18n.of(context).actLevel}${_model.contractId.contains("N") ? (_model.boughtPx / (_model.boughtPx - _model.strikePx)).toStringAsFixed(1) : (_model.boughtPx / (_model.strikePx - _model.boughtPx)).toStringAsFixed(1)}",
@@ -412,14 +412,18 @@ class OrderInfo extends StatelessWidget {
 
   Widget getUpOrDownIcon({OrderResponseModel orderResponse}) {
     if (orderResponse.contractId.contains("N")) {
-      return Icon(
-        Icons.arrow_upward,
+      return SvgPicture.asset(
+        R.resAssetsIconsIcWithdraw,
         color: Palette.redOrange,
+        height: 10,
+        width: 7,
       );
     } else {
-      return Icon(
-        Icons.arrow_downward,
+      return SvgPicture.asset(
+        R.resAssetsIconsIcDeposit,
         color: Palette.shamrockGreen,
+        height: 10,
+        width: 7,
       );
     }
   }

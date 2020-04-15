@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/limit_order_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -11,6 +12,7 @@ import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/buy_or_sell_bottom.dart';
 import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
 
 class TradeUSDTPage extends StatefulWidget {
@@ -27,7 +29,7 @@ class TradeUSDTPageState extends State<TradeUSDTPage> {
     return GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: KeyboardScrollPage(
-            appbarHeight: 48,
+            appbarHeight: 0,
             widget: Consumer3<LimitOrderViewModel, TickerData, WebSocketNXDailyPxResponse>(
               builder: (context, model, ticker, dailyPx, child) {
                 double percentage = (ticker != null && dailyPx != null)
@@ -44,7 +46,8 @@ class TradeUSDTPageState extends State<TradeUSDTPage> {
                         children: <Widget>[
                           Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("BTC/USDT", style: StyleNewFactory.grey14)),
+                              child: Text("${locator.get<SharedPref>().getAsset()}/USDT",
+                                  style: StyleNewFactory.grey14)),
                           SizedBox(
                             height: 10,
                           ),
@@ -54,15 +57,31 @@ class TradeUSDTPageState extends State<TradeUSDTPage> {
                               Row(
                                 children: <Widget>[
                                   Text(ticker?.value?.toStringAsFixed(4) ?? "--",
-                                      style: StyleNewFactory.green27),
-                                  Icon(percentage >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                                      color: percentage >= 0
-                                          ? Palette.redOrange
-                                          : Palette.shamrockGreen),
+                                      style: percentage >= 0
+                                          ? StyleNewFactory.red27
+                                          : StyleNewFactory.green27),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  percentage >= 0
+                                      ? SvgPicture.asset(
+                                          R.resAssetsIconsIcWithdraw,
+                                          color: Palette.appRed,
+                                          height: 20,
+                                          width: 14,
+                                        )
+                                      : SvgPicture.asset(
+                                          R.resAssetsIconsIcDeposit,
+                                          color: Palette.appGreen,
+                                          height: 20,
+                                          width: 14,
+                                        )
                                 ],
                               ),
                               Text(percentage == 0 ? "--" : "${percentage.toStringAsFixed(2)}%",
-                                  style: StyleNewFactory.green27)
+                                  style: percentage >= 0
+                                      ? StyleNewFactory.red27
+                                      : StyleNewFactory.green27)
                             ],
                           ),
                           SizedBox(
@@ -213,7 +232,9 @@ class TradeUSDTPageState extends State<TradeUSDTPage> {
             builder: (context) {
               return DialogFactory.normalConfirmDialog(context,
                   title: I18n.of(context).remider,
-                  content: I18n.of(context).triggerCloseContent, onConfirmPressed: () {
+                  content: model.isMarket
+                      ? I18n.of(context).triggerCloseContent
+                      : I18n.of(context).triggerCloseLimitContent, onConfirmPressed: () {
                 _onDialogConfirmClicked(model: model);
               });
             });

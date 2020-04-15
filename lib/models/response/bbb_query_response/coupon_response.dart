@@ -110,13 +110,9 @@ class Custom {
   bool humanActivate;
   String wechatId;
   String type;
+  String title;
 
-  Custom({
-    this.description,
-    this.humanActivate,
-    this.wechatId,
-    this.type,
-  });
+  Custom({this.description, this.humanActivate, this.wechatId, this.type, this.title});
 
   factory Custom.fromJson(jsonRes) => jsonRes == null
       ? null
@@ -127,13 +123,14 @@ class Custom {
               convertValueByType(jsonRes['human_activate'], bool, stack: "Root-human_activate"),
           wechatId: convertValueByType(jsonRes['wechat_id'], String, stack: "Root-wechat_id"),
           type: convertValueByType(jsonRes['type'], String, stack: "Root-type"),
-        );
+          title: convertValueByType(jsonRes['title'], String, stack: "Root-type"));
 
   Map<String, dynamic> toJson() => {
         'description': description,
         'human_activate': humanActivate,
         'wechat_id': wechatId,
         'type': type,
+        'title': title
       };
   @override
   String toString() {

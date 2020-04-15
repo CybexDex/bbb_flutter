@@ -7,7 +7,6 @@ import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/decorated_tabbar.dart';
-import 'package:bbb_flutter/widgets/keyboard_scroll_page.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TradeHomePage extends StatefulWidget {
@@ -94,7 +93,7 @@ class _TradeHomePageState extends State<TradeHomePage> {
                     Tab(
                       text: "USDT",
                     ),
-                    Tab(text: "代金券"),
+                    Tab(text: "奖励金"),
                   ],
           ),
         ),
@@ -115,9 +114,8 @@ class _TradeHomePageState extends State<TradeHomePage> {
         ChangeNotifierProvider<CouponOrderViewModel>(
           create: (context) {
             var cv = locator.get<CouponOrderViewModel>();
-            cv.initForm(params.isUp);
-            cv.fetchCouponBalance();
-            cv.onChnageCouponDropdownSelection(params.defaultCoupon);
+            cv.initForm(params.isUp, params.defaultCoupon);
+            // cv.fetchCouponBalance();
             return cv;
           },
         )

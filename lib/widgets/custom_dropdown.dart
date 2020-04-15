@@ -9,6 +9,7 @@
 
 import 'dart:math' as math;
 
+import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:flutter/material.dart';
 
 const Duration _kDropdownMenuDuration = Duration(milliseconds: 300);
@@ -934,7 +935,9 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
     return Semantics(
       button: true,
       child: GestureDetector(
-        onTap: widget.value is String ? (_enabled ? _handleTap : null) : null,
+        onTap: widget.value is UnderlyingAssetResponse || widget.value is String
+            ? (_enabled ? _handleTap : null)
+            : null,
         behavior: HitTestBehavior.opaque,
         child: result,
       ),

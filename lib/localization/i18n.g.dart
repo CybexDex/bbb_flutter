@@ -30,7 +30,7 @@ class _$I18nDelegate extends LocalizationsDelegate<I18n> {
 
 /// Contains the keys read from the JSON
 class _$Keys {
-  static final String accountLogInError = 'account_log_in_error';
+  static final String accountLogOut = 'account_log_out';
 
   static final String transfer = 'transfer';
 
@@ -217,9 +217,9 @@ class _$Keys {
 
   static final String registerWarningText = 'register_warning_text';
 
-  static final String assetCat = 'asset_cat';
+  static final String accountLogInError = 'account_log_in_error';
 
-  static final String accountLogOut = 'account_log_out';
+  static final String assetCat = 'asset_cat';
 
   static final String updatedDate = 'updated_date';
 
@@ -401,6 +401,8 @@ class _$Keys {
 
   static final String version = 'version';
 
+  static final String triggerCloseContent = 'trigger_close_content';
+
   static final String coupon = 'coupon';
 
   static final String pnl = 'pnl';
@@ -580,7 +582,7 @@ class _$Keys {
 
   static final String limitOrderCancelButton = 'limit_order_cancel_button';
 
-  static final String triggerCloseContent = 'trigger_close_content';
+  static final String triggerCloseLimitContent = 'trigger_close_limit_content';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -601,7 +603,7 @@ abstract class _$I18nHelper {
 
   /// Returns the requested string resource associated with the given [key].
   String _translate(String key) => _translations[key];
-  String get accountLogInError => this._translate(_$Keys.accountLogInError);
+  String get accountLogOut => this._translate(_$Keys.accountLogOut);
   String get transfer => this._translate(_$Keys.transfer);
   String get cashRecords => this._translate(_$Keys.cashRecords);
   String get transferRecords => this._translate(_$Keys.transferRecords);
@@ -703,8 +705,8 @@ abstract class _$I18nHelper {
   String get registerErrorMessageTooLong =>
       this._translate(_$Keys.registerErrorMessageTooLong);
   String get registerWarningText => this._translate(_$Keys.registerWarningText);
+  String get accountLogInError => this._translate(_$Keys.accountLogInError);
   String get assetCat => this._translate(_$Keys.assetCat);
-  String get accountLogOut => this._translate(_$Keys.accountLogOut);
   String get updatedDate => this._translate(_$Keys.updatedDate);
   String get address => this._translate(_$Keys.address);
   String get fundStatusInProgress =>
@@ -807,6 +809,7 @@ abstract class _$I18nHelper {
   String get forceClosePrice => this._translate(_$Keys.forceClosePrice);
   String get type => this._translate(_$Keys.type);
   String get version => this._translate(_$Keys.version);
+  String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
   String get coupon => this._translate(_$Keys.coupon);
   String get pnl => this._translate(_$Keys.pnl);
   String get percentageUp => this._translate(_$Keys.percentageUp);
@@ -907,5 +910,6 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.limitOrderStatusExpired);
   String get limitOrderCancelButton =>
       this._translate(_$Keys.limitOrderCancelButton);
-  String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
+  String get triggerCloseLimitContent =>
+      this._translate(_$Keys.triggerCloseLimitContent);
 }

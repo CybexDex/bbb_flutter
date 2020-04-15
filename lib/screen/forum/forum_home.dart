@@ -1,5 +1,4 @@
 import 'package:bbb_flutter/screen/forum/astrology_page.dart';
-import 'package:bbb_flutter/screen/forum/blockchain_vip_page.dart';
 import 'package:bbb_flutter/screen/forum/news_page.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/widgets.dart';
@@ -16,7 +15,7 @@ class _ForumWidget extends State<ForumHome> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -32,8 +31,7 @@ class _ForumWidget extends State<ForumHome> {
             indicator: ShapeDecoration(
                 shape: UnderlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4)),
-                    borderSide: BorderSide(
-                        width: 8, color: Palette.invitePromotionBadgeColor))),
+                    borderSide: BorderSide(width: 8, color: Palette.invitePromotionBadgeColor))),
             unselectedLabelColor: Palette.descColor,
             labelColor: Palette.subTitleColor,
             indicatorSize: TabBarIndicatorSize.label,
@@ -41,7 +39,7 @@ class _ForumWidget extends State<ForumHome> {
               Tab(
                 text: I18n.of(context).astrology,
               ),
-              Tab(text: I18n.of(context).blockchainVip),
+              // Tab(text: I18n.of(context).blockchainVip),
               Tab(text: I18n.of(context).news),
             ],
             onTap: (index) {},
@@ -51,7 +49,7 @@ class _ForumWidget extends State<ForumHome> {
           child: TabBarView(
             children: <Widget>[
               AstrologyPage(),
-              new BlockchainVipPage(),
+              // new BlockchainVipPage(),
               NewsPage(
                 key: _key,
               )

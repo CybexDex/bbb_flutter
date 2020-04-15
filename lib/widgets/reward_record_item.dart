@@ -7,10 +7,8 @@ import 'package:intl/intl.dart';
 
 class RewardRecordItem extends StatelessWidget {
   final FundRecordModel _model;
-  final RewardRecordsViewModel _vm;
   RewardRecordItem({FundRecordModel model, Key key, RewardRecordsViewModel vm})
       : _model = model,
-        _vm = vm,
         super(key: key);
 
   @override

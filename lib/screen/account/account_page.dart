@@ -310,16 +310,18 @@ class _AccountPageState extends State<AccountPage> {
                                                     content: I18n.of(context).changeToTryEnv);
                                               }
                                             },
-                                            child: Badge(
-                                              showBadge: true,
-                                              badgeColor: Palette.appYellowOrange,
-                                              badgeContent:
-                                                  Text("点我试试", style: StyleNewFactory.white14),
-                                              shape: BadgeShape.square,
-                                              padding:
-                                                  EdgeInsets.symmetric(vertical: 1, horizontal: 18),
-                                              borderRadius: 5,
-                                            ),
+                                            child: userManager.user.loginType != LoginType.test
+                                                ? Badge(
+                                                    showBadge: true,
+                                                    badgeColor: Palette.appYellowOrange,
+                                                    badgeContent: Text("点我试试",
+                                                        style: StyleNewFactory.white14),
+                                                    shape: BadgeShape.square,
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 1, horizontal: 18),
+                                                    borderRadius: 5,
+                                                  )
+                                                : Container(),
                                           ),
                                         ],
                                       ),
@@ -461,25 +463,6 @@ class _AccountPageState extends State<AccountPage> {
                                   onTap: () {
                                     _accountViewModel.puchToNextPage(
                                         userManager.user.logined, RoutePaths.FundRecords, context);
-                                  },
-                                )
-                              : Container(),
-                          Divider(
-                            color: Palette.appDividerBackgroudGreyColor,
-                            thickness: 1,
-                            height: 1,
-                          ),
-                          userManager.user.loginType == LoginType.cloud ||
-                                  userManager.user.loginType == LoginType.none
-                              ? ListTile(
-                                  trailing: Icon(Icons.keyboard_arrow_right),
-                                  title: Text(
-                                    I18n.of(context).transferRecords,
-                                    style: StyleNewFactory.black15,
-                                  ),
-                                  onTap: () {
-                                    _accountViewModel.puchToNextPage(userManager.user.logined,
-                                        RoutePaths.TransferRecords, context);
                                   },
                                 )
                               : Container(),

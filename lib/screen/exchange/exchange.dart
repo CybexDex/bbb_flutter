@@ -434,7 +434,7 @@ class _ExchangePageState extends State<ExchangePage>
                   return Container(
                       decoration: DecorationFactory.cornerShadowDecoration,
                       margin: EdgeInsets.only(bottom: 15, left: 5, right: 5),
-                      padding: EdgeInsets.fromLTRB(20, 16, 20, 0),
+                      padding: EdgeInsets.fromLTRB(5, 16, 5, 0),
                       width: ScreenUtil.screenWidth,
                       child: OrderInfo(
                         model: i,

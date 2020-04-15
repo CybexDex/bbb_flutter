@@ -5,6 +5,7 @@ import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/widgets/sparkline.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class LimitOrderInfo extends StatelessWidget {
@@ -15,11 +16,23 @@ class LimitOrderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double openPrice = OrderCalculate.calculateLimitOrderOpenPrice(
-        _model.contractId.contains("N"),
-        _model.highestTriggerPx,
-        _model.lowestTriggerPx,
-        _model.strikePx);
+    double openPrice = OrderCalculate.calculateLimitOrderOpenPrice(_model.contractId.contains("N"),
+        _model.highestTriggerPx, _model.lowestTriggerPx, _model.strikePx);
+
+    double takeprofit = _model.takeProfitPx == 0
+        ? null
+        : OrderCalculate.getTakeProfit(
+            _model.takeProfitPx,
+            _model.highestTriggerPx != 0 ? _model.highestTriggerPx : _model.lowestTriggerPx,
+            _model.strikePx,
+            _model.contractId.contains("N"));
+    double cutLoss = _model.cutLossPx == _model.strikePx
+        ? null
+        : OrderCalculate.getCutLoss(
+            _model.cutLossPx,
+            _model.highestTriggerPx != 0 ? _model.highestTriggerPx : _model.lowestTriggerPx,
+            _model.strikePx,
+            _model.contractId.contains("N"));
     return Consumer<TickerData>(builder: (context, ticker, child) {
       return Container(
         child: Column(
@@ -33,8 +46,7 @@ class LimitOrderInfo extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 4),
-                      child: Text(_model.contractId,
-                          style: StyleNewFactory.grey12),
+                      child: Text(_model.contractId, style: StyleNewFactory.grey12),
                     ),
                     getUpOrDownIcon(orderResponse: _model),
                     SizedBox(
@@ -47,9 +59,8 @@ class LimitOrderInfo extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                                DateFormat("MM/dd HH:mm").format(
-                                    DateTime.parse(_model.createTime)
-                                        .toLocal()),
+                                DateFormat("MM/dd HH:mm")
+                                    .format(DateTime.parse(_model.createTime).toLocal()),
                                 style: StyleNewFactory.grey12))),
                   ],
                 ),
@@ -119,8 +130,7 @@ class LimitOrderInfo extends StatelessWidget {
                             child: Container(),
                             flex: 15,
                           ),
-                          Text(I18n.of(context).fee,
-                              style: StyleNewFactory.grey12Opacity60),
+                          Text(I18n.of(context).fee, style: StyleNewFactory.grey12Opacity60),
                           Expanded(
                             child: Container(),
                             flex: 5,
@@ -142,8 +152,7 @@ class LimitOrderInfo extends StatelessWidget {
                             flex: 23,
                             child: Container(),
                           ),
-                          Text(I18n.of(context).actLevel,
-                              style: StyleNewFactory.grey12Opacity60),
+                          Text(I18n.of(context).actLevel, style: StyleNewFactory.grey12Opacity60),
                           Expanded(
                             child: Container(),
                             flex: 5,
@@ -165,7 +174,7 @@ class LimitOrderInfo extends StatelessWidget {
                             flex: 5,
                           ),
                           Text(
-                            "--/100%",
+                            "${takeprofit == null ? I18n.of(context).stepWidgetNotSetHint : (takeprofit.round().toStringAsFixed(0) + "%")} / ${cutLoss == null ? "100%" : (cutLoss.round().toStringAsFixed(0) + "%")}",
                             style: StyleNewFactory.grey15,
                           ),
                           Expanded(
@@ -186,14 +195,18 @@ class LimitOrderInfo extends StatelessWidget {
 
   Widget getUpOrDownIcon({LimitOrderResponse orderResponse}) {
     if (orderResponse.contractId.contains("N")) {
-      return Icon(
-        Icons.arrow_upward,
+      return SvgPicture.asset(
+        R.resAssetsIconsIcWithdraw,
         color: Palette.redOrange,
+        height: 10,
+        width: 7,
       );
     } else {
-      return Icon(
-        Icons.arrow_downward,
+      return SvgPicture.asset(
+        R.resAssetsIconsIcDeposit,
         color: Palette.shamrockGreen,
+        height: 10,
+        width: 7,
       );
     }
   }

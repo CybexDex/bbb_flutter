@@ -4,8 +4,10 @@ import 'package:bbb_flutter/logic/transfer_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter_svg/svg.dart';
 
 class TransferPage extends StatefulWidget {
   TransferPage({Key key}) : super(key: key);
@@ -21,8 +23,7 @@ class _TransferState extends State<TransferPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: BaseWidget<TransferViewModel>(
-        model: TransferViewModel(
-            api: locator.get(), refm: locator.get(), um: locator.get()),
+        model: TransferViewModel(api: locator.get(), refm: locator.get(), um: locator.get()),
         onModelReady: (model) {
           model.initForm();
         },
@@ -33,11 +34,26 @@ class _TransferState extends State<TransferPage> {
                   color: Palette.backButtonColor, //change your color here
                 ),
                 centerTitle: true,
-                title:
-                    Text(I18n.of(context).transfer, style: StyleFactory.title),
+                title: Text(I18n.of(context).transfer, style: StyleFactory.title),
                 backgroundColor: Colors.white,
                 brightness: Brightness.light,
                 elevation: 0,
+                actions: <Widget>[
+                  GestureDetector(
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Center(
+                          child: SvgPicture.asset(
+                        R.resAssetsIconsHoldAll,
+                        width: 24,
+                        height: 24,
+                      )),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(RoutePaths.TransferRecords);
+                    },
+                  )
+                ],
               ),
               body: SingleChildScrollView(
                 child: SafeArea(
@@ -66,16 +82,13 @@ class _TransferState extends State<TransferPage> {
                               child: Column(
                                 children: <Widget>[
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(I18n.of(context).transferFrom,
-                                          style:
-                                              StyleFactory.transferStyleTitle),
+                                          style: StyleFactory.transferStyleTitle),
                                       Text(model.transferForm.fromBBBToCybex
                                           ? I18n.of(context).transferBbbAccount
-                                          : I18n.of(context)
-                                              .transferCybexAccount),
+                                          : I18n.of(context).transferCybexAccount),
                                     ],
                                   ),
                                   SizedBox(
@@ -85,17 +98,13 @@ class _TransferState extends State<TransferPage> {
                                     color: Colors.transparent,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(I18n.of(context).transferTo,
-                                          style:
-                                              StyleFactory.transferStyleTitle),
+                                          style: StyleFactory.transferStyleTitle),
                                       Text(model.transferForm.fromBBBToCybex
-                                          ? I18n.of(context)
-                                              .transferCybexAccount
-                                          : I18n.of(context)
-                                              .transferBbbAccount),
+                                          ? I18n.of(context).transferCybexAccount
+                                          : I18n.of(context).transferBbbAccount),
                                     ],
                                   ),
                                 ],
@@ -131,21 +140,18 @@ class _TransferState extends State<TransferPage> {
                             children: <Widget>[
                               Flexible(
                                 child: TextField(
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      signed: false, decimal: true),
+                                  keyboardType:
+                                      TextInputType.numberWithOptions(signed: false, decimal: true),
                                   controller: _amountEditingController,
                                   onChanged: (value) {
-                                    if (value.isNotEmpty &&
-                                        double.tryParse(value) != null) {
-                                      model.setTotalAmount(
-                                          value: double.parse(value));
+                                    if (value.isNotEmpty && double.tryParse(value) != null) {
+                                      model.setTotalAmount(value: double.parse(value));
                                     } else {
                                       model.setTotalAmount(value: null);
                                     }
                                   },
                                   decoration: InputDecoration(
-                                      hintText:
-                                          I18n.of(context).transferAmountHint,
+                                      hintText: I18n.of(context).transferAmountHint,
                                       hintStyle: StyleFactory.hintStyle,
                                       border: InputBorder.none),
                                 ),
@@ -156,12 +162,10 @@ class _TransferState extends State<TransferPage> {
                                 onTap: () {
                                   if (model.transferForm.balance != null) {
                                     model.setTotalAmount(
-                                        value: double.tryParse(floor(
-                                            model.transferForm?.balance
-                                                ?.quantity,
-                                            4)));
-                                    _amountEditingController.text = floor(
-                                        model.transferForm.balance.quantity, 4);
+                                        value: double.tryParse(
+                                            floor(model.transferForm?.balance?.quantity, 4)));
+                                    _amountEditingController.text =
+                                        floor(model.transferForm.balance.quantity, 4);
                                   }
                                 },
                               )
@@ -170,51 +174,39 @@ class _TransferState extends State<TransferPage> {
                           Container(
                             decoration: BoxDecoration(
                                 border: Border(
-                                    bottom: BorderSide(
-                                        color: Palette.separatorColor,
-                                        width: 0.8))),
+                                    bottom: BorderSide(color: Palette.separatorColor, width: 0.8))),
                           ),
                           SizedBox(
                             height: 15,
                           ),
                           Offstage(
-                            offstage: model.isButtonAvailable ||
-                                _amountEditingController.text.isEmpty,
+                            offstage:
+                                model.isButtonAvailable || _amountEditingController.text.isEmpty,
                             child: Row(
                               children: <Widget>[
                                 Image.asset(R.resAssetsIconsIcWarn),
                                 Builder(builder: (context) {
-                                  if (model.transferForm.totalAmount.amount !=
-                                          null &&
-                                      model.transferForm.totalAmount.amount <=
-                                          0) {
-                                    return Text(
-                                        I18n.of(context)
-                                            .orderFormInputPositiveNumberError,
+                                  if (model.transferForm.totalAmount.amount != null &&
+                                      model.transferForm.totalAmount.amount <= 0) {
+                                    return Text(I18n.of(context).orderFormInputPositiveNumberError,
                                         style: StyleFactory.errorMessageText);
-                                  } else if (model.transferForm.totalAmount
-                                              .assetId ==
+                                  } else if (model.transferForm.totalAmount.assetId ==
                                           locator
                                               .get<RefManager>()
                                               .refDataControllerNew
                                               .value
                                               .cybexAssetId ||
                                       !model.transferForm.fromBBBToCybex) {
-                                    return Text(
-                                        I18n.of(context)
-                                            .transferErrorMessageCybNotEnough,
+                                    return Text(I18n.of(context).transferErrorMessageCybNotEnough,
                                         style: StyleFactory.errorMessageText);
-                                  } else if (model.transferForm.totalAmount
-                                              .assetId ==
+                                  } else if (model.transferForm.totalAmount.assetId ==
                                           locator
                                               .get<RefManager>()
                                               .refDataControllerNew
                                               .value
                                               .bbbAssetId ||
                                       model.transferForm.fromBBBToCybex) {
-                                    return Text(
-                                        I18n.of(context)
-                                            .transferErrorMessageBbbNotEnough,
+                                    return Text(I18n.of(context).transferErrorMessageBbbNotEnough,
                                         style: StyleFactory.errorMessageText);
                                   }
                                   return Container();
@@ -228,10 +220,8 @@ class _TransferState extends State<TransferPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(I18n.of(context).fee,
-                                  style: StyleFactory.transferStyleTitle),
-                              Text("0.01 CYB",
-                                  style: StyleFactory.transferStyleTitle),
+                              Text(I18n.of(context).fee, style: StyleFactory.transferStyleTitle),
+                              Text("0.01 CYB", style: StyleFactory.transferStyleTitle),
                             ],
                           ),
                           SizedBox(
@@ -247,26 +237,19 @@ class _TransferState extends State<TransferPage> {
                                     : Palette.subTitleColor,
                                 onPressed: model.isButtonAvailable
                                     ? () async {
-                                        if (model.transferForm.cybBalance
-                                                .quantity <
-                                            (AssetDef.cybTransfer.amount /
-                                                100000)) {
-                                          showNotification(context, true,
-                                              I18n.of(context).noFeeError);
+                                        if (model.transferForm.cybBalance.quantity <
+                                            (AssetDef.cybTransfer.amount / 100000)) {
+                                          showNotification(
+                                              context, true, I18n.of(context).noFeeError);
                                         } else {
                                           TextEditingController controller =
                                               TextEditingController();
-                                          if (locator
-                                              .get<UserManager>()
-                                              .user
-                                              .isLocked) {
+                                          if (locator.get<UserManager>().user.isLocked) {
                                             showDialog(
                                                 context: context,
                                                 builder: (context) {
-                                                  return DialogFactory
-                                                      .unlockDialog(context,
-                                                          controller:
-                                                              controller);
+                                                  return DialogFactory.unlockDialog(context,
+                                                      controller: controller);
                                                 }).then((value) async {
                                               if (value) {
                                                 callPostWithdraw(model);

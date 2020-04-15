@@ -226,6 +226,15 @@ class StyleNewFactory {
     letterSpacing: 1.5,
   );
 
+  static var red27 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appRed,
+    fontSize: Dimen.fontSize27,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 1.5,
+  );
+
   static var lightGrey15 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appLightGrey,
