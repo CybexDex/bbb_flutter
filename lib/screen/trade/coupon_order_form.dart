@@ -47,12 +47,14 @@ class CouponOrderFormState extends State<CouponOrderForm> {
       return Stack(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 30),
-            padding: EdgeInsets.only(left: 15, right: 15),
+            margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(30)),
+            padding: EdgeInsets.only(
+                left: ScreenUtil.getInstance().setWidth(15),
+                right: ScreenUtil.getInstance().setWidth(15)),
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 50),
+                SizedBox(height: ScreenUtil.getInstance().setHeight(40)),
                 Row(
                   children: <Widget>[
                     ChoiceChip(
@@ -68,7 +70,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,11 +80,11 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                       style: StyleNewFactory.grey15,
                     ),
                     SizedBox(
-                      width: 240,
+                      width: ScreenUtil.getInstance().setWidth(240),
                       child: Container(
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.only(left: 10),
-                        height: 36,
+                        height: ScreenUtil.getInstance().setHeight(35),
                         decoration: BoxDecoration(
                             color: Palette.separatorColor,
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
@@ -96,16 +98,16 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(I18n.of(context).forcePrice, style: StyleNewFactory.grey15),
                     SizedBox(
-                      width: 240,
+                      width: ScreenUtil.getInstance().setWidth(240),
                       child: Container(
-                        height: 36,
+                        height: ScreenUtil.getInstance().setHeight(35),
                         decoration: BoxDecoration(
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
                             borderRadius: BorderRadius.circular(5)),
@@ -166,7 +168,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,7 +180,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          width: 202,
+                          width: ScreenUtil.getInstance().setWidth(202),
                           child: IStep(
                             enabled: true,
                             isPrice: true,
@@ -214,15 +216,15 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                             model.changeTakeProfitPx(profit: null);
                             _takeProfitController.text = "-";
                           },
-                          child: Text(I18n.of(context).orderFormReset,
-                              style: StyleFactory.cellDescLabel),
+                          child:
+                              Text(I18n.of(context).orderFormReset, style: StyleNewFactory.grey14),
                         )
                       ],
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,7 +233,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          width: 202,
+                          width: ScreenUtil.getInstance().setWidth(202),
                           child: IStep(
                             enabled: true,
                             isPrice: true,
@@ -265,24 +267,24 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                             _cutLossController.text =
                                 widget._model.contract.strikeLevel.toStringAsFixed(0);
                           },
-                          child: Text(I18n.of(context).orderFormReset,
-                              style: StyleFactory.cellDescLabel),
+                          child:
+                              Text(I18n.of(context).orderFormReset, style: StyleNewFactory.grey14),
                         )
                       ],
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(I18n.of(context).coupon, style: StyleNewFactory.grey15),
                     SizedBox(
-                      width: 240,
+                      width: ScreenUtil.getInstance().setWidth(240),
                       child: Container(
-                        height: 36,
+                        height: ScreenUtil.getInstance().setHeight(36),
                         decoration: BoxDecoration(
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
                             borderRadius: BorderRadius.circular(5)),
@@ -330,7 +332,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 ),
                 Row(
                   children: <Widget>[
@@ -408,18 +410,20 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                       ],
                     )),
                 SizedBox(
-                  height: 10,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 )
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
+            padding: EdgeInsets.only(
+                left: ScreenUtil.getInstance().setWidth(15),
+                right: ScreenUtil.getInstance().setWidth(15)),
             child: Row(
               children: <Widget>[
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -432,7 +436,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                         model.selectedCoupon != null
                             ? "${model.selectedCoupon.amount.toStringAsFixed(0)}"
                             : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text("${I18n.of(context).balanceAvailable}", style: StyleNewFactory.grey13),
@@ -440,8 +444,8 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ),
                 ),
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -454,7 +458,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                         model.orderForm.totalAmount.amount > double.minPositive
                             ? "${(model.orderForm.totalAmount.amount / model.orderForm.investAmount).toStringAsFixed(4)}"
                             : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text(I18n.of(context).perPrice, style: StyleNewFactory.grey13),
@@ -462,8 +466,8 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                   ),
                 ),
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -474,7 +478,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                     children: <Widget>[
                       Text(
                         refreshContract != null ? "${model.actLevel.toStringAsFixed(1)}" : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text("${I18n.of(context).actLevel}", style: StyleNewFactory.grey13),

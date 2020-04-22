@@ -43,13 +43,15 @@ class DataPickerState extends State<DataPickerWidget> {
               GestureDetector(
                 onTap: () {
                   if (widget._isCoupon) {
-                    if (selectedCoupon != null) {
-                      widget._model.onChnageCouponDropdownSelection(selectedCoupon);
+                    if (selectedCoupon == null) {
+                      selectedCoupon = widget._model.couponListData[0];
                     }
+                    widget._model.onChnageCouponDropdownSelection(selectedCoupon);
                   } else {
-                    if (selectedContract != null) {
-                      widget._model.onChnageDropdownSelection(selectedContract);
+                    if (selectedContract == null) {
+                      selectedContract = widget._model.contractIds[0];
                     }
+                    widget._model.onChnageDropdownSelection(selectedContract);
                   }
                   Navigator.of(context).maybePop();
                 },

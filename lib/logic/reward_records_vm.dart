@@ -37,6 +37,7 @@ class RewardRecordsViewModel extends BaseModel {
       end: DateTime.now().toUtc(),
     )
         .then((d) {
+      dataMap.clear();
       data = d.where((f) {
         if (dropdownType == "全部") {
           return f.subtype == "airdrop";

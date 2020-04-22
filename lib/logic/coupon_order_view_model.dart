@@ -170,7 +170,8 @@ class CouponOrderViewModel extends BaseModel {
     if (_cm.pendingCoupon != null && _cm.pendingCoupon.isNotEmpty) {
       List<custom.DropdownMenuItem<Coupon>> items = List();
       for (Coupon coupon in _cm.pendingCoupon) {
-        if (coupon.status == couponStatusMap[CouponStatus.activated]) {
+        if (coupon.status == couponStatusMap[CouponStatus.activated] &&
+            DateTime.parse(coupon.effDate).isBefore(DateTime.now())) {
           items.add(
             custom.DropdownMenuItem(
               value: coupon,
@@ -197,7 +198,8 @@ class CouponOrderViewModel extends BaseModel {
     couponList = [];
     couponListData = [];
     for (Coupon coupon in _cm.pendingCoupon) {
-      if (coupon.status == couponStatusMap[CouponStatus.activated]) {
+      if (coupon.status == couponStatusMap[CouponStatus.activated] &&
+          DateTime.parse(coupon.effDate).isBefore(DateTime.now())) {
         couponList.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[

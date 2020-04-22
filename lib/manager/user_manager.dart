@@ -305,6 +305,8 @@ class UserManager extends BaseModel {
     if (user.logined) {
       fetchBalances(name: user.name);
     }
+    locator.get<HomeViewModel>().getRankingList();
+    locator.get<CouponViewModel>().getCoupons();
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);
     notifyListeners();

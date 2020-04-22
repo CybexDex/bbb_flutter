@@ -54,6 +54,7 @@ class RoutePaths {
   static const String SplashScreen = "SplashScreen";
   static const String Coupon = "Coupon";
   static const String CouponRules = "CouponRules";
+  static const String inviteRules = "InviteRules";
 }
 
 class Routes {
@@ -115,6 +116,8 @@ class Routes {
         return CupertinoPageRoute(builder: (_) => TransferRecordsWidget());
       case RoutePaths.RewardRecords:
         return CupertinoPageRoute(builder: (_) => RewardRecordsWidget());
+      // case RoutePaths.inviteRules:
+      // return CupertinoPageRoute(builder: (_) => )
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

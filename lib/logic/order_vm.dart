@@ -36,6 +36,9 @@ class OrderViewModel extends BaseModel {
     _getOrdersCallback = () {
       getOrders();
     };
+    _refSub = _tm.tick.listen((data) {
+      getOrders();
+    });
     um.removeListener(_getOrdersCallback);
     um.addListener(_getOrdersCallback);
   }
@@ -48,19 +51,22 @@ class OrderViewModel extends BaseModel {
         status: [OrderStatus.open],
       );
       orders = orders.toList();
+      // if (orders.length > 0) {
+      //   index = min(index, orders.length - 1);
+      //   if (!isSubscribed) {
+      //     isSubscribed = true;
+      //     _refSub = _tm.tick.listen((data) {
+      //       getOrders();
+      //     });
+      //   }
+      // } else {
+      //   if (_refSub != null) {
+      //     _refSub.cancel();
+      //   }
+      //   isSubscribed = false;
+      // }
       if (orders.length > 0) {
         index = min(index, orders.length - 1);
-        if (!isSubscribed) {
-          isSubscribed = true;
-          _refSub = _tm.tick.listen((data) {
-            getOrders();
-          });
-        }
-      } else {
-        if (_refSub != null) {
-          _refSub.cancel();
-        }
-        isSubscribed = false;
       }
       calculateTotalPnl();
       initOrUpdateSelectedList();

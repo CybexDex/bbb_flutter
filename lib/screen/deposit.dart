@@ -26,23 +26,20 @@ class _DepositPageState extends State<DepositPage> {
   final GlobalKey _globalKey = GlobalKey();
 
   _capturePng() async {
-    RenderRepaintBoundary boundary =
-        _globalKey.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage();
+    RenderRepaintBoundary boundary = _globalKey.currentContext.findRenderObject();
+    ui.Image image = await boundary.toImage(pixelRatio: 3.0);
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
   }
 
-  Future<void> requestPermission(
-      List<PermissionGroup> permissions, BuildContext context) async {
-    final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
-        await PermissionHandler().requestPermissions(permissions);
+  Future<void> requestPermission(List<Permission> permissions, BuildContext context) async {
+    final Map<Permission, PermissionStatus> permissionRequestResult = await permissions.request();
     print(permissionRequestResult);
     if (Platform.isAndroid) {
       if (permissionRequestResult[permissions[0]] == PermissionStatus.granted) {
         _capturePng();
         showNotification(context, false, I18n.of(context).savePhotoSuccess);
-      } else {}
+      }
     } else {
       print(permissions[1]);
       if (permissionRequestResult[permissions[1]] == PermissionStatus.granted) {
@@ -54,7 +51,7 @@ class _DepositPageState extends State<DepositPage> {
             builder: (context) => DialogFactory.normalConfirmDialog(context,
                 title: I18n.of(context).requestPermissionTitle,
                 content: I18n.of(context).requestPermissionContent,
-                onConfirmPressed: () => PermissionHandler().openAppSettings()));
+                onConfirmPressed: () => openAppSettings()));
       }
     }
   }
@@ -70,18 +67,15 @@ class _DepositPageState extends State<DepositPage> {
         showDialog(
             context: context,
             builder: (context) {
-              return DialogFactory.unlockDialog(context,
-                  controller: controller);
+              return DialogFactory.unlockDialog(context, controller: controller);
             }).then((value) async {
           if (value) {
-            _bloc.getDepositAddress(
-                name: _bloc.user.name, asset: AssetName.USDTERC20);
+            _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
           }
         });
       });
     } else {
-      _bloc.getDepositAddress(
-          name: _bloc.user.name, asset: AssetName.USDTERC20);
+      _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
     }
   }
 
@@ -128,22 +122,16 @@ class _DepositPageState extends State<DepositPage> {
                         GestureDetector(
                             child: Text("保存二维码", style: StyleFactory.hyperText),
                             onTap: () {
-                              requestPermission([
-                                PermissionGroup.storage,
-                                PermissionGroup.photos
-                              ], context);
+                              requestPermission([Permission.storage, Permission.photos], context);
                             }),
                         SizedBox(height: 20),
                         Container(
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 1, color: Palette.separatorColor),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0) //
-                                      ),
+                              border: Border.all(width: 1, color: Palette.separatorColor),
+                              borderRadius: BorderRadius.all(Radius.circular(5.0) //
+                                  ),
                             ),
-                            padding: EdgeInsets.only(
-                                left: 20, top: 20, right: 20, bottom: 20),
+                            padding: EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 20),
                             child: Column(
                               children: <Widget>[
                                 Text(value.user.deposit.address),
@@ -151,12 +139,11 @@ class _DepositPageState extends State<DepositPage> {
                                   child: Container(
                                     margin: EdgeInsets.only(top: 10),
                                     alignment: Alignment.bottomRight,
-                                    child: Text("点击复制",
-                                        style: StyleFactory.hyperText),
+                                    child: Text("点击复制", style: StyleFactory.hyperText),
                                   ),
                                   onTap: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: value.user.deposit.address));
+                                    Clipboard.setData(
+                                        ClipboardData(text: value.user.deposit.address));
                                     showNotification(context, false, "复制成功");
                                   },
                                 )
@@ -166,9 +153,8 @@ class _DepositPageState extends State<DepositPage> {
                           margin: EdgeInsets.only(top: 20),
                           decoration: BoxDecoration(
                             color: Palette.veryLightPinkTwo,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(4.0) //
-                                    ),
+                            borderRadius: BorderRadius.all(Radius.circular(4.0) //
+                                ),
                           ),
                           child: Text(I18n.of(context).depositParagraph,
                               style: StyleFactory.subTitleStyle),

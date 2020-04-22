@@ -13,8 +13,8 @@ class NavDrawer extends StatefulWidget {
 class _NavDrawerState extends State<NavDrawer> {
   @override
   void initState() {
-    locator.get<NavDrawerViewModel>().subscribeTicker();
     locator.get<NavDrawerViewModel>().getAssetList();
+    locator.get<NavDrawerViewModel>().subscribeTicker();
     super.initState();
   }
 
@@ -26,75 +26,83 @@ class _NavDrawerState extends State<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the Drawer if there isn't enough vertical
-        // space to fit everything.
-        child: Consumer<NavDrawerViewModel>(
-      builder: (context, model, child) {
-        return Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 50, left: 15, bottom: 16),
-                child: Align(
-                  child: Text(
-                    I18n.of(context).navDrawerSelectContract,
-                    style: StyleNewFactory.black18,
+    return SizedBox(
+      width: ScreenUtil.screenWidthDp * 0.75,
+      child: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the Drawer if there isn't enough vertical
+          // space to fit everything.
+          child: Consumer<NavDrawerViewModel>(
+        builder: (context, model, child) {
+          return Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(
+                      top: ScreenUtil.getInstance().setHeight(50),
+                      left: ScreenUtil.getInstance().setWidth(15),
+                      bottom: ScreenUtil.getInstance().setHeight(16)),
+                  child: Align(
+                    child: Text(
+                      I18n.of(context).navDrawerSelectContract,
+                      style: StyleNewFactory.black18,
+                    ),
+                    alignment: Alignment.topLeft,
                   ),
-                  alignment: Alignment.topLeft,
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                    padding: EdgeInsets.only(top: 0),
-                    itemCount: model.tickerList.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          model.onChangeAsset(
-                              context: context, asset: model.assetList[index].underlying);
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 17),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(
-                                        text: model.assetList[index].underlying,
-                                        style: StyleNewFactory.black15,
-                                      ),
-                                      TextSpan(
-                                        text: "/USDT",
-                                        style: StyleNewFactory.grey12,
+                Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsets.only(top: 0),
+                      itemCount: model.tickerList.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            model.onChangeAsset(
+                                context: context, asset: model.assetList[index].underlying);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: ScreenUtil.getInstance().setWidth(15),
+                                      vertical: ScreenUtil.getInstance().setHeight(17)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                          text: model.assetList[index].underlying,
+                                          style: StyleNewFactory.black15,
+                                        ),
+                                        TextSpan(
+                                          text: "/USDT",
+                                          style: StyleNewFactory.grey12,
+                                        )
+                                      ])),
+                                      Text(
+                                        model.tickerList[index].latest,
+                                        style: double.parse(model.tickerList[index].latest) >
+                                                model.tickerList[index].lastDayPx
+                                            ? StyleNewFactory.red15
+                                            : StyleNewFactory.green15,
                                       )
-                                    ])),
-                                    Text(
-                                      model.tickerList[index].latest,
-                                      style: double.parse(model.tickerList[index].latest) >
-                                              model.tickerList[index].lastDayPx
-                                          ? StyleNewFactory.red15
-                                          : StyleNewFactory.green15,
-                                    )
-                                  ],
-                                )),
-                            Divider(
-                              color: Palette.separatorColor,
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-              )
-            ],
-          ),
-        );
-      },
-    ));
+                                    ],
+                                  )),
+                              Divider(
+                                color: Palette.separatorColor,
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                )
+              ],
+            ),
+          );
+        },
+      )),
+    );
   }
 }

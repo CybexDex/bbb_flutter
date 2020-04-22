@@ -68,7 +68,9 @@ class CouponState extends State<CouponPage> {
                     child: Container(
                       color: Colors.white,
                       width: ScreenUtil.screenWidth,
-                      padding: EdgeInsets.only(left: 50, top: 10),
+                      padding: EdgeInsets.only(
+                          left: ScreenUtil.getInstance().setWidth(50),
+                          top: ScreenUtil.getInstance().setHeight(10)),
                       child: MaterialSegmentedControl(
                         children: _children,
                         selectionIndex: _currentSelection,
@@ -121,7 +123,11 @@ class CouponState extends State<CouponPage> {
   }
 
   Map<int, Widget> _children = {
-    0: Container(padding: EdgeInsets.only(left: 40, right: 40), child: Text('待使用')),
+    0: Container(
+        padding: EdgeInsets.only(
+            left: ScreenUtil.getInstance().setWidth(40),
+            right: ScreenUtil.getInstance().setWidth(40)),
+        child: Text('待使用')),
     1: Container(child: Text('记录'))
   };
 
@@ -153,12 +159,18 @@ class CouponState extends State<CouponPage> {
     return GestureDetector(
       onTap: () {
         if (coupon.status == couponStatusMap[CouponStatus.activated]) {
-          Navigator.pushNamed(context, RoutePaths.Trade,
-              arguments: RouteParamsOfTrade(isUp: true, isCoupon: true, defaultCoupon: coupon));
+          if (DateTime.parse(coupon.effDate).isBefore(DateTime.now()))
+            Navigator.pushNamed(context, RoutePaths.Trade,
+                arguments: RouteParamsOfTrade(isUp: true, isCoupon: true, defaultCoupon: coupon));
+        } else if (coupon.custom.humanActivate) {
+          Navigator.pushNamed(context, RoutePaths.Feedback);
         }
       },
       child: Container(
-          margin: EdgeInsets.only(left: 15, right: 15, top: 15),
+          margin: EdgeInsets.only(
+              left: ScreenUtil.getInstance().setWidth(15),
+              right: ScreenUtil.getInstance().setWidth(15),
+              top: ScreenUtil.getInstance().setHeight(15)),
           decoration: BoxDecoration(
               color: Palette.pagePrimaryColor,
               borderRadius: StyleFactory.corner,
@@ -178,8 +190,8 @@ class CouponState extends State<CouponPage> {
                               : (coupon.custom.humanActivate
                                   ? R.resAssetsIconsCouponRed
                                   : R.resAssetsIconsCouponGrey),
-                          width: 94,
-                          height: 92,
+                          width: ScreenUtil.getInstance().setWidth(94),
+                          height: ScreenUtil.getInstance().setWidth(92),
                         ),
                         Positioned.fill(
                             child: Align(
@@ -200,12 +212,12 @@ class CouponState extends State<CouponPage> {
                         ))
                       ],
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: ScreenUtil.getInstance().setWidth(5)),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
-                          height: 10,
+                          height: ScreenUtil.getInstance().setHeight(10),
                         ),
                         Text(
                           coupon.custom.title,
@@ -216,7 +228,7 @@ class CouponState extends State<CouponPage> {
                           style: StyleNewFactory.grey12,
                         ),
                         SizedBox(
-                          height: 5,
+                          height: ScreenUtil.getInstance().setHeight(5),
                         ),
                         Text("有效期:", style: StyleNewFactory.grey12),
                         Text(
@@ -225,7 +237,7 @@ class CouponState extends State<CouponPage> {
                                 : "${dateFormat(date: coupon.actEffDate)}-${dateFormat(date: coupon.actExpDate)}",
                             style: StyleNewFactory.grey11),
                         SizedBox(
-                          height: 5,
+                          height: ScreenUtil.getInstance().setHeight(5),
                         )
                       ],
                     )
@@ -234,13 +246,18 @@ class CouponState extends State<CouponPage> {
               ),
               Stack(
                 children: <Widget>[
-                  SvgPicture.asset(R.resAssetsIconsWave, height: 92),
+                  SvgPicture.asset(R.resAssetsIconsWave,
+                      height: ScreenUtil.getInstance().setWidth(92)),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment.center,
                           child: Wrap(
                             children: coupon.status == couponStatusMap[CouponStatus.activated]
-                                ? _getWords("立 即 使 用", StyleNewFactory.yellowOrange14)
+                                ? _getWords(
+                                    "立 即 使 用",
+                                    DateTime.parse(coupon.effDate).isBefore(DateTime.now())
+                                        ? StyleNewFactory.yellowOrange14
+                                        : StyleNewFactory.grey14)
                                 : (coupon.custom.humanActivate
                                     ? _getWords("待 激 活", StyleNewFactory.yellowOrange14)
                                     : _getWords("未 生 效", StyleNewFactory.grey14)),
@@ -255,7 +272,10 @@ class CouponState extends State<CouponPage> {
 
   buildUsedItems({Coupon coupon}) {
     return Container(
-        margin: EdgeInsets.only(left: 15, right: 15, top: 10),
+        margin: EdgeInsets.only(
+            left: ScreenUtil.getInstance().setWidth(15),
+            right: ScreenUtil.getInstance().setWidth(15),
+            top: ScreenUtil.getInstance().setHeight(15)),
         decoration: BoxDecoration(
             color: Palette.pagePrimaryColor,
             borderRadius: StyleFactory.corner,
@@ -268,8 +288,8 @@ class CouponState extends State<CouponPage> {
               children: <Widget>[
                 Image.asset(
                   R.resAssetsIconsCouponGrey,
-                  width: 94,
-                  height: 92,
+                  width: ScreenUtil.getInstance().setWidth(94),
+                  height: ScreenUtil.getInstance().setWidth(92),
                 ),
                 Positioned.fill(
                     child: Align(
@@ -291,14 +311,16 @@ class CouponState extends State<CouponPage> {
               ],
             ),
             SizedBox(
-              width: 10,
+              width: ScreenUtil.getInstance().setWidth(10),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  SizedBox(
+                    height: ScreenUtil.getInstance().setHeight(10),
+                  ),
+                  Stack(
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,19 +336,20 @@ class CouponState extends State<CouponPage> {
                         ],
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10, right: 10),
+                        alignment: Alignment.centerRight,
+                        margin: EdgeInsets.only(right: ScreenUtil.getInstance().setWidth(10)),
                         child: SvgPicture.asset(
                           coupon.status == couponStatusMap[CouponStatus.activateFailed]
                               ? R.resAssetsIconsExpired
                               : R.resAssetsIconsUsed,
-                          width: 40,
-                          height: 40,
+                          width: ScreenUtil.getInstance().setWidth(40),
+                          height: ScreenUtil.getInstance().setWidth(40),
                         ),
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 5,
+                    height: ScreenUtil.getInstance().setHeight(5),
                   ),
                   Text("有效期:", style: StyleNewFactory.grey12),
                   Text(
@@ -335,7 +358,7 @@ class CouponState extends State<CouponPage> {
                           : "${dateFormat(date: coupon.effDate)} - ${dateFormat(date: coupon.expDate)}",
                       style: StyleNewFactory.grey11),
                   SizedBox(
-                    height: 5,
+                    height: ScreenUtil.getInstance().setHeight(5),
                   )
                 ],
               ),

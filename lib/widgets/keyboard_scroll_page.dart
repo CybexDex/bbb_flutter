@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class KeyboardScrollPage extends StatelessWidget {
@@ -16,11 +15,7 @@ class KeyboardScrollPage extends StatelessWidget {
     return KeyboardAvoider(
       autoScroll: true,
       focusPadding: double.infinity,
-      child: Container(
-          height: ScreenUtil.screenHeightDp -
-              appbarHeight -
-              ScreenUtil.statusBarHeight,
-          child: widget),
+      child: Container(child: widget),
     );
   }
 }

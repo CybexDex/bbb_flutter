@@ -40,6 +40,8 @@ class Dimen {
   static double fontSize14 = ScreenUtil.getInstance().setSp(14.0);
   static double fontSize15 = ScreenUtil.getInstance().setSp(15.0);
   static double fontSize18 = ScreenUtil.getInstance().setSp(18.0);
+  static double fontSize22 = ScreenUtil.getInstance().setSp(22.0);
+  static double fontSize25 = ScreenUtil.getInstance().setSp(25.0);
   static double fontSize26 = ScreenUtil.getInstance().setSp(26.0);
   static double fontSize27 = ScreenUtil.getInstance().setSp(27.0);
   static double fontSize30 = ScreenUtil.getInstance().setSp(30.0);

@@ -291,6 +291,8 @@ class _$Keys {
 
   static final String inviteInputPinCode = 'invite_input_pin_code';
 
+  static final String inviteRule = 'invite_rule';
+
   static final String clickToTry = 'click_to_try';
 
   static final String clickToQuit = 'click_to_quit';
@@ -401,9 +403,9 @@ class _$Keys {
 
   static final String version = 'version';
 
-  static final String triggerCloseContent = 'trigger_close_content';
-
   static final String coupon = 'coupon';
+
+  static final String triggerCloseLimitContent = 'trigger_close_limit_content';
 
   static final String pnl = 'pnl';
 
@@ -582,7 +584,7 @@ class _$Keys {
 
   static final String limitOrderCancelButton = 'limit_order_cancel_button';
 
-  static final String triggerCloseLimitContent = 'trigger_close_limit_content';
+  static final String triggerCloseContent = 'trigger_close_content';
 }
 
 /// Loads and allows access to string resources provided by the JSON
@@ -745,6 +747,7 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.inviteRecommendation);
   String get inviteAddReferer => this._translate(_$Keys.inviteAddReferer);
   String get inviteInputPinCode => this._translate(_$Keys.inviteInputPinCode);
+  String get inviteRule => this._translate(_$Keys.inviteRule);
   String get clickToTry => this._translate(_$Keys.clickToTry);
   String get clickToQuit => this._translate(_$Keys.clickToQuit);
   String get share => this._translate(_$Keys.share);
@@ -809,8 +812,9 @@ abstract class _$I18nHelper {
   String get forceClosePrice => this._translate(_$Keys.forceClosePrice);
   String get type => this._translate(_$Keys.type);
   String get version => this._translate(_$Keys.version);
-  String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
   String get coupon => this._translate(_$Keys.coupon);
+  String get triggerCloseLimitContent =>
+      this._translate(_$Keys.triggerCloseLimitContent);
   String get pnl => this._translate(_$Keys.pnl);
   String get percentageUp => this._translate(_$Keys.percentageUp);
   String get percentageDown => this._translate(_$Keys.percentageDown);
@@ -910,6 +914,5 @@ abstract class _$I18nHelper {
       this._translate(_$Keys.limitOrderStatusExpired);
   String get limitOrderCancelButton =>
       this._translate(_$Keys.limitOrderCancelButton);
-  String get triggerCloseLimitContent =>
-      this._translate(_$Keys.triggerCloseLimitContent);
+  String get triggerCloseContent => this._translate(_$Keys.triggerCloseContent);
 }

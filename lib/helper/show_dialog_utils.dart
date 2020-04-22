@@ -7,6 +7,7 @@ import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void showNotification(BuildContext context, bool isFaild, String content, {Function callback}) {
@@ -113,4 +114,23 @@ Widget showFlashBar(BuildContext context, bool isFaild, {String content, Functio
       }
     },
   )..show(context);
+}
+
+void showThemeToast(String message) {
+  showToastWidget(Container(
+    decoration:
+        BoxDecoration(color: Colors.black.withOpacity(0.7), borderRadius: BorderRadius.circular(5)),
+    height: ScreenUtil.getInstance().setWidth(120),
+    width: ScreenUtil.getInstance().setWidth(120),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.check, color: Colors.white, size: ScreenUtil.getInstance().setHeight(50)),
+        Text(
+          message,
+          style: StyleNewFactory.white18,
+        )
+      ],
+    ),
+  ));
 }

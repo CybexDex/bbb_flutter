@@ -9,10 +9,16 @@ class DecorationFactory {
       borderRadius: StyleFactory.corner,
       boxShadow: [StyleFactory.shadow]);
 
-  static const invitationContainerShadowDecoration = BoxDecoration(
+  static final invitationContainerShadowDecoration = BoxDecoration(
       color: Palette.pagePrimaryColor,
-      borderRadius: StyleFactory.dialogCorner,
-      boxShadow: [StyleFactory.shadow]);
+      borderRadius: BorderRadius.circular(5),
+      boxShadow: [
+        BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.16),
+            offset: Offset(0, 5),
+            spreadRadius: 3,
+            blurRadius: 5)
+      ]);
 
   static final pageTopDecoration = BoxDecoration(
       image: DecorationImage(
@@ -25,18 +31,15 @@ class DecorationFactory {
       borderRadius: StyleFactory.dialogCorner,
       boxShadow: [StyleFactory.shadow]);
 
-  static var dialogChooseDecoration = BoxDecoration(
-      color: Palette.pagePrimaryColor, borderRadius: StyleFactory.dialogCorner);
+  static var dialogChooseDecoration =
+      BoxDecoration(color: Palette.pagePrimaryColor, borderRadius: StyleFactory.dialogCorner);
 
   static var addPeopleButtonDecoration = BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       gradient: LinearGradient(
           begin: Alignment(0.5, 0),
           end: Alignment(0.5, 1),
-          colors: [
-            Palette.inviteAddButtonColor,
-            Palette.inviteAddButtonColorTwo
-          ]));
+          colors: [Palette.inviteAddButtonColor, Palette.inviteAddButtonColorTwo]));
 }
 
 class BorderFactory {

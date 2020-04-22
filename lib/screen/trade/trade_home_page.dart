@@ -19,87 +19,6 @@ class TradeHomePage extends StatefulWidget {
 }
 
 class _TradeHomePageState extends State<TradeHomePage> {
-  var appBar = AppBar(
-    iconTheme: IconThemeData(
-      color: Palette.backButtonColor, //change your color here
-    ),
-    centerTitle: true,
-    title: Consumer2<LimitOrderViewModel, CouponOrderViewModel>(
-        builder: (context, model, couponViewModel, child) {
-      return Row(
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              model.updateSide();
-              couponViewModel.updateSide();
-            },
-            child: Text(
-                model.orderForm.isUp ? "${I18n.of(context).buyUp}" : "${I18n.of(context).buyDown}",
-                style: model.orderForm.isUp ? StyleFactory.buyUpTitle : StyleFactory.buyDownTitle),
-          ),
-          SizedBox(
-            width: 7,
-          ),
-          GestureDetector(
-            child: model.orderForm.isUp
-                ? SvgPicture.asset(
-                    R.resAssetsIconsIcUpRed,
-                    width: 18,
-                    height: 18,
-                  )
-                : SvgPicture.asset(
-                    R.resAssetsIconsIcDownGreen,
-                    width: 18,
-                    height: 18,
-                  ),
-            onTap: model.updateSide,
-          )
-        ],
-        mainAxisSize: MainAxisSize.min,
-      );
-    }),
-    backgroundColor: Colors.white,
-    brightness: Brightness.light,
-    elevation: 0,
-    bottom: PreferredSize(
-      preferredSize: Size.fromHeight(48.0),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: DecoratedTabBar(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Palette.appDividerBackgroudGreyColor,
-                width: 1.0,
-              ),
-            ),
-          ),
-          tabBar: TabBar(
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: Palette.appYellowOrange,
-            indicatorWeight: 4,
-            unselectedLabelColor: Palette.appGrey,
-            labelStyle: StyleNewFactory.black18,
-            unselectedLabelStyle: StyleNewFactory.grey15,
-            labelColor: Palette.appBlack,
-            tabs: locator.get<UserManager>().user.loginType == LoginType.test
-                ? [
-                    Tab(
-                      text: "USDT",
-                    ),
-                  ]
-                : [
-                    Tab(
-                      text: "USDT",
-                    ),
-                    Tab(text: "奖励金"),
-                  ],
-          ),
-        ),
-      ),
-    ),
-  );
   @override
   Widget build(BuildContext context) {
     final RouteParamsOfTrade params = ModalRoute.of(context).settings.arguments;
@@ -124,7 +43,104 @@ class _TradeHomePageState extends State<TradeHomePage> {
           length: locator.get<UserManager>().user.loginType == LoginType.test ? 1 : 2,
           initialIndex: params.isCoupon ? 1 : 0,
           child: Scaffold(
-            appBar: appBar,
+            appBar: PreferredSize(
+                child: AppBar(
+                    leading: IconButton(
+                        icon: Icon(Icons.arrow_back_ios,
+                            color: Palette.backButtonColor,
+                            size: ScreenUtil.getInstance().setWidth(24)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                    centerTitle: true,
+                    title: Consumer2<LimitOrderViewModel, CouponOrderViewModel>(
+                        builder: (context, model, couponViewModel, child) {
+                      return Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              model.updateSide();
+                              couponViewModel.updateSide();
+                            },
+                            child: Text(
+                                model.orderForm.isUp
+                                    ? "${I18n.of(context).buyUp}"
+                                    : "${I18n.of(context).buyDown}",
+                                style: model.orderForm.isUp
+                                    ? StyleFactory.buyUpTitle
+                                    : StyleFactory.buyDownTitle),
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          GestureDetector(
+                            child: model.orderForm.isUp
+                                ? SvgPicture.asset(
+                                    R.resAssetsIconsIcUpRed,
+                                    width: ScreenUtil.getInstance().setWidth(18),
+                                    height: ScreenUtil.getInstance().setHeight(18),
+                                  )
+                                : SvgPicture.asset(
+                                    R.resAssetsIconsIcDownGreen,
+                                    width: ScreenUtil.getInstance().setWidth(18),
+                                    height: ScreenUtil.getInstance().setHeight(18),
+                                  ),
+                            onTap: () {
+                              model.updateSide();
+                              couponViewModel.updateSide();
+                            },
+                          )
+                        ],
+                        mainAxisSize: MainAxisSize.min,
+                      );
+                    }),
+                    backgroundColor: Colors.white,
+                    brightness: Brightness.light,
+                    elevation: 0,
+                    bottom: PreferredSize(
+                        child: DecoratedTabBar(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Palette.appDividerBackgroudGreyColor,
+                              ),
+                            ),
+                          ),
+                          tabBar: TabBar(
+                            indicatorSize: TabBarIndicatorSize.label,
+                            indicatorColor: Palette.appYellowOrange,
+                            indicatorWeight: 4,
+                            unselectedLabelColor: Palette.appGrey,
+                            labelStyle: StyleNewFactory.black18,
+                            unselectedLabelStyle: StyleNewFactory.grey15,
+                            labelColor: Palette.appBlack,
+                            tabs: locator.get<UserManager>().user.loginType == LoginType.test
+                                ? [
+                                    Container(
+                                      height: ScreenUtil.getInstance().setHeight(44),
+                                      child: Tab(
+                                        text: "USDT",
+                                      ),
+                                    ),
+                                  ]
+                                : [
+                                    Container(
+                                      height: ScreenUtil.getInstance().setHeight(44),
+                                      child: Tab(
+                                        text: "USDT",
+                                      ),
+                                    ),
+                                    Container(
+                                      height: ScreenUtil.getInstance().setHeight(44),
+                                      child: Tab(
+                                        text: "奖励金",
+                                      ),
+                                    ),
+                                  ],
+                          ),
+                        ),
+                        preferredSize: Size.fromHeight(ScreenUtil.getInstance().setHeight(44)))),
+                preferredSize: Size.fromHeight(ScreenUtil.getInstance().setHeight(88))),
             body: SafeArea(
               child: TabBarView(
                 physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),

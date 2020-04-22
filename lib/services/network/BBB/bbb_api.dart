@@ -4,6 +4,8 @@ import 'package:bbb_flutter/models/response/bbb_query_response/action_response.d
 import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/rebate_top_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/rebate_user_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
@@ -50,6 +52,9 @@ abstract class BBBAPI {
   Future<TestAccountResponseModel> getTestAccount({bool bonusEvent, String accountName});
   Future<List<RankingResponse>> getRankings({int indicator});
   Future<CouponResponse> getCoupons({List<CouponStatus> status, String name});
+
+  Future<RebateUserResponse> getRebateUser({String accountName});
+  Future<List<RebateTopResponse>> getRebateTop();
 
   ///post
   Future<PostOrderResponseModel> postOrder({Map<String, dynamic> requestOrder});

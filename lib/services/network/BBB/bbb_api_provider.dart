@@ -7,6 +7,8 @@ import 'package:bbb_flutter/models/response/bbb_query_response/action_response.d
 import 'package:bbb_flutter/models/response/bbb_query_response/config_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/coupon_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/rebate_top_response.dart';
+import 'package:bbb_flutter/models/response/bbb_query_response/rebate_user_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/refData_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/ticker_response.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
@@ -228,6 +230,21 @@ class BBBAPIProvider extends BBBAPI {
     }
     var response = await newDio.get('/cybex/coupon', queryParameters: params);
     return Future.value(CouponResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<RebateUserResponse> getRebateUser({String accountName}) async {
+    var response = await newDio.get('/rebate/user', queryParameters: {"accountName": accountName});
+    return Future.value(RebateUserResponse.fromJson(response.data));
+  }
+
+  @override
+  Future<List<RebateTopResponse>> getRebateTop() async {
+    var response = await newDio.get('/rebate/top3');
+    var responseData = response.data as List;
+    List<RebateTopResponse> model =
+        responseData.map((data) => RebateTopResponse.fromJson(data)).toList();
+    return Future.value(model);
   }
 
   @override

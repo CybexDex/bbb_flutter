@@ -39,7 +39,10 @@ class TradeCouponState extends State<TradeCouponPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: 18, left: 15, right: 15),
+                    margin: EdgeInsets.only(
+                        top: ScreenUtil.getInstance().setHeight(15),
+                        left: ScreenUtil.getInstance().setWidth(15),
+                        right: ScreenUtil.getInstance().setWidth(15)),
                     child: Column(
                       children: <Widget>[
                         Align(
@@ -47,7 +50,7 @@ class TradeCouponState extends State<TradeCouponPage> {
                             child: Text("${locator.get<SharedPref>().getAsset()}/USDT",
                                 style: StyleNewFactory.grey14)),
                         SizedBox(
-                          height: 10,
+                          height: ScreenUtil.getInstance().setHeight(5),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,7 +86,7 @@ class TradeCouponState extends State<TradeCouponPage> {
                           ],
                         ),
                         SizedBox(
-                          height: 5,
+                          height: ScreenUtil.getInstance().setHeight(1),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,12 +118,18 @@ class TradeCouponState extends State<TradeCouponPage> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(bottom: 10, top: 15),
+                    margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(15)),
                     child: CouponOrderForm(model: model),
                   ),
                   Container(
+                    color: Palette.separatorColor,
+                    height: ScreenUtil.getInstance().setHeight(0.5),
+                  ),
+                  Container(
                       color: Colors.white,
-                      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                      margin: EdgeInsets.only(
+                          bottom: ScreenUtil.getInstance()
+                              .setHeight(MediaQuery.of(context).padding.bottom)),
                       padding: EdgeInsets.only(left: 15),
                       child: BuyOrSellBottom(
                           totalAmount: model.couponAmount * model.amountPerContract,
@@ -128,15 +137,14 @@ class TradeCouponState extends State<TradeCouponPage> {
                               ? GestureDetector(
                                   child: Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                                    padding: EdgeInsets.only(
+                                        top: ScreenUtil.getInstance().setHeight(8),
+                                        bottom: ScreenUtil.getInstance().setHeight(8)),
                                     child: new Text(
                                       "下单",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white),
+                                      style: StyleNewFactory.white18,
                                     ),
-                                    width: 130,
+                                    width: ScreenUtil.getInstance().setWidth(130),
                                     color: model.isSatisfied && model.selectedCoupon != null
                                         ? Palette.redOrange
                                         : Palette.subTitleColor,
@@ -149,15 +157,14 @@ class TradeCouponState extends State<TradeCouponPage> {
                               : GestureDetector(
                                   child: Container(
                                     alignment: Alignment.center,
-                                    padding: EdgeInsets.only(top: 12, bottom: 12),
+                                    padding: EdgeInsets.only(
+                                        top: ScreenUtil.getInstance().setHeight(8),
+                                        bottom: ScreenUtil.getInstance().setHeight(8)),
                                     child: new Text(
                                       "下单",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white),
+                                      style: StyleNewFactory.white18,
                                     ),
-                                    width: 130,
+                                    width: ScreenUtil.getInstance().setWidth(130),
                                     color: model.isSatisfied && model.selectedCoupon != null
                                         ? Palette.shamrockGreen
                                         : Palette.subTitleColor,

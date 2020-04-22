@@ -14,15 +14,14 @@ class FeedBackScreen extends StatelessWidget {
     print(result);
   }
 
-  Future<void> requestPermission(List<PermissionGroup> permissions, BuildContext context) async {
-    final Map<PermissionGroup, PermissionStatus> permissionRequestResult =
-        await PermissionHandler().requestPermissions(permissions);
+  Future<void> requestPermission(List<Permission> permissions, BuildContext context) async {
+    final Map<Permission, PermissionStatus> permissionRequestResult = await permissions.request();
     print(permissionRequestResult);
     if (Platform.isAndroid) {
       if (permissionRequestResult[permissions[0]] == PermissionStatus.granted) {
         _capturePng();
         showToast(I18n.of(context).savePhotoSuccess, textPadding: EdgeInsets.all(20));
-      } else {}
+      }
     } else {
       print(permissions[1]);
       if (permissionRequestResult[permissions[1]] == PermissionStatus.granted) {
@@ -34,7 +33,7 @@ class FeedBackScreen extends StatelessWidget {
             builder: (context) => DialogFactory.normalConfirmDialog(context,
                 title: I18n.of(context).requestPermissionTitle,
                 content: I18n.of(context).requestPermissionContent,
-                onConfirmPressed: () => PermissionHandler().openAppSettings()));
+                onConfirmPressed: () => openAppSettings()));
       }
     }
   }
@@ -83,8 +82,7 @@ class FeedBackScreen extends StatelessWidget {
                             color: Colors.lightBlueAccent,
                             data: "保存二维码",
                             onPressed: () {
-                              requestPermission(
-                                  [PermissionGroup.storage, PermissionGroup.photos], context);
+                              requestPermission([Permission.storage, Permission.photos], context);
                             })),
                     Container(
                       width: 20,

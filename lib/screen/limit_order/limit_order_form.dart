@@ -66,12 +66,14 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
       return Stack(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 30),
-            padding: EdgeInsets.only(left: 15, right: 15),
+            margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(30)),
+            padding: EdgeInsets.only(
+                left: ScreenUtil.getInstance().setWidth(15),
+                right: ScreenUtil.getInstance().setWidth(15)),
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 50),
+                SizedBox(height: ScreenUtil.getInstance().setHeight(40)),
                 Row(
                   children: <Widget>[
                     ChoiceChip(
@@ -112,7 +114,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 ),
                 model.isMarket
                     ? Row(
@@ -123,11 +125,11 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                             style: StyleNewFactory.grey15,
                           ),
                           SizedBox(
-                            width: 240,
+                            width: ScreenUtil.getInstance().setWidth(240),
                             child: Container(
                               alignment: Alignment.centerLeft,
                               padding: EdgeInsets.only(left: 10),
-                              height: 36,
+                              height: ScreenUtil.getInstance().setHeight(35),
                               decoration: BoxDecoration(
                                   color: Palette.separatorColor,
                                   border: Border.all(color: Palette.separatorColor, width: 0.5),
@@ -148,9 +150,9 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                             style: StyleNewFactory.grey15,
                           ),
                           SizedBox(
-                            width: 240,
+                            width: ScreenUtil.getInstance().setWidth(240),
                             child: Container(
-                              height: 36,
+                              height: ScreenUtil.getInstance().setHeight(35),
                               decoration: BoxDecoration(
                                   border: Border.all(color: Palette.separatorColor, width: 0.5),
                                   borderRadius: BorderRadius.circular(5)),
@@ -210,7 +212,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,9 +222,9 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                       style: StyleNewFactory.grey15,
                     ),
                     SizedBox(
-                      width: 240,
+                      width: ScreenUtil.getInstance().setWidth(240),
                       child: Container(
-                        height: 36,
+                        height: ScreenUtil.getInstance().setHeight(35),
                         decoration: BoxDecoration(
                             border: Border.all(color: Palette.separatorColor, width: 0.5),
                             borderRadius: BorderRadius.circular(5)),
@@ -260,7 +262,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,7 +274,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          width: 202,
+                          width: ScreenUtil.getInstance().setWidth(202),
                           child: IStep(
                             enabled: model.isMarket ? true : model.contract != null,
                             isPrice: true,
@@ -318,15 +320,15 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                                   _takeProfitController.text = "-";
                                 }
                               : () {},
-                          child: Text(I18n.of(context).orderFormReset,
-                              style: StyleFactory.cellDescLabel),
+                          child:
+                              Text(I18n.of(context).orderFormReset, style: StyleNewFactory.grey14),
                         )
                       ],
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +340,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                     Row(
                       children: <Widget>[
                         SizedBox(
-                          width: 202,
+                          width: ScreenUtil.getInstance().setWidth(202),
                           child: IStep(
                             enabled: (model.isMarket ? true : model.contract != null),
                             isPrice: true,
@@ -383,15 +385,15 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                                       widget._model.contract.strikeLevel.toStringAsFixed(0);
                                 }
                               : () {},
-                          child: Text(I18n.of(context).orderFormReset,
-                              style: StyleFactory.cellDescLabel),
+                          child:
+                              Text(I18n.of(context).orderFormReset, style: StyleNewFactory.grey14),
                         )
                       ],
                     )
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(15),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -401,7 +403,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                       style: StyleNewFactory.grey15,
                     ),
                     SizedBox(
-                      width: 240,
+                      width: ScreenUtil.getInstance().setWidth(240),
                       child: IStep(
                         text: _amountController,
                         plusOnTap: () {
@@ -427,7 +429,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ],
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 ),
                 Row(
                   children: <Widget>[
@@ -507,18 +509,20 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                       ],
                     )),
                 SizedBox(
-                  height: 10,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 )
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15),
+            padding: EdgeInsets.only(
+                left: ScreenUtil.getInstance().setWidth(15),
+                right: ScreenUtil.getInstance().setWidth(15)),
             child: Row(
               children: <Widget>[
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -531,7 +535,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         model.usdtBalance != null
                             ? "${model.usdtBalance.quantity.toStringAsFixed(4)}"
                             : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text("${I18n.of(context).balanceAvailable}", style: StyleNewFactory.grey13),
@@ -539,8 +543,8 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ),
                 ),
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -553,7 +557,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                         model.orderForm.totalAmount.amount > double.minPositive
                             ? "${(model.orderForm.totalAmount.amount / model.orderForm.investAmount).toStringAsFixed(4)}"
                             : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text(I18n.of(context).perPrice, style: StyleNewFactory.grey13),
@@ -561,8 +565,8 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                   ),
                 ),
                 Container(
-                  height: 60,
-                  width: 108,
+                  height: ScreenUtil.getInstance().setHeight(60),
+                  width: ScreenUtil.getInstance().setWidth(108),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -573,7 +577,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
                     children: <Widget>[
                       Text(
                         refreshContract != null ? "${model.actLevel.toStringAsFixed(1)}" : "--",
-                        style: StyleFactory.cellTitleStyle,
+                        style: StyleNewFactory.black15,
                       ),
                       SizedBox(height: 6),
                       Text("${I18n.of(context).actLevel}", style: StyleNewFactory.grey13),

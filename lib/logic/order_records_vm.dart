@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
@@ -49,7 +50,7 @@ class OrderRecordsViewModel extends BaseModel {
   }
 
   getAsset() async {
-    List<UnderlyingAssetResponse> response = await _bbbapi.getAsset();
+    List<UnderlyingAssetResponse> response = locator.get<RefManager>().underlyingList;
     assetList = response;
     buildDropdownMenu();
     setBusy(false);

@@ -10,8 +10,7 @@ import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extended;
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart' as extended;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -22,12 +21,10 @@ class HomePage extends StatefulWidget {
   State createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
   TabController _tabController;
-  Future<ForumResponse<BannerResponse>> future =
-      locator.get<HomeViewModel>().getBanners();
+  Future<ForumResponse<BannerResponse>> future = locator.get<HomeViewModel>().getBanners();
 
   @override
   void initState() {
@@ -85,52 +82,44 @@ class _HomePageState extends State<HomePage>
                                   },
                                 ),
                                 Container(
-                                  margin: EdgeInsets.fromLTRB(16, 20, 16, 10),
+                                  margin: EdgeInsets.fromLTRB(ScreenUtil.getInstance().setWidth(16),
+                                      20, ScreenUtil.getInstance().setWidth(16), 10),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       SvgPicture.asset(
                                         R.resAssetsIconsIcHomeMarquee,
-                                        width: 20,
-                                        height: 20,
+                                        width: ScreenUtil.getInstance().setWidth(20),
+                                        height: ScreenUtil.getInstance().setWidth(20),
                                       ),
                                       Container(
                                         height: 30,
-                                        margin: EdgeInsets.only(left: 6),
-                                        child: homeViewModel
-                                                .zendeskAdvertise.isEmpty
+                                        margin: EdgeInsets.only(
+                                          left: ScreenUtil.getInstance().setWidth(6),
+                                        ),
+                                        child: homeViewModel.zendeskAdvertise.isEmpty
                                             ? Container()
                                             : CarouselSlider(
-                                                scrollPhysics:
-                                                    NeverScrollableScrollPhysics(),
-                                                aspectRatio: 10 / 1,
+                                                scrollPhysics: NeverScrollableScrollPhysics(),
+                                                aspectRatio:
+                                                    (10 / 1) * ScreenUtil.getInstance().scaleWidth,
                                                 scrollDirection: Axis.vertical,
                                                 autoPlay: true,
-                                                items: homeViewModel
-                                                    .zendeskAdvertise
-                                                    .map((i) {
+                                                items: homeViewModel.zendeskAdvertise.map((i) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      if (i.htmlUrl == null ||
-                                                          i.htmlUrl.isEmpty) {
+                                                      if (i.htmlUrl == null || i.htmlUrl.isEmpty) {
                                                         return;
                                                       }
-                                                      if (i.htmlUrl.contains(
-                                                          HTTPString)) {
-                                                        launchURL(
-                                                            url: Uri.encodeFull(
-                                                                i.htmlUrl));
+                                                      if (i.htmlUrl.contains(HTTPString)) {
+                                                        launchURL(url: Uri.encodeFull(i.htmlUrl));
                                                       } else {
-                                                        Navigator.of(context)
-                                                            .pushNamed(
-                                                                i.htmlUrl);
+                                                        Navigator.of(context).pushNamed(i.htmlUrl);
                                                       }
                                                     },
                                                     child: Text(i.name,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: StyleNewFactory
-                                                            .grey15),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: StyleNewFactory.grey15),
                                                   );
                                                 }).toList(),
                                               ),
@@ -143,8 +132,7 @@ class _HomePageState extends State<HomePage>
                       ),
                       SliverToBoxAdapter(
                         child: Container(
-                          padding: EdgeInsets.only(
-                              right: 15, left: 15, top: 12, bottom: 12),
+                          padding: EdgeInsets.only(right: 15, left: 15, top: 12, bottom: 12),
                           child: Column(
                             children: <Widget>[
                               // Container(
@@ -158,13 +146,11 @@ class _HomePageState extends State<HomePage>
                               //   height: 12,
                               // ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          homeViewModel.checkGuess(context),
+                                      onTap: () => homeViewModel.checkGuess(context),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Stack(
@@ -186,8 +172,7 @@ class _HomePageState extends State<HomePage>
                                   ),
                                   Expanded(
                                     child: GestureDetector(
-                                      onTap: () =>
-                                          homeViewModel.checkDeposit(context),
+                                      onTap: () => homeViewModel.checkDeposit(context),
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: Stack(
@@ -227,9 +212,8 @@ class _HomePageState extends State<HomePage>
                           labelStyle: StyleNewFactory.black15,
                           unselectedLabelStyle: StyleNewFactory.grey15,
                           indicator: UnderlineTabIndicator(
-                            borderSide: BorderSide(
-                                color: Palette.invitePromotionBadgeColor,
-                                width: 2),
+                            borderSide:
+                                BorderSide(color: Palette.invitePromotionBadgeColor, width: 2),
                             insets: EdgeInsets.fromLTRB(0, 0.0, 0, 8),
                           ),
                           onTap: (index) {},
@@ -237,29 +221,23 @@ class _HomePageState extends State<HomePage>
                             Tab(
                               child: Badge(
                                 showBadge: _currentTabIndex == 0,
-                                position:
-                                    BadgePosition.topRight(top: 5, right: -22),
+                                position: BadgePosition.topRight(top: 5, right: -22),
                                 badgeColor: Palette.appYellowOrange,
-                                badgeContent:
-                                    Text("24H", style: StyleNewFactory.white9),
+                                badgeContent: Text("24H", style: StyleNewFactory.white9),
                                 shape: BadgeShape.square,
                                 padding: EdgeInsets.all(1),
-                                child: Text(
-                                    I18n.of(context).homeSingleOrderRanking),
+                                child: Text(I18n.of(context).homeSingleOrderRanking),
                               ),
                             ),
                             Tab(
                               child: Badge(
                                 showBadge: _currentTabIndex == 1,
-                                position:
-                                    BadgePosition.topRight(top: 5, right: -22),
+                                position: BadgePosition.topRight(top: 5, right: -22),
                                 badgeColor: Palette.appYellowOrange,
-                                badgeContent:
-                                    Text("24H", style: StyleNewFactory.white9),
+                                badgeContent: Text("24H", style: StyleNewFactory.white9),
                                 shape: BadgeShape.square,
                                 padding: EdgeInsets.all(1),
-                                child: Text(
-                                    I18n.of(context).homeTotalOrderRanking),
+                                child: Text(I18n.of(context).homeTotalOrderRanking),
                               ),
                             ),
                           ],
@@ -276,10 +254,7 @@ class _HomePageState extends State<HomePage>
                                 return HomeRankingItem(
                                   index: index,
                                   rankingResponse: (index == 0 ||
-                                          index >=
-                                              homeViewModel
-                                                      .rankingsTotal.length +
-                                                  1)
+                                          index >= homeViewModel.rankingsTotal.length + 1)
                                       ? null
                                       : homeViewModel.rankingsTotal[index - 1],
                                 );
@@ -291,13 +266,9 @@ class _HomePageState extends State<HomePage>
                                 return HomeRankingItem(
                                   index: index,
                                   rankingResponse: (index == 0 ||
-                                          index >=
-                                              homeViewModel
-                                                      .rankingsPerorder.length +
-                                                  1)
+                                          index >= homeViewModel.rankingsPerorder.length + 1)
                                       ? null
-                                      : homeViewModel
-                                          .rankingsPerorder[index - 1],
+                                      : homeViewModel.rankingsPerorder[index - 1],
                                 );
                               },
                             ),

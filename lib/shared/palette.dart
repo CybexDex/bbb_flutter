@@ -54,4 +54,16 @@ class Palette {
   static const appDividerBackgroudGreyColor = const Color(0xfff7f7f7);
   static const appGreen = const Color(0xff48af53);
   static const appRed = const Color(0xffe45b43);
+
+  //New design Color Invitation
+  static const appInvitationBorderColor = const Color(0xffBFBFBF);
+  static const appInvitationGoldenColor = const Color(0xffAB8A57);
+  static const appInvitationYellowColor = const Color(0xffFFDA58);
+  static const appInvitationGreyColor = const Color(0xffA6A6A6);
+  static const appInvitationBrownColor = const Color(0xff654108);
+  static const appInvitationTextVip = const Color(0xff666666);
+  static const appInvitationTextVip2 = const Color(0xff836246);
+  static const appInvitationTextVip3 = const Color(0xff945E11);
+  static const appInvitationTextVip4 = const Color(0xff5F4879);
+  static const appInvitationTextVip5 = const Color(0xff71F5FC);
 }

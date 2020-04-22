@@ -9,25 +9,20 @@ void main() async {
   var newLines = <String>[];
   var resource = <String>[];
   for (var line in pubLines) {
-    if (line.contains('begin') &&
-        line.contains('#') &&
-        line.contains('assets')) {
+    if (line.contains('begin') && line.contains('#') && line.contains('assets')) {
       working = true;
       newLines.add(line);
     }
-    if (line.contains('end') && line.contains('#') && line.contains('assets'))
-      working = false;
+    if (line.contains('end') && line.contains('#') && line.contains('assets')) working = false;
 
     if (working) {
       if (line.trim().startsWith('#') && line.trim().endsWith('*')) {
         newLines.add(line);
-        var directory =
-            new Directory(line.replaceAll('#', '').replaceAll('*', '').trim());
+        var directory = new Directory(line.replaceAll('#', '').replaceAll('*', '').trim());
         if (directory.existsSync()) {
           var list = directory.listSync(recursive: false);
           for (var file in list) {
-            if (new File(file.path).statSync().type ==
-                FileSystemEntityType.file) {
+            if (new File(file.path).statSync().type == FileSystemEntityType.file) {
               var path = file.path.replaceAll('\\', '/');
               var varName = path
                   .replaceAll('/', '_')
@@ -40,16 +35,14 @@ void main() async {
                 pos = varName.indexOf('_', pos);
                 if (pos == -1) break;
                 char = varName.substring(pos + 1, pos + 2);
-                varName =
-                    varName.replaceFirst('_$char', '_${char.toUpperCase()}');
+                varName = varName.replaceFirst('_$char', '_${char.toUpperCase()}');
                 pos++;
               }
               varName = varName.replaceAll('_', '');
               if (!varName.contains(".")) {
-                resource
-                    .add("/// ![](http://127.0.0.1:$previewServerPort/$path)");
+                resource.add("/// ![](http://127.0.0.1:$previewServerPort/$path)");
                 resource.add("static final String $varName = '$path';");
-                newLines.add('        - $path');
+                newLines.add('    - $path');
               }
             }
           }

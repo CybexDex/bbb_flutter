@@ -83,6 +83,14 @@ class StyleNewFactory {
     fontStyle: FontStyle.normal,
   );
 
+  static var appCellTitleLightGrey15 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appCellTitlelightGrey,
+    fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
   static var black10 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appBlack,
@@ -243,4 +251,51 @@ class StyleNewFactory {
     fontStyle: FontStyle.normal,
     letterSpacing: 0,
   );
+
+  static var golden15 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appInvitationGoldenColor,
+    fontSize: Dimen.fontSize15,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static var invitationGrey13 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appInvitationGreyColor,
+    fontSize: Dimen.fontSize13,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static var invitationBrown13 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appInvitationBrownColor,
+    fontSize: Dimen.fontSize13,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static var invitationBrown22 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appInvitationBrownColor,
+    fontSize: Dimen.fontSize22,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+  );
+
+  static TextStyle getInvitationVipText({Color color, double fontSize}) {
+    return TextStyle(
+      fontFamily: 'PingFangSC',
+      color: color,
+      fontSize: fontSize,
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      letterSpacing: 0,
+    );
+  }
 }

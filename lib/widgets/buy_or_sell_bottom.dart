@@ -1,3 +1,4 @@
+import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 
 class BuyOrSellBottom extends StatelessWidget {
@@ -14,20 +15,12 @@ class BuyOrSellBottom extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text("${I18n.of(context).investPay}: ",
-                style: TextStyle(
-                  fontFamily: 'PingFangSC',
-                  color: Color(0xff6f7072),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
-                  letterSpacing: 0,
-                )),
+            Text("${I18n.of(context).investPay}: ", style: StyleNewFactory.black15),
             Text(
               (totalAmount != null && totalAmount > double.minPositive)
                   ? totalAmount.toStringAsFixed(4) + " USDT"
                   : "-- USDT",
-              style: StyleFactory.buySellValueText,
+              style: StyleNewFactory.black15,
             ),
           ],
         ),

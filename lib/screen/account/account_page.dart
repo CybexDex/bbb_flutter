@@ -11,7 +11,6 @@ import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:bbb_flutter/widgets/speech_bubble.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -256,7 +255,6 @@ class _AccountPageState extends State<AccountPage> {
                                 ),
                               ),
                               Align(
-                                alignment: Alignment.center,
                                 child: Container(
                                   width: ScreenUtil.getInstance().setWidth(345),
                                   margin: EdgeInsets.only(top: 152),
@@ -507,33 +505,44 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                           userManager.user.loginType == LoginType.cloud ||
                                   userManager.user.loginType == LoginType.none
-                              ? ListTile(
-                                  trailing: Icon(Icons.keyboard_arrow_right),
-                                  title: Row(
-                                    children: <Widget>[
-                                      Text(
-                                        I18n.of(context).inviteFriend,
-                                        style: StyleNewFactory.black15,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      SpeechBubble(
-                                          nipLocation: NipLocation.LEFT,
-                                          color: Palette.invitePromotionBadgeColor.withOpacity(0.1),
-                                          padding: EdgeInsets.only(
-                                              bottom: 1, top: 1, left: 12, right: 12),
-                                          child: Container(
-                                            child: Text("返利",
-                                                style: StyleFactory.inviteBadgeFontStyle),
-                                          ))
-                                    ],
-                                  ),
+                              ? GestureDetector(
                                   onTap: () {
                                     _accountViewModel.puchToNextPage(
                                         userManager.user.logined, RoutePaths.Invite, context);
                                   },
+                                  child: SvgPicture.asset(
+                                    R.resAssetsIconsInvitationListTile,
+                                    height: ScreenUtil.getInstance().setHeight(105),
+                                    width: ScreenUtil.getInstance().setWidth(375),
+                                  ),
                                 )
+                              // ? ListTile(
+                              //     trailing: Icon(Icons.keyboard_arrow_right),
+                              //     title: Row(
+                              //       children: <Widget>[
+                              //         Text(
+                              //           I18n.of(context).inviteFriend,
+                              //           style: StyleNewFactory.black15,
+                              //         ),
+                              //         SizedBox(
+                              //           width: 10,
+                              //         ),
+                              //         SpeechBubble(
+                              //             nipLocation: NipLocation.LEFT,
+                              //             color: Palette.invitePromotionBadgeColor.withOpacity(0.1),
+                              //             padding: EdgeInsets.only(
+                              //                 bottom: 1, top: 1, left: 12, right: 12),
+                              //             child: Container(
+                              //               child: Text("返利",
+                              //                   style: StyleFactory.inviteBadgeFontStyle),
+                              //             ))
+                              //       ],
+                              //     ),
+                              //     onTap: () {
+                              //       _accountViewModel.puchToNextPage(
+                              //           userManager.user.logined, RoutePaths.Invite, context);
+                              //     },
+                              //   )
                               : Container(),
                           SizedBox(
                             height: 50,

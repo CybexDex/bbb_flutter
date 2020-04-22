@@ -26,7 +26,7 @@ class IStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 36,
+      height: ScreenUtil.getInstance().setHeight(35),
       decoration: BoxDecoration(
           border: Border.all(color: Palette.separatorColor, width: 0.5),
           borderRadius: BorderRadius.circular(5)),
