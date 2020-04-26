@@ -45,8 +45,8 @@ class ReviseState extends State<ReviseWidget> {
               style: StyleFactory.subTitleStyle,
             ),
             SizedBox(
-                width: 250,
-                height: 40,
+                width: ScreenUtil.getInstance().setWidth(250),
+                height: ScreenUtil.getInstance().setHeight(40),
                 child: Material(
                   child: IStep(
                     text: widget._takeProfitController,
@@ -68,18 +68,16 @@ class ReviseState extends State<ReviseWidget> {
                     },
                     onChange: (value) {
                       if (value.isNotEmpty &&
-                          (double.tryParse(value) == null ||
-                              double.tryParse(value) < 0)) {
+                          (double.tryParse(value) == null || double.tryParse(value) < 0)) {
                         widget.model.setTakeProfitInputCorrectness(false);
                       } else {
                         widget.model.setTakeProfitInputCorrectness(true);
                         widget.model.changeTakeProfit(
                             profit: value.isEmpty ? null : double.parse(value),
                             order: widget._order);
-                        widget._takeProfitPxController.text =
-                            widget.model.takeProfitPx == 0
-                                ? I18n.of(context).stepWidgetNotSetHint
-                                : widget.model.takeProfitPx.toStringAsFixed(4);
+                        widget._takeProfitPxController.text = widget.model.takeProfitPx == 0
+                            ? I18n.of(context).stepWidgetNotSetHint
+                            : widget.model.takeProfitPx.toStringAsFixed(4);
                       }
                     },
                   ),
@@ -87,12 +85,9 @@ class ReviseState extends State<ReviseWidget> {
             GestureDetector(
               onTap: () {
                 widget.model.setTakeProfitInputCorrectness(true);
-                widget.model
-                    .changeTakeProfit(profit: null, order: widget._order);
-                widget._takeProfitController.text =
-                    I18n.of(context).stepWidgetNotSetHint;
-                widget._takeProfitPxController.text =
-                    I18n.of(context).stepWidgetNotSetHint;
+                widget.model.changeTakeProfit(profit: null, order: widget._order);
+                widget._takeProfitController.text = I18n.of(context).stepWidgetNotSetHint;
+                widget._takeProfitPxController.text = I18n.of(context).stepWidgetNotSetHint;
               },
               child: Text(
                 I18n.of(context).orderFormReset,
@@ -110,7 +105,7 @@ class ReviseState extends State<ReviseWidget> {
         //   ),
         // ),
         SizedBox(
-          height: 20,
+          height: ScreenUtil.getInstance().setHeight(20),
         ),
         Row(
           children: <Widget>[
@@ -123,40 +118,33 @@ class ReviseState extends State<ReviseWidget> {
               ],
             ),
             SizedBox(
-                width: 250,
-                height: 40,
+                width: ScreenUtil.getInstance().setWidth(250),
+                height: ScreenUtil.getInstance().setHeight(40),
                 child: Material(
                   child: IStep(
                     text: widget._cutLossController,
                     plusOnTap: () {
                       widget.model.increaseCutLoss(order: widget._order);
                       widget.model.setCutLossInputCorectness(true);
-                      widget._cutLossController.text =
-                          widget.model.cutLoss.toStringAsFixed(0);
-                      widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(4);
+                      widget._cutLossController.text = widget.model.cutLoss.toStringAsFixed(0);
+                      widget._cutLossPxController.text = widget.model.cutLossPx.toStringAsFixed(4);
                     },
                     minusOnTap: () {
                       widget.model.decreaseCutLoss(order: widget._order);
                       widget.model.setCutLossInputCorectness(true);
-                      widget._cutLossController.text =
-                          widget.model.cutLoss.toStringAsFixed(0);
-                      widget._cutLossPxController.text =
-                          widget.model.cutLossPx.toStringAsFixed(4);
+                      widget._cutLossController.text = widget.model.cutLoss.toStringAsFixed(0);
+                      widget._cutLossPxController.text = widget.model.cutLossPx.toStringAsFixed(4);
                     },
                     onChange: (value) {
                       if (value.isNotEmpty &&
-                          (double.tryParse(value) == null ||
-                              double.tryParse(value) < 0)) {
+                          (double.tryParse(value) == null || double.tryParse(value) < 0)) {
                         widget.model.setCutLossInputCorectness(false);
                       } else {
                         widget.model.setCutLossInputCorectness(true);
                         widget.model.changeCutLoss(
                             cutLoss: value.isEmpty
                                 ? null
-                                : double.parse(value) > 100
-                                    ? 100
-                                    : double.parse(value),
+                                : double.parse(value) > 100 ? 100 : double.parse(value),
                             order: widget._order);
                         if (value.isNotEmpty && double.parse(value) > 100) {
                           widget._cutLossController.text = "100";
@@ -172,8 +160,7 @@ class ReviseState extends State<ReviseWidget> {
                 widget.model.setCutLossInputCorectness(true);
                 widget.model.changeCutLoss(cutLoss: 100, order: widget._order);
                 widget._cutLossController.text = "100";
-                widget._cutLossPxController.text =
-                    widget.model.cutLossPx.toStringAsFixed(4);
+                widget._cutLossPxController.text = widget.model.cutLossPx.toStringAsFixed(4);
               },
               child: Text(
                 I18n.of(context).orderFormReset,
@@ -201,8 +188,7 @@ class ReviseState extends State<ReviseWidget> {
                 builder: (context) {
                   if (!widget.model.isCutLossInputCorrect ||
                       !widget.model.isTakeProfitInputCorrect) {
-                    return Text(
-                        I18n.of(context).orderFormInputPositiveNumberError,
+                    return Text(I18n.of(context).orderFormInputPositiveNumberError,
                         style: StyleFactory.smallButtonTitleStyle);
                   } else if (!widget.model.isCutLossCorrect &&
                       widget._order.boughtPx > widget._order.forceClosePx) {
@@ -223,7 +209,7 @@ class ReviseState extends State<ReviseWidget> {
               ),
             )),
         SizedBox(
-          height: 40,
+          height: ScreenUtil.getInstance().setHeight(40),
         ),
       ],
     );

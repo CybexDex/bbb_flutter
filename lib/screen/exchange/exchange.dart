@@ -141,7 +141,11 @@ class _ExchangePageState extends State<ExchangePage>
                       Visibility(
                         visible: !isExpandOpen,
                         child: Container(
-                          padding: EdgeInsets.only(right: 20, left: 20, bottom: 15, top: 15),
+                          padding: EdgeInsets.only(
+                              right: ScreenUtil.getInstance().setWidth(20),
+                              left: ScreenUtil.getInstance().setWidth(20),
+                              bottom: ScreenUtil.getInstance().setHeight(15),
+                              top: ScreenUtil.getInstance().setHeight(15)),
                           color: Colors.white,
                           child: Row(
                             children: <Widget>[
@@ -151,8 +155,8 @@ class _ExchangePageState extends State<ExchangePage>
                                     builder: (context) => WidgetFactory.button(
                                         data: I18n.of(context).buyUp,
                                         color: Palette.redOrange,
-                                        topPadding: 10.0,
-                                        bottomPadding: 10.0,
+                                        topPadding: ScreenUtil.getInstance().setHeight(10),
+                                        bottomPadding: ScreenUtil.getInstance().setHeight(10),
                                         onPressed: () {
                                           _onClickBuyOrSellButton(
                                               ref: locator.get(),
@@ -162,7 +166,7 @@ class _ExchangePageState extends State<ExchangePage>
                                         }),
                                   )),
                               Container(
-                                width: 20,
+                                width: ScreenUtil.getInstance().setWidth(20),
                               ),
                               Expanded(
                                   flex: 1,
@@ -170,8 +174,8 @@ class _ExchangePageState extends State<ExchangePage>
                                     builder: (context) => WidgetFactory.button(
                                         data: I18n.of(context).buyDown,
                                         color: Palette.shamrockGreen,
-                                        topPadding: 10.0,
-                                        bottomPadding: 10.0,
+                                        topPadding: ScreenUtil.getInstance().setHeight(10),
+                                        bottomPadding: ScreenUtil.getInstance().setHeight(10),
                                         onPressed: () {
                                           _onClickBuyOrSellButton(
                                               ref: locator.get(),

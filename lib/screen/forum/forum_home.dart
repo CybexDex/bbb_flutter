@@ -3,6 +3,8 @@ import 'package:bbb_flutter/screen/forum/news_page.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/widgets.dart';
 
+import 'blockchain_vip_page.dart';
+
 class ForumHome extends StatefulWidget {
   const ForumHome({Key key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class _ForumWidget extends State<ForumHome> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -39,7 +41,7 @@ class _ForumWidget extends State<ForumHome> {
               Tab(
                 text: I18n.of(context).astrology,
               ),
-              // Tab(text: I18n.of(context).blockchainVip),
+              Tab(text: I18n.of(context).blockchainVip),
               Tab(text: I18n.of(context).news),
             ],
             onTap: (index) {},
@@ -49,7 +51,7 @@ class _ForumWidget extends State<ForumHome> {
           child: TabBarView(
             children: <Widget>[
               AstrologyPage(),
-              // new BlockchainVipPage(),
+              BlockchainVipPage(),
               NewsPage(
                 key: _key,
               )

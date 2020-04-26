@@ -5,15 +5,11 @@ import 'dimen.dart';
 
 class StyleFactory {
   static const shadow = BoxShadow(
-      color: Color.fromRGBO(0, 0, 0, 0.1),
-      offset: Offset(0, 4),
-      spreadRadius: 0,
-      blurRadius: 12);
+      color: Color.fromRGBO(0, 0, 0, 0.1), offset: Offset(0, 4), spreadRadius: 0, blurRadius: 12);
 
   static const corner = BorderRadius.all(Radius.circular(Dimen.corner));
 
-  static const dialogCorner =
-      BorderRadius.all(Radius.circular(Dimen.dialogCorner));
+  static const dialogCorner = BorderRadius.all(Radius.circular(Dimen.dialogCorner));
 
   static var title = TextStyle(
       decoration: TextDecoration.none,
@@ -46,7 +42,7 @@ class StyleFactory {
       color: Palette.buttonPrimaryColor,
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
-      fontSize: Dimen.largeButtonFontSize);
+      fontSize: Dimen.fontSize18);
 
   static var navButtonTitleStyle = TextStyle(
       decoration: TextDecoration.none,

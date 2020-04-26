@@ -133,13 +133,11 @@ class _AstrologyWidget extends State<AstrologyPage>
                             Text(DateTime.now().day.toString(),
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize:
-                                      ScreenUtil.getInstance().setSp(50.0),
+                                  fontSize: ScreenUtil.getInstance().setSp(50.0),
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
                                 )),
-                            new Text(
-                                "${DateTime.now().year}年${DateTime.now().month}月",
+                            new Text("${DateTime.now().year}年${DateTime.now().month}月",
                                 style: TextStyle(
                                   fontFamily: 'FZLTZCHK-GBK1-0',
                                   color: Colors.white,
@@ -170,7 +168,11 @@ class _AstrologyWidget extends State<AstrologyPage>
       },
       child: Container(
         margin: EdgeInsets.only(left: 15, right: 15, top: 10),
-        padding: EdgeInsets.fromLTRB(15, 9, 15, 8),
+        padding: EdgeInsets.fromLTRB(
+            ScreenUtil.getInstance().setWidth(15),
+            ScreenUtil.getInstance().setHeight(9),
+            ScreenUtil.getInstance().setWidth(15),
+            ScreenUtil.getInstance().setHeight(8)),
         decoration: BoxDecoration(
             color: Palette.pagePrimaryColor,
             borderRadius: StyleFactory.corner,
@@ -183,21 +185,21 @@ class _AstrologyWidget extends State<AstrologyPage>
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(newsList[pos].title,
-                      style: StyleFactory.forumTitleFontStyle),
+                  Text(newsList[pos].title, style: StyleFactory.forumTitleFontStyle),
                   Text(newsList[pos].subtitle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: StyleFactory.forumContentFontStyle),
                   Container(
-                      margin: EdgeInsets.only(top: 5),
+                      margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(5)),
                       child: getItemBottomWidget(pos)),
                 ],
               ),
             ),
             Container(
-                height: 60,
-                width: 100,
+                padding: EdgeInsets.only(left: ScreenUtil.getInstance().setWidth(5)),
+                height: ScreenUtil.getInstance().setHeight(60),
+                width: ScreenUtil.getInstance().setWidth(100),
                 child: Image.network(newsList[pos].image)),
           ],
         ),
@@ -217,8 +219,7 @@ class _AstrologyWidget extends State<AstrologyPage>
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Expanded(
-            child: Text(
-                "${I18n.of(context).forumCreate}${newsList[pos].author}",
+            child: Text("${I18n.of(context).forumCreate}${newsList[pos].author}",
                 style: StyleFactory.forumItemLabelFontStyle)),
       ],
     );

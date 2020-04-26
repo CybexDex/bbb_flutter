@@ -132,7 +132,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                       SliverToBoxAdapter(
                         child: Container(
-                          padding: EdgeInsets.only(right: 15, left: 15, top: 12, bottom: 12),
+                          padding: EdgeInsets.only(
+                              right: ScreenUtil.getInstance().setWidth(15),
+                              left: ScreenUtil.getInstance().setWidth(15),
+                              top: ScreenUtil.getInstance().setHeight(12),
+                              bottom: ScreenUtil.getInstance().setHeight(12)),
                           child: Column(
                             children: <Widget>[
                               // Container(
@@ -159,7 +163,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                               width: double.infinity,
                                               child: SvgPicture.asset(
                                                 R.resAssetsIconsIcGuessUpDown,
-                                                fit: BoxFit.fill,
                                               ),
                                             ),
                                           ],
@@ -168,7 +171,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: ScreenUtil.getInstance().setWidth(10),
                                   ),
                                   Expanded(
                                     child: GestureDetector(
@@ -181,7 +184,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                               width: double.infinity,
                                               child: SvgPicture.asset(
                                                 R.resAssetsIconsIcHomeDeposit,
-                                                fit: BoxFit.fill,
                                               ),
                                             ),
                                           ],

@@ -89,7 +89,11 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(15, 9, 15, 8),
+            padding: EdgeInsets.fromLTRB(
+                ScreenUtil.getInstance().setWidth(15),
+                ScreenUtil.getInstance().setHeight(9),
+                ScreenUtil.getInstance().setWidth(15),
+                ScreenUtil.getInstance().setHeight(9)),
             color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,32 +103,33 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(newsList[pos].title,
-                          style: StyleFactory.forumTitleFontStyle),
+                      Text(newsList[pos].title, style: StyleFactory.forumTitleFontStyle),
                       SizedBox(
-                        height: 8,
+                        height: ScreenUtil.getInstance().setHeight(8),
                       ),
                       Text(newsList[pos].preview,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: StyleFactory.forumContentFontStyle),
                       Container(
-                          margin: EdgeInsets.only(top: 9, right: 12),
+                          margin: EdgeInsets.only(
+                              top: ScreenUtil.getInstance().setHeight(9),
+                              right: ScreenUtil.getInstance().setWidth(12)),
                           child: getItemBottomWidget(pos)),
                     ],
                   ),
                 ),
                 Container(
-                    width: 100,
-                    height: 80,
+                    width: ScreenUtil.getInstance().setWidth(100),
+                    height: ScreenUtil.getInstance().setHeight(80),
                     child: Image.network(newsList[pos].image)),
               ],
             ),
           ),
           Divider(
             color: Color(0xffe0e0e0),
-            indent: 12,
-            endIndent: 12,
+            indent: ScreenUtil.getInstance().setWidth(15),
+            endIndent: ScreenUtil.getInstance().setWidth(15),
           )
         ],
       ),
@@ -138,13 +143,11 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Expanded(
-              child: Text(
-                  "${I18n.of(context).forumAuthor}${newsList[pos].author}",
+              child: Text("${I18n.of(context).forumAuthor}${newsList[pos].author}",
                   style: StyleFactory.forumItemLabelFontStyle)),
           new Text(
-              DateFormat("yyyy-MM-dd").format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                      newsList[pos].updated * 1000)),
+              DateFormat("yyyy-MM-dd")
+                  .format(DateTime.fromMillisecondsSinceEpoch(newsList[pos].updated * 1000)),
               style: StyleFactory.forumItemLabelFontStyle)
         ],
       ),

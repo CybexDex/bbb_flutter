@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/utils.dart';
-import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/post_ref_request_model.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/rebate_top_response.dart';
@@ -12,7 +11,6 @@ import 'package:bbb_flutter/models/response/query_ref_response_model.dart';
 import 'package:bbb_flutter/models/response/refer_top_list_response.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
-import 'package:bbb_flutter/services/network/node/node_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -20,9 +18,7 @@ import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
 class InviteViewModel extends BaseModel {
   ReferApi _api;
-  NodeApi _nodeApi;
   UserManager _um;
-  RefManager _ref;
   BBBAPI _bbbapi;
 
   QueryRefResponseModel queryRefResponseModel;
@@ -39,16 +35,9 @@ class InviteViewModel extends BaseModel {
   String vipBackground;
   Color vipTextColor;
 
-  InviteViewModel(
-      {@required ReferApi api,
-      @required NodeApi nodeApi,
-      @required RefManager refm,
-      @required UserManager um,
-      @required BBBAPI bbbapi}) {
+  InviteViewModel({@required ReferApi api, @required UserManager um, @required BBBAPI bbbapi}) {
     _api = api;
     _um = um;
-    _ref = refm;
-    _nodeApi = nodeApi;
     _bbbapi = bbbapi;
     getRoleBackgroundId();
   }

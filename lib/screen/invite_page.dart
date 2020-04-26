@@ -23,12 +23,7 @@ class _InviteState extends State<InvitePage> {
   @override
   Widget build(BuildContext context) {
     return BaseWidget<InviteViewModel>(
-      model: InviteViewModel(
-          api: locator.get(),
-          nodeApi: locator.get(),
-          refm: locator.get(),
-          um: locator.get(),
-          bbbapi: locator.get()),
+      model: InviteViewModel(api: locator.get(), um: locator.get(), bbbapi: locator.get()),
       onModelReady: (model) async {
         model.getRefer();
         model.getUserRebate();
@@ -63,8 +58,13 @@ class _InviteState extends State<InvitePage> {
             elevation: 0,
           ),
           bottomNavigationBar: Container(
-            height: ScreenUtil.getInstance().setHeight(95),
-            padding: EdgeInsets.only(right: 15, left: 15, top: 9, bottom: 14),
+            height: ScreenUtil.getInstance().setHeight(90),
+            padding: EdgeInsets.only(
+              right: ScreenUtil.getInstance().setWidth(15),
+              left: ScreenUtil.getInstance().setHeight(15),
+              top: ScreenUtil.getInstance().setHeight(9),
+              bottom: ScreenUtil.getInstance().setHeight(14),
+            ),
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -115,7 +115,7 @@ class _InviteState extends State<InvitePage> {
                   ],
                 ),
                 SizedBox(
-                  height: 8,
+                  height: ScreenUtil.getInstance().setHeight(10),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +126,9 @@ class _InviteState extends State<InvitePage> {
                           Navigator.of(context).pushNamed(RoutePaths.Share);
                         },
                         child: Container(
-                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          padding: EdgeInsets.only(
+                              top: ScreenUtil.getInstance().setHeight(4.5),
+                              bottom: ScreenUtil.getInstance().setHeight(4.5)),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color: Palette.appYellowOrange,
@@ -139,16 +141,21 @@ class _InviteState extends State<InvitePage> {
                       ),
                     ),
                     SizedBox(
-                      width: 20,
+                      width: ScreenUtil.getInstance().setWidth(20),
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => launchURL(
-                            url:
-                                "https://bbb.cybex.io/?id=${locator.get<UserManager>().user.name}#/"),
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(
+                              text:
+                                  "https://bbb.cybex.io/?id=${locator.get<UserManager>().user.name}#/"));
+                          showThemeToast("复制成功");
+                        },
                         child: Container(
                           alignment: Alignment.center,
-                          padding: EdgeInsets.only(top: 5, bottom: 5),
+                          padding: EdgeInsets.only(
+                              top: ScreenUtil.getInstance().setHeight(4.5),
+                              bottom: ScreenUtil.getInstance().setHeight(4.5)),
                           decoration: BoxDecoration(
                               color: Palette.appInvitationYellowColor,
                               borderRadius: BorderRadius.circular(5)),
@@ -346,7 +353,7 @@ class _InviteState extends State<InvitePage> {
                                                       style: StyleNewFactory.invitationBrown22,
                                                     ),
                                                     Text(
-                                                      "累积返佣",
+                                                      "累计返佣",
                                                       style: StyleNewFactory.invitationBrown13,
                                                     ),
                                                   ],
@@ -614,7 +621,7 @@ class _InviteState extends State<InvitePage> {
                                                                 StyleNewFactory.invitationBrown22,
                                                           ),
                                                           Text(
-                                                            "累积新增",
+                                                            "累计新增",
                                                             style:
                                                                 StyleNewFactory.invitationBrown13,
                                                           ),
@@ -669,9 +676,10 @@ class _InviteState extends State<InvitePage> {
                                         ),
                                       )
                                     : ListView.separated(
+                                        physics: ClampingScrollPhysics(),
                                         padding: EdgeInsets.only(
                                             top: ScreenUtil.getInstance().setHeight(10),
-                                            bottom: 20,
+                                            bottom: ScreenUtil.getInstance().setHeight(20),
                                             left: ScreenUtil.getInstance().setWidth(10),
                                             right: ScreenUtil.getInstance().setWidth(10)),
                                         shrinkWrap: true,
@@ -684,11 +692,12 @@ class _InviteState extends State<InvitePage> {
                                             child: Row(
                                               children: <Widget>[
                                                 Container(
-                                                  width: ScreenUtil.getInstance().setWidth(
-                                                      (_getSize() -
-                                                              ScreenUtil.getInstance()
-                                                                  .setWidth(20)) /
-                                                          2),
+                                                  alignment: Alignment.centerLeft,
+                                                  // width: ScreenUtil.getInstance().setWidth(
+                                                  //     (_getSize() -
+                                                  //             ScreenUtil.getInstance()
+                                                  //                 .setWidth(20)) /
+                                                  //         2),
                                                   child: Text(
                                                       getEllipsisName(
                                                           value: model.referralList[index].referral,

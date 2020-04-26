@@ -317,7 +317,7 @@ class CouponOrderFormState extends State<CouponOrderForm> {
                               hint: Padding(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Text(
-                                    "暂无代金券",
+                                    "暂无奖励金",
                                     style: StyleNewFactory.grey14,
                                   )),
                               height: 0,
