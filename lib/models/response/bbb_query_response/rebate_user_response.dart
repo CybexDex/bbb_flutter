@@ -3,7 +3,7 @@ import 'dart:convert' show json;
 import 'package:bbb_flutter/helper/utils.dart';
 
 class RebateUserResponse {
-  int latestRebate;
+  double latestRebate;
   double totalRebate;
   int currentEffectiveReferral;
   double rebateRatio;
@@ -26,7 +26,7 @@ class RebateUserResponse {
       ? null
       : RebateUserResponse(
           latestRebate:
-              convertValueByType(jsonRes['latest_rebate'], int, stack: "Root-latest_rebate"),
+              convertValueByType(jsonRes['latest_rebate'], double, stack: "Root-latest_rebate"),
           totalRebate:
               convertValueByType(jsonRes['total_rebate'], double, stack: "Root-total_rebate"),
           currentEffectiveReferral: convertValueByType(jsonRes['current_effective_referral'], int,
