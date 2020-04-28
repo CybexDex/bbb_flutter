@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
@@ -33,6 +34,8 @@ class CouponOrderViewModel extends BaseModel {
   bool changeCutLoss = false;
   var ticker;
   var currentTicker;
+  var priceFloating;
+
   double amountPerContract = 0;
   prefix.OpenLimitOrderRequestModel order;
   OpenRewardRequestModel marketOrder;
@@ -70,6 +73,9 @@ class CouponOrderViewModel extends BaseModel {
     _cm = cm;
     isSatisfied = true;
     currentTicker = _mtm.lastTicker.value;
+    priceFloating = _refm.underlyingList
+        .firstWhere((value) => value.underlying == locator.get<SharedPref>().getAsset())
+        .priceFloating;
   }
 
   @override
@@ -255,7 +261,8 @@ class CouponOrderViewModel extends BaseModel {
         ? (ticker.value / (ticker.value - contract.strikeLevel))
         : (ticker.value / (contract.strikeLevel - ticker.value));
     amountPerContract =
-        ((orderForm.isUp ? (ticker.value + 10) : (ticker.value - 10)) - contract.strikeLevel)
+        ((orderForm.isUp ? (ticker.value + priceFloating) : (ticker.value - priceFloating)) -
+                    contract.strikeLevel)
                 .abs() *
             contract.conversionRate.abs();
 
