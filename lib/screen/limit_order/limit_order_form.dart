@@ -48,7 +48,7 @@ class LimitOrderFormWidgetState extends State<LimitOrderFormWidget> {
         widget._model.buildPickerMenuItem(widget._model.contractIds);
         _amountController.text = "1";
         _takeProfitController.text = "-";
-        _cutLossController.text = widget._model.contract.strikeLevel.toStringAsFixed(0);
+        _cutLossController.text = widget._model.contract?.strikeLevel?.toStringAsFixed(0) ?? "-";
       }
     });
     super.initState();

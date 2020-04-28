@@ -42,7 +42,8 @@ class _RegisterState extends State<RegisterPage> {
               body: SingleChildScrollView(
             child: SafeArea(
                 child: Container(
-              margin: EdgeInsets.only(left: 50, right: 50, top: 45, bottom: 58),
+              margin: EdgeInsets.only(
+                  left: 50, right: 50, top: ScreenUtil.getInstance().setHeight(41), bottom: 58),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -65,8 +66,8 @@ class _RegisterState extends State<RegisterPage> {
                   Container(
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.only(top: 44),
-                      child: Text(I18n.of(context).welcomeRegister,
-                          style: StyleNewFactory.black26)),
+                      child:
+                          Text(I18n.of(context).welcomeRegister, style: StyleNewFactory.black26)),
                   Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -88,8 +89,8 @@ class _RegisterState extends State<RegisterPage> {
                     autocorrect: false,
                     controller: _accountNameController,
                     onChanged: (value) {
-                      registerViewModel.checkAccountName(
-                          value, _pinCodeController.text);
+                      registerViewModel.checkAccountName(value, _pinCodeController.text,
+                          _passwordController.text, _passwordConfirmController.text);
                     },
                     decoration: InputDecoration(
                       hintText: I18n.of(context).accountName,
@@ -110,11 +111,9 @@ class _RegisterState extends State<RegisterPage> {
                         ),
                       ),
                       enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                     ),
                   ),
                   SizedBox(
@@ -125,11 +124,8 @@ class _RegisterState extends State<RegisterPage> {
                     enableInteractiveSelection: true,
                     controller: _passwordController,
                     onChanged: (value) {
-                      registerViewModel.checkPassword(
-                          value,
-                          _passwordConfirmController.text,
-                          _accountNameController.text,
-                          _pinCodeController.text);
+                      registerViewModel.checkPassword(value, _passwordConfirmController.text,
+                          _accountNameController.text, _pinCodeController.text);
                     },
                     decoration: InputDecoration(
                       hintText: I18n.of(context).password,
@@ -141,11 +137,9 @@ class _RegisterState extends State<RegisterPage> {
                         letterSpacing: 0,
                       ),
                       enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       suffixIcon: SizedBox(
                         width: 96,
                         child: Row(
@@ -183,11 +177,8 @@ class _RegisterState extends State<RegisterPage> {
                     enableInteractiveSelection: true,
                     controller: _passwordConfirmController,
                     onChanged: (value) {
-                      registerViewModel.checkPasswordConfirmation(
-                          value,
-                          _passwordController.text,
-                          _accountNameController.text,
-                          _pinCodeController.text);
+                      registerViewModel.checkPasswordConfirmation(value, _passwordController.text,
+                          _accountNameController.text, _pinCodeController.text);
                     },
                     decoration: InputDecoration(
                       hintText: I18n.of(context).passwordConfirm,
@@ -199,11 +190,9 @@ class _RegisterState extends State<RegisterPage> {
                         letterSpacing: 0,
                       ),
                       enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Palette.appGrey.withOpacity(0.1))),
+                          borderSide: BorderSide(color: Palette.appGrey.withOpacity(0.1))),
                       suffixIcon: SizedBox(
                         width: 96,
                         child: Row(
@@ -211,8 +200,7 @@ class _RegisterState extends State<RegisterPage> {
                             IconButton(
                               alignment: Alignment.centerRight,
                               padding: EdgeInsets.only(right: 0),
-                              onPressed:
-                                  registerViewModel.setPasswordConfirmObscure,
+                              onPressed: registerViewModel.setPasswordConfirmObscure,
                               icon: Icon(
                                 registerViewModel.passwordConfirmObscureText
                                     ? Icons.visibility_off
@@ -272,9 +260,7 @@ class _RegisterState extends State<RegisterPage> {
                                         width: 45,
                                         height: 25,
                                       ),
-                                      Text(
-                                          I18n.of(context)
-                                              .registerChangePinCode,
+                                      Text(I18n.of(context).registerChangePinCode,
                                           style: StyleNewFactory.grey9)
                                     ],
                                   )
@@ -294,9 +280,7 @@ class _RegisterState extends State<RegisterPage> {
                       Container(
                         decoration: BoxDecoration(
                             border: Border(
-                                bottom: BorderSide(
-                                    color: Palette.separatorColor,
-                                    width: 0.5))),
+                                bottom: BorderSide(color: Palette.separatorColor, width: 0.5))),
                       )
                     ],
                   ),
@@ -329,8 +313,7 @@ class _RegisterState extends State<RegisterPage> {
                                 ? () async {
                                     showLoading(context);
                                     await registerViewModel.processRegister(
-                                        accountName:
-                                            _accountNameController.text,
+                                        accountName: _accountNameController.text,
                                         password: _passwordController.text,
                                         pinCode: _pinCodeController.text);
                                   }
@@ -391,8 +374,7 @@ class _RegisterState extends State<RegisterPage> {
                           ),
                           text: I18n.of(context).alreadyRegister),
                       new TextSpan(
-                          style: StyleNewFactory.yellowOrange15,
-                          text: I18n.of(context).logIn)
+                          style: StyleNewFactory.yellowOrange15, text: I18n.of(context).logIn)
                     ])),
                     onTap: () {
                       Navigator.pop(context);

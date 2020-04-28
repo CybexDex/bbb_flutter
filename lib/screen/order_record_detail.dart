@@ -14,8 +14,7 @@ import 'package:intl/intl.dart';
 class OrderRecordDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final RouteParamsOfTransactionRecords params =
-        ModalRoute.of(context).settings.arguments;
+    final RouteParamsOfTransactionRecords params = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -23,8 +22,7 @@ class OrderRecordDetail extends StatelessWidget {
             color: Palette.backButtonColor, //change your color here
           ),
           centerTitle: true,
-          title:
-              Text(I18n.of(context).tradingDetail, style: StyleFactory.title),
+          title: Text(I18n.of(context).tradingDetail, style: StyleFactory.title),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           elevation: 0,
@@ -63,10 +61,7 @@ class OrderRecordDetailHeader extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
-            BoxShadow(
-                color: Color(0x1a000000),
-                offset: Offset(0.0, 4.0),
-                blurRadius: 12.0)
+            BoxShadow(color: Color(0x1a000000), offset: Offset(0.0, 4.0), blurRadius: 12.0)
           ],
           borderRadius: BorderRadius.circular(4.0)),
       child: Column(
@@ -132,6 +127,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
     I18n.of(globalKey.currentContext).openPositionPrice,
     I18n.of(globalKey.currentContext).settlementPrice,
     I18n.of(globalKey.currentContext).investPay,
+    I18n.of(globalKey.currentContext).investAmount,
     I18n.of(globalKey.currentContext).actLevel,
     I18n.of(globalKey.currentContext).fee,
     I18n.of(globalKey.currentContext).accruedInterest,
@@ -149,13 +145,12 @@ class OrderRecordDetailInfo extends StatelessWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    double takeprofit = OrderCalculate.getTakeProfit(_model.takeProfitPx,
-        _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
-    double cutLoss = OrderCalculate.getCutLoss(_model.cutLossPx,
-        _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
+    double takeprofit = OrderCalculate.getTakeProfit(
+        _model.takeProfitPx, _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
+    double cutLoss = OrderCalculate.getCutLoss(
+        _model.cutLossPx, _model.boughtPx, _model.strikePx, _model.contractId.contains("N"));
     double invest = OrderCalculate.calculateInvest(
-        orderQtyContract: _model.qtyContract,
-        orderBoughtContractPx: _model.boughtContractPx);
+        orderQtyContract: _model.qtyContract, orderBoughtContractPx: _model.boughtContractPx);
     _itemBuilder(title, index) {
       if (index == 0) {
         return Container(
@@ -169,31 +164,28 @@ class OrderRecordDetailInfo extends StatelessWidget {
           trailing: Builder(builder: (context) {
             switch (index) {
               case 1:
-                return Text(_model.boughtPx.toStringAsFixed(4),
-                    style: StyleNewFactory.black15);
+                return Text(_model.boughtPx.toStringAsFixed(4), style: StyleNewFactory.black15);
               case 2:
-                return Text(_model.soldPx.toStringAsFixed(4),
-                    style: StyleNewFactory.black15);
+                return Text(_model.soldPx.toStringAsFixed(4), style: StyleNewFactory.black15);
               case 3:
-                return Text(invest.toStringAsFixed(4),
-                    style: StyleNewFactory.black15);
+                return Text(invest.toStringAsFixed(4), style: StyleNewFactory.black15);
               case 4:
+                return Text(_model.qtyContract.toStringAsFixed(0), style: StyleNewFactory.black15);
+              case 5:
                 return Text(
                     "${_model.contractId.contains("N") ? (_model.boughtPx / (_model.boughtPx - _model.strikePx)).toStringAsFixed(1) : (_model.boughtPx / (_model.strikePx - _model.boughtPx)).toStringAsFixed(1)}",
                     style: StyleNewFactory.black15);
-              case 5:
-                return Text(_model.commission.toStringAsFixed(4),
-                    style: StyleNewFactory.black15);
               case 6:
+                return Text(_model.commission.toStringAsFixed(4), style: StyleNewFactory.black15);
+              case 7:
                 return Text(_model.accruedInterest.toStringAsFixed(4),
                     style: StyleNewFactory.black15);
-              case 7:
+              case 8:
                 return Text(
-                    (_model.pnl - _model.commission - _model.accruedInterest)
-                        .toStringAsFixed(4),
+                    (_model.pnl - _model.commission - _model.accruedInterest).toStringAsFixed(4),
                     style: StyleNewFactory.black15);
 
-              case 8:
+              case 9:
                 return Text(
                     _model.takeProfitPx == 0
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -202,7 +194,7 @@ class OrderRecordDetailInfo extends StatelessWidget {
                             takeprofit.toStringAsFixed(0) +
                             "%)",
                     style: StyleNewFactory.black15);
-              case 9:
+              case 10:
                 return Text(
                     _model.cutLossPx == _model.strikePx
                         ? I18n.of(context).stepWidgetNotSetHint
@@ -211,19 +203,18 @@ class OrderRecordDetailInfo extends StatelessWidget {
                             cutLoss.toStringAsFixed(0) +
                             "%)",
                     style: StyleNewFactory.black15);
-              case 10:
+              case 11:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.createTime).toLocal()),
                     style: StyleNewFactory.black15);
-              case 11:
+              case 12:
                 return Text(
                     DateFormat("yyyy/MM/dd HH:mm:ss")
                         .format(DateTime.parse(_model.settleTime).toLocal()),
                     style: StyleNewFactory.black15);
-              case 12:
-                return Text(closeResonCN(_model.closeReason),
-                    style: StyleNewFactory.black15);
+              case 13:
+                return Text(closeResonCN(_model.closeReason), style: StyleNewFactory.black15);
 
               default:
                 return Text("text", style: StyleNewFactory.black15);

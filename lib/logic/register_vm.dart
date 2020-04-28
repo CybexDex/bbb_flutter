@@ -32,10 +32,7 @@ class RegisterViewModel extends BaseModel {
   FaucetCaptchaResponseModel faucetCaptchaResponseModel;
 
   RegisterViewModel(
-      {BBBAPI bbbapi,
-      UserManager userManager,
-      FaucetAPI faucetAPI,
-      BuildContext buildContext})
+      {BBBAPI bbbapi, UserManager userManager, FaucetAPI faucetAPI, BuildContext buildContext})
       : _userManager = userManager,
         _faucetAPI = faucetAPI,
         _buildContext = buildContext;
@@ -45,10 +42,8 @@ class RegisterViewModel extends BaseModel {
     String password,
     String pinCode,
   }) async {
-    RegisterRequestModel requestModel =
-        RegisterRequestModel(cap: Cap(), account: Account());
-    String keys =
-        await CybexFlutterPlugin.getUserKeyWith(accountName, password);
+    RegisterRequestModel requestModel = RegisterRequestModel(cap: Cap(), account: Account());
+    String keys = await CybexFlutterPlugin.getUserKeyWith(accountName, password);
     var jsonKeys = json.decode(keys);
     requestModel.account.activeKey = jsonKeys["active-key"]["public_key"];
     requestModel.account.ownerKey = jsonKeys["owner-key"]["public_key"];
@@ -63,11 +58,9 @@ class RegisterViewModel extends BaseModel {
       errorMessageVisibility = true;
       errorMessage = registerRequestResponse.error;
       Navigator.of(_buildContext).pop();
-    } else if (registerRequestResponse.error == null &&
-        registerRequestResponse != null) {
+    } else if (registerRequestResponse.error == null && registerRequestResponse != null) {
       try {
-        if (await _userManager.loginWith(
-            name: accountName, password: password)) {
+        if (await _userManager.loginWith(name: accountName, password: password)) {
           await checkAdd(_buildContext, activityTypes[ActivityType.register]);
           await _userManager.fetchBalances(name: accountName);
           Navigator.of(_buildContext).popUntil((route) => route.isFirst);
@@ -89,7 +82,8 @@ class RegisterViewModel extends BaseModel {
     setBusy(false);
   }
 
-  checkAccountName(String accountName, String pinCode) async {
+  checkAccountName(
+      String accountName, String pinCode, String password, String passwordConfirm) async {
     if (accountName.isEmpty) {
       errorMessage = "请输入账号";
       errorMessageVisibility = true;
@@ -99,8 +93,7 @@ class RegisterViewModel extends BaseModel {
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (!RegExp("^[a-z0-9-]+\$").hasMatch(accountName)) {
-      errorMessage =
-          I18n.of(_buildContext).registerErrorMessageContainLowercase;
+      errorMessage = I18n.of(_buildContext).registerErrorMessageContainLowercase;
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (accountName.length < 3) {
@@ -108,8 +101,7 @@ class RegisterViewModel extends BaseModel {
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (accountName.contains("--")) {
-      errorMessage = I18n.of(_buildContext)
-          .registerErrorMessageShouldNotContainContinuesDash;
+      errorMessage = I18n.of(_buildContext).registerErrorMessageShouldNotContainContinuesDash;
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (accountName.endsWith("-")) {
@@ -117,8 +109,7 @@ class RegisterViewModel extends BaseModel {
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (RegExp("^[a-z]+\$").hasMatch(accountName)) {
-      errorMessage =
-          I18n.of(_buildContext).registerErrorMessageOnlyContainLetter;
+      errorMessage = I18n.of(_buildContext).registerErrorMessageOnlyContainLetter;
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else if (accountName.length >= 63) {
@@ -126,7 +117,7 @@ class RegisterViewModel extends BaseModel {
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
     } else {
-      await processAccountCheck(accountName);
+      await processAccountCheck(accountName, pinCode, password, passwordConfirm);
     }
     setButtonState(_isAccountNamePassChecker &&
         _isPasswordPassChecker &&
@@ -134,25 +125,22 @@ class RegisterViewModel extends BaseModel {
         pinCode.isEmpty);
   }
 
-  checkPassword(String password, String passwordConfirm, String accountName,
-      String pinCode) {
+  checkPassword(String password, String passwordConfirm, String accountName, String pinCode) {
     if (password.isEmpty) {
-      checkPasswordConfirmation(
-          passwordConfirm, password, accountName, pinCode);
-    } else if (!RegExp(
-            "(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{12,}")
+      checkPasswordConfirmation(passwordConfirm, password, accountName, pinCode);
+    } else if (!RegExp("(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9]).{12,}")
         .hasMatch(password)) {
       if (accountName.isEmpty || _isAccountNamePassChecker) {
         errorMessageVisibility = true;
-        errorMessage =
-            I18n.of(_buildContext).registerErrorMessagePasswordChecker;
+        errorMessage = I18n.of(_buildContext).registerErrorMessagePasswordChecker;
         _isPasswordPassChecker = false;
       }
     } else {
-      errorMessageVisibility = false;
-      _isPasswordPassChecker = true;
-      checkPasswordConfirmation(
-          passwordConfirm, password, accountName, pinCode);
+      if (accountName.isEmpty || _isAccountNamePassChecker) {
+        errorMessageVisibility = false;
+        _isPasswordPassChecker = true;
+        checkPasswordConfirmation(passwordConfirm, password, accountName, pinCode);
+      }
     }
     setButtonState(_isAccountNamePassChecker &&
         _isPasswordPassChecker &&
@@ -160,8 +148,8 @@ class RegisterViewModel extends BaseModel {
         pinCode.isEmpty);
   }
 
-  checkPasswordConfirmation(String confirmPassword, String password,
-      String accountName, String pinCode) {
+  checkPasswordConfirmation(
+      String confirmPassword, String password, String accountName, String pinCode) {
     if (!_isPasswordPassChecker || confirmPassword.isEmpty) {
       return;
     }
@@ -169,8 +157,7 @@ class RegisterViewModel extends BaseModel {
       if ((accountName.isEmpty || _isAccountNamePassChecker) &&
           (_isPasswordPassChecker || password.isEmpty)) {
         errorMessageVisibility = true;
-        errorMessage =
-            I18n.of(_buildContext).registerErrorMessagePasswordConfirm;
+        errorMessage = I18n.of(_buildContext).registerErrorMessagePasswordConfirm;
         _isPasswordConfirmChecker = false;
       }
     } else {
@@ -185,16 +172,17 @@ class RegisterViewModel extends BaseModel {
         pinCode.isNotEmpty);
   }
 
-  processAccountCheck(String accountName) async {
+  processAccountCheck(
+      String accountName, String pincode, String password, String passwordConfirmation) async {
     if (await _userManager.checkAccount(name: accountName)) {
       errorMessageVisibility = true;
       _isAccountNamePassChecker = false;
-      errorMessage =
-          I18n.of(_buildContext).registerErrorMessageAccountHasAlreadyExist;
+      errorMessage = I18n.of(_buildContext).registerErrorMessageAccountHasAlreadyExist;
     } else {
       errorMessageVisibility = false;
       _isAccountNamePassChecker = true;
       errorMessage = "";
+      checkPassword(password, passwordConfirmation, accountName, pincode);
     }
     setBusy(false);
   }
