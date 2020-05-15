@@ -58,8 +58,7 @@ class _SettingState extends State<SettingWiget> {
                               style: StyleNewFactory.black15,
                             ),
                             onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(RoutePaths.Feedback);
+                              Navigator.of(context).pushNamed(RoutePaths.Feedback);
                             },
                           ),
                           Divider(
@@ -93,66 +92,54 @@ class _SettingState extends State<SettingWiget> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return CupertinoActionSheet(
-                                            title: Text(
-                                                I18n.of(context).chooseEnv),
-                                            message: Text(I18n.of(context)
-                                                .chooseEnvDetail),
+                                            title: Text(I18n.of(context).chooseEnv),
+                                            message: Text(I18n.of(context).chooseEnvDetail),
                                             actions: <Widget>[
                                               CupertinoActionSheetAction(
                                                 child: Text("PRO"),
                                                 onPressed: () async {
                                                   await locator
                                                       .get<BBBAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Pro);
+                                                      .setEnvMode(envType: EnvType.Pro);
                                                   userManager.reload();
                                                   Navigator.of(context).pop();
                                                 },
-                                                isDestructiveAction: locator
-                                                        .get<SharedPref>()
-                                                        .getEnvType() ==
-                                                    EnvType.Pro,
+                                                isDestructiveAction:
+                                                    locator.get<SharedPref>().getEnvType() ==
+                                                        EnvType.Pro,
                                               ),
                                               CupertinoActionSheetAction(
                                                 child: Text("TEST"),
                                                 onPressed: () async {
                                                   await locator
                                                       .get<BBBAPI>()
-                                                      .setEnvMode(
-                                                          envType:
-                                                              EnvType.Test);
+                                                      .setEnvMode(envType: EnvType.Test);
                                                   userManager.reload();
                                                   Navigator.of(context).pop();
                                                 },
-                                                isDestructiveAction: locator
-                                                        .get<SharedPref>()
-                                                        .getEnvType() ==
-                                                    EnvType.Test,
+                                                isDestructiveAction:
+                                                    locator.get<SharedPref>().getEnvType() ==
+                                                        EnvType.Test,
                                               ),
                                               CupertinoActionSheetAction(
                                                 child: Text("DEV"),
                                                 onPressed: () async {
                                                   await locator
                                                       .get<BBBAPI>()
-                                                      .setEnvMode(
-                                                          envType: EnvType.Dev);
+                                                      .setEnvMode(envType: EnvType.Dev);
                                                   userManager.reload();
                                                   Navigator.of(context).pop();
                                                 },
-                                                isDestructiveAction: locator
-                                                        .get<SharedPref>()
-                                                        .getEnvType() ==
-                                                    EnvType.Dev,
+                                                isDestructiveAction:
+                                                    locator.get<SharedPref>().getEnvType() ==
+                                                        EnvType.Dev,
                                               )
                                             ],
-                                            cancelButton:
-                                                CupertinoActionSheetAction(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                    child: Text(I18n.of(context)
-                                                        .dialogCancelButton)),
+                                            cancelButton: CupertinoActionSheetAction(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(I18n.of(context).dialogCancelButton)),
                                           );
                                         });
                                   },
@@ -170,26 +157,20 @@ class _SettingState extends State<SettingWiget> {
                     child: GestureDetector(
                       onTap: () {
                         if (userManager.user.testAccountResponseModel != null) {
-                          showFlashBar(context, false,
-                              content: I18n.of(context).changeFromTryEnv,
+                          showFlashBar(context, false, content: I18n.of(context).changeFromTryEnv,
                               callback: () async {
                             await userManager.logoutTestAccount();
                             locator.get<AccountViewModel>().checkRewardAccount(
-                                accountName: userManager.user.name,
-                                bonusEvent: true);
+                                accountName: userManager.user.name, bonusEvent: true);
                             Navigator.of(context).maybePop();
                           });
                         } else {
                           if (userManager.user.loginType == LoginType.reward) {
-                            showFlashBar(context, false,
-                                content: I18n.of(context).quitReward,
+                            showFlashBar(context, false, content: I18n.of(context).quitReward,
                                 callback: () async {
                               await userManager.logOutRewardAccount();
-                              locator
-                                  .get<AccountViewModel>()
-                                  .checkRewardAccount(
-                                      accountName: userManager.user.name,
-                                      bonusEvent: true);
+                              locator.get<AccountViewModel>().checkRewardAccount(
+                                  accountName: userManager.user.name, bonusEvent: true);
                               Navigator.of(context).maybePop();
                             });
                           } else {
@@ -203,20 +184,17 @@ class _SettingState extends State<SettingWiget> {
                           height: 47,
                           margin: EdgeInsets.only(bottom: 50),
                           child: Center(
-                            child: userManager.user.testAccountResponseModel !=
-                                    null
+                            child: userManager.user.testAccountResponseModel != null
                                 ? Text(I18n.of(context).clickToQuit,
                                     style: StyleNewFactory.yellowOrange18)
-                                : (userManager.user.loginType ==
-                                        LoginType.reward
+                                : (userManager.user.loginType == LoginType.reward
                                     ? Text(I18n.of(context).quitReward,
                                         style: StyleNewFactory.yellowOrange18)
                                     : Text(I18n.of(context).logout,
                                         style: StyleNewFactory.yellowOrange18)),
                           ),
                           decoration: new BoxDecoration(
-                              border: Border.all(
-                                  color: Palette.appYellowOrange, width: 1),
+                              border: Border.all(color: Palette.appYellowOrange, width: 1),
                               borderRadius: BorderRadius.circular(5))),
                     ),
                   ),
@@ -231,8 +209,7 @@ class _SettingState extends State<SettingWiget> {
     await locator.get<ConfigureApi>().getUpdateInfo(isIOS: Platform.isIOS);
 
     UpdateResponse updateResponse = locator.get<ConfigureApi>().updateResponse;
-    bool isForce =
-        updateResponse.isForceUpdate(locator.get<PackageInfo>().version);
+    bool isForce = updateResponse.isForceUpdate(locator.get<PackageInfo>().version);
     if (updateResponse.needUpdate(locator.get<PackageInfo>().version)) {
       showDialog(
           barrierDismissible: !isForce,

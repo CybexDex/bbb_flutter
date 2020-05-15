@@ -22,6 +22,8 @@ import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api_provider.dart';
 import 'package:bbb_flutter/services/network/node/node_api.dart';
 import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
+import 'package:bbb_flutter/services/network/push/push_api.dart';
+import 'package:bbb_flutter/services/network/push/push_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
@@ -29,6 +31,8 @@ import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:package_info/package_info.dart';
@@ -43,6 +47,7 @@ final globalKey = GlobalKey();
 GlobalKey navGlobaykey = GlobalKey();
 final flutterWebViewPlugin = FlutterWebviewPlugin();
 UrlConfigResponse configResult;
+final LocalAuthentication auth = LocalAuthentication();
 
 class SimpleLogPrinter extends LogPrinter {
   final String className;
@@ -75,6 +80,7 @@ Logger getLogger(String className) {
 setupLocator() async {
   var pref = await SharedPref.create();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  locator.registerSingleton(JPush());
   locator.registerSingleton(packageInfo);
   locator.registerSingleton(pref);
   locator.registerSingleton(TimerManager());
@@ -95,6 +101,7 @@ setupLocator() async {
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
   locator.registerSingleton<NodeApi>(NodeApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ZendeskApi>(ZendeskApiProvider());
+  locator.registerSingleton<PushApi>(PushApiProvider());
 
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),

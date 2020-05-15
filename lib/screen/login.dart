@@ -1,7 +1,9 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/coupon_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/services/network/push/push_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:dio/dio.dart';
@@ -192,13 +194,15 @@ class _LoginState extends State<LoginPage> {
                                           password: _passwordController.text)) {
                                         userLocator.fetchBalances(
                                             name: _accountNameController.text);
-                                        // locator
-                                        //     .get<AccountViewModel>()
-                                        //     .checkRewardAccount(
-                                        //         accountName:
-                                        //             _accountNameController.text,
-                                        //         bonusEvent: true);
                                         locator.get<CouponViewModel>().getCoupons();
+                                        int expir =
+                                            DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+                                        int timeout = expir + 5 * 60;
+
+                                        locator.get<PushApi>().registerPush(
+                                            regId: locator.get<RefManager>().pushRegId,
+                                            accountName: _accountNameController.text,
+                                            timeout: timeout);
                                         Navigator.of(context).popUntil((route) => route.isFirst);
                                       } else {
                                         setState(() {

@@ -1,24 +1,37 @@
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
+
 class WebSocketNXPriceResponseEntity {
   String topic;
-  String sym;
   double px;
+  String sym;
   String time;
 
-  WebSocketNXPriceResponseEntity({this.sym, this.px, this.time, this.topic});
+  WebSocketNXPriceResponseEntity({
+    this.topic,
+    this.px,
+    this.sym,
+    this.time,
+  });
 
-  WebSocketNXPriceResponseEntity.fromJson(Map<String, dynamic> json) {
-    sym = json['sym'];
-    px = json['px'];
-    time = json['time'];
-    topic = json['topic'];
-  }
+  factory WebSocketNXPriceResponseEntity.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : WebSocketNXPriceResponseEntity(
+          topic: convertValueByType(jsonRes['topic'], String, stack: "Root-topic"),
+          px: convertValueByType(jsonRes['px'], double, stack: "Root-px"),
+          sym: convertValueByType(jsonRes['sym'], String, stack: "Root-sym"),
+          time: convertValueByType(jsonRes['time'], String, stack: "Root-time"),
+        );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sym'] = this.sym;
-    data['px'] = this.px;
-    data['time'] = this.time;
-    data['topic'] = this.topic;
-    return data;
+  Map<String, dynamic> toJson() => {
+        'topic': topic,
+        'px': px,
+        'sym': sym,
+        'time': time,
+      };
+  @override
+  String toString() {
+    return json.encode(this);
   }
 }

@@ -13,6 +13,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_mailer (0.0.1):
     - Flutter
+  - flutter_plugin_android_lifecycle (0.0.1):
+    - Flutter
   - flutter_statusbarcolor (0.0.1):
     - Flutter
   - flutter_umplus (0.0.1):
@@ -30,11 +32,19 @@ PODS:
   - FMDB/standard (2.7.5)
   - image_gallery_saver (0.0.1):
     - Flutter
+  - JCore (2.2.5)
+  - JPush (3.3.2):
+    - JCore (< 3.0.0, >= 2.0.0)
+  - jpush_flutter (0.0.2):
+    - Flutter
+    - JPush
+  - local_auth (0.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - "permission_handler (5.0.0+hotfix.3)":
+  - "permission_handler (5.0.0+hotfix.6)":
     - Flutter
   - Reachability (3.2)
   - shared_preferences (0.0.1):
@@ -46,9 +56,9 @@ PODS:
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
-  - UMCAnalytics (6.0.5):
+  - UMCAnalytics (6.1.0):
     - UMCCommon
-  - UMCCommon (2.1.0)
+  - UMCCommon (2.1.4)
   - UMCCommonLog (1.0.0)
   - UMCErrorCatch (1.0.0):
     - UMCCommon
@@ -69,11 +79,14 @@ DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
+  - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - flutter_statusbarcolor (from `.symlinks/plugins/flutter_statusbarcolor/ios`)
   - flutter_umplus (from `.symlinks/plugins/flutter_umplus/ios`)
   - flutter_webview_plugin (from `.symlinks/plugins/flutter_webview_plugin/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
+  - jpush_flutter (from `.symlinks/plugins/jpush_flutter/ios`)
+  - local_auth (from `.symlinks/plugins/local_auth/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -87,8 +100,10 @@ DEPENDENCIES:
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - FMDB
+    - JCore
+    - JPush
     - Reachability
     - UMCAnalytics
     - UMCCommon
@@ -110,6 +125,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_mailer:
     :path: ".symlinks/plugins/flutter_mailer/ios"
+  flutter_plugin_android_lifecycle:
+    :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
   flutter_statusbarcolor:
     :path: ".symlinks/plugins/flutter_statusbarcolor/ios"
   flutter_umplus:
@@ -120,6 +137,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
+  jpush_flutter:
+    :path: ".symlinks/plugins/jpush_flutter/ios"
+  local_auth:
+    :path: ".symlinks/plugins/local_auth/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -145,35 +166,40 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   catcher: e5585ed31458c849f4fd9c3719b2fcb0188b8918
-  connectivity: 6e94255659cc86dcbef1d452ad3e0491bb1b3e75
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
   cybex_flutter_plugin: a16be87c9abbcf7fd041e3cb04219e5a62e63515
-  device_info: cbf09d2ec12aa7110e0b09fabe54b5bd6c8efe74
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
+  flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   flutter_statusbarcolor: 8afb1071ed8c58be929f1e32b36c629771fd2259
   flutter_umplus: be1f2b751dd6110757509fa57c1ffb12edb1c2b2
   flutter_webview_plugin: ed9e8a6a96baf0c867e90e1bce2673913eeac694
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  image_gallery_saver: 6d422f8c5b40f5b57e8c3298d1fa6b1653c088c0
-  package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
+  image_gallery_saver: 73b3cd8ad9c950c739878af9c311744d1bf5405d
+  JCore: d75c0306dc99875d323d23e5a063b3a3ef22335a
+  JPush: 9468c84a3809dc3ac2fc1c89c6d1d6c858a91bf5
+  jpush_flutter: 69133df35eaf9135e540549b154d992c44f8ee44
+  local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
-  permission_handler: 4a985b5448897c27fdeadde84f7452520c0e6c58
+  permission_handler: b7a0953389e699927c6217933754cdcd0fa2c5a7
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
-  UMCAnalytics: 045be2cd1ec05aa95ad62405a850757f932e2d59
-  UMCCommon: c9637200488c482b30cdebebb0bd595b9adf0847
+  UMCAnalytics: 3503f179f7af932b30af9ac161ac11fb48fa72b6
+  UMCCommon: b0703b0053323f598e01670ea702b8eb1e66e611
   UMCCommonLog: 05a2d5de21858e3d870551562cff405c1366d244
   UMCErrorCatch: 51f1b68f920233e90a3fa6d51f0456174507ec78
-  url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
-  webview_flutter: bec7599de6bfbe8008a739aa3ebd7b364ea9d0cd
+  webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: 8b37e455a0072038b3bb8f56f2a11b4a84b514b5
+PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.9.1

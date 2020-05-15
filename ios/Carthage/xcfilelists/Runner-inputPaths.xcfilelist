@@ -1,3 +1,2 @@
-$(SRCROOT)/Carthage/Build/iOS/FMDB.framework
 $(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework
 $(SRCROOT)/Carthage/Build/iOS/cybex_ios_core_cpp.framework

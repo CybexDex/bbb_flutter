@@ -6,6 +6,7 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 -keep class com.cybex.provider.** { *; }
+-keep class androidx.lifecycle.** {*;}
 
 -ignorewarnings
 -keep class * {

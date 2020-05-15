@@ -1,24 +1,38 @@
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
+
 class WebSocketPNLResponse {
   String topic;
-  double pnl;
   String accountName;
+  double pnl;
   String contract;
 
-  WebSocketPNLResponse({this.pnl, this.accountName, this.topic, this.contract});
+  WebSocketPNLResponse({
+    this.topic,
+    this.accountName,
+    this.pnl,
+    this.contract,
+  });
 
-  WebSocketPNLResponse.fromJson(Map<String, dynamic> json) {
-    topic = json['topic'];
-    accountName = json['accountName'];
-    pnl = json['pnl'];
-    contract = json['contract'];
-  }
+  factory WebSocketPNLResponse.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : WebSocketPNLResponse(
+          topic: convertValueByType(jsonRes['topic'], String, stack: "Root-topic"),
+          accountName:
+              convertValueByType(jsonRes['accountName'], String, stack: "Root-accountName"),
+          pnl: convertValueByType(jsonRes['pnl'], double, stack: "Root-pnl"),
+          contract: convertValueByType(jsonRes['contract'], String, stack: "Root-contract"),
+        );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['topic'] = this.topic;
-    data['pnl'] = this.pnl;
-    data['accountName'] = this.accountName;
-    data['contract'] = this.contract;
-    return data;
+  Map<String, dynamic> toJson() => {
+        'topic': topic,
+        'accountName': accountName,
+        'pnl': pnl,
+        'contract': contract,
+      };
+  @override
+  String toString() {
+    return json.encode(this);
   }
 }

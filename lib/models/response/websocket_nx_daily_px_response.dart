@@ -1,25 +1,37 @@
+import 'dart:convert' show json;
+
+import 'package:bbb_flutter/helper/utils.dart';
+
 class WebSocketNXDailyPxResponse {
   String topic;
   double lastDayPx;
   double highPx;
   double lowPx;
 
-  WebSocketNXDailyPxResponse(
-      {this.lastDayPx, this.highPx, this.topic, this.lowPx});
+  WebSocketNXDailyPxResponse({
+    this.topic,
+    this.lastDayPx,
+    this.highPx,
+    this.lowPx,
+  });
 
-  WebSocketNXDailyPxResponse.fromJson(Map<String, dynamic> json) {
-    topic = json['topic'];
-    lastDayPx = json['last_day_px'];
-    highPx = json['high_px'];
-    lowPx = json['low_px'];
-  }
+  factory WebSocketNXDailyPxResponse.fromJson(jsonRes) => jsonRes == null
+      ? null
+      : WebSocketNXDailyPxResponse(
+          topic: convertValueByType(jsonRes['topic'], String, stack: "Root-topic"),
+          lastDayPx: convertValueByType(jsonRes['last_day_px'], double, stack: "Root-last_day_px"),
+          highPx: convertValueByType(jsonRes['high_px'], double, stack: "Root-high_px"),
+          lowPx: convertValueByType(jsonRes['low_px'], double, stack: "Root-low_px"),
+        );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['topic'] = this.topic;
-    data['last_day_px'] = this.lastDayPx;
-    data['high_px'] = this.highPx;
-    data['low_px'] = this.lowPx;
-    return data;
+  Map<String, dynamic> toJson() => {
+        'topic': topic,
+        'last_day_px': lastDayPx,
+        'high_px': highPx,
+        'low_px': lowPx,
+      };
+  @override
+  String toString() {
+    return json.encode(this);
   }
 }

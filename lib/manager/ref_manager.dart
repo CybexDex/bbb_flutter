@@ -7,6 +7,7 @@ import 'package:bbb_flutter/models/response/bbb_query_response/underlying_asset_
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:rxdart/subjects.dart';
 
 class RefManager {
@@ -21,6 +22,7 @@ class RefManager {
   ConfigResponse config;
   ConfigResponse couponConfig;
   bool isIdSelectedByUser = false;
+  String pushRegId;
 
   RefManager({BBBAPI api}) : _api = api;
 
@@ -83,6 +85,7 @@ class RefManager {
     await updateRefData();
     await updateContract();
     await getAssetList();
+    await getPushRegistrationId();
     // updateUpContractId();
     // updateDownContractId();
     startLoop();
@@ -164,5 +167,11 @@ class RefManager {
   getAssetList() async {
     List<UnderlyingAssetResponse> assetList = await _api.getAsset();
     underlyingList = assetList;
+  }
+
+  getPushRegistrationId() async {
+    String regId = await locator.get<JPush>().getRegistrationID();
+    print(regId);
+    pushRegId = regId;
   }
 }

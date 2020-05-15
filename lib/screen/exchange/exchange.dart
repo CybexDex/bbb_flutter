@@ -306,7 +306,7 @@ class _ExchangePageState extends State<ExchangePage>
   }
 
   _onClickBuyOrSellButton(
-      {RefManager ref, UserManager user, bool isUp, OrderViewModel orderViewModel}) {
+      {RefManager ref, UserManager user, bool isUp, OrderViewModel orderViewModel}) async {
     if (isUp
         ? (ref.upContract == null || ref.upContract.isEmpty)
         : (ref.downContract == null || ref.downContract.isEmpty)) {
@@ -335,6 +335,13 @@ class _ExchangePageState extends State<ExchangePage>
             });
           }
         });
+        // if (await auth.canCheckBiometrics) {
+        //   if (await auth.authenticateWithBiometrics(localizedReason: "test", stickyAuth: true)) {
+
+        //   }
+        // } else {
+        //   showThemeToast("not support");
+        // }
       } else {
         if (ref.currentUpContract == null ||
             ref.currentDownContract == null ||

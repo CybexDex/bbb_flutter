@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/request/register_request_model.dart';
 import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/models/response/register_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
+import 'package:bbb_flutter/services/network/push/push_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
@@ -63,6 +65,12 @@ class RegisterViewModel extends BaseModel {
         if (await _userManager.loginWith(name: accountName, password: password)) {
           await checkAdd(_buildContext, activityTypes[ActivityType.register]);
           await _userManager.fetchBalances(name: accountName);
+          int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+          int timeout = expir + 5 * 60;
+          locator.get<PushApi>().registerPush(
+              regId: locator.get<RefManager>().pushRegId,
+              accountName: accountName,
+              timeout: timeout);
           Navigator.of(_buildContext).popUntil((route) => route.isFirst);
         } else {
           errorMessage = "注册失败请重试";

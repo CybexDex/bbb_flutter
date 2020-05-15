@@ -104,9 +104,7 @@ class _MainState extends State<MainPage> {
     });
 
     if (locator.get<UserManager>().user.logined && index == 3) {
-      locator
-          .get<UserManager>()
-          .fetchBalances(name: locator.get<UserManager>().user.name);
+      locator.get<UserManager>().fetchBalances(name: locator.get<UserManager>().user.name);
     }
   }
 }
