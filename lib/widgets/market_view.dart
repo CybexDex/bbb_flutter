@@ -16,8 +16,7 @@ class MarketView extends StatefulWidget {
   final double width;
   final bool isTrade;
   final MarketManager mtm;
-  const MarketView({Key key, this.width, this.isTrade, this.mtm})
-      : super(key: key);
+  const MarketView({Key key, this.width, this.isTrade, this.mtm}) : super(key: key);
 
   @override
   _MarketViewState createState() => _MarketViewState();
@@ -88,8 +87,6 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
         //     klines.add(last);
         //   }
         // }
-        // print(data.last.value);
-        // print("kline${klines.last.value}");
 
         return BaseWidget<MarketViewModel>(
           model: initModel,
@@ -108,8 +105,7 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
             }
 
             if (trade != null) {
-              model.supplyDataWithOrder(
-                  data, trade.orderForm, trade.contract.strikeLevel);
+              model.supplyDataWithOrder(data, trade.orderForm, trade.contract.strikeLevel);
             }
 
             if (limitOrder != null) {
@@ -135,9 +131,8 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                               unselectedLabelColor: Palette.descColor,
                               labelColor: Palette.subTitleColor,
                               indicator: UnderlineTabIndicator(
-                                borderSide: BorderSide(
-                                    color: Palette.invitePromotionBadgeColor,
-                                    width: 2),
+                                borderSide:
+                                    BorderSide(color: Palette.invitePromotionBadgeColor, width: 2),
                                 insets: EdgeInsets.fromLTRB(0, 0.0, 0, 3),
                               ),
                               tabs: [
@@ -162,27 +157,19 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                                     break;
                                   case 1:
                                     model.changeDuration(MarketDuration.oneMin,
-                                        time:
-                                            last.time.millisecondsSinceEpoch ~/
-                                                1000);
+                                        time: last.time.millisecondsSinceEpoch ~/ 1000);
                                     break;
                                   case 2:
                                     model.changeDuration(MarketDuration.fiveMin,
-                                        time:
-                                            last.time.millisecondsSinceEpoch ~/
-                                                1000);
+                                        time: last.time.millisecondsSinceEpoch ~/ 1000);
                                     break;
                                   case 3:
                                     model.changeDuration(MarketDuration.oneHour,
-                                        time:
-                                            last.time.millisecondsSinceEpoch ~/
-                                                1000);
+                                        time: last.time.millisecondsSinceEpoch ~/ 1000);
                                     break;
                                   case 4:
                                     model.changeDuration(MarketDuration.oneDay,
-                                        time:
-                                            last.time.millisecondsSinceEpoch ~/
-                                                1000);
+                                        time: last.time.millisecondsSinceEpoch ~/ 1000);
                                     break;
                                   default:
                                     model.changeDuration(MarketDuration.line);
@@ -203,25 +190,21 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                                   model.lastOffset = details.globalPosition;
                                 },
                                 onPanUpdate: (details) {
-                                  double gap = details.globalPosition.dx -
-                                      model.lastOffset.dx;
+                                  double gap = details.globalPosition.dx - model.lastOffset.dx;
 
                                   double timeOffset = 30 *
-                                      marketDurationSecondMap[
-                                          model.marketDuration] *
+                                      marketDurationSecondMap[model.marketDuration] *
                                       gap /
                                       ScreenUtil.screenWidthDp;
                                   model.lastOffset = details.globalPosition;
 
-                                  var start = model.startTime.subtract(
-                                      Duration(seconds: timeOffset.toInt()));
-                                  var end = model.endTime.subtract(
-                                      Duration(seconds: timeOffset.toInt()));
-                                  if (end.compareTo(getCorrectTime().add(
-                                          Duration(
-                                              seconds: 10 *
-                                                  marketDurationSecondMap[
-                                                      model.marketDuration]))) >
+                                  var start = model.startTime
+                                      .subtract(Duration(seconds: timeOffset.toInt()));
+                                  var end =
+                                      model.endTime.subtract(Duration(seconds: timeOffset.toInt()));
+                                  if (end.compareTo(getCorrectTime().add(Duration(
+                                          seconds: 10 *
+                                              marketDurationSecondMap[model.marketDuration]))) >
                                       0) {
                                     return;
                                   }
@@ -238,19 +221,14 @@ class _MarketViewState extends State<MarketView> with WidgetsBindingObserver {
                                   endTime: model.endTime,
                                   lineColor: Palette.darkSkyBlue,
                                   timeLineGap: Duration(
-                                      seconds: 5 *
-                                          marketDurationSecondMap[
-                                              model.marketDuration]),
+                                      seconds: 5 * marketDurationSecondMap[model.marketDuration]),
                                   lineWidth: 1,
                                   gridLineWidth: 0.5,
                                   width: widget.width,
-                                  fillGradient: LinearGradient(
-                                      colors: [
-                                        Palette.lineGradintColorStart,
-                                        Palette.lineGradientColorEnd
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter),
+                                  fillGradient: LinearGradient(colors: [
+                                    Palette.lineGradintColorStart,
+                                    Palette.lineGradientColorEnd
+                                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                                   gridLineColor: Palette.veryLightPinkTwo,
                                   pointSize: 8.0,
                                   pointColor: Palette.darkSkyBlue,

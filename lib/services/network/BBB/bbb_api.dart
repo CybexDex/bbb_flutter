@@ -64,4 +64,8 @@ abstract class BBBAPI {
   Future<PostOrderResponseModel> amendOrder({AmendOrderRequestModel order, bool exNow});
   Future<PostOrderResponseModel> postWithdraw({Map<String, dynamic> withdraw});
   Future<PostOrderResponseModel> postTransfer({Map<String, dynamic> transfer});
+
+  //Push
+  Future<dynamic> registerPush({String accountName, String regId, int timeout});
+  Future<dynamic> unRegisterPush({String accountName, String regId});
 }

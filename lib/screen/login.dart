@@ -3,7 +3,7 @@ import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/routes/routes.dart';
-import 'package:bbb_flutter/services/network/push/push_api.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:dio/dio.dart';
@@ -199,11 +199,12 @@ class _LoginState extends State<LoginPage> {
                                             DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
                                         int timeout = expir + 5 * 60;
 
-                                        locator.get<PushApi>().registerPush(
+                                        locator.get<BBBAPI>().registerPush(
                                             regId: locator.get<RefManager>().pushRegId,
                                             accountName: _accountNameController.text,
                                             timeout: timeout);
-                                        Navigator.of(context).popUntil((route) => route.isFirst);
+                                        Routes.open(context,
+                                            arguments: ModalRoute.of(context).settings.arguments);
                                       } else {
                                         setState(() {
                                           _errorMessageVisible = true;

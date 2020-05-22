@@ -1,14 +1,14 @@
 import 'package:bbb_flutter/base/base_model.dart';
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
-import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
+import 'package:bbb_flutter/models/response/forum_response/image_config.dart';
+import 'package:bbb_flutter/models/response/forum_response/share_image_response.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/ranking_response_model.dart';
 import 'package:bbb_flutter/models/response/zendesk_advertise_reponse_model.dart';
-import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
@@ -16,7 +16,7 @@ import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:oktoast/oktoast.dart';
+import 'package:package_info/package_info.dart';
 
 import '../../setup.dart';
 
@@ -25,12 +25,12 @@ class HomeViewModel extends BaseModel {
   ForumApi _forumApi;
   ZendeskApi _zendeskApi;
   GatewayApi _gatewayApi;
-  UserManager _userManager;
   List<BannerResponse> banners = [];
   List<RankingResponse> rankingsPerorder = [];
   List<RankingResponse> rankingsTotal = [];
   List<Articles> zendeskAdvertise = [];
-  AstrologyPredictResponse astrologyPredictResponse;
+  ImageConfigResponse imageConfigResponse;
+  List<ShareImageResponse> shareImageList = [];
   bool depositAvailable = true;
   bool isAutoPlay = false;
 
@@ -45,7 +45,6 @@ class HomeViewModel extends BaseModel {
     _forumApi = forumApi;
     _zendeskApi = zendeskApi;
     _gatewayApi = gatewayApi;
-    _userManager = userManager;
   }
 
   getGatewayInfo({String assetName}) async {
@@ -63,8 +62,7 @@ class HomeViewModel extends BaseModel {
   }
 
   Future<ForumResponse<BannerResponse>> getBanners() async {
-    ForumResponse<BannerResponse> response =
-        await _forumApi.getBanners(pg: 0, siz: 100);
+    ForumResponse<BannerResponse> response = await _forumApi.getBanners(pg: 0, siz: 100);
     banners = response.result;
     return response;
   }
@@ -82,9 +80,15 @@ class HomeViewModel extends BaseModel {
     setBusy(false);
   }
 
-  getAstrologyPredict() async {
-    astrologyPredictResponse = await _forumApi.getAstrologyPredict();
+  getImageConfig() async {
+    imageConfigResponse = await _forumApi.getImageConfig(
+        version: locator.get<PackageInfo>().version.replaceAll(".", "-"));
     setBusy(false);
+  }
+
+  getSharedImage() async {
+    var response = await _forumApi.getSharedImages(pg: 0, siz: 100);
+    shareImageList = response.result;
   }
 
   startLoop() {
@@ -96,34 +100,16 @@ class HomeViewModel extends BaseModel {
   }
 
   checkDeposit(BuildContext context) {
-    if (depositAvailable) {
-      if (_userManager.user.logined) {
-        if (_userManager.user.testAccountResponseModel != null) {
-          showToast(I18n.of(context).toastFormalAccount,
-              textPadding: EdgeInsets.all(20));
-        } else {
-          Navigator.of(context).pushNamed(RoutePaths.Deposit);
-        }
-      } else {
-        Navigator.of(context).pushNamed(RoutePaths.Login);
-      }
-    } else {
-      showToast(I18n.of(context).toastDeposit, textPadding: EdgeInsets.all(20));
-    }
+    jumpToUrl(
+        Uri.encodeFull("${imageConfigResponse?.result?.midBannerLink2 ?? GuessUpDownUrl.URL}"),
+        context,
+        needLogIn: imageConfigResponse?.result?.midBannerNeedName2 == "1");
   }
 
   checkGuess(BuildContext context) {
-    if (_userManager.user.logined) {
-      if (_userManager.user.testAccountResponseModel != null) {
-        showToast(I18n.of(context).toastFormalAccount,
-            textPadding: EdgeInsets.all(20));
-      } else {
-        launchURL(
-            url: Uri.encodeFull(
-                "${GuessUpDownUrl.URL}${_userManager.user.name}"));
-      }
-    } else {
-      Navigator.of(context).pushNamed(RoutePaths.Login);
-    }
+    jumpToUrl(
+        Uri.encodeFull("${imageConfigResponse?.result?.midBannerLink1 ?? GuessUpDownUrl.URL}"),
+        context,
+        needLogIn: imageConfigResponse?.result?.midBannerNeedName1 == "1");
   }
 }

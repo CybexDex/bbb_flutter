@@ -1,7 +1,5 @@
-import 'package:bbb_flutter/screen/allLimitOrders/all_limit_orders.dart';
-import 'package:bbb_flutter/screen/allOrders/all_orders.dart';
+import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/screen/coupon/coupon_page.dart';
-import 'package:bbb_flutter/screen/coupon/coupon_rule.dart';
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
@@ -26,6 +24,7 @@ import 'package:bbb_flutter/screen/withdraw_page.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 
 class RoutePaths {
   static const String Login = 'login';
@@ -44,20 +43,26 @@ class RoutePaths {
   static const String Invite = "Invite";
   static const String Feedback = "feedback";
   static const String Share = "Share";
-  static const String Help = "Help";
+  static const String WebView = "WebView";
   static const String Forum = "Forum";
-  static const String AllOrders = "AllOrders";
-  static const String AllLimitOrders = "AllLimitOrders";
   static const String OrderHome = "OrderHome";
   static const String Setting = "Setting";
   static const String LimitOrder = "LimitOrder";
-  static const String SplashScreen = "SplashScreen";
   static const String Coupon = "Coupon";
-  static const String CouponRules = "CouponRules";
-  static const String inviteRules = "InviteRules";
 }
 
 class Routes {
+  static String parameter;
+  static open(BuildContext context, {Object arguments}) {
+    if (parameter == null || parameter.isEmpty) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    } else {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(parameter, (route) => route.isFirst, arguments: arguments);
+      parameter = null;
+    }
+  }
+
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RoutePaths.Home:
@@ -72,53 +77,121 @@ class Routes {
       case RoutePaths.Register:
         return CupertinoPageRoute(builder: (_) => RegisterPage(), settings: settings);
       case RoutePaths.Deposit:
-        return CupertinoPageRoute(builder: (_) => DepositPage(), settings: settings);
+        if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+          showToast(I18n.of(globalKey.currentContext).toastFormalAccount,
+              textPadding: EdgeInsets.all(20));
+          break;
+        }
+        if (!locator.get<UserManager>().depositAvailable) {
+          showToast(I18n.of(globalKey.currentContext).toastDeposit,
+              textPadding: EdgeInsets.all(20));
+          break;
+        }
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => DepositPage(), settings: settings);
+        }
+        parameter = RoutePaths.Deposit;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.OrderRecords:
-        return CupertinoPageRoute(builder: (_) => OrderRecordsWidget(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => OrderRecordsWidget(), settings: settings);
+        }
+        parameter = RoutePaths.OrderRecords;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.FundRecords:
-        return CupertinoPageRoute(builder: (_) => FundRecordsWidget(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => FundRecordsWidget(), settings: settings);
+        }
+        parameter = RoutePaths.FundRecords;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.LimitOrderRecords:
-        return CupertinoPageRoute(builder: (_) => LimitOrderRecordsPage(), settings: settings);
-
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => LimitOrderRecordsPage(), settings: settings);
+        }
+        parameter = RoutePaths.LimitOrderRecords;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.OrderRecordDetail:
         return CupertinoPageRoute(builder: (_) => OrderRecordDetail(), settings: settings);
       case RoutePaths.Transfer:
-        return CupertinoPageRoute(builder: (_) => TransferPage(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => TransferPage(), settings: settings);
+        }
+        parameter = RoutePaths.Transfer;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.Withdraw:
-        return CupertinoPageRoute(builder: (_) => WithdrawPage(), settings: settings);
+        if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+          showToast(I18n.of(globalKey.currentContext).toastFormalAccount,
+              textPadding: EdgeInsets.all(20));
+          break;
+        }
+        if (!locator.get<UserManager>().withdrawAvailable) {
+          showToast(I18n.of(globalKey.currentContext).toastWithdraw,
+              textPadding: EdgeInsets.all(20));
+          break;
+        }
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => WithdrawPage(), settings: settings);
+        }
+        parameter = RoutePaths.Withdraw;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.Invite:
-        return CupertinoPageRoute(builder: (_) => InvitePage(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => InvitePage(), settings: settings);
+        }
+        parameter = RoutePaths.Invite;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.Trade:
-        return CupertinoPageRoute(builder: (_) => TradeHomePage(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => TradeHomePage(), settings: settings);
+        }
+        parameter = RoutePaths.Trade;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.Feedback:
         return CupertinoPageRoute(builder: (_) => FeedBackScreen(), settings: settings);
-      case RoutePaths.Help:
-        return CupertinoPageRoute(
-            fullscreenDialog: true, builder: (_) => HelpCenterScreen(), settings: settings);
+      case RoutePaths.WebView:
+        dynamic param = settings.arguments;
+        if (param['needLogIn'] != null &&
+            param['needLogIn'] &&
+            locator.get<UserManager>().user.testAccountResponseModel != null) {
+          showToast(I18n.of(globalKey.currentContext).toastFormalAccount,
+              textPadding: EdgeInsets.all(20));
+          break;
+        }
+        if ((param['needLogIn'] == null || !param['needLogIn']) ||
+            (param['needLogIn'] && locator.get<UserManager>().user.logined)) {
+          return CupertinoPageRoute(builder: (_) => WebViewPage(), settings: settings);
+        }
+        parameter = RoutePaths.WebView;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.Share:
         return CupertinoPageRoute(builder: (_) => SharePage(), settings: settings);
       case RoutePaths.Forum:
         return CupertinoPageRoute(builder: (_) => ForumHome(), settings: settings);
-      case RoutePaths.AllOrders:
-        return CupertinoPageRoute(builder: (_) => AllOrdersPage(), settings: settings);
-      case RoutePaths.AllLimitOrders:
-        return CupertinoPageRoute(builder: (_) => AllLimitOrderPage(), settings: settings);
       case RoutePaths.OrderHome:
-        return CupertinoPageRoute(builder: (_) => OrderHome(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => OrderHome(), settings: settings);
+        }
+        parameter = RoutePaths.OrderHome;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
+
       case RoutePaths.Setting:
         return CupertinoPageRoute(builder: (_) => SettingWiget(), settings: settings);
       case RoutePaths.LimitOrder:
         return CupertinoPageRoute(builder: (_) => LimitOrderPage(), settings: settings);
       case RoutePaths.Coupon:
-        return CupertinoPageRoute(builder: (_) => CouponPage(), settings: settings);
-      case RoutePaths.CouponRules:
-        return CupertinoPageRoute(builder: (_) => CouponRulePage(), settings: settings);
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => CouponPage(), settings: settings);
+        }
+        parameter = RoutePaths.Coupon;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       case RoutePaths.TransferRecords:
         return CupertinoPageRoute(builder: (_) => TransferRecordsWidget(), settings: settings);
       case RoutePaths.RewardRecords:
-        return CupertinoPageRoute(builder: (_) => RewardRecordsWidget(), settings: settings);
-      // case RoutePaths.inviteRules:
-      // return CupertinoPageRoute(builder: (_) => )
+        if (locator.get<UserManager>().user.logined) {
+          return CupertinoPageRoute(builder: (_) => RewardRecordsWidget(), settings: settings);
+        }
+        parameter = RoutePaths.RewardRecords;
+        return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

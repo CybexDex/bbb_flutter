@@ -32,7 +32,10 @@ class CouponState extends State<CouponPage> {
         appBar: AppBar(
             actions: <Widget>[
               GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed(RoutePaths.CouponRules),
+                onTap: () => Navigator.pushNamed(context, RoutePaths.WebView, arguments: {
+                  "title": I18n.of(context).couponRule,
+                  "url": 'https://nxapi.cybex.io/v1/webpage/coupon_rule.html'
+                }),
                 child: Container(
                   margin: EdgeInsets.only(right: 15),
                   alignment: Alignment.center,

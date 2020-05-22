@@ -25,6 +25,7 @@ import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/widgets/k_line/entity/k_line_entity.dart';
+import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:dio/dio.dart';
 import 'package:bbb_flutter/models/response/deposit_response_model.dart';
 
@@ -40,8 +41,7 @@ class BBBAPIProvider extends BBBAPI {
     _dispatchNewNode(url: url);
     newDio.options.connectTimeout = 15000;
     newDio.options.receiveTimeout = 13000;
-    // newDio.interceptors
-    //     .add(LogInterceptor(requestBody: true, responseBody: true));
+    // newDio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
   }
 
   @override
@@ -389,5 +389,33 @@ class BBBAPIProvider extends BBBAPI {
     var response = await newDio.post("/trade/create_test_account");
     return Future.value(
         response.data == null ? null : TestAccountResponseModel.fromJson(response.data));
+  }
+
+  @override
+  Future<dynamic> registerPush({String accountName, String regId, int timeout}) async {
+    var data = {"account_name": accountName, "reg_id": regId, "timeout": timeout};
+    String sig = await CybexFlutterPlugin.signMessageOperation(
+        getQueryStringFromJson(data, data.keys.toList()..sort()));
+    sig = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
+    var requestBody = {"data": data, "signature": sig};
+    print(requestBody);
+    try {
+      var response = await newDio.post("/push/subscribe", data: requestBody);
+      return Future.value(response.data);
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  Future<dynamic> unRegisterPush({String accountName, String regId}) async {
+    var requestBody = {"account_name": accountName, "reg_id": regId};
+    print(requestBody);
+    try {
+      var response = await newDio.post("/push/unsubscribe", data: requestBody);
+      return Future.value(response.data);
+    } on DioError catch (e) {
+      print(e);
+    }
   }
 }

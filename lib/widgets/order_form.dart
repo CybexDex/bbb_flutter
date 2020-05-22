@@ -23,7 +23,6 @@ class OrderFormWidgetState extends State<OrderFormWidget> {
 
   @override
   void initState() {
-    print("d");
     _takeProfitController.text = "-";
     _cutLossController.text = widget._contract.strikeLevel.toStringAsFixed(0);
     _amountController.text = "1";

@@ -1,9 +1,11 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/logic/invite_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/register_ref_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/services.dart';
@@ -44,7 +46,10 @@ class _InviteState extends State<InvitePage> {
                   ),
                 ),
                 onTap: () {
-                  launchURL(url: "https://nxapi.cybex.io/v1/webpage/refer_rule.html");
+                  Navigator.of(context).pushNamed(RoutePaths.WebView, arguments: {
+                    "title": "邀请规则",
+                    "url": "https://nxapi.cybex.io/v1/webpage/refer_rule.html"
+                  });
                 },
               )
             ],
@@ -182,11 +187,20 @@ class _InviteState extends State<InvitePage> {
                           Stack(
                             children: <Widget>[
                               FittedBox(
-                                  child: SvgPicture.asset(
-                                R.resAssetsIconsInvitationBackground,
-                                height: ScreenUtil.instance.setHeight(166),
-                                width: ScreenUtil.screenWidthDp,
-                              )),
+                                  child: locator.get<HomeViewModel>().imageConfigResponse == null
+                                      ? SvgPicture.asset(
+                                          R.resAssetsIconsInvitationBackground,
+                                          height: ScreenUtil.instance.setHeight(166),
+                                          width: ScreenUtil.screenWidthDp,
+                                        )
+                                      : showNetworkImageWrapper(
+                                          url: locator
+                                              .get<HomeViewModel>()
+                                              .imageConfigResponse
+                                              .result
+                                              .referBanner,
+                                          height: ScreenUtil.instance.setHeight(166),
+                                          width: ScreenUtil.screenWidthDp)),
                               FittedBox(
                                 child: Container(
                                     margin: EdgeInsets.only(

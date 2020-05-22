@@ -7,7 +7,9 @@ import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart
 import 'package:bbb_flutter/models/response/forum_response/astroloty_predict.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
+import 'package:bbb_flutter/models/response/forum_response/image_config.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/share_image_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 import 'package:bbb_flutter/screen/forum/astrology_header_result.dart';
 import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
@@ -44,8 +46,7 @@ class ForumApiProvider extends ForumApi {
 
   @override
   Future<ForumResponse<NewsResult>> getNews({int pg, int siz}) async {
-    var response =
-        await dio.get("/list/prod/express/content", queryParameters: {
+    var response = await dio.get("/list/prod/express/content", queryParameters: {
       "pg": pg,
       "siz": siz,
     });
@@ -54,44 +55,38 @@ class ForumApiProvider extends ForumApi {
   }
 
   @override
-  Future<ForumResponse<AstrologyResult>> getAstrologyList(
-      {int pg, int siz}) async {
-    var response = await dio.get("/list/prod/astrology/content",
-        queryParameters: {"pg": pg, "siz": siz});
+  Future<ForumResponse<AstrologyResult>> getAstrologyList({int pg, int siz}) async {
+    var response =
+        await dio.get("/list/prod/astrology/content", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }
 
   @override
-  Future<ForumResponse<BlockchainVip>> getBlockchainVip(
-      {int pg, int siz}) async {
-    var response = await dio.get("/list/prod/bigsister/content",
-        queryParameters: {"pg": pg, "siz": siz});
+  Future<ForumResponse<BlockchainVip>> getBlockchainVip({int pg, int siz}) async {
+    var response =
+        await dio.get("/list/prod/bigsister/content", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }
 
   @override
   Future<ForumResponse<BannerResponse>> getBanners({int pg, int siz}) async {
-    var response = await dio
-        .get("/list/prod/bbb/banner", queryParameters: {"pg": pg, "siz": siz});
+    var response = await dio.get("/list/prod/bbb/banner", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }
 
   @override
   Future<ForumResponse<AssetList>> getAssetList({int pg, int siz}) async {
-    var response = await dio
-        .get("/list/prod/bbb/assets", queryParameters: {"pg": pg, "siz": siz});
+    var response = await dio.get("/list/prod/bbb/assets", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }
 
   @override
-  Future<ForumResponse<UrlConfigResponse>> getUrlConfig(
-      {int pg, int siz}) async {
-    var response = await dio
-        .get("/list/prod/bbb/url", queryParameters: {"pg": pg, "siz": siz});
+  Future<ForumResponse<UrlConfigResponse>> getUrlConfig({int pg, int siz}) async {
+    var response = await dio.get("/list/prod/bbb/url", queryParameters: {"pg": pg, "siz": siz});
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }
@@ -108,5 +103,20 @@ class ForumApiProvider extends ForumApi {
     var response = await dio.get("/item/prod/bbb/astrology");
     var responseData = json.decode(response.data);
     return Future.value(AstrologyPredictResponse.fromJson(responseData));
+  }
+
+  @override
+  Future<ImageConfigResponse> getImageConfig({String version}) async {
+    var response = await dio.get("/item/prod/bbb/ver$version");
+    var responseData = json.decode(response.data);
+    return Future.value(ImageConfigResponse.fromJson(responseData));
+  }
+
+  @override
+  Future<ForumResponse<ShareImageResponse>> getSharedImages({int pg, int siz}) async {
+    var response =
+        await dio.get("/list/prod/bbb/refer_poster", queryParameters: {"pg": pg, "siz": siz});
+    var responseData = json.decode(response.data);
+    return Future.value(ForumResponse.fromJson(responseData));
   }
 }

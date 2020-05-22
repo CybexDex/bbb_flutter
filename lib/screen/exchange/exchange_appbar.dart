@@ -21,11 +21,7 @@ AppBar exchangeAppBar({BuildContext context}) {
                   )),
                 ),
                 onTap: () {
-                  if (bloc.user.logined) {
-                    Navigator.of(context).pushNamed(RoutePaths.OrderHome);
-                  } else {
-                    Navigator.of(context).pushNamed(RoutePaths.Login);
-                  }
+                  Navigator.of(context).pushNamed(RoutePaths.OrderHome);
                 },
               )),
     ],
@@ -64,12 +60,10 @@ AppBar exchangeAppBar({BuildContext context}) {
     title: Consumer2<UserManager, TickerData>(
       builder: (context, bloc, ticker, child) {
         if (ticker == null) {
-          return Text("${locator.get<SharedPref>().getAsset()}/USDT --",
-              style: StyleFactory.title);
+          return Text("${locator.get<SharedPref>().getAsset()}/USDT --", style: StyleFactory.title);
         }
         return bloc.user.loginType == LoginType.test
-            ? Text("试玩 ${locator.get<SharedPref>().getAsset()}/USDT",
-                style: StyleFactory.title)
+            ? Text("试玩 ${locator.get<SharedPref>().getAsset()}/USDT", style: StyleFactory.title)
             : Text(
                 bloc.user.loginType == LoginType.reward
                     ? "奖励 ${locator.get<SharedPref>().getAsset()}/USDT"

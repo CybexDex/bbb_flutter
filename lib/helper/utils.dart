@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/shared/defs.dart';
+import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:intl/intl.dart';
 
 dynamic convertValueByType(value, Type type, {String stack: ""}) {
@@ -91,4 +94,19 @@ dynamic convertJson(Map<String, dynamic> json) {
 
 String dateFormat({String date}) {
   return DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(date).toLocal());
+}
+
+jumpToUrl(String url, BuildContext buildContext, {bool needLogIn}) {
+  if (url == null || url.isEmpty || url == "empty") {
+    return;
+  }
+  if (url.contains(HTTPString)) {
+    Navigator.of(buildContext).pushNamed(RoutePaths.WebView, arguments: {
+      "url": "${Uri.encodeFull(url)}",
+      "title": Uri.encodeFull(url),
+      'needLogIn': needLogIn
+    });
+  } else {
+    Navigator.of(buildContext).pushNamed(url);
+  }
 }

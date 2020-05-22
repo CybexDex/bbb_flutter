@@ -1,5 +1,6 @@
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/list_page_widget.dart';
@@ -77,7 +78,8 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
 
   _onItemClick(int pos) {
     if (newsList != null && newsList.length > pos) {
-      launchURL(url: Uri.encodeFull(newsList[pos].link));
+      Navigator.of(context).pushNamed(RoutePaths.WebView,
+          arguments: {"title": "大表姐", "url": Uri.encodeFull(newsList[pos].link)});
     }
   }
 
@@ -120,9 +122,10 @@ class _BlockchainVipWidget extends State<BlockchainVipPage>
                   ),
                 ),
                 Container(
-                    width: ScreenUtil.getInstance().setWidth(100),
-                    height: ScreenUtil.getInstance().setHeight(80),
-                    child: Image.network(newsList[pos].image)),
+                  width: ScreenUtil.getInstance().setWidth(100),
+                  height: ScreenUtil.getInstance().setHeight(80),
+                  child: showNetworkImageWrapper(url: newsList[pos].image),
+                ),
               ],
             ),
           ),

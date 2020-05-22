@@ -1,5 +1,6 @@
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
+import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/screen/forum/astrology_header_result.dart';
 import 'package:bbb_flutter/services/network/forumApi/forum_api.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -113,7 +114,7 @@ class _AstrologyWidget extends State<AstrologyPage>
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      Image.network(astrologyHeaderResult.result.headerImage),
+                      showNetworkImageWrapper(url: astrologyHeaderResult.result.headerImage),
                       Padding(
                         padding: const EdgeInsets.only(left: 28, top: 28),
                         child: Text("今日星运",
@@ -197,10 +198,11 @@ class _AstrologyWidget extends State<AstrologyPage>
               ),
             ),
             Container(
-                padding: EdgeInsets.only(left: ScreenUtil.getInstance().setWidth(5)),
-                height: ScreenUtil.getInstance().setHeight(60),
-                width: ScreenUtil.getInstance().setWidth(100),
-                child: Image.network(newsList[pos].image)),
+              padding: EdgeInsets.only(left: ScreenUtil.getInstance().setWidth(5)),
+              height: ScreenUtil.getInstance().setHeight(60),
+              width: ScreenUtil.getInstance().setWidth(100),
+              child: showNetworkImageWrapper(url: newsList[pos].image),
+            ),
           ],
         ),
       ),
@@ -209,7 +211,8 @@ class _AstrologyWidget extends State<AstrologyPage>
 
   _onItemClick(int pos) {
     if (newsList != null && newsList.length > pos) {
-      launchURL(url: Uri.encodeFull(newsList[pos].link));
+      Navigator.of(context).pushNamed(RoutePaths.WebView,
+          arguments: {"title": "占星观币", "url": Uri.encodeFull(newsList[pos].link)});
     }
   }
 

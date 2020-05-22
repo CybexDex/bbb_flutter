@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/screen/home/banner_widget.dart';
@@ -48,7 +49,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         homeViewMode.startLoop();
         homeViewMode.getZendeskAdvertise();
         homeViewMode.getGatewayInfo(assetName: AssetName.USDTERC20);
-        // homeViewMode.getAstrologyPredict();
+        homeViewMode.getImageConfig();
+        homeViewMode.getSharedImage();
       },
       builder: (context, homeViewModel, child) {
         return Scaffold(
@@ -108,14 +110,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                                 items: homeViewModel.zendeskAdvertise.map((i) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      if (i.htmlUrl == null || i.htmlUrl.isEmpty) {
-                                                        return;
-                                                      }
-                                                      if (i.htmlUrl.contains(HTTPString)) {
-                                                        launchURL(url: Uri.encodeFull(i.htmlUrl));
-                                                      } else {
-                                                        Navigator.of(context).pushNamed(i.htmlUrl);
-                                                      }
+                                                      jumpToUrl(Uri.encodeFull(i.htmlUrl), context,
+                                                          needLogIn: false);
                                                     },
                                                     child: Text(i.name,
                                                         overflow: TextOverflow.ellipsis,
@@ -161,9 +157,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                           children: <Widget>[
                                             Container(
                                               width: double.infinity,
-                                              child: SvgPicture.asset(
-                                                R.resAssetsIconsIcGuessUpDown,
-                                              ),
+                                              child: homeViewModel.imageConfigResponse == null
+                                                  ? Container()
+                                                  : showNetworkImageWrapper(
+                                                      url: homeViewModel.imageConfigResponse.result
+                                                          .midBannerImage1),
                                             ),
                                           ],
                                         ),
@@ -182,9 +180,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                           children: <Widget>[
                                             Container(
                                               width: double.infinity,
-                                              child: SvgPicture.asset(
-                                                R.resAssetsIconsIcHomeDeposit,
-                                              ),
+                                              child: homeViewModel.imageConfigResponse == null
+                                                  ? Container()
+                                                  : showNetworkImageWrapper(
+                                                      url: homeViewModel.imageConfigResponse.result
+                                                          .midBannerImage2),
                                             ),
                                           ],
                                         ),

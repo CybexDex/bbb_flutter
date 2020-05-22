@@ -22,8 +22,6 @@ import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api_provider.dart';
 import 'package:bbb_flutter/services/network/node/node_api.dart';
 import 'package:bbb_flutter/services/network/node/node_api_provider.dart';
-import 'package:bbb_flutter/services/network/push/push_api.dart';
-import 'package:bbb_flutter/services/network/push/push_api_provider.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api.dart';
 import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
@@ -101,8 +99,6 @@ setupLocator() async {
   locator.registerSingleton(RefManager(api: locator<BBBAPI>()));
   locator.registerSingleton<NodeApi>(NodeApiProvider(sharedPref: locator<SharedPref>()));
   locator.registerSingleton<ZendeskApi>(ZendeskApiProvider());
-  locator.registerSingleton<PushApi>(PushApiProvider());
-
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),
       pref: locator<SharedPref>(),

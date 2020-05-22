@@ -34,11 +34,8 @@ openDialog(BuildContext context, OrderResponseModel model) {
   ).then((v) {});
 }
 
-Widget _buildMaterialDialogTransitions(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child) {
+Widget _buildMaterialDialogTransitions(BuildContext context, Animation<double> animation,
+    Animation<double> secondaryAnimation, Widget child) {
   return SlideTransition(
     position: CurvedAnimation(
       parent: animation,
@@ -56,4 +53,11 @@ headerBuild(int month) {
     color: Palette.appDividerBackgroudGreyColor,
     child: Text("$month月份"),
   );
+}
+
+showNetworkImageWrapper({String url, BoxFit fit = BoxFit.contain, double width, double height}) {
+  if (url.contains(".svg")) {
+    return SvgPicture.network(url, fit: fit);
+  }
+  return Image.network(url, fit: fit, width: width, height: height);
 }

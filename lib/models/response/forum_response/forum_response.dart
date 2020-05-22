@@ -6,6 +6,7 @@ import 'package:bbb_flutter/models/response/forum_response/assets_list.dart';
 import 'package:bbb_flutter/models/response/forum_response/astrology_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/bolockchain_vip_result.dart';
 import 'package:bbb_flutter/models/response/forum_response/news_result.dart';
+import 'package:bbb_flutter/models/response/forum_response/share_image_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 
 class ForumResponse<T> {
@@ -36,6 +37,8 @@ class ForumResponse<T> {
             item = AssetList.fromJson(item);
           } else if (T == UrlConfigResponse) {
             item = UrlConfigResponse.fromJson(item);
+          } else if (T == ShareImageResponse) {
+            item = ShareImageResponse.fromJson(item);
           }
           result.add(item);
         }
@@ -43,8 +46,7 @@ class ForumResponse<T> {
     }
     return ForumResponse(
       result: result,
-      success:
-          convertValueByType(jsonRes['success'], bool, stack: "Root-success"),
+      success: convertValueByType(jsonRes['success'], bool, stack: "Root-success"),
     );
   }
 

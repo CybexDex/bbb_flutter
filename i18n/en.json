@@ -103,6 +103,7 @@
   "success_toast": "成功",
   "fail_toast": "失败",
   "toast_deposit": "充值暂停",
+  "toast_withdraw": "提现暂停",
   "toast_formal_account": "请切换到正式账号",
   "open_position_time": "建仓时间",
   "settlement_type": "平仓类型",
@@ -266,5 +267,6 @@
   "limit_order_cancel_failed": "撤单失败",
   "limit_order_status_expired": "已到期",
   "limit_order_cancel_button": "撤单",
-  "coupon": "奖励金"
+  "coupon": "奖励金",
+  "coupon_rule": "使用规则"
 }

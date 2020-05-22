@@ -1,4 +1,5 @@
 import 'package:bbb_flutter/base/base_widget.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/coupon_order_view_model.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -465,7 +466,10 @@ class DialogFactory {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          GestureDetector(onTap: onImageTap, child: Image.network(img, width: 270)),
+          GestureDetector(
+            onTap: onImageTap,
+            child: showNetworkImageWrapper(url: img, width: 270),
+          ),
           SizedBox(height: 20),
           GestureDetector(
             onTap: () {

@@ -4,11 +4,12 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -106,33 +107,30 @@ class SharePage extends StatelessWidget {
     var random = Random();
     switch (random.nextInt(3)) {
       case 0:
-        return SvgPicture.asset(
-          R.resAssetsIconsSharePhoto1,
-          fit: BoxFit.fitHeight,
-          width: ScreenUtil.screenWidthDp,
-          height: ScreenUtil.screenHeightDp,
-        );
+        return showNetworkImageWrapper(
+            url: locator.get<HomeViewModel>().shareImageList[0].url,
+            fit: BoxFit.fitHeight,
+            width: ScreenUtil.screenWidthDp,
+            height: ScreenUtil.screenHeightDp);
+
       case 1:
-        return SvgPicture.asset(
-          R.resAssetsIconsSharePhoto2,
-          fit: BoxFit.fitHeight,
-          width: ScreenUtil.screenWidthDp,
-          height: ScreenUtil.screenHeightDp,
-        );
+        return showNetworkImageWrapper(
+            url: locator.get<HomeViewModel>().shareImageList[1].url,
+            fit: BoxFit.fitHeight,
+            width: ScreenUtil.screenWidthDp,
+            height: ScreenUtil.screenHeightDp);
       case 2:
-        return SvgPicture.asset(
-          R.resAssetsIconsSharePhoto3,
-          fit: BoxFit.fitHeight,
-          width: ScreenUtil.screenWidthDp,
-          height: ScreenUtil.screenHeightDp,
-        );
+        return showNetworkImageWrapper(
+            url: locator.get<HomeViewModel>().shareImageList[2].url,
+            fit: BoxFit.fitHeight,
+            width: ScreenUtil.screenWidthDp,
+            height: ScreenUtil.screenHeightDp);
       default:
-        return SvgPicture.asset(
-          R.resAssetsIconsSharePhoto1,
-          fit: BoxFit.fitHeight,
-          width: ScreenUtil.screenWidthDp,
-          height: ScreenUtil.screenHeightDp,
-        );
+        return showNetworkImageWrapper(
+            url: locator.get<HomeViewModel>().shareImageList[0].url,
+            fit: BoxFit.fitHeight,
+            width: ScreenUtil.screenWidthDp,
+            height: ScreenUtil.screenHeightDp);
     }
   }
 }

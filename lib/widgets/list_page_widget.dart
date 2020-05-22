@@ -65,12 +65,8 @@ class ListPageState extends State<ListPage> {
       return widget.headerCreator(context, index);
     } else {
       return new GestureDetector(
-        child: new Padding(
-            padding: new EdgeInsets.all(10.0),
-            child: new Text("Header Row $index")),
-        onTap: () {
-          print('header click $index --------------------');
-        },
+        child: new Padding(padding: new EdgeInsets.all(10.0), child: new Text("Header Row $index")),
+        onTap: () {},
       );
     }
   }
@@ -89,11 +85,8 @@ class ListPageState extends State<ListPage> {
       return widget.itemWidgetCreator(context, index);
     } else {
       return new GestureDetector(
-        child: new Padding(
-            padding: new EdgeInsets.all(10.0), child: new Text("Row $index")),
-        onTap: () {
-          print('click $index --------------------');
-        },
+        child: new Padding(padding: new EdgeInsets.all(10.0), child: new Text("Row $index")),
+        onTap: () {},
       );
     }
   }

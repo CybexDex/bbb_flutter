@@ -171,7 +171,6 @@ class RefManager {
 
   getPushRegistrationId() async {
     String regId = await locator.get<JPush>().getRegistrationID();
-    print(regId);
     pushRegId = regId;
   }
 }

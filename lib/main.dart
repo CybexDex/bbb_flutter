@@ -22,7 +22,6 @@ import 'package:sentry/sentry.dart';
 import 'manager/ref_manager.dart';
 
 main() async {
-  await Future.delayed(Duration(seconds: 1));
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

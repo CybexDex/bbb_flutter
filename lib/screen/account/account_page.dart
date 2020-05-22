@@ -1,12 +1,14 @@
 import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/positions_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/types.dart';
@@ -141,10 +143,8 @@ class _AccountPageState extends State<AccountPage> {
                                               children: <Widget>[
                                                 GestureDetector(
                                                   onTap: accountVm.depositAvailable
-                                                      ? () => _accountViewModel.puchToNextPage(
-                                                          userManager.user.logined,
-                                                          RoutePaths.Deposit,
-                                                          context)
+                                                      ? () => Navigator.of(context)
+                                                          .pushNamed(RoutePaths.Deposit)
                                                       : () {},
                                                   child: Badge(
                                                     showBadge: !accountVm.depositAvailable,
@@ -178,10 +178,8 @@ class _AccountPageState extends State<AccountPage> {
                                                 ),
                                                 GestureDetector(
                                                   onTap: accountVm.withdrawAvailable
-                                                      ? () => _accountViewModel.puchToNextPage(
-                                                          userManager.user.logined,
-                                                          RoutePaths.Withdraw,
-                                                          context)
+                                                      ? () => Navigator.of(context)
+                                                          .pushNamed(RoutePaths.Withdraw)
                                                       : () {},
                                                   child: Badge(
                                                     showBadge: !accountVm.withdrawAvailable,
@@ -214,10 +212,8 @@ class _AccountPageState extends State<AccountPage> {
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () => _accountViewModel.puchToNextPage(
-                                                      userManager.user.logined,
-                                                      RoutePaths.Transfer,
-                                                      context),
+                                                  onTap: () => Navigator.of(context)
+                                                      .pushNamed(RoutePaths.Transfer),
                                                   child: Column(
                                                     children: <Widget>[
                                                       SvgPicture.asset(
@@ -375,10 +371,8 @@ class _AccountPageState extends State<AccountPage> {
                                                   //   Navigator.of(context).popUntil((route) => route.isFirst);
                                                   //   showFlashBar(context, true, content: I18n.of(context).changeToReward);
                                                   // }
-                                                  _accountViewModel.puchToNextPage(
-                                                      userManager.user.logined,
-                                                      RoutePaths.Coupon,
-                                                      context);
+                                                  Navigator.of(context)
+                                                      .pushNamed(RoutePaths.Coupon);
                                                 },
                                                 child: Row(
                                                   mainAxisSize: MainAxisSize.min,
@@ -418,6 +412,23 @@ class _AccountPageState extends State<AccountPage> {
                       color: Colors.white,
                       child: Column(
                         children: <Widget>[
+                          userManager.user.loginType == LoginType.cloud ||
+                                  userManager.user.loginType == LoginType.none
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(RoutePaths.Invite);
+                                  },
+                                  child: showNetworkImageWrapper(
+                                    url: locator
+                                            .get<HomeViewModel>()
+                                            .imageConfigResponse
+                                            ?.result
+                                            ?.referEntry ??
+                                        "https://config-center.cybex.io/prod/bbb/ver2-0-9/refer_entry.1589787111457.png",
+                                    height: ScreenUtil.getInstance().setHeight(80),
+                                    width: ScreenUtil.getInstance().setWidth(345),
+                                  ))
+                              : Container(),
                           ListTile(
                             trailing: Icon(Icons.keyboard_arrow_right),
                             title: Text(
@@ -425,8 +436,7 @@ class _AccountPageState extends State<AccountPage> {
                               style: StyleNewFactory.black15,
                             ),
                             onTap: () {
-                              _accountViewModel.puchToNextPage(
-                                  userManager.user.logined, RoutePaths.OrderRecords, context);
+                              Navigator.of(context).pushNamed(RoutePaths.OrderRecords);
                             },
                           ),
                           Divider(
@@ -441,8 +451,7 @@ class _AccountPageState extends State<AccountPage> {
                               style: StyleNewFactory.black15,
                             ),
                             onTap: () {
-                              _accountViewModel.puchToNextPage(
-                                  userManager.user.logined, RoutePaths.LimitOrderRecords, context);
+                              Navigator.of(context).pushNamed(RoutePaths.LimitOrderRecords);
                             },
                           ),
                           Divider(
@@ -459,8 +468,7 @@ class _AccountPageState extends State<AccountPage> {
                                     style: StyleNewFactory.black15,
                                   ),
                                   onTap: () {
-                                    _accountViewModel.puchToNextPage(
-                                        userManager.user.logined, RoutePaths.FundRecords, context);
+                                    Navigator.of(context).pushNamed(RoutePaths.FundRecords);
                                   },
                                 )
                               : Container(),
@@ -478,8 +486,7 @@ class _AccountPageState extends State<AccountPage> {
                                     style: StyleNewFactory.black15,
                                   ),
                                   onTap: () {
-                                    _accountViewModel.puchToNextPage(userManager.user.logined,
-                                        RoutePaths.RewardRecords, context);
+                                    Navigator.of(context).pushNamed(RoutePaths.RewardRecords);
                                   },
                                 )
                               : Container(),
@@ -495,7 +502,10 @@ class _AccountPageState extends State<AccountPage> {
                               style: StyleNewFactory.black15,
                             ),
                             onTap: () {
-                              Navigator.pushNamed(context, RoutePaths.Help);
+                              Navigator.pushNamed(context, RoutePaths.WebView, arguments: {
+                                "title": I18n.of(context).helpCenter,
+                                "url": "https://bbb2019.zendesk.com/hc/zh-cn"
+                              });
                             },
                           ),
                           Divider(
@@ -503,47 +513,47 @@ class _AccountPageState extends State<AccountPage> {
                             thickness: 10,
                             height: 1,
                           ),
-                          userManager.user.loginType == LoginType.cloud ||
-                                  userManager.user.loginType == LoginType.none
-                              ? GestureDetector(
-                                  onTap: () {
-                                    _accountViewModel.puchToNextPage(
-                                        userManager.user.logined, RoutePaths.Invite, context);
-                                  },
-                                  child: SvgPicture.asset(
-                                    R.resAssetsIconsInvitationListTile,
-                                    height: ScreenUtil.getInstance().setHeight(105),
-                                    width: ScreenUtil.getInstance().setWidth(375),
-                                  ),
-                                )
-                              // ? ListTile(
-                              //     trailing: Icon(Icons.keyboard_arrow_right),
-                              //     title: Row(
-                              //       children: <Widget>[
-                              //         Text(
-                              //           I18n.of(context).inviteFriend,
-                              //           style: StyleNewFactory.black15,
-                              //         ),
-                              //         SizedBox(
-                              //           width: 10,
-                              //         ),
-                              //         SpeechBubble(
-                              //             nipLocation: NipLocation.LEFT,
-                              //             color: Palette.invitePromotionBadgeColor.withOpacity(0.1),
-                              //             padding: EdgeInsets.only(
-                              //                 bottom: 1, top: 1, left: 12, right: 12),
-                              //             child: Container(
-                              //               child: Text("返利",
-                              //                   style: StyleFactory.inviteBadgeFontStyle),
-                              //             ))
-                              //       ],
-                              //     ),
-                              //     onTap: () {
-                              //       _accountViewModel.puchToNextPage(
-                              //           userManager.user.logined, RoutePaths.Invite, context);
-                              //     },
-                              //   )
-                              : Container(),
+                          // userManager.user.loginType == LoginType.cloud ||
+                          //         userManager.user.loginType == LoginType.none
+                          //     ? GestureDetector(
+                          //         onTap: () {
+                          //           _accountViewModel.puchToNextPage(
+                          //               userManager.user.logined, RoutePaths.Invite, context);
+                          //         },
+                          //         child: Image.network(
+                          //           locator.get<HomeViewModel>().imageConfigResponse.result.referEntry,
+                          //           height: ScreenUtil.getInstance().setHeight(105),
+                          //           width: ScreenUtil.getInstance().setWidth(375),
+                          //         ),
+                          //       )
+                          // ? ListTile(
+                          //     trailing: Icon(Icons.keyboard_arrow_right),
+                          //     title: Row(
+                          //       children: <Widget>[
+                          //         Text(
+                          //           I18n.of(context).inviteFriend,
+                          //           style: StyleNewFactory.black15,
+                          //         ),
+                          //         SizedBox(
+                          //           width: 10,
+                          //         ),
+                          //         SpeechBubble(
+                          //             nipLocation: NipLocation.LEFT,
+                          //             color: Palette.invitePromotionBadgeColor.withOpacity(0.1),
+                          //             padding: EdgeInsets.only(
+                          //                 bottom: 1, top: 1, left: 12, right: 12),
+                          //             child: Container(
+                          //               child: Text("返利",
+                          //                   style: StyleFactory.inviteBadgeFontStyle),
+                          //             ))
+                          //       ],
+                          //     ),
+                          //     onTap: () {
+                          //       _accountViewModel.puchToNextPage(
+                          //           userManager.user.logined, RoutePaths.Invite, context);
+                          //     },
+                          //   )
+                          // : Container(),
                           SizedBox(
                             height: 50,
                           ),

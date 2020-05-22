@@ -28,8 +28,9 @@ class _UserDrawerState extends State<UserDrawer> {
   void initState() {
     if (locator.get<UserManager>().user.testAccountResponseModel == null) {
       locator.get<UserManager>().getGatewayInfo(assetName: AssetName.USDTERC20);
-      locator.get<UserManager>().checkRewardAccount(
-          accountName: locator.get<UserManager>().user.name, bonusEvent: true);
+      locator
+          .get<UserManager>()
+          .checkRewardAccount(accountName: locator.get<UserManager>().user.name, bonusEvent: true);
     }
     locator.get<ConfigureApi>().getBanner();
     super.initState();
@@ -72,15 +73,12 @@ class _UserDrawerState extends State<UserDrawer> {
                             Align(
                               child: GestureDetector(
                                 child: Offstage(
-                                    offstage: userMg.user.loginType !=
-                                            LoginType.cloud ||
+                                    offstage: userMg.user.loginType != LoginType.cloud ||
                                         !userMg.hasBonus,
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        SvgPicture.asset(
-                                            R.resAssetsIconsIcRewardAccount),
+                                        SvgPicture.asset(R.resAssetsIconsIcRewardAccount),
                                         SizedBox(
                                           width: 6,
                                         ),
@@ -88,8 +86,7 @@ class _UserDrawerState extends State<UserDrawer> {
                                           width: 25,
                                           child: Text(
                                             I18n.of(context).rewardAccount,
-                                            style:
-                                                StyleFactory.clickToRewardStyle,
+                                            style: StyleFactory.clickToRewardStyle,
                                           ),
                                         )
                                       ],
@@ -97,20 +94,16 @@ class _UserDrawerState extends State<UserDrawer> {
                                 onTap: () async {
                                   showLoading(context);
                                   if (await userMg.loginWithPrivateKey(
-                                      bonusEvent: true,
-                                      accountName: userMg.user.name)) {
-                                    showNotification(context, false,
-                                        I18n.of(context).changeToReward,
+                                      bonusEvent: true, accountName: userMg.user.name)) {
+                                    showNotification(
+                                        context, false, I18n.of(context).changeToReward,
                                         callback: () {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
                                     });
                                   } else {
-                                    showNotification(context, true,
-                                        I18n.of(context).changeToTryEnv,
+                                    showNotification(context, true, I18n.of(context).changeToTryEnv,
                                         callback: () {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
                                     });
                                   }
                                 },
@@ -123,8 +116,7 @@ class _UserDrawerState extends State<UserDrawer> {
                             Align(
                               child: GestureDetector(
                                 child: Offstage(
-                                    offstage: userMg.user.loginType !=
-                                        LoginType.cloud,
+                                    offstage: userMg.user.loginType != LoginType.cloud,
                                     child: Row(
                                       children: <Widget>[
                                         SvgPicture.asset(R.resAssetsIconsIcTry),
@@ -142,20 +134,16 @@ class _UserDrawerState extends State<UserDrawer> {
                                     )),
                                 onTap: () async {
                                   showLoading(context);
-                                  if (await userMg.loginWithPrivateKey(
-                                      bonusEvent: false)) {
-                                    showNotification(context, false,
-                                        I18n.of(context).changeToTryEnv,
+                                  if (await userMg.loginWithPrivateKey(bonusEvent: false)) {
+                                    showNotification(
+                                        context, false, I18n.of(context).changeToTryEnv,
                                         callback: () {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
                                     });
                                   } else {
-                                    showNotification(context, true,
-                                        I18n.of(context).changeToTryEnv,
+                                    showNotification(context, true, I18n.of(context).changeToTryEnv,
                                         callback: () {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
+                                      Navigator.of(context).popUntil((route) => route.isFirst);
                                     });
                                   }
                                 },
@@ -208,8 +196,7 @@ class _UserDrawerState extends State<UserDrawer> {
                     SizedBox(
                       height: 24,
                     ),
-                    Text("${I18n.of(context).myAsset} (USDT)",
-                        style: StyleFactory.subTitleStyle),
+                    Text("${I18n.of(context).myAsset} (USDT)", style: StyleFactory.subTitleStyle),
                     SizedBox(height: 8),
                     Text(usdt == null ? "--" : "${floor(usdt.quantity, 4)}",
                         style: StyleFactory.hugeTitleStyle)
@@ -224,16 +211,14 @@ class _UserDrawerState extends State<UserDrawer> {
                         children: <Widget>[
                           userMg.user.testAccountResponseModel == null
                               ? Container(
-                                  margin: EdgeInsets.only(
-                                      top: 24, right: 24, left: 24),
+                                  margin: EdgeInsets.only(top: 24, right: 24, left: 24),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       GestureDetector(
                                         onTap: userMg.depositAvailable
-                                            ? () => Navigator.of(context)
-                                                .pushNamed(RoutePaths.Deposit)
+                                            ? () =>
+                                                Navigator.of(context).pushNamed(RoutePaths.Deposit)
                                             : () {},
                                         child: Badge(
                                           showBadge: !userMg.depositAvailable,
@@ -257,8 +242,7 @@ class _UserDrawerState extends State<UserDrawer> {
                                               ),
                                               Text(
                                                 I18n.of(context).topUp,
-                                                style: StyleFactory
-                                                    .smallCellTitleStyle,
+                                                style: StyleFactory.smallCellTitleStyle,
                                               ),
                                             ],
                                           ),
@@ -266,8 +250,8 @@ class _UserDrawerState extends State<UserDrawer> {
                                       ),
                                       GestureDetector(
                                         onTap: userMg.withdrawAvailable
-                                            ? () => Navigator.of(context)
-                                                .pushNamed(RoutePaths.Withdraw)
+                                            ? () =>
+                                                Navigator.of(context).pushNamed(RoutePaths.Withdraw)
                                             : () {},
                                         child: Badge(
                                           showBadge: !userMg.withdrawAvailable,
@@ -291,27 +275,24 @@ class _UserDrawerState extends State<UserDrawer> {
                                               ),
                                               Text(
                                                 I18n.of(context).withdraw,
-                                                style: StyleFactory
-                                                    .smallCellTitleStyle,
+                                                style: StyleFactory.smallCellTitleStyle,
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
                                       GestureDetector(
-                                        onTap: () => Navigator.pushNamed(
-                                            context, RoutePaths.Transfer),
+                                        onTap: () =>
+                                            Navigator.pushNamed(context, RoutePaths.Transfer),
                                         child: Column(
                                           children: <Widget>[
-                                            SvgPicture.asset(
-                                                R.resAssetsIconsIcSend),
+                                            SvgPicture.asset(R.resAssetsIconsIcSend),
                                             SizedBox(
                                               height: 2,
                                             ),
                                             Text(
                                               I18n.of(context).transfer,
-                                              style: StyleFactory
-                                                  .smallCellTitleStyle,
+                                              style: StyleFactory.smallCellTitleStyle,
                                             ),
                                           ],
                                         ),
@@ -324,45 +305,35 @@ class _UserDrawerState extends State<UserDrawer> {
                             height: 18,
                           ),
                           userMg.user.testAccountResponseModel == null &&
-                                  locator
-                                      .get<ConfigureApi>()
-                                      .bannersResponseList
-                                      .isNotEmpty
+                                  locator.get<ConfigureApi>().bannersResponseList.isNotEmpty
                               ? _bannerWidget(
-                                  items: locator
-                                      .get<ConfigureApi>()
-                                      .bannersResponseList)
+                                  items: locator.get<ConfigureApi>().bannersResponseList)
                               : Container(),
                           ListTile(
-                            leading:
-                                SvgPicture.asset(R.resAssetsIconsIcWdrecords),
+                            leading: SvgPicture.asset(R.resAssetsIconsIcWdrecords),
                             title: Text(
                               I18n.of(context).transactionRecords,
                               style: StyleFactory.larSubtitle,
                             ),
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, RoutePaths.OrderRecords);
+                              Navigator.pushNamed(context, RoutePaths.OrderRecords);
                             },
                           ),
                           userMg.user.testAccountResponseModel == null
                               ? ListTile(
-                                  leading: SvgPicture.asset(
-                                      R.resAssetsIconsIcExchangeRecords),
+                                  leading: SvgPicture.asset(R.resAssetsIconsIcExchangeRecords),
                                   title: Text(
                                     I18n.of(context).cashRecords,
                                     style: StyleFactory.larSubtitle,
                                   ),
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RoutePaths.FundRecords);
+                                    Navigator.pushNamed(context, RoutePaths.FundRecords);
                                   },
                                 )
                               : Container(),
                           userMg.user.testAccountResponseModel == null
                               ? ListTile(
-                                  leading: SvgPicture.asset(
-                                      R.resAssetsIconsIcInvite),
+                                  leading: SvgPicture.asset(R.resAssetsIconsIcInvite),
                                   title: Row(
                                     children: <Widget>[
                                       Text(
@@ -374,24 +345,17 @@ class _UserDrawerState extends State<UserDrawer> {
                                       ),
                                       SpeechBubble(
                                           nipLocation: NipLocation.LEFT,
-                                          color: Palette
-                                              .invitePromotionBadgeColor
-                                              .withOpacity(0.1),
+                                          color: Palette.invitePromotionBadgeColor.withOpacity(0.1),
                                           padding: EdgeInsets.only(
-                                              bottom: 1,
-                                              top: 1,
-                                              left: 12,
-                                              right: 12),
+                                              bottom: 1, top: 1, left: 12, right: 12),
                                           child: Container(
                                             child: Text("返利",
-                                                style: StyleFactory
-                                                    .inviteBadgeFontStyle),
+                                                style: StyleFactory.inviteBadgeFontStyle),
                                           ))
                                     ],
                                   ),
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, RoutePaths.Invite);
+                                    Navigator.pushNamed(context, RoutePaths.Invite);
                                   },
                                 )
                               : Container(),
@@ -402,7 +366,7 @@ class _UserDrawerState extends State<UserDrawer> {
                               style: StyleFactory.larSubtitle,
                             ),
                             onTap: () {
-                              Navigator.pushNamed(context, RoutePaths.Help);
+                              Navigator.pushNamed(context, RoutePaths.WebView);
                             },
                           ),
                           ListTile(
@@ -507,12 +471,9 @@ class _UserDrawerState extends State<UserDrawer> {
                           userMg.user.name == null
                               ? Container()
                               : ListTile(
-                                  leading: SvgPicture.asset(
-                                      R.resAssetsIconsIcLogout),
-                                  title: userMg.user.testAccountResponseModel !=
-                                          null
-                                      ? (userMg.user.loginType ==
-                                              LoginType.reward
+                                  leading: SvgPicture.asset(R.resAssetsIconsIcLogout),
+                                  title: userMg.user.testAccountResponseModel != null
+                                      ? (userMg.user.loginType == LoginType.reward
                                           ? Text(I18n.of(context).quitReward,
                                               style: StyleFactory.larSubtitle)
                                           : Text(I18n.of(context).clickToQuit,
@@ -520,16 +481,13 @@ class _UserDrawerState extends State<UserDrawer> {
                                       : Text(I18n.of(context).logout,
                                           style: StyleFactory.larSubtitle),
                                   onTap: () {
-                                    if (userMg.user.testAccountResponseModel !=
-                                        null) {
+                                    if (userMg.user.testAccountResponseModel != null) {
                                       showNotification(
                                           context,
                                           false,
-                                          userMg.user.loginType ==
-                                                  LoginType.reward
+                                          userMg.user.loginType == LoginType.reward
                                               ? I18n.of(context).quitReward
-                                              : I18n.of(context)
-                                                  .changeFromTryEnv,
+                                              : I18n.of(context).changeFromTryEnv,
                                           callback: () async {
                                         await userMg.logoutTestAccount();
                                         Navigator.pop(context);

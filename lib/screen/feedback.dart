@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/services.dart';
@@ -58,11 +60,12 @@ class FeedBackScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(60)),
-                height: ScreenUtil.getInstance().setWidth(150),
-                width: ScreenUtil.getInstance().setWidth(150),
-                child: Image.asset(R.resAssetsIconsWechat),
-              ),
+                  margin: EdgeInsets.only(top: ScreenUtil.getInstance().setHeight(60)),
+                  height: ScreenUtil.getInstance().setWidth(150),
+                  width: ScreenUtil.getInstance().setWidth(150),
+                  child: showNetworkImageWrapper(
+                      url:
+                          locator.get<HomeViewModel>().imageConfigResponse.result.assistantBicode)),
               SizedBox(
                 height: ScreenUtil.getInstance().setHeight(20),
               ),
@@ -72,16 +75,7 @@ class FeedBackScreen extends StatelessWidget {
                       left: ScreenUtil.getInstance().setWidth(20)),
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "您好，感谢支持！",
-                    style: StyleNewFactory.black15,
-                  )),
-              Container(
-                  margin: EdgeInsets.only(
-                      right: ScreenUtil.getInstance().setWidth(20),
-                      left: ScreenUtil.getInstance().setWidth(20)),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "新人福利添加客服微信，回复【新人奖励】即可领取10U奖励金，可直接用于交易，盈利可提现哦～",
+                    locator.get<HomeViewModel>().imageConfigResponse.result.assistantHint,
                     style: StyleNewFactory.black15,
                   )),
               Container(

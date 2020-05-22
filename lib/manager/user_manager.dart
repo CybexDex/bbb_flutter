@@ -16,7 +16,6 @@ import 'package:bbb_flutter/models/response/test_account_response_model.dart';
 import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
-import 'package:bbb_flutter/services/network/push/push_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 
@@ -248,9 +247,7 @@ class UserManager extends BaseModel {
     _pref.removeUserName();
     _pref.removeLoginType();
 
-    locator
-        .get<PushApi>()
-        .unRegisterPush(accountName: user.name, regId: locator.get<RefManager>().pushRegId);
+    _api.unRegisterPush(accountName: user.name, regId: locator.get<RefManager>().pushRegId);
 
     user.account = null;
     user.name = null;

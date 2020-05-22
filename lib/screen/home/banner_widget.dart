@@ -1,6 +1,6 @@
-import 'package:bbb_flutter/helper/show_dialog_utils.dart';
+import 'package:bbb_flutter/helper/ui_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
-import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -43,26 +43,15 @@ class BannerState extends State<BannerWidget> {
                     margin: EdgeInsets.all(8),
                     constraints: BoxConstraints.expand(),
                     decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                          color: Color(0xffe2e2e2),
-                          blurRadius: 6,
-                          offset: Offset(0, 3))
+                      BoxShadow(color: Color(0xffe2e2e2), blurRadius: 6, offset: Offset(0, 3))
                     ], borderRadius: BorderRadius.circular(10)),
                     child: GestureDetector(
                         onTap: () {
-                          if (i.link == null ||
-                              i.link.isEmpty ||
-                              i.link == "empty") {
-                            return;
-                          }
-                          if (i.link.contains(HTTPString)) {
-                            launchURL(url: Uri.encodeFull(i.link));
-                          } else {
-                            Navigator.of(context).pushNamed(i.link);
-                          }
+                          jumpToUrl(Uri.encodeFull(i.link), context,
+                              needLogIn: i.needUserName == "1");
                         },
-                        child: Image.network(
-                          i.image,
+                        child: showNetworkImageWrapper(
+                          url: i.image,
                           fit: BoxFit.fill,
                         )),
                   );
@@ -81,14 +70,13 @@ class BannerState extends State<BannerWidget> {
                             margin: EdgeInsets.symmetric(horizontal: 2.5),
                             width: 10,
                             height: 3,
-                            decoration:
-                                BoxDecoration(color: Palette.appYellowOrange))
+                            decoration: BoxDecoration(color: Palette.appYellowOrange))
                         : new Container(
                             margin: EdgeInsets.symmetric(horizontal: 2.5),
                             width: 4,
                             height: 3,
-                            decoration: new BoxDecoration(
-                                color: Color(0xffcccccc).withOpacity(0.5))));
+                            decoration:
+                                new BoxDecoration(color: Color(0xffcccccc).withOpacity(0.5))));
               })
               .values
               .toList(),

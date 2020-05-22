@@ -10,7 +10,6 @@ import 'package:bbb_flutter/models/response/faucet_captcha_response_model.dart';
 import 'package:bbb_flutter/models/response/register_response_model.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/faucet/faucet_api.dart';
-import 'package:bbb_flutter/services/network/push/push_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
@@ -67,7 +66,7 @@ class RegisterViewModel extends BaseModel {
           await _userManager.fetchBalances(name: accountName);
           int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
           int timeout = expir + 5 * 60;
-          locator.get<PushApi>().registerPush(
+          locator.get<BBBAPI>().registerPush(
               regId: locator.get<RefManager>().pushRegId,
               accountName: accountName,
               timeout: timeout);
@@ -130,7 +129,7 @@ class RegisterViewModel extends BaseModel {
     setButtonState(_isAccountNamePassChecker &&
         _isPasswordPassChecker &&
         _isPasswordConfirmChecker &&
-        pinCode.isEmpty);
+        pinCode.isNotEmpty);
   }
 
   checkPassword(String password, String passwordConfirm, String accountName, String pinCode) {
@@ -153,7 +152,7 @@ class RegisterViewModel extends BaseModel {
     setButtonState(_isAccountNamePassChecker &&
         _isPasswordPassChecker &&
         _isPasswordConfirmChecker &&
-        pinCode.isEmpty);
+        pinCode.isNotEmpty);
   }
 
   checkPasswordConfirmation(
