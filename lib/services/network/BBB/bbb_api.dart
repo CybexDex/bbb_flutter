@@ -47,7 +47,7 @@ abstract class BBBAPI {
       {String startTime, String endTime, MarketDuration duration});
   Future<DepositResponseModel> getDeposit({String name, String asset});
 
-  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end});
+  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end, String subType});
   Future<List<String>> getFundDescription();
   Future<TestAccountResponseModel> getTestAccount({bool bonusEvent, String accountName});
   Future<List<RankingResponse>> getRankings({int indicator});

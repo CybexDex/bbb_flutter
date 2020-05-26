@@ -4,6 +4,7 @@ import 'package:bbb_flutter/screen/exchange/exchange.dart';
 import 'package:bbb_flutter/screen/exchange/nav_drawer_assets.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/home/home_page.dart';
+import 'package:bbb_flutter/screen/home/home_view_model.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,9 @@ class _MainState extends State<MainPage> {
 
     if (locator.get<UserManager>().user.logined && index == 3) {
       locator.get<UserManager>().fetchBalances(name: locator.get<UserManager>().user.name);
+    }
+    if (index == 0) {
+      locator.get<HomeViewModel>().getRankingList();
     }
   }
 }

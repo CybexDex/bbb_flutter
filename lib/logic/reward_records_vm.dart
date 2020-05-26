@@ -33,6 +33,7 @@ class RewardRecordsViewModel extends BaseModel {
     _bbbapi
         .getFundRecords(
       name: name,
+      subType: "airdrop",
       start: DateTime.now().toUtc().subtract(Duration(days: 30)),
       end: DateTime.now().toUtc(),
     )

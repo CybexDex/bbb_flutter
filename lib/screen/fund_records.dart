@@ -34,6 +34,7 @@ class _FundRecordsWidgetState extends State<FundRecordsWidget> {
         .get<BBBAPI>()
         .getFundRecords(
             name: name,
+            subType: "gateway_deposit,gateway_withdraw" ,
             start: DateTime.now().toUtc().subtract(Duration(days: 30)),
             end: DateTime.now().toUtc())
         .then((d) {

@@ -6,7 +6,6 @@ class WebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> param = ModalRoute.of(context).settings.arguments;
-    print(param);
     return WebviewScaffold(
         url: param['needLogIn'] != null &&
                 param['needLogIn'] &&
@@ -63,6 +62,7 @@ class WebViewPage extends StatelessWidget {
             ],
           ),
         ));
+
     // return Scaffold(
     //   appBar: AppBar(
     //     centerTitle: true,

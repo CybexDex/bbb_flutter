@@ -248,9 +248,9 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end}) async {
+  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end, String subType}) async {
     var response =
-        await newDio.get("/cybex/fund", queryParameters: {"accountName": name, "action": action});
+        await newDio.get("/cybex/fund", queryParameters: {"accountName": name, "action": action, "subType": subType});
     var responseData = response.data as List;
     List<FundRecordModel> model = responseData.map((data) {
       return FundRecordModel.fromJson(data);

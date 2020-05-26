@@ -23,7 +23,7 @@ dependencies:
 
   flutter_page_indicator: ^0.0.3
   flutter_spinkit: ^3.1.0
-  cached_network_image: ^0.7.0
+  cached_network_image: ^2.2.0+1
   shared_preferences: ^0.5.7+1
   simple_animations: ^1.0.0
   magical_widget: ^1.0.1
@@ -41,7 +41,7 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   provider: ^3.0.0+1
-  rxdart: ^0.22.0
+  rxdart: ^0.23.1
   get_it: ^1.0.3+1
   quiver: ">=2.0.0 <3.0.0"
   oktoast: 2.3.0
@@ -50,8 +50,8 @@ dependencies:
   functional_widget_annotation: ^0.5.0
   json_annotation: ^2.4.0
   keyboard_avoider: ^0.1.2
-  rx_command: ^4.3.1+1
-  rx_widgets: ^2.2.0+1
+  rx_command: ^5.0.3
+  rx_widgets: ^3.0.0
   # flutter_flipperkit: ^0.0.20
   webview_flutter: ^0.3.11+3
   flutter_webview_plugin:

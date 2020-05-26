@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/localization/i18n.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
@@ -39,7 +40,7 @@ main() async {
   setupLog();
   await setupLocator();
   setupProviders();
-  locator.get<JPush>().setup(appKey: "ac3739c30b71a1d301454eb6", production: false, debug: true);
+  locator.get<JPush>().setup(appKey: "ac3739c30b71a1d301454eb6", production: buildMode == BuildMode.release, debug: buildMode == BuildMode.debug);
   locator
       .get<JPush>()
       .applyPushAuthority(new NotificationSettingsIOS(sound: true, alert: true, badge: false));
@@ -102,11 +103,11 @@ class MyApp extends StatelessWidget {
 
 _handlePushCallback() {
   locator.get<JPush>().getLaunchAppNotification().then((map) {
-    if (map['page'] == RoutePaths.Trade) {
+    if (map['page'] != null) {
       Future.delayed(
           Duration.zero,
-          () => Navigator.of(globalKey.currentContext).pushNamed(RoutePaths.Trade,
-              arguments: RouteParamsOfTrade(isUp: true, isCoupon: false)));
+          () => Navigator.of(globalKey.currentContext).pushNamed(map['page'],
+              arguments: map['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null));
     }
   });
   try {
@@ -117,23 +118,23 @@ _handlePushCallback() {
       print("flutter onOpenNotification: $message");
       if (Platform.isAndroid) {
         Map<String, dynamic> map = json.decode(message['extras']['cn.jpush.android.EXTRA']);
-        if (map['page'] == RoutePaths.Trade) {
+        if (map['page'] != null) {
           Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
-              RoutePaths.Trade, (route) => route.isFirst,
-              arguments: RouteParamsOfTrade(isUp: true, isCoupon: false));
+             map['page'], (route) => route.isFirst,
+              arguments: map['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
         }
       } else {
-        if (message['page'] == RoutePaths.Trade) {
+        if (message['page'] != null) {
           Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
-              RoutePaths.Trade, (route) => route.isFirst,
-              arguments: RouteParamsOfTrade(isUp: true, isCoupon: false));
+             message['page'], (route) => route.isFirst,
+              arguments: message['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
         }
       }
     }, onReceiveMessage: (Map<String, dynamic> message) async {
       print("flutter onReceiveMessage: $message");
-      if (message['page'] == RoutePaths.Trade) {
-        Navigator.of(globalKey.currentContext).pushNamed(RoutePaths.Trade,
-            arguments: RouteParamsOfTrade(isUp: true, isCoupon: false));
+      if (message['page'] != null) {
+        Navigator.of(globalKey.currentContext).pushNamed(message['page'],
+            arguments: message['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
       }
     }, onReceiveNotificationAuthorization: (Map<String, dynamic> message) async {
       print("flutter onReceiveNotificationAuthorization: $message");

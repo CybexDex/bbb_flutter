@@ -26,6 +26,7 @@ class TransferRecordsViewModel extends BaseModel {
     _bbbapi
         .getFundRecords(
       name: name,
+      subType: "transfer_in,transfer_out",
       start: DateTime.now().toUtc().subtract(Duration(days: 30)),
       end: DateTime.now().toUtc(),
     )
