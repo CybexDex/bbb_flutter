@@ -40,7 +40,10 @@ main() async {
   setupLog();
   await setupLocator();
   setupProviders();
-  locator.get<JPush>().setup(appKey: "ac3739c30b71a1d301454eb6", production: buildMode == BuildMode.release, debug: buildMode == BuildMode.debug);
+  locator.get<JPush>().setup(
+      appKey: "ac3739c30b71a1d301454eb6",
+      production: buildMode == BuildMode.release,
+      debug: buildMode == BuildMode.debug);
   locator
       .get<JPush>()
       .applyPushAuthority(new NotificationSettingsIOS(sound: true, alert: true, badge: false));
@@ -107,7 +110,9 @@ _handlePushCallback() {
       Future.delayed(
           Duration.zero,
           () => Navigator.of(globalKey.currentContext).pushNamed(map['page'],
-              arguments: map['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null));
+              arguments: map['page'] == RoutePaths.Trade
+                  ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                  : null));
     }
   });
   try {
@@ -120,21 +125,27 @@ _handlePushCallback() {
         Map<String, dynamic> map = json.decode(message['extras']['cn.jpush.android.EXTRA']);
         if (map['page'] != null) {
           Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
-             map['page'], (route) => route.isFirst,
-              arguments: map['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
+              map['page'], (route) => route.isFirst,
+              arguments: map['page'] == RoutePaths.Trade
+                  ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                  : null);
         }
       } else {
         if (message['page'] != null) {
           Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
-             message['page'], (route) => route.isFirst,
-              arguments: message['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
+              message['page'], (route) => route.isFirst,
+              arguments: message['page'] == RoutePaths.Trade
+                  ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                  : null);
         }
       }
     }, onReceiveMessage: (Map<String, dynamic> message) async {
       print("flutter onReceiveMessage: $message");
       if (message['page'] != null) {
         Navigator.of(globalKey.currentContext).pushNamed(message['page'],
-            arguments: message['page'] == RoutePaths.Trade ? RouteParamsOfTrade(isUp: true, isCoupon: false) : null);
+            arguments: message['page'] == RoutePaths.Trade
+                ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                : null);
       }
     }, onReceiveNotificationAuthorization: (Map<String, dynamic> message) async {
       print("flutter onReceiveNotificationAuthorization: $message");
