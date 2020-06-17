@@ -64,8 +64,8 @@ class HomeViewModel extends BaseModel {
   checkIfShowCompetition() {
     if (_refManager?.action?.isActive == 1) {
       shouldShowCompetition = true;
+      _userManager.checkCompetitionQualification();
     }
-    _userManager.checkCompetitionQualification();
   }
 
   getGatewayInfo({String assetName}) async {
