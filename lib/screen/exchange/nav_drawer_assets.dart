@@ -14,7 +14,6 @@ class _NavDrawerState extends State<NavDrawer> {
   @override
   void initState() {
     locator.get<NavDrawerViewModel>().getAssetList();
-    locator.get<NavDrawerViewModel>().subscribeTicker();
     super.initState();
   }
 

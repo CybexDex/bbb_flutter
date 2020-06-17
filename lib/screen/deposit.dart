@@ -62,21 +62,29 @@ class _DepositPageState extends State<DepositPage> {
     TextEditingController controller = TextEditingController();
     var _bloc = locator<UserManager>();
 
-    if (locator.get<UserManager>().user.isLocked) {
-      Future.delayed(Duration.zero, () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return DialogFactory.unlockDialog(context, controller: controller);
-            }).then((value) async {
-          if (value) {
-            _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
-          }
-        });
-      });
-    } else {
-      _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
-    }
+    Future.delayed(Duration(seconds: 1), () {
+      showUnlockAndBiometricDialog(
+          context: context,
+          passwordEditor: controller,
+          callback: () =>
+              _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20));
+    });
+
+    // if (locator.get<UserManager>().user.isLocked) {
+    //   Future.delayed(Duration.zero, () {
+    //     showDialog(
+    //         context: context,
+    //         builder: (context) {
+    //           return DialogFactory.unlockDialog(context, controller: controller);
+    //         }).then((value) async {
+    //       if (value) {
+    //         _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
+    //       }
+    //     });
+    //   });
+    // } else {
+    //   _bloc.getDepositAddress(name: _bloc.user.name, asset: AssetName.USDTERC20);
+    // }
   }
 
   @override

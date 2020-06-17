@@ -4,6 +4,7 @@ import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/env.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
+import 'package:bbb_flutter/manager/biomeric_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/update_response.dart';
 import 'package:bbb_flutter/routes/routes.dart';
@@ -24,7 +25,37 @@ class SettingWiget extends StatefulWidget {
   }
 }
 
-class _SettingState extends State<SettingWiget> {
+class _SettingState extends State<SettingWiget> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    locator.get<BiometricManager>().checkBiometrics();
+    locator.get<BiometricManager>().getAvailableBiometrics();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        break;
+      case AppLifecycleState.resumed:
+        locator.get<BiometricManager>().checkBiometrics();
+        locator.get<BiometricManager>().getAvailableBiometrics();
+        break;
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,8 +70,8 @@ class _SettingState extends State<SettingWiget> {
           brightness: Brightness.light,
           elevation: 0,
         ),
-        body: Consumer<UserManager>(
-          builder: (context, userManager, child) {
+        body: Consumer2<UserManager, BiometricManager>(
+          builder: (context, userManager, biometricManager, child) {
             return Stack(
               children: <Widget>[
                 Column(
@@ -51,6 +82,32 @@ class _SettingState extends State<SettingWiget> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
+                          userManager.user.loginType == LoginType.cloud &&
+                                  biometricManager.canCheckBiometrics
+                              ? ListTile(
+                                  trailing: CupertinoSwitch(
+                                      value: biometricManager.isOpen,
+                                      onChanged: (value) {
+                                        if (value) {
+                                          Navigator.of(context).pushNamed(RoutePaths.FingerPrint);
+                                        } else {
+                                          TextEditingController controller =
+                                              TextEditingController();
+                                          biometricManager.getAvailableBiometrics();
+                                          biometricManager.switchOn(value, context, controller);
+                                        }
+                                      }),
+                                  title: Text(
+                                    biometricManager.type ?? "  ",
+                                    style: StyleNewFactory.black15,
+                                  ),
+                                )
+                              : Container(),
+                          Divider(
+                            color: Palette.appDividerBackgroudGreyColor,
+                            thickness: 1,
+                            height: 1,
+                          ),
                           ListTile(
                             trailing: Icon(Icons.keyboard_arrow_right),
                             title: Text(

@@ -2,7 +2,6 @@ import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/transfer_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/shared/defs.dart';
@@ -244,20 +243,25 @@ class _TransferState extends State<TransferPage> {
                                         } else {
                                           TextEditingController controller =
                                               TextEditingController();
-                                          if (locator.get<UserManager>().user.isLocked) {
-                                            showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return DialogFactory.unlockDialog(context,
-                                                      controller: controller);
-                                                }).then((value) async {
-                                              if (value) {
-                                                callPostWithdraw(model);
-                                              }
-                                            });
-                                          } else {
-                                            callPostWithdraw(model);
-                                          }
+                                          showUnlockAndBiometricDialog(
+                                            context: context,
+                                            passwordEditor: controller,
+                                            callback: () => callPostWithdraw(model),
+                                          );
+                                          //   if (locator.get<UserManager>().user.isLocked) {
+                                          //     showDialog(
+                                          //         context: context,
+                                          //         builder: (context) {
+                                          //           return DialogFactory.unlockDialog(context,
+                                          //               controller: controller);
+                                          //         }).then((value) async {
+                                          //       if (value) {
+                                          //         callPostWithdraw(model);
+                                          //       }
+                                          //     });
+                                          //   } else {
+                                          //     callPostWithdraw(model);
+                                          //   }
                                         }
                                       }
                                     : () {}),

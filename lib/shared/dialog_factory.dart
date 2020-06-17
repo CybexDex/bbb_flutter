@@ -1,12 +1,16 @@
+import 'package:animated_widgets/animated_widgets.dart';
 import 'package:bbb_flutter/base/base_widget.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/coupon_order_view_model.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/style_factory.dart';
+import 'package:bbb_flutter/widgets/shake_animation.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +28,14 @@ class DialogFactory {
       Function onConfirmPressed}) {
     return CupertinoAlertDialog(
       title: Text(title),
-      content: Text(content),
+      content: Container(
+          padding: EdgeInsets.only(top: 10, bottom: 10),
+          child: Text(
+            content,
+            textAlign: TextAlign.left,
+            softWrap: true,
+            style: TextStyle(height: 1.5),
+          )),
       actions: isForce
           ? <Widget>[
               CupertinoDialogAction(
@@ -53,7 +64,7 @@ class DialogFactory {
       String errorText,
       String cancel,
       String confirm,
-      VoidCallback onConfirmPressed,
+      ValueChanged<PnlViewModel> onConfirmPressed,
       TextEditingController controller}) {
     TextEditingController _textEditorController = controller;
     return BaseWidget<PnlViewModel>(
@@ -64,33 +75,48 @@ class DialogFactory {
             title: Text(I18n.of(context).dialogCheckPassword),
             content: Column(
               children: <Widget>[
-                contentText != null ? Text(contentText) : Container(),
+                contentText != null
+                    ? Container(
+                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Text(
+                          contentText,
+                          textAlign: TextAlign.left,
+                          softWrap: true,
+                          style: TextStyle(height: 1.5),
+                        ))
+                    : Container(),
                 value != null ? Text(value) : Container(),
-                Container(
-                  child: Material(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: TextField(
-                      controller: _textEditorController,
-                      enableInteractiveSelection: true,
-                      obscureText: model.isObscure,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
-                        hintText: I18n.of(context).passwordHint,
-                        labelText: null,
-                        fillColor: Palette.subTitleColor.withOpacity(0.1),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(style: BorderStyle.none, width: 0)),
-                        errorText:
-                            model.shouldShowErrorMessage ? I18n.of(context).passwordError : "",
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            model.changeObscure();
-                          },
-                          child: Icon(
-                            model.isObscure ? Icons.visibility_off : Icons.visibility,
-                            color: Palette.appGrey.withOpacity(0.3),
+                ShakeAnimation(
+                  enabled: model.shouldShowErrorMessage,
+                  duration: Duration(milliseconds: 1500),
+                  shakeAngle: Rotation.deg(x: 20),
+                  curve: Curves.ease,
+                  child: Container(
+                    child: Material(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(4.0),
+                      child: TextField(
+                        controller: _textEditorController,
+                        enableInteractiveSelection: true,
+                        obscureText: model.isObscure,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(top: 9, bottom: 9, left: 10, right: 16),
+                          hintText: I18n.of(context).passwordHint,
+                          labelText: null,
+                          fillColor: Palette.subTitleColor.withOpacity(0.1),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(style: BorderStyle.none, width: 0)),
+                          errorText:
+                              model.shouldShowErrorMessage ? I18n.of(context).passwordError : "",
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              model.changeObscure();
+                            },
+                            child: Icon(
+                              model.isObscure ? Icons.visibility_off : Icons.visibility,
+                              color: Palette.appGrey.withOpacity(0.3),
+                            ),
                           ),
                         ),
                       ),
@@ -109,9 +135,23 @@ class DialogFactory {
               ),
               CupertinoDialogAction(
                 onPressed: () async {
+                  if (!locator.get<UserManager>().hasRegisterPush) {
+                    int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+                    int timeout = expir + 5 * 60;
+
+                    locator.get<BBBAPI>().registerPush(
+                        regId: locator.get<RefManager>().pushRegId,
+                        accountName: locator.get<UserManager>().user.account.name,
+                        timeout: timeout);
+                  }
+                  if (onConfirmPressed != null) {
+                    onConfirmPressed(model);
+                    return;
+                  }
                   bool result = await model.checkPassword(
                       name: locator.get<UserManager>().user.name,
                       password: _textEditorController.text);
+
                   if (result) {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }
@@ -234,7 +274,7 @@ class DialogFactory {
   }
 
   static Widget confirmDialog(BuildContext context,
-      {dynamic model, TextEditingController controller}) {
+      {dynamic model, TextEditingController controller, VoidCallback onConfirmed}) {
     return CupertinoAlertDialog(
       title: Text("买入确认"),
       content: model is CouponOrderViewModel
@@ -366,25 +406,29 @@ class DialogFactory {
         CupertinoDialogAction(
             child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
             onPressed: () {
-              if (locator.get<UserManager>().user.isLocked) {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return KeyboardAvoider(
-                        child: DialogFactory.unlockDialog(context, controller: controller),
-                        autoScroll: true,
-                      );
-                    }).then((value) {
-                  if (value) {
-                    Navigator.of(context, rootNavigator: true).pop(true);
-                  }
-                });
+              if (onConfirmed != null) {
+                onConfirmed();
               } else {
-                if (locator.get<UserManager>().user.testAccountResponseModel != null) {
-                  CybexFlutterPlugin.setDefaultPrivKey(
-                      locator.get<UserManager>().user.testAccountResponseModel.privkey);
+                if (locator.get<UserManager>().user.isLocked) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return KeyboardAvoider(
+                          child: DialogFactory.unlockDialog(context, controller: controller),
+                          autoScroll: true,
+                        );
+                      }).then((value) {
+                    if (value) {
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                    }
+                  });
+                } else {
+                  if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+                    CybexFlutterPlugin.setDefaultPrivKey(
+                        locator.get<UserManager>().user.testAccountResponseModel.privkey);
+                  }
+                  Navigator.of(context, rootNavigator: true).pop(true);
                 }
-                Navigator.of(context, rootNavigator: true).pop(true);
               }
             })
       ],
@@ -392,7 +436,7 @@ class DialogFactory {
   }
 
   static Widget closeOutConfirmDialog(BuildContext context,
-      {String value, String pnl, TextEditingController controller}) {
+      {String value, String pnl, TextEditingController controller, VoidCallback callback}) {
     return CupertinoAlertDialog(
       title: Text(I18n.of(context).closeOut,
           style: TextStyle(
@@ -436,25 +480,29 @@ class DialogFactory {
         CupertinoDialogAction(
             child: Text(I18n.of(context).confirm, style: StyleFactory.dialogButtonFontStyle),
             onPressed: () async {
-              if (locator.get<UserManager>().user.isLocked) {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return KeyboardAvoider(
-                        child: DialogFactory.unlockDialog(context, controller: controller),
-                        autoScroll: true,
-                      );
-                    }).then((value) {
-                  if (value) {
-                    Navigator.of(context, rootNavigator: true).pop(true);
-                  }
-                });
+              if (callback != null) {
+                callback();
               } else {
-                if (locator.get<UserManager>().user.testAccountResponseModel != null) {
-                  await CybexFlutterPlugin.setDefaultPrivKey(
-                      locator.get<UserManager>().user.testAccountResponseModel.privkey);
+                if (locator.get<UserManager>().user.isLocked) {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return KeyboardAvoider(
+                          child: DialogFactory.unlockDialog(context, controller: controller),
+                          autoScroll: true,
+                        );
+                      }).then((value) {
+                    if (value) {
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                    }
+                  });
+                } else {
+                  if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+                    await CybexFlutterPlugin.setDefaultPrivKey(
+                        locator.get<UserManager>().user.testAccountResponseModel.privkey);
+                  }
+                  Navigator.of(context, rootNavigator: true).pop(true);
                 }
-                Navigator.of(context, rootNavigator: true).pop(true);
               }
             })
       ],

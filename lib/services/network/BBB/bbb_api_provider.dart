@@ -41,7 +41,8 @@ class BBBAPIProvider extends BBBAPI {
     _dispatchNewNode(url: url);
     newDio.options.connectTimeout = 15000;
     newDio.options.receiveTimeout = 13000;
-    // newDio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+    newDio.interceptors.add(
+        LogInterceptor(request: false, requestHeader: false, responseHeader: false, error: true));
   }
 
   @override
@@ -124,9 +125,9 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<ConfigResponse> getConfig({String injectAction}) async {
-    var response = await newDio
-        .get('/api/$asset/config?action=${injectAction == null ? action : injectAction}');
+  Future<ConfigResponse> getConfig({String injectAction, String injectAsset}) async {
+    var response = await newDio.get(
+        '/api/${injectAsset != null ? injectAsset : asset}/config?action=${injectAction == null ? action : injectAction}');
     return Future.value(ConfigResponse.fromJson(response.data));
   }
 
@@ -180,7 +181,8 @@ class BBBAPIProvider extends BBBAPI {
       params["beginTime"] = startTime;
       params["endTime"] = endTime;
     }
-    params["action"] = action != "test" ? "main,coupon" : action;
+    params["action"] =
+        (action != "test" && !action.contains("competition")) ? "main,coupon" : action;
 
     var response = await newDio.get('/api/${injectAsset == null ? asset : injectAsset}/order',
         queryParameters: params);
@@ -248,9 +250,10 @@ class BBBAPIProvider extends BBBAPI {
   }
 
   @override
-  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end, String subType}) async {
-    var response =
-        await newDio.get("/cybex/fund", queryParameters: {"accountName": name, "action": action, "subType": subType});
+  Future<List<FundRecordModel>> getFundRecords(
+      {String name, DateTime start, DateTime end, String subType}) async {
+    var response = await newDio.get("/cybex/fund",
+        queryParameters: {"accountName": name, "action": action, "subType": subType});
     var responseData = response.data as List;
     List<FundRecordModel> model = responseData.map((data) {
       return FundRecordModel.fromJson(data);
@@ -417,5 +420,20 @@ class BBBAPIProvider extends BBBAPI {
     } on DioError catch (e) {
       print(e);
     }
+  }
+
+  @override
+  Future<dynamic> checkRegisterPush({String regId}) async {
+    try {
+      var response = await newDio.get("/push/account?reg_id=$regId");
+      Map<String, dynamic> responseData = response.data;
+      if (responseData["data"]["account"] != null) {
+        return Future.value(true);
+      }
+    } on DioError {
+      return Future.value(false);
+    }
+
+    return Future.value(false);
   }
 }

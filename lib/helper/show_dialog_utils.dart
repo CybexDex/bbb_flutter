@@ -1,12 +1,19 @@
 import 'package:bbb_flutter/cache/shared_pref.dart';
+import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/entity/user_biometric_entity.dart';
 import 'package:bbb_flutter/models/response/activities_response.dart';
+import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
 import 'package:bbb_flutter/shared/defs.dart';
 import 'package:bbb_flutter/shared/style_new_standard_factory.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:keyboard_avoider/keyboard_avoider.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -133,4 +140,150 @@ void showThemeToast(String message) {
       ],
     ),
   ));
+}
+
+showUnlockAndBiometricDialog(
+    {BuildContext context, TextEditingController passwordEditor, VoidCallback callback}) async {
+  UserBiometricEntity userBiometricEntity = locator
+      .get<SharedPref>()
+      .getUserBiometricEntity(userName: locator.get<UserManager>().user.name);
+  if (locator.get<UserManager>().user.isLocked) {
+    try {
+      if (userBiometricEntity?.isBiomtricOpen ?? false) {
+        String privateKey = await locator
+            .get<FlutterSecureStorage>()
+            .read(key: locator.get<UserManager>().user.name);
+        if (privateKey == null) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return KeyboardAvoider(
+                  child: DialogFactory.unlockDialog(context, controller: passwordEditor),
+                  autoScroll: true,
+                );
+              }).then((value) {
+            if (value) {
+              callback();
+            }
+          });
+        } else {
+          locator.get<UserManager>().user.privateKey = privateKey;
+          await CybexFlutterPlugin.setDefaultPrivKey(privateKey);
+          locator.get<UserManager>().user.userPrivateKeyTag = "used";
+          if (!locator.get<UserManager>().hasRegisterPush) {
+            int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+            int timeout = expir + 5 * 60;
+
+            locator.get<BBBAPI>().registerPush(
+                regId: locator.get<RefManager>().pushRegId,
+                accountName: locator.get<UserManager>().user.account.name,
+                timeout: timeout);
+          }
+          callback();
+        }
+        // try {
+        // } on PlatformException catch (error) {
+        //   print(error.code);
+        //   if (error.code == notEnrolled || error.code == passcodeNotSet) {
+        //     showDialog(
+        //         context: context,
+        //         builder: (context) {
+        //           return KeyboardAvoider(
+        //             child: DialogFactory.unlockDialog(context, controller: passwordEditor),
+        //             autoScroll: true,
+        //           );
+        //         }).then((value) {
+        //       if (value) {
+        //         callback();
+        //       }
+        //     });
+        //   }
+        // }
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return KeyboardAvoider(
+                child: DialogFactory.unlockDialog(context, controller: passwordEditor),
+                autoScroll: true,
+              );
+            }).then((value) {
+          if (value) {
+            callback();
+          }
+        });
+      }
+    } on PlatformException catch (e) {
+      if (e.code == "negativeButton") {
+        print(e.message);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return KeyboardAvoider(
+                child: DialogFactory.unlockDialog(context, controller: passwordEditor),
+                autoScroll: true,
+              );
+            }).then((value) {
+          if (value) {
+            callback();
+          }
+        });
+        if (e.details.toString().contains("KeyPermanentlyInvalidatedException")) {
+          userBiometricEntity.isBiomtricOpen = false;
+          locator
+              .get<SharedPref>()
+              .saveUserBiometricEntity(userBiometricEntity: userBiometricEntity);
+        }
+      }
+    }
+  } else {
+    if (locator.get<UserManager>().user.testAccountResponseModel != null) {
+      CybexFlutterPlugin.setDefaultPrivKey(
+          locator.get<UserManager>().user.testAccountResponseModel.privkey);
+    }
+    if (locator.get<UserManager>().user.keys == null) {
+      await CybexFlutterPlugin.setDefaultPrivKey(locator.get<UserManager>().user.privateKey);
+    }
+    callback();
+  }
+}
+
+checkIfShowReminderDialog(UserBiometricEntity userBiometricEntity, BuildContext context,
+    TextEditingController controller) {
+  int count = 0;
+  if (DateTime.now().toUtc().millisecondsSinceEpoch - userBiometricEntity.timeStamp >
+      1000 * 60 * 60 * 72) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return DialogFactory.unlockDialog(context,
+              controller: controller,
+              contentText: "为避免您遗忘密码，我们会定期提醒您进行验证", onConfirmPressed: (model) async {
+            bool result = await model.checkPassword(
+                name: locator.get<UserManager>().user.name, password: controller.text);
+            if (result) {
+              userBiometricEntity.timeStamp = DateTime.now().toUtc().millisecondsSinceEpoch;
+              locator
+                  .get<SharedPref>()
+                  .saveUserBiometricEntity(userBiometricEntity: userBiometricEntity);
+              Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+            } else {
+              count++;
+              if (count > 3) {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogFactory.normalConfirmDialog(context,
+                          title: "提示",
+                          isForce: true,
+                          content: "若您忘记密码，建议将资产转移至其他账户", onConfirmPressed: () {
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      });
+                    });
+              }
+            }
+          });
+        });
+  }
 }

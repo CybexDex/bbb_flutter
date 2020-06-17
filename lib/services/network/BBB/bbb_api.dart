@@ -31,7 +31,7 @@ abstract class BBBAPI {
   Future<RefDataResponse> getRefDataNew({String injectAction});
   Future<ContractResponse> getContract({String active});
   Future<ActionResponse> getActions();
-  Future<ConfigResponse> getConfig({String injectAction});
+  Future<ConfigResponse> getConfig({String injectAction, String injectAsset});
   Future<TickerResponse> getTicker({String injectAsset});
   Future<PositionsResponseModel> getPositions({String name, String injectAction});
   Future<PositionsResponseModel> getPositionsTestAccount({String name});
@@ -47,7 +47,8 @@ abstract class BBBAPI {
       {String startTime, String endTime, MarketDuration duration});
   Future<DepositResponseModel> getDeposit({String name, String asset});
 
-  Future<List<FundRecordModel>> getFundRecords({String name, DateTime start, DateTime end, String subType});
+  Future<List<FundRecordModel>> getFundRecords(
+      {String name, DateTime start, DateTime end, String subType});
   Future<List<String>> getFundDescription();
   Future<TestAccountResponseModel> getTestAccount({bool bonusEvent, String accountName});
   Future<List<RankingResponse>> getRankings({int indicator});
@@ -68,4 +69,5 @@ abstract class BBBAPI {
   //Push
   Future<dynamic> registerPush({String accountName, String regId, int timeout});
   Future<dynamic> unRegisterPush({String accountName, String regId});
+  Future<dynamic> checkRegisterPush({String regId});
 }

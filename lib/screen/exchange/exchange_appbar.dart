@@ -66,7 +66,7 @@ AppBar exchangeAppBar({BuildContext context}) {
             ? Text("试玩 ${locator.get<SharedPref>().getAsset()}/USDT", style: StyleFactory.title)
             : Text(
                 bloc.user.loginType == LoginType.reward
-                    ? "奖励 ${locator.get<SharedPref>().getAsset()}/USDT"
+                    ? "交易大赛 ${locator.get<SharedPref>().getAsset()}/USDT"
                     : "${locator.get<SharedPref>().getAsset()}/USDT",
                 style: StyleFactory.title);
       },

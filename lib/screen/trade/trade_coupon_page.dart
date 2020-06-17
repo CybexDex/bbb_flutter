@@ -219,7 +219,13 @@ class TradeCouponState extends State<TradeCouponPage> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return DialogFactory.confirmDialog(context, model: model, controller: passwordEditor);
+          return DialogFactory.confirmDialog(context, model: model, controller: passwordEditor,
+              onConfirmed: () {
+            showUnlockAndBiometricDialog(
+                context: context,
+                passwordEditor: passwordEditor,
+                callback: () => Navigator.of(context, rootNavigator: true).pop(true));
+          });
         }).then((value) async {
       if (value) {
         callPostOrder(context, model);

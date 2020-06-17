@@ -315,13 +315,10 @@ class _ExchangePageState extends State<ExchangePage>
     }
     if (user.user.logined) {
       TextEditingController controller = TextEditingController();
-      if (user.user.isLocked) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return DialogFactory.unlockDialog(context, controller: controller);
-            }).then((value) {
-          if (value != null && value) {
+      showUnlockAndBiometricDialog(
+          context: context,
+          passwordEditor: controller,
+          callback: () {
             if (ref.currentUpContract == null ||
                 ref.currentDownContract == null ||
                 !ref.isIdSelectedByUser) {
@@ -333,28 +330,48 @@ class _ExchangePageState extends State<ExchangePage>
                 .then((v) {
               orderViewModel.getOrders();
             });
-          }
-        });
-        // if (await auth.canCheckBiometrics) {
-        //   if (await auth.authenticateWithBiometrics(localizedReason: "test", stickyAuth: true)) {
+          });
+      // if (user.user.isLocked) {
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return DialogFactory.unlockDialog(context, controller: controller);
+      //     }).then((value) {
+      //   if (value != null && value) {
+      //     if (ref.currentUpContract == null ||
+      //         ref.currentDownContract == null ||
+      //         !ref.isIdSelectedByUser) {
+      //       ref.updateUpContractId();
+      //       ref.updateDownContractId();
+      //     }
+      //     Navigator.pushNamed(context, RoutePaths.Trade,
+      //             arguments: RouteParamsOfTrade(isUp: isUp, isCoupon: false))
+      //         .then((v) {
+      //       orderViewModel.getOrders();
+      //     });
+      //   }
+      // });
+      // if (await auth.canCheckBiometrics) {
+      //   if (await auth.authenticateWithBiometrics(localizedReason: "test", stickyAuth: true)) {
 
-        //   }
-        // } else {
-        //   showThemeToast("not support");
-        // }
-      } else {
-        if (ref.currentUpContract == null ||
-            ref.currentDownContract == null ||
-            !ref.isIdSelectedByUser) {
-          ref.updateUpContractId();
-          ref.updateDownContractId();
-        }
-        Navigator.pushNamed(context, RoutePaths.Trade,
-                arguments: RouteParamsOfTrade(isUp: isUp, isCoupon: false))
-            .then((v) {
-          orderViewModel.getOrders();
-        });
-      }
+      //   }
+      // } else {
+      //   showThemeToast("not support");
+      // }
+      // } else {
+
+      // }
+      // if (ref.currentUpContract == null ||
+      //     ref.currentDownContract == null ||
+      //     !ref.isIdSelectedByUser) {
+      //   ref.updateUpContractId();
+      //   ref.updateDownContractId();
+      // }
+      // Navigator.pushNamed(context, RoutePaths.Trade,
+      //         arguments: RouteParamsOfTrade(isUp: isUp, isCoupon: false))
+      //     .then((v) {
+      //   orderViewModel.getOrders();
+      // });
     } else {
       Navigator.of(context).pushNamed(RoutePaths.Login);
     }

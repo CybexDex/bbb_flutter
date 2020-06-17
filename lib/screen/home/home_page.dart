@@ -37,6 +37,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         });
       }
     });
+    Future.delayed(
+        Duration.zero, () => locator.get<HomeViewModel>().checkIfBiometricExpired(context));
     super.initState();
   }
 
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return BaseWidget<HomeViewModel>(
       model: locator.get<HomeViewModel>(),
       onModelReady: (homeViewMode) {
+        homeViewMode.checkIfShowCompetition();
         homeViewMode.getRankingList();
         homeViewMode.startLoop();
         homeViewMode.getZendeskAdvertise();
@@ -55,6 +58,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       builder: (context, homeViewModel, child) {
         return Scaffold(
           backgroundColor: Palette.appDividerBackgroudGreyColor,
+          resizeToAvoidBottomPadding: false,
           appBar: homePageAppBar(context),
           body: Stack(
             children: <Widget>[
@@ -183,8 +187,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                               child: homeViewModel.imageConfigResponse == null
                                                   ? Container()
                                                   : showNetworkImageWrapper(
-                                                      url: homeViewModel.imageConfigResponse.result
-                                                          .midBannerImage2),
+                                                      url: (homeViewModel.shouldShowCompetition)
+                                                          ? homeViewModel.imageConfigResponse.result
+                                                              .competitionBannerImage
+                                                          : homeViewModel.imageConfigResponse.result
+                                                              .midBannerImage2),
                                             ),
                                           ],
                                         ),

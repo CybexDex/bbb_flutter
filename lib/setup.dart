@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/cache/user_ops.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
@@ -10,6 +12,7 @@ import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
+import 'package:bbb_flutter/models/entity/user_biometric_entity.dart';
 import 'package:bbb_flutter/models/response/forum_response/url_config_response.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api_provider.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
@@ -27,15 +30,19 @@ import 'package:bbb_flutter/services/network/refer/refer_api_provider.dart';
 import 'package:bbb_flutter/services/network/zendesk/zendesk_api_provider.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:local_auth/error_codes.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:package_info/package_info.dart';
 
 import 'logic/limit_order_vm.dart';
+import 'manager/biomeric_manager.dart';
 import 'screen/home/home_view_model.dart';
 import 'services/network/zendesk/zendesk_api.dart';
 
@@ -79,8 +86,11 @@ setupLocator() async {
   var pref = await SharedPref.create();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   locator.registerSingleton(JPush());
+  locator.registerSingleton(FlutterSecureStorage());
   locator.registerSingleton(packageInfo);
   locator.registerSingleton(pref);
+  locator.registerSingleton(BiometricManager(
+      localAuthentication: LocalAuthentication(), sharedPref: locator<SharedPref>()));
   locator.registerSingleton(TimerManager());
   locator.registerSingleton(getLogger("BBB"));
   locator.registerSingleton<ForumApi>(ForumApiProvider(sharedPref: locator<SharedPref>()));
@@ -102,7 +112,9 @@ setupLocator() async {
   locator.registerLazySingleton(() => UserManager(
       api: locator<BBBAPI>(),
       pref: locator<SharedPref>(),
-      user: loadUserFromCache(locator<SharedPref>())));
+      user: loadUserFromCache(locator<SharedPref>()),
+      flutterSecureStorage: locator<FlutterSecureStorage>(),
+      biometricManager: locator<BiometricManager>()));
 
   locator.registerLazySingleton(() => HomeViewModel(
       bbbapi: locator.get(),
@@ -110,7 +122,8 @@ setupLocator() async {
       configureApi: locator.get(),
       zendeskApi: locator.get(),
       gatewayApi: locator.get(),
-      userManager: locator.get()));
+      userManager: locator.get(),
+      refManager: locator.get()));
   locator.registerLazySingleton(() => CouponViewModel(bbbapi: locator.get(), um: locator.get()));
 
   locator.registerLazySingleton(
@@ -157,6 +170,7 @@ setupProviders() {
     ChangeNotifierProvider.value(
       value: locator.get<CouponViewModel>(),
     ),
+    ChangeNotifierProvider.value(value: locator.get<BiometricManager>()),
     StreamProvider(create: (context) => locator.get<MarketManager>().prices),
     StreamProvider(create: (context) => locator.get<MarketManager>().kline),
     StreamProvider(create: (context) => locator.get<MarketManager>().lastTicker.stream),
@@ -169,4 +183,35 @@ setupProviders() {
     ),
     StreamProvider(create: (context) => locator.get<MarketManager>().dailyPxTicker.stream)
   ];
+}
+
+checkBiometricAvailability() async {
+  if (!locator.get<UserManager>().user.logined) {
+    return;
+  }
+  UserBiometricEntity userBiometricEntity = locator
+      .get<SharedPref>()
+      .getUserBiometricEntity(userName: locator.get<UserManager>().user.name);
+  if (userBiometricEntity.isBiomtricOpen) {
+    var biomanager = LocalAuthentication();
+    if (Platform.isAndroid) {
+      try {
+        biomanager.authenticateWithBiometrics(localizedReason: "", useErrorDialogs: false);
+        biomanager.stopAuthentication();
+      } on PlatformException catch (e) {
+        if (e.code == notEnrolled) {
+          userBiometricEntity.isBiomtricOpen = false;
+          locator
+              .get<SharedPref>()
+              .saveUserBiometricEntity(userBiometricEntity: userBiometricEntity);
+        }
+      }
+    } else if (Platform.isIOS) {
+      var available = await biomanager.getAvailableBiometrics();
+      if (available.isEmpty) {
+        userBiometricEntity.isBiomtricOpen = false;
+        locator.get<SharedPref>().saveUserBiometricEntity(userBiometricEntity: userBiometricEntity);
+      }
+    }
+  }
 }

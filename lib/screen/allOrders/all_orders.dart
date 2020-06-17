@@ -2,7 +2,6 @@ import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/order_vm.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -93,21 +92,22 @@ class AllOrderState extends State<AllOrdersPage> {
                                       ? () {
                                           TextEditingController controller =
                                               TextEditingController();
-                                          if (locator.get<UserManager>().user.isLocked) {
-                                            showDialog(
-                                                barrierDismissible: false,
-                                                context: context,
-                                                builder: (context) {
-                                                  return DialogFactory.unlockDialog(context,
-                                                      controller: controller);
-                                                }).then((value) async {
-                                              if (value != null && value) {
-                                                showCloseOutDialog(context, controller, data);
-                                              }
-                                            });
-                                          } else {
-                                            showCloseOutDialog(context, controller, data);
-                                          }
+                                          showCloseOutDialog(context, controller, data);
+                                          // if (locator.get<UserManager>().user.isLocked) {
+                                          //   showDialog(
+                                          //       barrierDismissible: false,
+                                          //       context: context,
+                                          //       builder: (context) {
+                                          //         return DialogFactory.unlockDialog(context,
+                                          //             controller: controller);
+                                          //       }).then((value) async {
+                                          //     if (value != null && value) {
+                                          //       showCloseOutDialog(context, controller, data);
+                                          //     }
+                                          //   });
+                                          // } else {
+                                          //   showCloseOutDialog(context, controller, data);
+                                          // }
                                         }
                                       : () {},
                                   child: Container(
@@ -222,7 +222,13 @@ class AllOrderState extends State<AllOrdersPage> {
         context: context,
         builder: (context) {
           return DialogFactory.closeOutConfirmDialog(context,
-              value: data.selectedTotalPnl.toStringAsFixed(4), controller: controller);
+              value: data.selectedTotalPnl.toStringAsFixed(4),
+              controller: controller, callback: () {
+            showUnlockAndBiometricDialog(
+                context: context,
+                passwordEditor: controller,
+                callback: () => Navigator.of(context, rootNavigator: true).pop(true));
+          });
         }).then((value) async {
       if (value != null && value) {
         callAmendAll(data);

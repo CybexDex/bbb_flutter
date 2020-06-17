@@ -40,7 +40,10 @@ class _TradeHomePageState extends State<TradeHomePage> {
         )
       ],
       child: DefaultTabController(
-          length: locator.get<UserManager>().user.loginType == LoginType.test ? 1 : 2,
+          length: locator.get<UserManager>().user.loginType == LoginType.test ||
+                  locator.get<UserManager>().user.loginType == LoginType.reward
+              ? 1
+              : 2,
           initialIndex: params.isCoupon ? 1 : 0,
           child: Scaffold(
             appBar: PreferredSize(
@@ -114,7 +117,8 @@ class _TradeHomePageState extends State<TradeHomePage> {
                             labelStyle: StyleNewFactory.black18,
                             unselectedLabelStyle: StyleNewFactory.grey15,
                             labelColor: Palette.appBlack,
-                            tabs: locator.get<UserManager>().user.loginType == LoginType.test
+                            tabs: locator.get<UserManager>().user.loginType == LoginType.test ||
+                                    locator.get<UserManager>().user.loginType == LoginType.reward
                                 ? [
                                     Container(
                                       height: ScreenUtil.getInstance().setHeight(44),
@@ -144,7 +148,8 @@ class _TradeHomePageState extends State<TradeHomePage> {
             body: SafeArea(
               child: TabBarView(
                 physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                children: locator.get<UserManager>().user.loginType == LoginType.test
+                children: locator.get<UserManager>().user.loginType == LoginType.test ||
+                        locator.get<UserManager>().user.loginType == LoginType.reward
                     ? [TradeUSDTPage()]
                     : [TradeUSDTPage(), TradeCouponPage()],
               ),

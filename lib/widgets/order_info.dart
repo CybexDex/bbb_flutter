@@ -2,7 +2,6 @@ import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/bbb_query_response/contract_response.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
@@ -375,21 +374,22 @@ class OrderInfo extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               TextEditingController controller = TextEditingController();
-                              if (locator.get<UserManager>().user.isLocked) {
-                                showDialog(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return DialogFactory.unlockDialog(context,
-                                          controller: controller);
-                                    }).then((value) async {
-                                  if (value != null && value) {
-                                    showCloseOutDialog(context, controller);
-                                  }
-                                });
-                              } else {
-                                showCloseOutDialog(context, controller);
-                              }
+                              showCloseOutDialog(context, controller);
+                              // if (locator.get<UserManager>().user.isLocked) {
+                              //   showDialog(
+                              //       barrierDismissible: false,
+                              //       context: context,
+                              //       builder: (context) {
+                              //         return DialogFactory.unlockDialog(context,
+                              //             controller: controller);
+                              //       }).then((value) async {
+                              //     if (value != null && value) {
+                              //       showCloseOutDialog(context, controller);
+                              //     }
+                              //   });
+                              // } else {
+                              //   showCloseOutDialog(context, controller);
+                              // }
                             },
                             child: Container(
                                 alignment: Alignment.center,
@@ -450,7 +450,12 @@ class OrderInfo extends StatelessWidget {
           return DialogFactory.closeOutConfirmDialog(context,
               value: (_model.pnl).toStringAsFixed(4),
               pnl: (_model.pnl - _model.accruedInterest - _model.commission).toStringAsFixed(4),
-              controller: controller);
+              controller: controller, callback: () {
+            showUnlockAndBiometricDialog(
+                context: context,
+                passwordEditor: controller,
+                callback: () => Navigator.of(context, rootNavigator: true).pop(true));
+          });
         }).then((value) {
       if (value != null && value) {
         callAmend(context);

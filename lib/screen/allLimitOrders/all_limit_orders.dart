@@ -1,6 +1,5 @@
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/manager/limit_order_manager.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/palette.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -72,20 +71,24 @@ class AllLimitOrderState extends State<AllLimitOrderPage> {
                                                 return DialogFactory.normalConfirmDialog(context,
                                                     title: I18n.of(context).limitOrderCancelButton,
                                                     content: "是否撤单", onConfirmPressed: () {
-                                                  if (locator.get<UserManager>().user.isLocked) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return DialogFactory.unlockDialog(context,
-                                                              controller: controller);
-                                                        }).then((value) async {
-                                                      if (value) {
-                                                        cancelAll(data);
-                                                      }
-                                                    });
-                                                  } else {
-                                                    cancelAll(data);
-                                                  }
+                                                  showUnlockAndBiometricDialog(
+                                                      context: context,
+                                                      passwordEditor: controller,
+                                                      callback: () => cancelAll(data));
+                                                  // if (locator.get<UserManager>().user.isLocked) {
+                                                  //   showDialog(
+                                                  //       context: context,
+                                                  //       builder: (context) {
+                                                  //         return DialogFactory.unlockDialog(context,
+                                                  //             controller: controller);
+                                                  //       }).then((value) async {
+                                                  //     if (value) {
+                                                  //       cancelAll(data);
+                                                  //     }
+                                                  //   });
+                                                  // } else {
+                                                  //   cancelAll(data);
+                                                  // }
                                                 });
                                               });
                                         }

@@ -2,6 +2,7 @@ import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/screen/coupon/coupon_page.dart';
 import 'package:bbb_flutter/screen/deposit.dart';
 import 'package:bbb_flutter/screen/feedback.dart';
+import 'package:bbb_flutter/screen/finger_print_reminder.dart';
 import 'package:bbb_flutter/screen/forum/forum_home.dart';
 import 'package:bbb_flutter/screen/fund_records.dart';
 import 'package:bbb_flutter/screen/help_center.dart';
@@ -49,6 +50,7 @@ class RoutePaths {
   static const String Setting = "Setting";
   static const String LimitOrder = "LimitOrder";
   static const String Coupon = "Coupon";
+  static const String FingerPrint = "FingerPrint";
 }
 
 class Routes {
@@ -192,13 +194,15 @@ class Routes {
         }
         parameter = RoutePaths.RewardRecords;
         return CupertinoPageRoute(builder: (_) => LoginPage(), settings: settings);
+      case RoutePaths.FingerPrint:
+        return CupertinoPageRoute(builder: (_) => FingerPrintReminderPage(), settings: settings);
       default:
-        return MaterialPageRoute(
-            builder: (_) => Scaffold(
-                  body: Center(
-                    child: Text('No route defined for ${settings.name}'),
-                  ),
-                ));
+        return CupertinoPageRoute(
+            builder: (context) {
+              ScreenUtil.instance = ScreenUtil(width: 375, height: 667)..init(context);
+              return MainPage();
+            },
+            settings: settings);
     }
   }
 }

@@ -241,6 +241,7 @@ class PnlViewModel extends BaseModel {
       setBusy(false);
       return true;
     } catch (error) {
+      print(error.toString());
       shouldShowErrorMessage = true;
       setBusy(false);
       return false;

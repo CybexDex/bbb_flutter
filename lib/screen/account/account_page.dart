@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:bbb_flutter/helper/decimal_util.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/helper/ui_utils.dart';
+import 'package:bbb_flutter/helper/utils.dart';
 import 'package:bbb_flutter/logic/account_vm.dart';
 import 'package:bbb_flutter/logic/coupon_vm.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
@@ -36,6 +37,7 @@ class _AccountPageState extends State<AccountPage> {
     _couponViewModel = locator.get();
     _accountViewModel.getGatewayInfo(assetName: AssetName.USDTERC20);
     _couponViewModel.getCoupons();
+    locator.get<HomeViewModel>().getImageConfig();
     super.initState();
   }
 
@@ -289,22 +291,26 @@ class _AccountPageState extends State<AccountPage> {
                                             ],
                                           ),
                                           GestureDetector(
-                                            onTap: () async {
-                                              showLoading(context);
-                                              if (await userManager.loginWithPrivateKey(
-                                                  bonusEvent: false)) {
-                                                Navigator.of(context)
-                                                    .popUntil((route) => route.isFirst);
-                                                showFlashBar(context, false,
-                                                    content: I18n.of(context).changeToTryEnv);
-                                              } else {
-                                                Navigator.of(context)
-                                                    .popUntil((route) => route.isFirst);
-                                                showFlashBar(context, false,
-                                                    content: I18n.of(context).changeToTryEnv);
-                                              }
-                                            },
-                                            child: userManager.user.loginType != LoginType.test
+                                            onTap: userManager.user.loginType == LoginType.cloud ||
+                                                    userManager.user.loginType == LoginType.none
+                                                ? () async {
+                                                    showLoading(context);
+                                                    if (await userManager.loginWithPrivateKey(
+                                                        bonusEvent: false)) {
+                                                      Navigator.of(context)
+                                                          .popUntil((route) => route.isFirst);
+                                                      showFlashBar(context, false,
+                                                          content: I18n.of(context).changeToTryEnv);
+                                                    } else {
+                                                      Navigator.of(context)
+                                                          .popUntil((route) => route.isFirst);
+                                                      showFlashBar(context, false,
+                                                          content: I18n.of(context).changeToTryEnv);
+                                                    }
+                                                  }
+                                                : () {},
+                                            child: userManager.user.loginType == LoginType.cloud ||
+                                                    userManager.user.loginType == LoginType.none
                                                 ? Badge(
                                                     showBadge: true,
                                                     badgeColor: Palette.appYellowOrange,
@@ -336,12 +342,9 @@ class _AccountPageState extends State<AccountPage> {
                                         height: 1,
                                         endIndent: 15,
                                       ),
-                                      userManager.user.loginType == LoginType.test
-                                          ? Container(
-                                              padding: EdgeInsets.symmetric(vertical: 10),
-                                              child:
-                                                  Text("试玩账户盈利不可提现", style: StyleNewFactory.grey15))
-                                          : ListTile(
+                                      userManager.user.loginType == LoginType.cloud ||
+                                              userManager.user.loginType == LoginType.none
+                                          ? ListTile(
                                               contentPadding: EdgeInsets.all(0),
                                               title: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -384,7 +387,22 @@ class _AccountPageState extends State<AccountPage> {
                                                     Icon(Icons.keyboard_arrow_right),
                                                   ],
                                                 ),
-                                              )),
+                                              ))
+                                          : userManager.user.loginType == LoginType.test
+                                              ? Container(
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: Text("试玩账户盈利不可提现",
+                                                      style: StyleNewFactory.grey15))
+                                              : Container(
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                          "活动时间: ${locator.get<RefManager>().action != null ? dateFormat(date: locator.get<RefManager>().action.start, formatter: "MM/dd HH:mm") : "--"} - ${locator.get<RefManager>().action != null ? dateFormat(date: locator.get<RefManager>().action.stop, formatter: "MM/dd HH:mm") : "--"}",
+                                                          style: StyleNewFactory.grey15),
+                                                    ],
+                                                  )),
                                     ],
                                   ),
                                 ),
@@ -429,6 +447,33 @@ class _AccountPageState extends State<AccountPage> {
                                     width: ScreenUtil.getInstance().setWidth(345),
                                   ))
                               : Container(),
+                          userManager.user.loginType == LoginType.reward
+                              ? ListTile(
+                                  trailing: Icon(Icons.keyboard_arrow_right),
+                                  title: Text(
+                                    "大赛排名",
+                                    style: StyleNewFactory.black15,
+                                  ),
+                                  onTap: () {
+                                    jumpToUrl(
+                                        locator
+                                                .get<HomeViewModel>()
+                                                .imageConfigResponse
+                                                ?.result
+                                                ?.competitionRankingLink ??
+                                            "https://config-center.cybex.io/prod/bbb/ver2-0-9/refer_entry.1589787111457.png",
+                                        context,
+                                        needLogIn: false);
+                                  },
+                                )
+                              : Container(),
+
+                          Divider(
+                            color: Palette.appDividerBackgroudGreyColor,
+                            thickness: 1,
+                            height: 1,
+                          ),
+
                           ListTile(
                             trailing: Icon(Icons.keyboard_arrow_right),
                             title: Text(
@@ -557,7 +602,8 @@ class _AccountPageState extends State<AccountPage> {
                           SizedBox(
                             height: 50,
                           ),
-                          userManager.user.loginType == LoginType.test
+                          userManager.user.loginType == LoginType.test ||
+                                  userManager.user.loginType == LoginType.reward
                               ? GestureDetector(
                                   onTap: () {
                                     if (userManager.user.testAccountResponseModel != null) {
@@ -566,6 +612,11 @@ class _AccountPageState extends State<AccountPage> {
                                           callback: () async {
                                         await userManager.logoutTestAccount();
                                       });
+                                    } else {
+                                      showFlashBar(context, false,
+                                          content: I18n.of(context).quitReward, callback: () async {
+                                        await userManager.logOutRewardAccount();
+                                      });
                                     }
                                   },
                                   child: Container(
@@ -573,8 +624,11 @@ class _AccountPageState extends State<AccountPage> {
                                       height: 47,
                                       margin: EdgeInsets.only(bottom: 50),
                                       child: Center(
-                                          child: Text(I18n.of(context).clickToQuit,
-                                              style: StyleNewFactory.yellowOrange18)),
+                                          child: userManager.user.loginType == LoginType.test
+                                              ? Text(I18n.of(context).clickToQuit,
+                                                  style: StyleNewFactory.yellowOrange18)
+                                              : Text(I18n.of(context).quitReward,
+                                                  style: StyleNewFactory.yellowOrange18)),
                                       decoration: new BoxDecoration(
                                           border:
                                               Border.all(color: Palette.appYellowOrange, width: 1),

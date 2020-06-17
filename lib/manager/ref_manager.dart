@@ -23,6 +23,7 @@ class RefManager {
   ConfigResponse couponConfig;
   bool isIdSelectedByUser = false;
   String pushRegId;
+  Action action;
 
   RefManager({BBBAPI api}) : _api = api;
 
@@ -155,6 +156,7 @@ class RefManager {
   getActions() async {
     ActionResponse response = await _api.getActions();
     actions = response.action;
+    checkTransactionCompetition();
   }
 
   getConfig() async {
@@ -172,5 +174,9 @@ class RefManager {
   getPushRegistrationId() async {
     String regId = await locator.get<JPush>().getRegistrationID();
     pushRegId = regId;
+  }
+
+  checkTransactionCompetition() {
+    action = actions.lastWhere((i) => i.name.contains("competition"), orElse: () => null);
   }
 }

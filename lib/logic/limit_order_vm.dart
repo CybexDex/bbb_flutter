@@ -442,6 +442,9 @@ class LimitOrderViewModel extends BaseModel {
     order.signature = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     var orderRequest = order.toJson();
     if (locator.get<SharedPref>().getAction() == "main") {
+      if (_um.user.keys == null) {
+        await CybexFlutterPlugin.setDefaultPrivKey(_um.user.privateKey);
+      }
       Map<String, dynamic> transaction = await CybexFlutterPlugin.transferOperation(commission);
       orderRequest["transaction"] = transaction;
     }
@@ -494,6 +497,9 @@ class LimitOrderViewModel extends BaseModel {
     marketOrder.signature = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     var orderRequest = marketOrder.toJson();
     if (locator.get<SharedPref>().getAction() == "main") {
+      if (_um.user.keys == null) {
+        await CybexFlutterPlugin.setDefaultPrivKey(_um.user.privateKey);
+      }
       Map<String, dynamic> transaction = await CybexFlutterPlugin.transferOperation(commission);
       orderRequest["transaction"] = transaction;
     }

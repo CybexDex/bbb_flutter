@@ -1,6 +1,7 @@
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
 import 'package:bbb_flutter/widgets/pnl_form.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 
 Widget getPnlIcon(bool isN) {
@@ -59,5 +60,11 @@ showNetworkImageWrapper({String url, BoxFit fit = BoxFit.contain, double width, 
   if (url.contains(".svg")) {
     return SvgPicture.network(url, fit: fit);
   }
-  return Image.network(url, fit: fit, width: width, height: height);
+  return CachedNetworkImage(
+    imageUrl: url,
+    width: width,
+    height: height,
+    fit: fit,
+    fadeInDuration: Duration.zero,
+  );
 }

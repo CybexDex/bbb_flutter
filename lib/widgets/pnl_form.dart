@@ -1,7 +1,6 @@
 import 'package:bbb_flutter/helper/order_calculate_helper.dart';
 import 'package:bbb_flutter/helper/show_dialog_utils.dart';
 import 'package:bbb_flutter/logic/pnl_vm.dart';
-import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/response/order_response_model.dart';
 import 'package:bbb_flutter/models/response/post_order_response_model.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
@@ -245,18 +244,22 @@ class _PnlFormState extends State<PnlForm> {
 
   _onClickSubmit({BuildContext context, PnlViewModel model, bool execute}) {
     TextEditingController controller = TextEditingController();
-    if (locator.get<UserManager>().user.isLocked) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return DialogFactory.unlockDialog(context, controller: controller);
-          }).then((value) async {
-        if (value) {
-          callAmend(context, model, execute: execute);
-        }
-      });
-    } else {
-      callAmend(context, model, execute: execute);
-    }
+    showUnlockAndBiometricDialog(
+        context: context,
+        passwordEditor: controller,
+        callback: () => callAmend(context, model, execute: execute));
+    // if (locator.get<UserManager>().user.isLocked) {
+    //   showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return DialogFactory.unlockDialog(context, controller: controller);
+    //       }).then((value) async {
+    //     if (value) {
+    //       callAmend(context, model, execute: execute);
+    //     }
+    //   });
+    // } else {
+    //   callAmend(context, model, execute: execute);
+    // }
   }
 }

@@ -99,6 +99,14 @@ class StyleNewFactory {
     fontStyle: FontStyle.normal,
   );
 
+  static var black12 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appBlack,
+    fontSize: Dimen.fontSize12,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+
   static var black15 = TextStyle(
     fontFamily: 'PingFangSC',
     color: Palette.appBlack,
@@ -220,6 +228,15 @@ class StyleNewFactory {
     fontFamily: 'PingFangSC',
     color: Palette.appGreen,
     fontSize: Dimen.fontSize27,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 1.5,
+  );
+
+  static var red12 = TextStyle(
+    fontFamily: 'PingFangSC',
+    color: Palette.appRed,
+    fontSize: Dimen.fontSize12,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
     letterSpacing: 1.5,

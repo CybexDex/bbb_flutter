@@ -194,6 +194,7 @@ class _LoginState extends State<LoginPage> {
                                           password: _passwordController.text)) {
                                         userLocator.fetchBalances(
                                             name: _accountNameController.text);
+                                        userLocator.checkCompetitionQualification();
                                         locator.get<CouponViewModel>().getCoupons();
                                         int expir =
                                             DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;

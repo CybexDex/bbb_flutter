@@ -10,7 +10,11 @@ import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/setup.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:catcher/catcher_plugin.dart';
+import 'package:catcher/core/catcher.dart';
+import 'package:catcher/handlers/console_handler.dart';
+import 'package:catcher/handlers/sentry_handler.dart';
+import 'package:catcher/mode/silent_report_mode.dart';
+import 'package:catcher/model/catcher_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -52,9 +56,9 @@ main() async {
     SentryHandler(
         SentryClient(dsn: "https://351353bdb8414e16a7799184219bb19b@sentry.nbltrust.com/19"))
   ]);
+  await locator.get<RefManager>().getActions();
   Catcher(MyApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
   // runApp(MyApp());
-  await locator.get<RefManager>().getActions();
   await locator.get<RefManager>().firstLoadData();
   locator.get<TimerManager>().start();
   if (locator.get<UserManager>().user.logined) {

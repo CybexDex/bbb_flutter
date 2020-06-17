@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bbb_flutter/base/base_model.dart';
+import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/manager/market_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
@@ -17,6 +18,7 @@ class NavDrawerViewModel extends BaseModel {
   MarketManager _marketManager;
   List<UnderlyingAssetResponse> assetList = [];
   List<TickerResponse> tickerList = [];
+  String action;
 
   StreamSubscription _refSub;
 
@@ -33,7 +35,21 @@ class NavDrawerViewModel extends BaseModel {
 
   getAssetList() async {
     List<UnderlyingAssetResponse> response = _refManager.underlyingList;
-    assetList = response;
+    _checkAssetAmount(response);
+  }
+
+  _checkAssetAmount(List<UnderlyingAssetResponse> responseAssetList) async {
+    if (action == null || action != locator.get<SharedPref>().getAction()) {
+      for (var asset in responseAssetList) {
+        var response = await _bbbapi.getConfig(
+            injectAction: locator.get<SharedPref>().getAction(), injectAsset: asset.underlying);
+        if (response.maxGearing != 0) {
+          assetList.add(asset);
+        }
+      }
+      action = locator.get<SharedPref>().getAction();
+    }
+    subscribeTicker();
   }
 
   getTickers() async {

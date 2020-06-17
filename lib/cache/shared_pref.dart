@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
+import 'package:bbb_flutter/models/entity/user_biometric_entity.dart';
 import 'package:bbb_flutter/models/response/account_response_model.dart';
 import 'package:bbb_flutter/models/response/activities_response.dart';
 import 'package:bbb_flutter/models/response/test_account_response_model.dart';
@@ -187,5 +188,21 @@ class SharedPref {
 
   removeEnvType() async {
     await _prefs.remove('bbb.envType');
+  }
+
+  UserBiometricEntity getUserBiometricEntity({String userName}) {
+    var value = _prefs.getString(userName);
+    if (value != null) {
+      return UserBiometricEntity.fromRawJson(value);
+    }
+    return UserBiometricEntity(userName: "", timeStamp: 0, isBiomtricOpen: false);
+  }
+
+  saveUserBiometricEntity({UserBiometricEntity userBiometricEntity}) async {
+    await _prefs.setString(userBiometricEntity.userName, userBiometricEntity.toRawJson());
+  }
+
+  removeBiometricEntity({String userName}) async {
+    await _prefs.remove(userName);
   }
 }

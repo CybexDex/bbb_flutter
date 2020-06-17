@@ -4,6 +4,8 @@ import 'package:bbb_flutter/base/base_model.dart';
 import 'package:bbb_flutter/cache/shared_pref.dart';
 import 'package:bbb_flutter/helper/account_util.dart';
 import 'package:bbb_flutter/logic/coupon_vm.dart';
+import 'package:bbb_flutter/logic/nav_drawer_vm.dart';
+import 'package:bbb_flutter/manager/biomeric_manager.dart';
 import 'package:bbb_flutter/manager/ref_manager.dart';
 import 'package:bbb_flutter/models/entity/account_keys_entity.dart';
 import 'package:bbb_flutter/models/entity/account_permission_entity.dart';
@@ -18,6 +20,7 @@ import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/gateway/getway_api.dart';
 import 'package:bbb_flutter/shared/types.dart';
 import 'package:cybex_flutter_plugin/cybex_flutter_plugin.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../setup.dart';
 import 'market_manager.dart';
@@ -27,13 +30,25 @@ class UserManager extends BaseModel {
   bool withdrawAvailable = true;
   bool depositAvailable = true;
   bool hasBonus = false;
+  bool hasRegisterPush = false;
+  bool hasCompetition = false;
+  int navIndex = 0;
 
   final SharedPref _pref;
   final BBBAPI _api;
+  final BiometricManager _biometricManager;
+  final FlutterSecureStorage _flutterSecureStorage;
 
-  UserManager({pref, BBBAPI api, this.user})
+  UserManager(
+      {pref,
+      BBBAPI api,
+      this.user,
+      BiometricManager biometricManager,
+      FlutterSecureStorage flutterSecureStorage})
       : _pref = pref,
-        _api = api;
+        _api = api,
+        _biometricManager = biometricManager,
+        _flutterSecureStorage = flutterSecureStorage;
 
   ///AssetName.CYB
 
@@ -76,6 +91,7 @@ class UserManager extends BaseModel {
     if (testAccount != null) {
       try {
         await locator.get<BBBAPI>().setAction(action: "test");
+        await locator.get<RefManager>().getConfig();
         await locator.get<RefManager>().updateRefData();
         await locator.get<RefManager>().updateContract();
         locator.get<RefManager>().updateUpContractId();
@@ -97,6 +113,7 @@ class UserManager extends BaseModel {
         _pref.saveLoginType(loginType: user.loginType);
         _pref.saveTestAccount(testAccount: testAccount);
         _pref.saveUserName(name: user.name);
+        navIndex = 1;
         notifyListeners();
         return true;
       } catch (error) {
@@ -108,15 +125,33 @@ class UserManager extends BaseModel {
 
   Future<bool> loginReward({String action}) async {
     await locator.get<BBBAPI>().setAction(action: action);
+    await locator.get<RefManager>().getConfig();
     await locator.get<RefManager>().updateRefData();
     await locator.get<RefManager>().updateContract();
     locator.get<RefManager>().updateUpContractId();
     locator.get<RefManager>().updateDownContractId();
+    locator.get<NavDrawerViewModel>().assetList = [];
+    locator.get<NavDrawerViewModel>().tickerList = [];
     user.loginType = LoginType.reward;
     _pref.saveLoginType(loginType: user.loginType);
     fetchBalances(name: user.name);
     notifyListeners();
     return true;
+  }
+
+  changeIndex(int index) {
+    navIndex = index;
+    setBusy(false);
+  }
+
+  checkCompetitionQualification() async {
+    PositionsResponseModel competitionPosition = await _api.getPositions(
+        name: user.name, injectAction: locator.get<RefManager>().action.name);
+    if (competitionPosition?.positions?.first?.quantity == null) {
+      hasCompetition = false;
+    } else {
+      hasCompetition = true;
+    }
   }
 
   unlockWithPrivKey({TestAccountResponseModel testAccount}) async {
@@ -134,7 +169,6 @@ class UserManager extends BaseModel {
         var permission = generatePermission(account: account ?? user.account, keys: [keys]);
         if (permission.unlock) {
           CybexFlutterPlugin.resetDefaultPubKey(permission.defaultKey);
-          keys.removePrivateKey();
           user.keys = keys;
           _pref.saveAccountKeys(keys: keys);
         } else {
@@ -168,11 +202,13 @@ class UserManager extends BaseModel {
       user.balances = balances;
       notifyListeners();
     }
+    checkIfRegisterPush();
   }
 
   getDepositAddress({String name, String asset}) async {
     String expiration = (DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000).toString();
     String sig = await CybexFlutterPlugin.signMessageOperation(expiration + name);
+    print(sig);
     sig = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     String authorization = "bearer $expiration.$name.$sig";
     DepositResponseModel deposit = await locator
@@ -248,7 +284,6 @@ class UserManager extends BaseModel {
     _pref.removeLoginType();
 
     _api.unRegisterPush(accountName: user.name, regId: locator.get<RefManager>().pushRegId);
-
     user.account = null;
     user.name = null;
     user.keys = null;
@@ -262,6 +297,7 @@ class UserManager extends BaseModel {
   logoutTestAccount() async {
     user.testAccountResponseModel = null;
     await locator<BBBAPI>().setAction(action: "main");
+    await locator.get<RefManager>().getConfig();
     await locator.get<RefManager>().updateRefData();
     await locator.get<RefManager>().updateContract();
     locator.get<RefManager>().updateUpContractId();
@@ -286,12 +322,15 @@ class UserManager extends BaseModel {
 
   logOutRewardAccount() async {
     await locator<BBBAPI>().setAction(action: "main");
+    await locator.get<RefManager>().getConfig();
     locator.get<HomeViewModel>().getRankingList();
     await locator.get<RefManager>().updateRefData();
     await locator.get<RefManager>().updateContract();
     locator.get<RefManager>().updateUpContractId();
     locator.get<RefManager>().updateDownContractId();
     user.loginType = LoginType.cloud;
+    locator.get<NavDrawerViewModel>().assetList = [];
+    locator.get<NavDrawerViewModel>().tickerList = [];
     _pref.saveLoginType(loginType: LoginType.cloud);
     user.name = user.account.name;
     _pref.saveUserName(name: user.account.name);
@@ -312,6 +351,10 @@ class UserManager extends BaseModel {
     locator.get<MarketManager>().cancelAndRemoveData();
     locator.get<MarketManager>().loadAllData(null);
     notifyListeners();
+  }
+
+  checkIfRegisterPush() async {
+    hasRegisterPush = await _api.checkRegisterPush(regId: locator.get<RefManager>().pushRegId);
   }
 }
 

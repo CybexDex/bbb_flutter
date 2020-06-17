@@ -17,6 +17,7 @@ class OrderViewModel extends BaseModel {
   var selectedTotalPnl = 0.0;
   int selectedTotalCount = 0;
   bool isSubscribed = false;
+  bool isDesposed = false;
 
   int index = 0;
   double totlaPnl = 0;
@@ -71,11 +72,15 @@ class OrderViewModel extends BaseModel {
       calculateTotalPnl();
       initOrUpdateSelectedList();
       calculateMoneyCount();
-      setBusy(false);
+      if (!isDesposed) {
+        setBusy(false);
+      }
     } else {
       orders = [];
       totlaPnl = 0;
-      setBusy(false);
+      if (!isDesposed) {
+        setBusy(false);
+      }
     }
   }
 
@@ -118,7 +123,9 @@ class OrderViewModel extends BaseModel {
       selectedOrders[i].isSelected = !isSelected;
     }
     isSelected = !isSelected;
-    setBusy(false);
+    if (!isDesposed) {
+      setBusy(false);
+    }
   }
 
   void calculateMoneyCount() {
@@ -130,7 +137,9 @@ class OrderViewModel extends BaseModel {
         selectedTotalPnl += double.parse((orders[i].pnl).toStringAsFixed(4));
       }
     }
-    setBusy(false);
+    if (!isDesposed) {
+      setBusy(false);
+    }
   }
 
   isAllSeleted() {
@@ -153,8 +162,8 @@ class OrderViewModel extends BaseModel {
     if (_refSub != null) {
       await _refSub.cancel();
     }
-
     super.dispose();
+    isDesposed = true;
   }
 }
 

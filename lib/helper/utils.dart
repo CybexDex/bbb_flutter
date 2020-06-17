@@ -92,7 +92,10 @@ dynamic convertJson(Map<String, dynamic> json) {
   return newJson;
 }
 
-String dateFormat({String date}) {
+String dateFormat({String date, String formatter}) {
+  if (formatter != null) {
+    return DateFormat(formatter).format(DateTime.parse(date).toLocal());
+  }
   return DateFormat("yyyy/MM/dd HH:mm").format(DateTime.parse(date).toLocal());
 }
 

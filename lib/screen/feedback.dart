@@ -88,7 +88,7 @@ class FeedBackScreen extends StatelessWidget {
                   children: <Widget>[
                     Expanded(
                         child: WidgetFactory.button(
-                            color: Colors.lightBlueAccent,
+                            color: Palette.appYellowOrange,
                             data: "保存二维码",
                             topPadding: ScreenUtil.getInstance().setHeight(10),
                             bottomPadding: ScreenUtil.getInstance().setHeight(10),
@@ -100,12 +100,17 @@ class FeedBackScreen extends StatelessWidget {
                     ),
                     Expanded(
                         child: WidgetFactory.button(
-                            color: Colors.lightBlueAccent,
+                            color: Palette.appYellowOrange,
                             data: "复制微信号",
                             topPadding: ScreenUtil.getInstance().setHeight(10),
                             bottomPadding: ScreenUtil.getInstance().setHeight(10),
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: "CybexServiceB"));
+                            onPressed: () async {
+                              Clipboard.setData(ClipboardData(
+                                  text: locator
+                                      .get<HomeViewModel>()
+                                      .imageConfigResponse
+                                      .result
+                                      .assistantWechatId));
                               showThemeToast("复制成功");
                             })),
                   ],
