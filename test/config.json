@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "result": [
+    {
+      "image": "https://config-center.cybex.io/prod/bbb/banner/image.1591931019004.png",
+      "updated": 1592447883,
+      "link": "https://bihu.com/article/1257375570",
+      "created": 1591931019,
+      "need_user_name": "0",
+      "sequence": "6",
+      "name": "交易大赛"
+    },
+    {
+      "image": "https://config-center.cybex.io/prod/bbb/banner/image.1590390088051.jpeg",
+      "updated": 1590390088,
+      "sequence": "4",
+      "created": 1588001028,
+      "need_user_name": "0",
+      "link": "https://bbb2019.zendesk.com/hc/zh-cn/articles/900000736626",
+      "name": "新人送礼"
+    },
+    {
+      "image": "https://config-center.cybex.io/prod/bbb/banner/image.1577776752380.png",
+      "updated": 1592449521,
+      "link": "https://bbb-kb.cybex.io/?knowledgebase=%e3%80%90bbb%e5%90%88%e7%ba%a6%e7%8c%9c%e6%b6%a8%e8%b7%8c%ef%bc%8c%e8%b5%a2%e5%a5%96%e9%87%91%e6%a6%9c%e5%8d%95%e3%80%91",
+      "created": 1577771616,
+      "need_user_name": "0",
+      "sequence": "1",
+      "name": "猜涨跌"
+    }
+  ]
+}
