@@ -549,7 +549,8 @@ class _AccountPageState extends State<AccountPage> {
                             onTap: () {
                               Navigator.pushNamed(context, RoutePaths.WebView, arguments: {
                                 "title": I18n.of(context).helpCenter,
-                                "url": "https://bbb2019.zendesk.com/hc/zh-cn"
+                                "url":
+                                    "https://bbb-kb.cybex.io/?knowledgebase_cat=%e5%b8%ae%e5%8a%a9%e4%b8%ad%e5%bf%83"
                               });
                             },
                           ),

@@ -1,5 +1,4 @@
 import 'package:bbb_flutter/shared/ui_common.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class CouponRulePage extends StatelessWidget {
   CouponRulePage({Key key, String titile}) : super(key: key);
@@ -42,11 +41,12 @@ class CouponRulePage extends StatelessWidget {
       // We're using a Builder here so we have a context that is below the Scaffold
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
-        return WebView(
-          initialUrl: 'https://nxapi.cybex.io/v1/webpage/coupon_rule.html',
-          javascriptMode: JavascriptMode.unrestricted,
-          gestureNavigationEnabled: true,
-        );
+        return;
+        // return WebView(
+        //   initialUrl: 'https://nxapi.cybex.io/v1/webpage/coupon_rule.html',
+        //   javascriptMode: JavascriptMode.unrestricted,
+        //   gestureNavigationEnabled: true,
+        // );
       }),
     );
   }

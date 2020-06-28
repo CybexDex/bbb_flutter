@@ -31,8 +31,7 @@ class LimitOrderManager extends BaseModel {
   Function _getOrdersCallback;
   StreamSubscription _refSub;
 
-  LimitOrderManager(
-      {BBBAPI api, UserManager um, RefManager rm, TimerManager tm}) {
+  LimitOrderManager({BBBAPI api, UserManager um, RefManager rm, TimerManager tm}) {
     _api = api;
     _um = um;
     _tm = tm;
@@ -81,8 +80,7 @@ class LimitOrderManager extends BaseModel {
         selectedItem.buyOrderTxId = value.orderId;
         return selectedItem;
       }).toList();
-    } else if (selectedOrders.isNotEmpty &&
-        selectedOrders.length != orders.length) {
+    } else if (selectedOrders.isNotEmpty && selectedOrders.length != orders.length) {
       List<SelectedItem> tempList = [];
       tempList = orders.map((value) {
         SelectedItem selectedItem = SelectedItem();
@@ -131,8 +129,9 @@ class LimitOrderManager extends BaseModel {
 
   Future<PostOrderResponseModel> cancelOrder(LimitOrderResponse order) async {
     if (_um.user.testAccountResponseModel != null) {
-      CybexFlutterPlugin.setDefaultPrivKey(
-          _um.user.testAccountResponseModel.privkey);
+      CybexFlutterPlugin.setDefaultPrivKey(_um.user.testAccountResponseModel.privkey);
+    } else if (_um.user.keys == null) {
+      CybexFlutterPlugin.setDefaultPrivKey(_um.user.privateKey);
     }
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 
@@ -147,12 +146,11 @@ class LimitOrderManager extends BaseModel {
     var data = model.data.toJson();
     String sig = await CybexFlutterPlugin.signMessageOperation(
         getQueryStringFromJson(data, data.keys.toList()..sort()));
-    model.signature =
-        sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
+    model.signature = sig.contains('\"') ? sig.substring(1, sig.length - 1) : sig;
     var requestCancelLimitOrder = model.toJson();
     try {
-      PostOrderResponseModel res = await _api.postCancelLimitOrder(
-          requestCancelLimitOrder: requestCancelLimitOrder);
+      PostOrderResponseModel res =
+          await _api.postCancelLimitOrder(requestCancelLimitOrder: requestCancelLimitOrder);
       locator.get<Logger>().w(res);
       return res;
     } catch (error) {

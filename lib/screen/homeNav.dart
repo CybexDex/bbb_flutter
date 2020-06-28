@@ -56,8 +56,12 @@ class _MainState extends State<MainPage> {
                       (userManager.user.loginType == LoginType.reward && index == 1)) {
                     userManager.fetchBalances(name: locator.get<UserManager>().user.name);
                   }
-                  if (index == 0) {
+                  if (index == 0 && userManager.user.loginType != LoginType.reward) {
                     locator.get<HomeViewModel>().getRankingList();
+                    locator.get<HomeViewModel>().checkIfShowCompetition();
+                    locator.get<HomeViewModel>().getRankingList();
+                    locator.get<HomeViewModel>().getZendeskAdvertise();
+                    locator.get<HomeViewModel>().getImageConfig();
                   }
                 },
                 items: userManager.user.loginType == LoginType.reward

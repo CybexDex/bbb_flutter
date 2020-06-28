@@ -104,6 +104,7 @@ class BiometricManager extends BaseModel {
       if (value) {
         showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (context) {
               return DialogFactory.unlockDialog(context, controller: controller);
             }).then((back) async {

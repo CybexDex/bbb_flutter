@@ -96,8 +96,8 @@ class ForumConnection {
   static const UAT_NODE = "https://guests-cfg.cybex.io";
 }
 
-class ZenDeskConnection {
-  static const PRO_NODE = "https://bbb2019.zendesk.com";
+class BBBKBConnection {
+  static const PRO_NODE = "https://bbb-kb.cybex.io";
 }
 
 class GuessUpDownUrl {

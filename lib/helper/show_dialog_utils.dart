@@ -229,7 +229,8 @@ showUnlockAndBiometricDialog(
             callback();
           }
         });
-        if (e.details.toString().contains("KeyPermanentlyInvalidatedException")) {
+        if (e.details.toString().contains("KeyPermanentlyInvalidatedException") ||
+            e.code == "No Biometric") {
           userBiometricEntity.isBiomtricOpen = false;
           locator
               .get<SharedPref>()

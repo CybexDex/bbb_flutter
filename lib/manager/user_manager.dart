@@ -113,7 +113,6 @@ class UserManager extends BaseModel {
         _pref.saveLoginType(loginType: user.loginType);
         _pref.saveTestAccount(testAccount: testAccount);
         _pref.saveUserName(name: user.name);
-        navIndex = 1;
         notifyListeners();
         return true;
       } catch (error) {
@@ -343,6 +342,8 @@ class UserManager extends BaseModel {
     await locator.get<RefManager>().updateContract();
     locator.get<RefManager>().updateUpContractId();
     locator.get<RefManager>().updateDownContractId();
+    locator.get<RefManager>().getActions();
+    locator.get<RefManager>().getConfig();
     if (user.logined) {
       fetchBalances(name: user.name);
     }

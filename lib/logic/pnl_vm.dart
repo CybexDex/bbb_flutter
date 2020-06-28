@@ -41,6 +41,8 @@ class PnlViewModel extends BaseModel {
       OrderResponseModel order, bool execNow, bool amendByPrice) async {
     if (_um.user.testAccountResponseModel != null) {
       CybexFlutterPlugin.setDefaultPrivKey(_um.user.testAccountResponseModel.privkey);
+    } else if (_um.user.keys == null) {
+      CybexFlutterPlugin.setDefaultPrivKey(_um.user.privateKey);
     }
     int expir = DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
 

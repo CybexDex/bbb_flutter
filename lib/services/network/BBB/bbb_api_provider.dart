@@ -41,6 +41,8 @@ class BBBAPIProvider extends BBBAPI {
     _dispatchNewNode(url: url);
     newDio.options.connectTimeout = 15000;
     newDio.options.receiveTimeout = 13000;
+    newDio.options.headers = {'Connection': 'keep-alive'};
+
     newDio.interceptors.add(
         LogInterceptor(request: false, requestHeader: false, responseHeader: false, error: true));
   }

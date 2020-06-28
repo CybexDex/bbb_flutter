@@ -26,6 +26,9 @@ class ForumApiProvider extends ForumApi {
     _dispatchNode();
     dio.options.connectTimeout = 15000; //5s
     dio.options.receiveTimeout = 13000;
+    dio.options.headers = {'Connection': 'keep-alive'};
+    dio.interceptors
+        .add(LogInterceptor(request: false, requestBody: false, responseBody: false, error: true));
   }
 
   _dispatchNode() {
@@ -73,6 +76,7 @@ class ForumApiProvider extends ForumApi {
   @override
   Future<ForumResponse<BannerResponse>> getBanners({int pg, int siz}) async {
     var response = await dio.get("/list/prod/bbb/banner", queryParameters: {"pg": pg, "siz": siz});
+    // var response = await rootBundle.loadString('test/config.json');
     var responseData = json.decode(response.data);
     return Future.value(ForumResponse.fromJson(responseData));
   }

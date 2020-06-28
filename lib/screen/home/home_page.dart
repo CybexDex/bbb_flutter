@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                         margin: EdgeInsets.only(
                                           left: ScreenUtil.getInstance().setWidth(6),
                                         ),
-                                        child: homeViewModel.zendeskAdvertise.isEmpty
+                                        child: homeViewModel.bbbKbResponse.isEmpty
                                             ? Container()
                                             : CarouselSlider(
                                                 scrollPhysics: NeverScrollableScrollPhysics(),
@@ -111,13 +111,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                                     (10 / 1) * ScreenUtil.getInstance().scaleWidth,
                                                 scrollDirection: Axis.vertical,
                                                 autoPlay: true,
-                                                items: homeViewModel.zendeskAdvertise.map((i) {
+                                                items: homeViewModel.bbbKbResponse.map((i) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      jumpToUrl(Uri.encodeFull(i.htmlUrl), context,
-                                                          needLogIn: false);
+                                                      jumpToUrl(i.link, context, needLogIn: false);
                                                     },
-                                                    child: Text(i.name,
+                                                    child: Text(i.title.rendered,
                                                         overflow: TextOverflow.ellipsis,
                                                         style: StyleNewFactory.grey15),
                                                   );

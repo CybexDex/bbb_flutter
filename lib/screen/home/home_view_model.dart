@@ -8,12 +8,12 @@ import 'package:bbb_flutter/manager/timer_manager.dart';
 import 'package:bbb_flutter/manager/user_manager.dart';
 import 'package:bbb_flutter/models/entity/user_biometric_entity.dart';
 import 'package:bbb_flutter/models/response/account_banner_response_model.dart';
+import 'package:bbb_flutter/models/response/bbb_kb_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/forum_response.dart';
 import 'package:bbb_flutter/models/response/forum_response/image_config.dart';
 import 'package:bbb_flutter/models/response/forum_response/share_image_response.dart';
 import 'package:bbb_flutter/models/response/gateway_asset_response_model.dart';
 import 'package:bbb_flutter/models/response/ranking_response_model.dart';
-import 'package:bbb_flutter/models/response/zendesk_advertise_reponse_model.dart';
 import 'package:bbb_flutter/routes/routes.dart';
 import 'package:bbb_flutter/services/network/bbb/bbb_api.dart';
 import 'package:bbb_flutter/services/network/configure/configure_api.dart';
@@ -38,7 +38,7 @@ class HomeViewModel extends BaseModel {
   List<BannerResponse> banners = [];
   List<RankingResponse> rankingsPerorder = [];
   List<RankingResponse> rankingsTotal = [];
-  List<Articles> zendeskAdvertise = [];
+  List<BBBKBResponse> bbbKbResponse = [];
   ImageConfigResponse imageConfigResponse;
   List<ShareImageResponse> shareImageList = [];
   bool depositAvailable = true;
@@ -95,9 +95,7 @@ class HomeViewModel extends BaseModel {
   }
 
   getZendeskAdvertise() async {
-    var zendeskAdvertiseResponse =
-        await _zendeskApi.getZendeskAdvertise(count: 6, sortBy: "created_at");
-    zendeskAdvertise = zendeskAdvertiseResponse.articles;
+    bbbKbResponse = await _zendeskApi.getKBList();
     setBusy(false);
   }
 

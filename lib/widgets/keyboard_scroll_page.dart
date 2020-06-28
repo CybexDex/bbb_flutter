@@ -14,7 +14,7 @@ class KeyboardScrollPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeyboardAvoider(
       autoScroll: true,
-      focusPadding: double.infinity,
+      focusPadding: appbarHeight ?? double.infinity,
       child: Container(child: widget),
     );
   }

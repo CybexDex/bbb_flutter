@@ -78,7 +78,7 @@
   "dialog_check_password": "验证密码",
   "register_error_message_contain_lowercase": "帐户名仅能包含小写字母、数字、横杠",
   "register_error_message_start_only_letter": "帐户名需要以字母开头",
-  "register_error_message_short_name_length": "帐户名过短",
+  "register_error_message_short_name_length": "账户名长度不能少于3个字符",
   "register_error_message_should_not_contain_continues_dash": "帐户名不能包含连续的横杠",
   "register_error_message_dash_end": "帐户名不能以横杠结尾",
   "register_error_message_only_contain_letter": "帐户名不能只包含字母",

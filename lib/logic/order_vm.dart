@@ -162,8 +162,8 @@ class OrderViewModel extends BaseModel {
     if (_refSub != null) {
       await _refSub.cancel();
     }
-    super.dispose();
     isDesposed = true;
+    super.dispose();
   }
 }
 

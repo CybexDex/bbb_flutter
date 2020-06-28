@@ -110,13 +110,15 @@ class MyApp extends StatelessWidget {
 
 _handlePushCallback() {
   locator.get<JPush>().getLaunchAppNotification().then((map) {
-    if (map['page'] != null) {
-      Future.delayed(
-          Duration.zero,
-          () => Navigator.of(globalKey.currentContext).pushNamed(map['page'],
-              arguments: map['page'] == RoutePaths.Trade
-                  ? RouteParamsOfTrade(isUp: true, isCoupon: false)
-                  : null));
+    if (locator.get<UserManager>().user.loginType == LoginType.cloud) {
+      if (map['page'] != null) {
+        Future.delayed(
+            Duration.zero,
+            () => Navigator.of(globalKey.currentContext).pushNamed(map['page'],
+                arguments: map['page'] == RoutePaths.Trade
+                    ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                    : null));
+      }
     }
   });
   try {
@@ -125,16 +127,29 @@ _handlePushCallback() {
       print("flutter onReceiveNotification: $message");
     }, onOpenNotification: (Map<String, dynamic> message) async {
       print("flutter onOpenNotification: $message");
-      if (Platform.isAndroid) {
-        Map<String, dynamic> map = json.decode(message['extras']['cn.jpush.android.EXTRA']);
-        if (map['page'] != null) {
-          Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
-              map['page'], (route) => route.isFirst,
-              arguments: map['page'] == RoutePaths.Trade
-                  ? RouteParamsOfTrade(isUp: true, isCoupon: false)
-                  : null);
+      if (locator.get<UserManager>().user.loginType == LoginType.cloud) {
+        if (Platform.isAndroid) {
+          Map<String, dynamic> map = json.decode(message['extras']['cn.jpush.android.EXTRA']);
+          if (map['page'] != null) {
+            Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
+                map['page'], (route) => route.isFirst,
+                arguments: map['page'] == RoutePaths.Trade
+                    ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                    : null);
+          }
+        } else {
+          if (message['page'] != null) {
+            Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
+                message['page'], (route) => route.isFirst,
+                arguments: message['page'] == RoutePaths.Trade
+                    ? RouteParamsOfTrade(isUp: true, isCoupon: false)
+                    : null);
+          }
         }
-      } else {
+      }
+    }, onReceiveMessage: (Map<String, dynamic> message) async {
+      print("flutter onReceiveMessage: $message");
+      if (locator.get<UserManager>().user.loginType == LoginType.cloud) {
         if (message['page'] != null) {
           Navigator.of(globalKey.currentContext).pushNamedAndRemoveUntil(
               message['page'], (route) => route.isFirst,
@@ -142,14 +157,6 @@ _handlePushCallback() {
                   ? RouteParamsOfTrade(isUp: true, isCoupon: false)
                   : null);
         }
-      }
-    }, onReceiveMessage: (Map<String, dynamic> message) async {
-      print("flutter onReceiveMessage: $message");
-      if (message['page'] != null) {
-        Navigator.of(globalKey.currentContext).pushNamed(message['page'],
-            arguments: message['page'] == RoutePaths.Trade
-                ? RouteParamsOfTrade(isUp: true, isCoupon: false)
-                : null);
       }
     }, onReceiveNotificationAuthorization: (Map<String, dynamic> message) async {
       print("flutter onReceiveNotificationAuthorization: $message");
